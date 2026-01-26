@@ -1,0 +1,42 @@
+Package: educabR
+Title: Download and Process Brazilian Education Data from INEP
+Version: 0.0.0.9000
+Authors@R: 
+    person("Sidney da Silva Pereira", "Bissoli", 
+           email = "sbissoli76@gmail.com", 
+           role = c("aut", "cre"),
+           comment = c(ORCID = "0009-0001-0442-3700"))
+Description: Download and process public education data from INEP (Instituto 
+    Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira). Provides 
+    functions to access microdata from the School Census (Censo Escolar), 
+    ENEM (Exame Nacional do Ensino Médio), IDEB (Índice de Desenvolvimento 
+    da Educação Básica), and other educational datasets. Returns data in 
+    tidy format ready for analysis.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+URL: https://github.com/SidneyBissoli/educabR, https://sidneybissoli.github.io/educabR/
+BugReports: https://github.com/SidneyBissoli/educabR/issues
+Depends: 
+    R (>= 4.1.0)
+Imports: 
+    cli,
+    dplyr,
+    httr2,
+    purrr,
+    readr,
+    rlang,
+    stringr,
+    tidyr,
+    tools
+Suggests: 
+    ggplot2,
+    knitr,
+    readxl,
+    rmarkdown,
+    testthat (>= 3.0.0),
+    tibble,
+    withr
+Config/testthat/edition: 3
+VignetteBuilder: knitr

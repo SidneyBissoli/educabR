@@ -1,0 +1,39 @@
+# R specific
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+
+# Package build files
+*.tar.gz
+*.zip
+/check/
+
+# Documentation
+docs/
+/doc/
+/Meta/
+
+# Cache
+inst/doc
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+
+# Test artifacts
+tests/testthat/_snaps/
+
+# Local data
+data-raw/*.csv
+data-raw/*.zip
+
+# Claude Code
+.claude/
