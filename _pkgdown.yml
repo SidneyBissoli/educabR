@@ -1,0 +1,43 @@
+url: https://sidneybissoli.github.io/educabR/
+
+template:
+  bootstrap: 5
+
+navbar:
+  structure:
+    left:  [intro, reference, articles]
+    right: [search, github]
+
+reference:
+  - title: "IDEB"
+    desc: "Functions for IDEB data"
+    contents:
+      - get_ideb
+      - get_ideb_series
+      - list_ideb_available
+
+  - title: "ENEM"
+    desc: "Functions for ENEM data"
+    contents:
+      - get_enem
+      - get_enem_itens
+      - enem_summary
+
+  - title: "Censo Escolar"
+    desc: "Functions for School Census data"
+    contents:
+      - get_censo_escolar
+      - list_censo_files
+
+  - title: "Cache Management"
+    desc: "Functions for managing the local cache"
+    contents:
+      - set_cache_dir
+      - get_cache_dir
+      - clear_cache
+      - list_cache
+
+  - title: "Utilities"
+    desc: "Helper functions"
+    contents:
+      - available_years
