@@ -51,7 +51,111 @@
   </div>
 </nav><div class="container template-home">
 <div class="row">
-  <main id="main" class="col-md-9"></main><aside class="col-md-3"><div class="links">
+  <main id="main" class="col-md-9"><div class="section level1">
+<div class="page-header"><h1 id="educabr">educabR<a class="anchor" aria-label="anchor" href="#educabr"></a>
+</h1></div>
+<!-- badges: start -->
+
+<p>O <strong>educabR</strong> facilita o acesso a dados educacionais brasileiros do INEP, incluindo IDEB, ENEM e Censo Escolar.</p>
+<div class="section level2">
+<h2 id="instalacao">Instalacao<a class="anchor" aria-label="anchor" href="#instalacao"></a>
+</h2>
+<p>Voce pode instalar a versao de desenvolvimento do educabR pelo GitHub:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"SidneyBissoli/educabR"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="funcionalidades">Funcionalidades<a class="anchor" aria-label="anchor" href="#funcionalidades"></a>
+</h2>
+<table class="table">
+<thead><tr class="header">
+<th>Dataset</th>
+<th>Funcao</th>
+<th>Anos disponiveis</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>IDEB</td>
+<td><code><a href="reference/get_ideb.html">get_ideb()</a></code></td>
+<td>2017, 2019, 2021, 2023</td>
+</tr>
+<tr class="even">
+<td>ENEM</td>
+<td><code><a href="reference/get_enem.html">get_enem()</a></code></td>
+<td>1998-2024</td>
+</tr>
+<tr class="odd">
+<td>Censo Escolar</td>
+<td><code><a href="reference/get_censo_escolar.html">get_censo_escolar()</a></code></td>
+<td>1995-2024</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="exemplos">Exemplos<a class="anchor" aria-label="anchor" href="#exemplos"></a>
+</h2>
+<div class="section level3">
+<h3 id="ideb">IDEB<a class="anchor" aria-label="anchor" href="#ideb"></a>
+</h3>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/SidneyBissoli/educabR" class="external-link">educabR</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Baixar IDEB 2021 - Anos Iniciais - Escolas</span></span>
+<span><span class="va">ideb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_ideb.html">get_ideb</a></span><span class="op">(</span></span>
+<span>  year <span class="op">=</span> <span class="fl">2021</span>,</span>
+<span>  stage <span class="op">=</span> <span class="st">"anos_iniciais"</span>,</span>
+<span>  level <span class="op">=</span> <span class="st">"escola"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="enem">ENEM<a class="anchor" aria-label="anchor" href="#enem"></a>
+</h3>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Baixar microdados do ENEM 2023</span></span>
+<span><span class="va">enem</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_enem.html">get_enem</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2023</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Resumo estatistico</span></span>
+<span><span class="fu"><a href="reference/enem_summary.html">enem_summary</a></span><span class="op">(</span><span class="va">enem</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="censo-escolar">Censo Escolar<a class="anchor" aria-label="anchor" href="#censo-escolar"></a>
+</h3>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Baixar Censo Escolar 2023</span></span>
+<span><span class="va">censo</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_censo_escolar.html">get_censo_escolar</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2023</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="cache">Cache<a class="anchor" aria-label="anchor" href="#cache"></a>
+</h2>
+<p>O pacote usa cache local para evitar downloads repetidos:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Ver arquivos em cache</span></span>
+<span><span class="fu"><a href="reference/list_cache.html">list_cache</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Limpar cache</span></span>
+<span><span class="fu"><a href="reference/clear_cache.html">clear_cache</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Definir diretorio de cache personalizado</span></span>
+<span><span class="fu"><a href="reference/set_cache_dir.html">set_cache_dir</a></span><span class="op">(</span><span class="st">"~/meu_cache"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="documentacao">Documentacao<a class="anchor" aria-label="anchor" href="#documentacao"></a>
+</h2>
+<ul>
+<li><a href="https://sidneybissoli.github.io/educabR/">Site do pacote</a></li>
+<li><a href="https://sidneybissoli.github.io/educabR/articles/introducao-educabr.html">Vignette de introducao</a></li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="licenca">Licenca<a class="anchor" aria-label="anchor" href="#licenca"></a>
+</h2>
+<p>MIT</p>
+</div>
+</div>
+  </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/SidneyBissoli/educabR/" class="external-link">Browse source code</a></li>
@@ -82,7 +186,14 @@
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/SidneyBissoli/educabR/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/SidneyBissoli/educabR/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://codecov.io/gh/SidneyBissoli/educabR" class="external-link"><img src="https://codecov.io/gh/SidneyBissoli/educabR/branch/main/graph/badge.svg" alt="codecov"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>
