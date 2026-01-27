@@ -18,7 +18,11 @@ test_that("set_cache_dir creates directory", {
   result <- set_cache_dir(temp_dir)
 
   expect_true(dir.exists(temp_dir))
-  expect_equal(result, normalizePath(temp_dir, mustWork = FALSE))
+  # Compare normalized paths to handle Windows 8.3 short path differences
+  expect_equal(
+    normalizePath(result, mustWork = FALSE),
+    normalizePath(temp_dir, mustWork = FALSE)
+  )
 
   # clean up
   unlink(temp_dir, recursive = TRUE)
