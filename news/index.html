@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">educabR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,15 +36,52 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.0.9000" id="educabr-0009000">educabR 0.0.0.9000<a class="anchor" aria-label="anchor" href="#educabr-0009000"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0" id="educabr-010">educabR 0.1.0<a class="anchor" aria-label="anchor" href="#educabr-010"></a></h2>
+<p>Primeira versao publica do pacote.</p>
 <div class="section level3">
-<h3 id="new-features-0-0-0-9000">New features<a class="anchor" aria-label="anchor" href="#new-features-0-0-0-9000"></a></h3>
-<ul><li>Added <code><a href="../reference/get_ideb.html">get_ideb()</a></code> function to download IDEB data from INEP (2017-2023).</li>
-<li>Added <code><a href="../reference/get_ideb_series.html">get_ideb_series()</a></code> function for downloading historical IDEB series.</li>
-<li>Added <code><a href="../reference/get_enem.html">get_enem()</a></code> function for ENEM microdata.</li>
-<li>Added <code><a href="../reference/get_censo_escolar.html">get_censo_escolar()</a></code> function for School Census data.</li>
-<li>Implemented local file caching with <code><a href="../reference/set_cache_dir.html">set_cache_dir()</a></code> and <code><a href="../reference/clear_cache.html">clear_cache()</a></code>.</li>
+<h3 id="novas-funcionalidades-0-1-0">Novas funcionalidades<a class="anchor" aria-label="anchor" href="#novas-funcionalidades-0-1-0"></a></h3>
+<div class="section level4">
+<h4 id="ideb-0-1-0">IDEB<a class="anchor" aria-label="anchor" href="#ideb-0-1-0"></a></h4>
+<ul><li>
+<code><a href="../reference/get_ideb.html">get_ideb()</a></code>: Baixa dados do IDEB (anos 2017, 2019, 2021, 2023)</li>
+<li>
+<code><a href="../reference/get_ideb_series.html">get_ideb_series()</a></code>: Baixa serie historica do IDEB</li>
+<li>
+<code><a href="../reference/list_ideb_available.html">list_ideb_available()</a></code>: Lista combinacoes disponiveis de ano/etapa/nivel</li>
 </ul></div>
+<div class="section level4">
+<h4 id="enem-0-1-0">ENEM<a class="anchor" aria-label="anchor" href="#enem-0-1-0"></a></h4>
+<ul><li>
+<code><a href="../reference/get_enem.html">get_enem()</a></code>: Baixa microdados do ENEM (anos 1998-2024)</li>
+<li>
+<code><a href="../reference/get_enem_itens.html">get_enem_itens()</a></code>: Baixa dados dos itens das provas</li>
+<li>
+<code><a href="../reference/enem_summary.html">enem_summary()</a></code>: Gera resumo estatistico dos dados do ENEM</li>
+</ul></div>
+<div class="section level4">
+<h4 id="censo-escolar-0-1-0">Censo Escolar<a class="anchor" aria-label="anchor" href="#censo-escolar-0-1-0"></a></h4>
+<ul><li>
+<code><a href="../reference/get_censo_escolar.html">get_censo_escolar()</a></code>: Baixa microdados do Censo Escolar (anos 1995-2024)</li>
+<li>
+<code><a href="../reference/list_censo_files.html">list_censo_files()</a></code>: Lista arquivos disponiveis no Censo</li>
+</ul></div>
+<div class="section level4">
+<h4 id="gerenciamento-de-cache-0-1-0">Gerenciamento de cache<a class="anchor" aria-label="anchor" href="#gerenciamento-de-cache-0-1-0"></a></h4>
+<ul><li>
+<code><a href="../reference/set_cache_dir.html">set_cache_dir()</a></code>: Define diretorio de cache personalizado</li>
+<li>
+<code><a href="../reference/get_cache_dir.html">get_cache_dir()</a></code>: Retorna diretorio de cache atual</li>
+<li>
+<code><a href="../reference/clear_cache.html">clear_cache()</a></code>: Limpa arquivos em cache</li>
+<li>
+<code><a href="../reference/list_cache.html">list_cache()</a></code>: Lista arquivos em cache</li>
+</ul></div>
+<div class="section level4">
+<h4 id="utilitarios-0-1-0">Utilitarios<a class="anchor" aria-label="anchor" href="#utilitarios-0-1-0"></a></h4>
+<ul><li>
+<code><a href="../reference/available_years.html">available_years()</a></code>: Retorna anos disponiveis para cada dataset</li>
+</ul></div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
