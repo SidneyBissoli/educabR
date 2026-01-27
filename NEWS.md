@@ -1,9 +1,28 @@
-# educabR 0.0.0.9000
+# educabR 0.1.0
 
-## New features
+Primeira versao publica do pacote.
 
-* Added `get_ideb()` function to download IDEB data from INEP (2017-2023).
-* Added `get_ideb_series()` function for downloading historical IDEB series.
-* Added `get_enem()` function for ENEM microdata.
-* Added `get_censo_escolar()` function for School Census data.
-* Implemented local file caching with `set_cache_dir()` and `clear_cache()`.
+## Novas funcionalidades
+
+### IDEB
+* `get_ideb()`: Baixa dados do IDEB (anos 2017, 2019, 2021, 2023)
+* `get_ideb_series()`: Baixa serie historica do IDEB
+* `list_ideb_available()`: Lista combinacoes disponiveis de ano/etapa/nivel
+
+### ENEM
+* `get_enem()`: Baixa microdados do ENEM (anos 1998-2024)
+* `get_enem_itens()`: Baixa dados dos itens das provas
+* `enem_summary()`: Gera resumo estatistico dos dados do ENEM
+
+### Censo Escolar
+* `get_censo_escolar()`: Baixa microdados do Censo Escolar (anos 1995-2024)
+* `list_censo_files()`: Lista arquivos disponiveis no Censo
+
+### Gerenciamento de cache
+* `set_cache_dir()`: Define diretorio de cache personalizado
+* `get_cache_dir()`: Retorna diretorio de cache atual
+* `clear_cache()`: Limpa arquivos em cache
+* `list_cache()`: Lista arquivos em cache
+
+### Utilitarios
+* `available_years()`: Retorna anos disponiveis para cada dataset
