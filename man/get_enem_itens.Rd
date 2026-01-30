@@ -21,7 +21,7 @@ Downloads and processes ENEM item response (gabarito) data,
 which contains detailed information about each question.
 }
 \examples{
-\dontrun{
+\donttest{
 # get item data for 2023
 itens <- get_enem_itens(2023)
 }

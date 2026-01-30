@@ -44,7 +44,7 @@ For detailed information about variables, see INEP's documentation:
 }
 
 \examples{
-\dontrun{
+\donttest{
 # get schools data for 2023
 escolas <- get_censo_escolar(2023)
 

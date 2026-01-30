@@ -6,7 +6,7 @@
 \alias{educabR}
 \title{educabR: Download and Process Brazilian Education Data from INEP}
 \description{
-Download and process public education data from INEP (Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira). Provides functions to access microdata from the School Census (Censo Escolar), ENEM (Exame Nacional do Ensino Médio), IDEB (Índice de Desenvolvimento da Educação Básica), and other educational datasets. Returns data in tidy format ready for analysis.
+Download and process public education data from INEP (Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira). Provides functions to access microdata from the School Census (Censo Escolar), ENEM (Exame Nacional do Ensino Médio), IDEB (Índice de Desenvolvimento da Educação Básica), and other educational datasets. Returns data in tidy format ready for analysis. Data source: INEP Open Data Portal \url{https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos}.
 
 The educabR package provides functions to download and process public
 education data from INEP (Instituto Nacional de Estudos e Pesquisas

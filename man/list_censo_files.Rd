@@ -16,7 +16,7 @@ A character vector of file names found.
 Lists the data files available in a downloaded School Census.
 }
 \examples{
-\dontrun{
+\donttest{
 list_censo_files(2023)
 }
 }

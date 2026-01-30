@@ -39,7 +39,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # get school-level IDEB for early elementary in 2021
 #' ideb_escolas <- get_ideb(2021, level = "escola", stage = "anos_iniciais")
 #'
@@ -191,7 +191,7 @@ read_ideb_excel <- function(file) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # get IDEB history for municipalities
 #' ideb_hist <- get_ideb_series(
 #'   years = c(2017, 2019, 2021),
@@ -274,9 +274,7 @@ get_ideb_series <- function(years = NULL,
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' list_ideb_available()
-#' }
 list_ideb_available <- function() {
   years <- c(2017L, 2019L, 2021L, 2023L)
   levels <- c("escola", "municipio")

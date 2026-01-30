@@ -19,7 +19,7 @@ Calculates summary statistics for ENEM scores, optionally grouped
 by demographic variables.
 }
 \examples{
-\dontrun{
+\donttest{
 enem <- get_enem(2023, n_max = 10000)
 
 # overall summary

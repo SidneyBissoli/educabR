@@ -31,7 +31,7 @@ Downloads and combines IDEB data across multiple years to create
 a historical series.
 }
 \examples{
-\dontrun{
+\donttest{
 # get IDEB history for municipalities
 ideb_hist <- get_ideb_series(
   years = c(2017, 2019, 2021),

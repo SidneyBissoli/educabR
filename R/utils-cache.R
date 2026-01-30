@@ -20,7 +20,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # set a persistent cache directory
 #' set_cache_dir("~/educabR_cache")
 #' }
@@ -101,7 +101,7 @@ get_cache_dir <- function() {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # clear all cached data
 #' clear_cache()
 #'
@@ -146,7 +146,7 @@ clear_cache <- function(dataset = NULL) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' list_cache()
 #' }
 list_cache <- function(dataset = NULL) {

@@ -59,7 +59,7 @@ Official IDEB portal: \url{https://www.gov.br/inep/pt-br/areas-de-atuacao/pesqui
 }
 
 \examples{
-\dontrun{
+\donttest{
 # get school-level IDEB for early elementary in 2021
 ideb_escolas <- get_ideb(2021, level = "escola", stage = "anos_iniciais")
 

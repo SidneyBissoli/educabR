@@ -16,7 +16,7 @@ A tibble with information about cached files.
 Lists all files currently in the educabR cache.
 }
 \examples{
-\dontrun{
+\donttest{
 list_cache()
 }
 }

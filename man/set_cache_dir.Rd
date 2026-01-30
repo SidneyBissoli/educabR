@@ -21,7 +21,7 @@ Sets the directory where downloaded files will be cached. This avoids
 repeated downloads of the same data.
 }
 \examples{
-\dontrun{
+\donttest{
 # set a persistent cache directory
 set_cache_dir("~/educabR_cache")
 }

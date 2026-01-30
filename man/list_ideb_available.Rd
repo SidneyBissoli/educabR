@@ -13,7 +13,5 @@ A tibble with available IDEB datasets.
 Lists the IDEB data files available in the INEP portal.
 }
 \examples{
-\dontrun{
 list_ideb_available()
-}
 }

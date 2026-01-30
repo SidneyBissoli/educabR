@@ -6,12 +6,13 @@ Authors@R:
            email = "sbissoli76@gmail.com", 
            role = c("aut", "cre"),
            comment = c(ORCID = "0009-0001-0442-3700"))
-Description: Download and process public education data from INEP (Instituto 
-    Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira). Provides 
-    functions to access microdata from the School Census (Censo Escolar), 
-    ENEM (Exame Nacional do Ensino Médio), IDEB (Índice de Desenvolvimento 
-    da Educação Básica), and other educational datasets. Returns data in 
-    tidy format ready for analysis.
+Description: Download and process public education data from INEP (Instituto
+    Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira). Provides
+    functions to access microdata from the School Census (Censo Escolar),
+    ENEM (Exame Nacional do Ensino Médio), IDEB (Índice de Desenvolvimento
+    da Educação Básica), and other educational datasets. Returns data in
+    tidy format ready for analysis. Data source: INEP Open Data Portal
+    <https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
