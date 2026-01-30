@@ -9,6 +9,7 @@
 *.tar.gz
 *.zip
 /check/
+CRAN-SUBMISSION
 
 # Documentation
 docs/
