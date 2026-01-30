@@ -22,11 +22,13 @@ Invisibly returns `TRUE` if successful.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 # clear all cached data
 clear_cache()
+#> ℹ cache is already empty
 
 # clear only ENEM cache
 clear_cache("enem")
-} # }
+#> ℹ no cache found for "enem"
+# }
 ```

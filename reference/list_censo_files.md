@@ -21,7 +21,8 @@ A character vector of file names found.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 list_censo_files(2023)
-} # }
+#> [1] "microdados_ed_basica_2023.csv"       "suplemento_cursos_tecnicos_2023.csv"
+# }
 ```

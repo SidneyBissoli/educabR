@@ -67,11 +67,20 @@ For detailed information about variables, see INEP's documentation:
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 # get a sample of 10000 rows for exploration
 enem_sample <- get_enem(2023, n_max = 10000)
+#> ✔ using cached file
+#> ℹ reading ENEM data...
+#> ℹ reading file with encoding: "UTF-8"
+#> ✔ loaded 10000 rows and 76 columns
 
 # get full data (warning: large file)
 enem_2023 <- get_enem(2023)
-} # }
+#> ✔ using cached file
+#> ℹ reading ENEM data...
+#> ! reading full file. use `n_max` to limit rows if needed.
+#> ℹ reading file with encoding: "UTF-8"
+#> ✔ loaded 3933955 rows and 76 columns
+# }
 ```

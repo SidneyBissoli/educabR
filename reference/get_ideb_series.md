@@ -44,12 +44,15 @@ A tibble with IDEB data for all requested years.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 # get IDEB history for municipalities
 ideb_hist <- get_ideb_series(
   years = c(2017, 2019, 2021),
   level = "municipio",
   stage = "anos_iniciais"
 )
-} # }
+#> ℹ downloading IDEB data for 3 year(s)...
+#> ! failed to get IDEB 2017: download failed
+#> ✔ loaded 28948 rows for 2 year(s)
+# }
 ```

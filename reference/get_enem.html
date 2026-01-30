@@ -100,13 +100,22 @@ with millions of participants. The microdata includes:</p><ul><li><p>Participant
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="co"># get a sample of 10000 rows for exploration</span></span></span>
 <span class="r-in"><span><span class="va">enem_sample</span> <span class="op">&lt;-</span> <span class="fu">get_enem</span><span class="op">(</span><span class="fl">2023</span>, n_max <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> using cached file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> reading ENEM data...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> reading file with encoding: <span style="color: #0000BB;">"UTF-8"</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> loaded <span style="color: #0000BB;">10000</span> rows and <span style="color: #0000BB;">76</span> columns</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># get full data (warning: large file)</span></span></span>
 <span class="r-in"><span><span class="va">enem_2023</span> <span class="op">&lt;-</span> <span class="fu">get_enem</span><span class="op">(</span><span class="fl">2023</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> using cached file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> reading ENEM data...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> reading full file. use `n_max` to limit rows if needed.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> reading file with encoding: <span style="color: #0000BB;">"UTF-8"</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> loaded <span style="color: #0000BB;">3933955</span> rows and <span style="color: #0000BB;">76</span> columns</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

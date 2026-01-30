@@ -30,8 +30,11 @@ A tibble with item response data.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 # get item data for 2023
 itens <- get_enem_itens(2023)
-} # }
+#> ℹ reading ENEM item data...
+#> ℹ reading file with encoding: "UTF-8"
+#> ✔ loaded 5550 rows and 14 columns
+# }
 ```

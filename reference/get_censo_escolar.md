@@ -59,14 +59,30 @@ For detailed information about variables, see INEP's documentation:
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 # get schools data for 2023
 escolas <- get_censo_escolar(2023)
+#> ℹ downloading Censo Escolar 2023...
+#> ℹ downloading from INEP...
+#> ✔ downloaded 30.61 MB
+#> ℹ extracting files...
+#> ✔ extracted 10 file(s)
+#> ℹ reading school data...
+#> ℹ reading file with encoding: "UTF-8"
+#> ✔ loaded 217625 rows and 408 columns
 
 # get schools from Sao Paulo state only
 escolas_sp <- get_censo_escolar(2023, uf = "SP")
+#> ✔ using cached file
+#> ℹ reading school data...
+#> ℹ reading file with encoding: "UTF-8"
+#> ✔ loaded 34099 rows and 408 columns
 
 # read only first 1000 rows for exploration
 escolas_sample <- get_censo_escolar(2023, n_max = 1000)
-} # }
+#> ✔ using cached file
+#> ℹ reading school data...
+#> ℹ reading file with encoding: "UTF-8"
+#> ✔ loaded 1000 rows and 408 columns
+# }
 ```

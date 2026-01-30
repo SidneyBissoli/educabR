@@ -28,8 +28,9 @@ Invisibly returns the cache directory path.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 # set a persistent cache directory
 set_cache_dir("~/educabR_cache")
-} # }
+#> ✔ cache directory created: /home/runner/educabR_cache
+# }
 ```

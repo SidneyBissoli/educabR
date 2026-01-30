@@ -74,14 +74,29 @@ Official IDEB portal:
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 # get school-level IDEB for early elementary in 2021
 ideb_escolas <- get_ideb(2021, level = "escola", stage = "anos_iniciais")
+#> ℹ downloading IDEB 2021 - "anos_iniciais" - "escola"...
+#> ℹ downloading from INEP...
+#> ✔ downloaded 7.23 MB
+#> ℹ reading IDEB data...
+#> ✔ loaded 63529 rows and 17 columns
 
 # get municipality-level IDEB for São Paulo state
 ideb_sp <- get_ideb(2021, level = "municipio", stage = "anos_iniciais", uf = "SP")
+#> ℹ downloading IDEB 2021 - "anos_iniciais" - "municipio"...
+#> ℹ downloading from INEP...
+#> ✔ downloaded 1.28 MB
+#> ℹ reading IDEB data...
+#> ✔ loaded 1536 rows and 15 columns
 
 # get high school IDEB for all municipalities
 ideb_em <- get_ideb(2023, level = "municipio", stage = "ensino_medio")
-} # }
+#> ℹ downloading IDEB 2023 - "ensino_medio" - "municipio"...
+#> ℹ downloading from INEP...
+#> ✔ downloaded 3.21 MB
+#> ℹ reading IDEB data...
+#> ✔ loaded 11735 rows and 46 columns
+# }
 ```
