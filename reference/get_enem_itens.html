@@ -74,9 +74,14 @@ which contains detailed information about each question.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="co"># get item data for 2023</span></span></span>
 <span class="r-in"><span><span class="va">itens</span> <span class="op">&lt;-</span> <span class="fu">get_enem_itens</span><span class="op">(</span><span class="fl">2023</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> reading ENEM item data...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> reading file with encoding: <span style="color: #0000BB;">"UTF-8"</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> loaded <span style="color: #0000BB;">5550</span> rows and <span style="color: #0000BB;">14</span> columns</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> downloading ENEM <span style="color: #0000BB;">2023</span>...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> downloading from INEP...</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in value[[3L]](cond):</span> download failed</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> url: <span style="color: #0000BB; font-style: italic;">&lt;https://download.inep.gov.br/microdados/microdados_enem_2023.zip&gt;</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> error: Failed to perform HTTP request. <span style="font-weight: bold;">Caused by error in</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>   <span style="font-weight: bold;">`curl::curl_fetch_memory()`:</span> <span style="color: #BBBB00;">!</span> Timeout was reached [download.inep.gov.br]:</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>   Operation timed out after 600000 milliseconds with 455272254 out of 520568121</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>   bytes received</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
