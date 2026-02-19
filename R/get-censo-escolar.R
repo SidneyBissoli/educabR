@@ -34,7 +34,7 @@
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # get schools data for 2023
 #' escolas <- get_censo_escolar(2023)
 #'
@@ -227,7 +227,7 @@ standardize_names <- function(df) {
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' list_censo_files(2023)
 #' }
 list_censo_files <- function(year) {

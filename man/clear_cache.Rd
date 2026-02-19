@@ -17,7 +17,7 @@ Invisibly returns \code{TRUE} if successful.
 Removes all cached files from the educabR cache directory.
 }
 \examples{
-\donttest{
+\dontrun{
 # clear all cached data
 clear_cache()
 

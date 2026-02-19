@@ -1,6 +1,6 @@
 Package: educabR
 Title: Download and Process Brazilian Education Data from INEP
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: 
     person("Sidney da Silva Pereira", "Bissoli", 
            email = "sbissoli76@gmail.com", 

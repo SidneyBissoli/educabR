@@ -39,7 +39,7 @@
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # get school-level IDEB for early elementary in 2021
 #' ideb_escolas <- get_ideb(2021, level = "escola", stage = "anos_iniciais")
 #'
@@ -191,7 +191,7 @@ read_ideb_excel <- function(file) {
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # get IDEB history for municipalities
 #' ideb_hist <- get_ideb_series(
 #'   years = c(2017, 2019, 2021),

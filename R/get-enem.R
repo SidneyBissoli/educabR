@@ -41,7 +41,7 @@
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # get a sample of 10000 rows for exploration
 #' enem_sample <- get_enem(2023, n_max = 10000)
 #'
@@ -174,7 +174,7 @@ find_enem_file <- function(exdir, year) {
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # get item data for 2023
 #' itens <- get_enem_itens(2023)
 #' }
@@ -253,7 +253,7 @@ get_enem_itens <- function(year, n_max = Inf, quiet = FALSE) {
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' enem <- get_enem(2023, n_max = 10000)
 #'
 #' # overall summary

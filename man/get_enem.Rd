@@ -51,7 +51,7 @@ For detailed information about variables, see INEP's documentation:
 }
 
 \examples{
-\donttest{
+\dontrun{
 # get a sample of 10000 rows for exploration
 enem_sample <- get_enem(2023, n_max = 10000)
 
