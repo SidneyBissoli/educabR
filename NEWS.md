@@ -1,3 +1,9 @@
+# educabR 0.1.1
+
+## Correcoes
+
+* Corrigido exemplo de `set_cache_dir()` que criava diretorio no home do usuario (`~/educabR_cache`) durante verificacoes do CRAN. Agora usa `tempdir()` nos exemplos.
+
 # educabR 0.1.0
 
 Primeira versao publica do pacote.

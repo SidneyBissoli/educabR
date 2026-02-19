@@ -13,13 +13,15 @@
 
 ## Resubmission
 
-This is a resubmission. In this version I have addressed the CRAN feedback:
-1. Added a reference to the data source (INEP Open Data Portal) in the DESCRIPTION file.
-2. Replaced `\dontrun{}` with `\donttest{}` for all examples that download data.
-3. Unwrapped the example for `list_ideb_available()` as it runs locally in < 5 sec.
+This is a resubmission addressing the additional issue flagged by CRAN (donttest).
+
+The `set_cache_dir()` example previously used `~/educabR_cache`, which created a
+directory in the user's home directory when `\donttest{}` examples were run.
+Changed the example to use `tempdir()` instead, so no files are written outside
+of session temporary directories.
 
 ## Notes
 
 The package downloads data from INEP (Instituto Nacional de Estudos e Pesquisas Educacionais Anisio Teixeira), Brazil's national institute of educational studies and research. All data is publicly available.
 
-Examples that download data are wrapped in `\donttest{}` to allow execution during testing while skipping during CRAN checks.
+Examples that download data are wrapped in `\donttest{}` to avoid timeouts during CRAN checks due to large file downloads from external servers.

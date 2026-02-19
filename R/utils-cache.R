@@ -21,8 +21,8 @@
 #'
 #' @examples
 #' \donttest{
-#' # set a persistent cache directory
-#' set_cache_dir("~/educabR_cache")
+#' # set a custom cache directory (use tempdir() in examples)
+#' set_cache_dir(file.path(tempdir(), "educabR_cache"))
 #' }
 set_cache_dir <- function(path = NULL, persistent = FALSE) {
   if (is.null(path)) {
