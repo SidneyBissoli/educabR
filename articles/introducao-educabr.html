@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">educabR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -274,7 +274,7 @@ socioeconômicas e notas.</p>
 <span><span class="va">notas_por_raca</span> <span class="op">&lt;-</span> <span class="va">enem_amostra</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">nu_nota_mt</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    cor_raca <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    cor_raca <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">tp_cor_raca</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">~</span> <span class="st">"Não declarado"</span>,</span>
 <span>      <span class="va">tp_cor_raca</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"Branca"</span>,</span>
 <span>      <span class="va">tp_cor_raca</span> <span class="op">==</span> <span class="fl">2</span> <span class="op">~</span> <span class="st">"Preta"</span>,</span>
@@ -348,7 +348,7 @@ básica no Brasil, cobrindo todas as escolas públicas e privadas.</p>
 <code class="sourceCode R"><span><span class="co"># Contagem por tipo de dependência</span></span>
 <span><span class="va">escolas_por_dep</span> <span class="op">&lt;-</span> <span class="va">escolas_2023</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    dependencia <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    dependencia <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">tp_dependencia</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"Federal"</span>,</span>
 <span>      <span class="va">tp_dependencia</span> <span class="op">==</span> <span class="fl">2</span> <span class="op">~</span> <span class="st">"Estadual"</span>,</span>
 <span>      <span class="va">tp_dependencia</span> <span class="op">==</span> <span class="fl">3</span> <span class="op">~</span> <span class="st">"Municipal"</span>,</span>

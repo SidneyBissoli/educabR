@@ -1,6 +1,18 @@
 # Changelog
 
+## educabR 0.1.1
+
+### Correcoes
+
+- Corrigido exemplo de
+  [`set_cache_dir()`](https://sidneybissoli.github.io/educabR/reference/set_cache_dir.md)
+  que criava diretorio no home do usuario (`~/educabR_cache`) durante
+  verificacoes do CRAN. Agora usa
+  [`tempdir()`](https://rdrr.io/r/base/tempfile.html) nos exemplos.
+
 ## educabR 0.1.0
+
+CRAN release: 2026-02-03
 
 Primeira versao publica do pacote.
 

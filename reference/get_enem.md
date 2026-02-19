@@ -70,17 +70,26 @@ For detailed information about variables, see INEP's documentation:
 # \donttest{
 # get a sample of 10000 rows for exploration
 enem_sample <- get_enem(2023, n_max = 10000)
-#> ✔ using cached file
-#> ℹ reading ENEM data...
-#> ℹ reading file with encoding: "UTF-8"
-#> ✔ loaded 10000 rows and 76 columns
+#> ℹ downloading ENEM 2023...
+#> ! ENEM files are large (1-3 GB). this may take a while...
+#> ℹ downloading from INEP...
+#> Error in value[[3L]](cond): download failed
+#> ✖ url: <https://download.inep.gov.br/microdados/microdados_enem_2023.zip>
+#> ℹ error: Failed to perform HTTP request. Caused by error in
+#>   `curl::curl_fetch_memory()`: ! Timeout was reached [download.inep.gov.br]:
+#>   Operation timed out after 600000 milliseconds with 458649525 out of 520568121
+#>   bytes received
 
 # get full data (warning: large file)
 enem_2023 <- get_enem(2023)
-#> ✔ using cached file
-#> ℹ reading ENEM data...
-#> ! reading full file. use `n_max` to limit rows if needed.
-#> ℹ reading file with encoding: "UTF-8"
-#> ✔ loaded 3933955 rows and 76 columns
+#> ℹ downloading ENEM 2023...
+#> ! ENEM files are large (1-3 GB). this may take a while...
+#> ℹ downloading from INEP...
+#> Error in value[[3L]](cond): download failed
+#> ✖ url: <https://download.inep.gov.br/microdados/microdados_enem_2023.zip>
+#> ℹ error: Failed to perform HTTP request. Caused by error in
+#>   `curl::curl_fetch_memory()`: ! Timeout was reached [download.inep.gov.br]:
+#>   Operation timed out after 600001 milliseconds with 455680670 out of 520568121
+#>   bytes received
 # }
 ```
