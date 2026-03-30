@@ -1,34 +1,57 @@
+# educabR 0.1.2
+
+## New features
+
+* `get_ideb_series()` now shows per-year progress indication (e.g., "processing IDEB 2017 (1/4)") and propagates the `quiet` parameter to inner `get_ideb()` calls.
+
+## Documentation
+
+* Added English README (`README.md`) as default; Portuguese version renamed to `README.pt-br.md` with cross-links between both.
+* Fixed `@param year` ranges in documentation to match `available_years()`:
+  - `get_enem()` / `get_enem_itens()`: 2009-2023 -> 1998-2024
+  - `get_censo_escolar()`: 2007-2024 -> 1995-2024
+* Added `@family` tags to group related functions in help pages (ENEM, IDEB, School Census, cache).
+* Fixed Portuguese accents in `README.pt-br.md`.
+
+## Tests
+
+* Added tests for `enem_summary()`: statistics calculation, NA handling, grouping by variable, and error on missing score columns.
+
+## CRAN
+
+* Replaced `\donttest` with `\dontrun` in all examples per CRAN request.
+
 # educabR 0.1.1
 
-## Correcoes
+## Bug fixes
 
-* Corrigido exemplo de `set_cache_dir()` que criava diretorio no home do usuario (`~/educabR_cache`) durante verificacoes do CRAN. Agora usa `tempdir()` nos exemplos.
+* Fixed `set_cache_dir()` example that created a directory in the user's home (`~/educabR_cache`) during CRAN checks. Now uses `tempdir()` in examples.
 
 # educabR 0.1.0
 
-Primeira versao publica do pacote.
+First public release.
 
-## Novas funcionalidades
+## New features
 
 ### IDEB
-* `get_ideb()`: Baixa dados do IDEB (anos 2017, 2019, 2021, 2023)
-* `get_ideb_series()`: Baixa serie historica do IDEB
-* `list_ideb_available()`: Lista combinacoes disponiveis de ano/etapa/nivel
+* `get_ideb()`: Download IDEB data (years 2017, 2019, 2021, 2023).
+* `get_ideb_series()`: Download IDEB historical series across multiple years.
+* `list_ideb_available()`: List available year/stage/level combinations.
 
 ### ENEM
-* `get_enem()`: Baixa microdados do ENEM (anos 1998-2024)
-* `get_enem_itens()`: Baixa dados dos itens das provas
-* `enem_summary()`: Gera resumo estatistico dos dados do ENEM
+* `get_enem()`: Download ENEM microdata (years 1998-2024).
+* `get_enem_itens()`: Download ENEM item response data.
+* `enem_summary()`: Calculate summary statistics for ENEM scores.
 
-### Censo Escolar
-* `get_censo_escolar()`: Baixa microdados do Censo Escolar (anos 1995-2024)
-* `list_censo_files()`: Lista arquivos disponiveis no Censo
+### School Census
+* `get_censo_escolar()`: Download School Census microdata (years 1995-2024).
+* `list_censo_files()`: List available files in a downloaded census.
 
-### Gerenciamento de cache
-* `set_cache_dir()`: Define diretorio de cache personalizado
-* `get_cache_dir()`: Retorna diretorio de cache atual
-* `clear_cache()`: Limpa arquivos em cache
-* `list_cache()`: Lista arquivos em cache
+### Cache management
+* `set_cache_dir()`: Set custom cache directory.
+* `get_cache_dir()`: Get current cache directory.
+* `clear_cache()`: Clear cached files.
+* `list_cache()`: List cached files with metadata.
 
-### Utilitarios
-* `available_years()`: Retorna anos disponiveis para cada dataset
+### Utilities
+* `available_years()`: Get available years for each dataset.
