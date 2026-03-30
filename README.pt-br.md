@@ -6,35 +6,35 @@
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-*[Leia em Português](README.pt-br.md)*
+*[Read in English](README.md)*
 
-**educabR** provides easy access to Brazilian educational data from INEP, including IDEB, ENEM, and School Census (Censo Escolar).
+O **educabR** facilita o acesso a dados educacionais brasileiros do INEP, incluindo IDEB, ENEM e Censo Escolar.
 
-## Installation
+## Instalação
 
-You can install the development version of educabR from GitHub:
+Você pode instalar a versão de desenvolvimento do educabR pelo GitHub:
 
 ```r
 # install.packages("devtools")
 devtools::install_github("SidneyBissoli/educabR")
 ```
 
-## Features
+## Funcionalidades
 
-| Dataset | Function | Available Years |
-|---------|----------|-----------------|
+| Dataset | Função | Anos disponíveis |
+|---------|--------|------------------|
 | IDEB | `get_ideb()` | 2017, 2019, 2021, 2023 |
 | ENEM | `get_enem()` | 1998-2024 |
-| School Census | `get_censo_escolar()` | 1995-2024 |
+| Censo Escolar | `get_censo_escolar()` | 1995-2024 |
 
-## Examples
+## Exemplos
 
 ### IDEB
 
 ```r
 library(educabR)
 
-# Download IDEB 2021 - Early Years - Schools
+# Baixar IDEB 2021 - Anos Iniciais - Escolas
 ideb <- get_ideb(
   year  = 2021,
   stage = "anos_iniciais",
@@ -45,39 +45,39 @@ ideb <- get_ideb(
 ### ENEM
 
 ```r
-# Download ENEM 2023 microdata
+# Baixar microdados do ENEM 2023
 enem <- get_enem(year = 2023)
 
-# Statistical summary
+# Resumo estatístico
 enem_summary(enem)
 ```
 
-### School Census
+### Censo Escolar
 
 ```r
-# Download School Census 2023
+# Baixar Censo Escolar 2023
 censo <- get_censo_escolar(year = 2023)
 ```
 
 ## Cache
 
-The package uses local caching to avoid repeated downloads:
+O pacote usa cache local para evitar downloads repetidos:
 ```r
-# List cached files
+# Ver arquivos em cache
 list_cache()
 
-# Clear cache
+# Limpar cache
 clear_cache()
 
-# Set custom cache directory
-set_cache_dir("~/my_cache")
+# Definir diretório de cache personalizado
+set_cache_dir("~/meu_cache")
 ```
 
-## Documentation
+## Documentação
 
-- [Package website](https://sidneybissoli.github.io/educabR/)
-- [Getting started vignette](https://sidneybissoli.github.io/educabR/articles/introducao-educabr.html)
+- [Site do pacote](https://sidneybissoli.github.io/educabR/)
+- [Vignette de introdução](https://sidneybissoli.github.io/educabR/articles/introducao-educabr.html)
 
-## License
+## Licença
 
 MIT
