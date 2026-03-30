@@ -8,7 +8,7 @@
 #' (Censo Escolar), conducted annually by INEP. Returns school-level data
 #' with information about infrastructure, location, and administrative details.
 #'
-#' @param year The year of the census (2007-2024).
+#' @param year The year of the census (1995-2024).
 #' @param uf Optional. Filter by state (UF code or abbreviation).
 #' @param n_max Maximum number of rows to read. Default is `Inf` (all rows).
 #' @param keep_zip Logical. If `TRUE`, keeps the downloaded ZIP file in cache.

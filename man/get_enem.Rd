@@ -7,7 +7,7 @@
 get_enem(year, n_max = Inf, keep_zip = TRUE, quiet = FALSE)
 }
 \arguments{
-\item{year}{The year of the exam (2009-2023).}
+\item{year}{The year of the exam (1998-2024).}
 
 \item{n_max}{Maximum number of rows to read. Default is \code{Inf} (all rows).
 Consider using a smaller value for exploration, as ENEM files

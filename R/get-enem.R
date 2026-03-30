@@ -8,7 +8,7 @@
 #' High School Exam. ENEM is used for university admissions and as a
 #' high school equivalency exam.
 #'
-#' @param year The year of the exam (2009-2023).
+#' @param year The year of the exam (1998-2024).
 #' @param n_max Maximum number of rows to read. Default is `Inf` (all rows).
 #'   Consider using a smaller value for exploration, as ENEM files
 #'   contain millions of rows.
@@ -165,7 +165,7 @@ find_enem_file <- function(exdir, year) {
 #' Downloads and processes ENEM item response (gabarito) data,
 #' which contains detailed information about each question.
 #'
-#' @param year The year of the exam (2009-2023).
+#' @param year The year of the exam (1998-2024).
 #' @param n_max Maximum number of rows to read.
 #' @param quiet Logical. If `TRUE`, suppresses progress messages.
 #'
