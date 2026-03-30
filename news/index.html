@@ -40,8 +40,12 @@
 <h2 class="pkg-version" data-toc-text="0.1.2" id="educabr-012">educabR 0.1.2<a class="anchor" aria-label="anchor" href="#educabr-012"></a></h2><p class="text-muted">CRAN release: 2026-02-19</p>
 <div class="section level3">
 <h3 id="new-features-0-1-2">New features<a class="anchor" aria-label="anchor" href="#new-features-0-1-2"></a></h3>
-<ul><li>
+<ul><li>Added post-read data validation for all datasets. Errors on empty or corrupted files; warns when expected columns are missing (e.g., score columns for ENEM, UF columns for IDEB/Census) with actionable messages.</li>
+<li>Downloads now show estimated file size before starting (e.g., “downloading 2.3 GB from INEP…”) via HTTP HEAD request, with graceful fallback if size is unavailable.</li>
+<li>
 <code><a href="../reference/get_ideb_series.html">get_ideb_series()</a></code> now shows per-year progress indication (e.g., “processing IDEB 2017 (1/4)”) and propagates the <code>quiet</code> parameter to inner <code><a href="../reference/get_ideb.html">get_ideb()</a></code> calls.</li>
+<li>
+<code><a href="../reference/get_enem_itens.html">get_enem_itens()</a></code> now has <code>keep_zip</code> parameter for consistency with <code><a href="../reference/get_enem.html">get_enem()</a></code> and <code><a href="../reference/get_censo_escolar.html">get_censo_escolar()</a></code>.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-0-1-2">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-1-2"></a></h3>
@@ -53,11 +57,13 @@
 <code><a href="../reference/get_censo_escolar.html">get_censo_escolar()</a></code>: 2007-2024 -&gt; 1995-2024</li>
 </ul></li>
 <li>Added <code>@family</code> tags to group related functions in help pages (ENEM, IDEB, School Census, cache).</li>
+<li>Added English vignette (<code>getting-started.Rmd</code>).</li>
 <li>Fixed Portuguese accents in <code>README.pt-br.md</code>.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="tests-0-1-2">Tests<a class="anchor" aria-label="anchor" href="#tests-0-1-2"></a></h3>
 <ul><li>Added tests for <code><a href="../reference/enem_summary.html">enem_summary()</a></code>: statistics calculation, NA handling, grouping by variable, and error on missing score columns.</li>
+<li>Added tests for <code>validate_data()</code>: empty data, few columns, missing expected columns per dataset.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="cran-0-1-2">CRAN<a class="anchor" aria-label="anchor" href="#cran-0-1-2"></a></h3>
