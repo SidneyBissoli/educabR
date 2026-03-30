@@ -168,6 +168,7 @@ find_enem_file <- function(exdir, year) {
 #'
 #' @param year The year of the exam (1998-2024).
 #' @param n_max Maximum number of rows to read.
+#' @param keep_zip Logical. If `TRUE`, keeps the downloaded ZIP file in cache.
 #' @param quiet Logical. If `TRUE`, suppresses progress messages.
 #'
 #' @return A tibble with item response data.
@@ -180,7 +181,7 @@ find_enem_file <- function(exdir, year) {
 #' # get item data for 2023
 #' itens <- get_enem_itens(2023)
 #' }
-get_enem_itens <- function(year, n_max = Inf, quiet = FALSE) {
+get_enem_itens <- function(year, n_max = Inf, keep_zip = TRUE, quiet = FALSE) {
   # validate arguments
   validate_year(year, "enem")
 
@@ -202,6 +203,12 @@ get_enem_itens <- function(year, n_max = Inf, quiet = FALSE) {
   if (!dir.exists(exdir)) {
     zip_path <- cache_path("enem", zip_filename)
     extract_zip(zip_path, exdir, quiet = quiet)
+  }
+
+  # clean up zip if requested
+  zip_path <- cache_path("enem", zip_filename)
+  if (!keep_zip && file.exists(zip_path)) {
+    unlink(zip_path)
   }
 
   # find item file

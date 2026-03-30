@@ -4,12 +4,14 @@
 \alias{get_enem_itens}
 \title{Get ENEM item response data}
 \usage{
-get_enem_itens(year, n_max = Inf, quiet = FALSE)
+get_enem_itens(year, n_max = Inf, keep_zip = TRUE, quiet = FALSE)
 }
 \arguments{
 \item{year}{The year of the exam (1998-2024).}
 
 \item{n_max}{Maximum number of rows to read.}
+
+\item{keep_zip}{Logical. If \code{TRUE}, keeps the downloaded ZIP file in cache.}
 
 \item{quiet}{Logical. If \code{TRUE}, suppresses progress messages.}
 }
