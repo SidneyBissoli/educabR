@@ -8,9 +8,9 @@
 
 O **educabR** facilita o acesso a dados educacionais brasileiros do INEP, incluindo IDEB, ENEM e Censo Escolar.
 
-## Instalacao
+## Instalação
 
-Voce pode instalar a versao de desenvolvimento do educabR pelo GitHub:
+Você pode instalar a versão de desenvolvimento do educabR pelo GitHub:
 
 ```r
 # install.packages("devtools")
@@ -19,7 +19,7 @@ devtools::install_github("SidneyBissoli/educabR")
 
 ## Funcionalidades
 
-| Dataset | Funcao | Anos disponiveis |
+| Dataset | Função | Anos disponíveis |
 |---------|--------|------------------|
 | IDEB | `get_ideb()` | 2017, 2019, 2021, 2023 |
 | ENEM | `get_enem()` | 1998-2024 |
@@ -34,7 +34,7 @@ library(educabR)
 
 # Baixar IDEB 2021 - Anos Iniciais - Escolas
 ideb <- get_ideb(
-  year = 2021,
+  year  = 2021,
   stage = "anos_iniciais",
   level = "escola"
 )
@@ -46,7 +46,7 @@ ideb <- get_ideb(
 # Baixar microdados do ENEM 2023
 enem <- get_enem(year = 2023)
 
-# Resumo estatistico
+# Resumo estatístico
 enem_summary(enem)
 ```
 
@@ -67,15 +67,15 @@ list_cache()
 # Limpar cache
 clear_cache()
 
-# Definir diretorio de cache personalizado
+# Definir diretório de cache personalizado
 set_cache_dir("~/meu_cache")
 ```
 
-## Documentacao
+## Documentação
 
 - [Site do pacote](https://sidneybissoli.github.io/educabR/)
-- [Vignette de introducao](https://sidneybissoli.github.io/educabR/articles/introducao-educabr.html)
+- [Vignette de introdução](https://sidneybissoli.github.io/educabR/articles/introducao-educabr.html)
 
-## Licenca
+## Licença
 
 MIT
