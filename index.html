@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">educabR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,9 +58,9 @@
 
 <p>O <strong>educabR</strong> facilita o acesso a dados educacionais brasileiros do INEP, incluindo IDEB, ENEM e Censo Escolar.</p>
 <div class="section level2">
-<h2 id="instalacao">Instalacao<a class="anchor" aria-label="anchor" href="#instalacao"></a>
+<h2 id="instalação">Instalação<a class="anchor" aria-label="anchor" href="#instala%C3%A7%C3%A3o"></a>
 </h2>
-<p>Voce pode instalar a versao de desenvolvimento do educabR pelo GitHub:</p>
+<p>Você pode instalar a versão de desenvolvimento do educabR pelo GitHub:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"SidneyBissoli/educabR"</span><span class="op">)</span></span></code></pre></div>
@@ -71,8 +71,8 @@
 <table class="table">
 <thead><tr class="header">
 <th>Dataset</th>
-<th>Funcao</th>
-<th>Anos disponiveis</th>
+<th>Função</th>
+<th>Anos disponíveis</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -104,7 +104,7 @@
 <span></span>
 <span><span class="co"># Baixar IDEB 2021 - Anos Iniciais - Escolas</span></span>
 <span><span class="va">ideb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_ideb.html">get_ideb</a></span><span class="op">(</span></span>
-<span>  year <span class="op">=</span> <span class="fl">2021</span>,</span>
+<span>  year  <span class="op">=</span> <span class="fl">2021</span>,</span>
 <span>  stage <span class="op">=</span> <span class="st">"anos_iniciais"</span>,</span>
 <span>  level <span class="op">=</span> <span class="st">"escola"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -116,7 +116,7 @@
 <code class="sourceCode R"><span><span class="co"># Baixar microdados do ENEM 2023</span></span>
 <span><span class="va">enem</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_enem.html">get_enem</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2023</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Resumo estatistico</span></span>
+<span><span class="co"># Resumo estatístico</span></span>
 <span><span class="fu"><a href="reference/enem_summary.html">enem_summary</a></span><span class="op">(</span><span class="va">enem</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -138,19 +138,19 @@
 <span><span class="co"># Limpar cache</span></span>
 <span><span class="fu"><a href="reference/clear_cache.html">clear_cache</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Definir diretorio de cache personalizado</span></span>
+<span><span class="co"># Definir diretório de cache personalizado</span></span>
 <span><span class="fu"><a href="reference/set_cache_dir.html">set_cache_dir</a></span><span class="op">(</span><span class="st">"~/meu_cache"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="documentacao">Documentacao<a class="anchor" aria-label="anchor" href="#documentacao"></a>
+<h2 id="documentação">Documentação<a class="anchor" aria-label="anchor" href="#documenta%C3%A7%C3%A3o"></a>
 </h2>
 <ul>
 <li><a href="https://sidneybissoli.github.io/educabR/">Site do pacote</a></li>
-<li><a href="https://sidneybissoli.github.io/educabR/articles/introducao-educabr.html">Vignette de introducao</a></li>
+<li><a href="https://sidneybissoli.github.io/educabR/articles/introducao-educabr.html">Vignette de introdução</a></li>
 </ul>
 </div>
 <div class="section level2">
-<h2 id="licenca">Licenca<a class="anchor" aria-label="anchor" href="#licenca"></a>
+<h2 id="licença">Licença<a class="anchor" aria-label="anchor" href="#licen%C3%A7a"></a>
 </h2>
 <p>MIT</p>
 </div>

@@ -28,8 +28,8 @@ Invisibly returns the cache directory path.
 ## Examples
 
 ``` r
-# \donttest{
+if (FALSE) { # \dontrun{
 # set a custom cache directory (use tempdir() in examples)
 set_cache_dir(file.path(tempdir(), "educabR_cache"))
-# }
+} # }
 ```
