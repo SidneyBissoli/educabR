@@ -6,6 +6,23 @@ inep_base_url <- function() {
   "https://download.inep.gov.br"
 }
 
+# get file size via HEAD request (returns NULL on failure)
+get_remote_file_size <- function(url) {
+  tryCatch(
+    {
+      req <- httr2::request(url) |>
+        httr2::req_method("HEAD") |>
+        httr2::req_timeout(seconds = 10)
+
+      resp <- httr2::req_perform(req)
+      size <- httr2::resp_header(resp, "content-length")
+
+      if (!is.null(size)) as.numeric(size) else NULL
+    },
+    error = function(e) NULL
+  )
+}
+
 #' Download a file from INEP
 #'
 #' @description
@@ -20,12 +37,24 @@ inep_base_url <- function() {
 #'
 #' @keywords internal
 download_inep_file <- function(url, destfile, quiet = FALSE) {
-  if (!quiet) {
-    cli::cli_alert_info("downloading from INEP...")
-  }
-
   # create directory if needed
   dir.create(dirname(destfile), recursive = TRUE, showWarnings = FALSE)
+
+  # check file size before downloading
+  if (!quiet) {
+    file_size <- get_remote_file_size(url)
+    if (!is.null(file_size)) {
+      size_mb <- round(file_size / 1024^2, 1)
+      if (size_mb >= 1000) {
+        size_label <- paste0(round(size_mb / 1024, 1), " GB")
+      } else {
+        size_label <- paste0(size_mb, " MB")
+      }
+      cli::cli_alert_info("downloading {.val {size_label}} from INEP...")
+    } else {
+      cli::cli_alert_info("downloading from INEP...")
+    }
+  }
 
   # use httr2 for better error handling
   tryCatch(

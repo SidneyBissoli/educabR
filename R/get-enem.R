@@ -65,9 +65,6 @@ get_enem <- function(year,
   if (!is_cached("enem", zip_filename)) {
     if (!quiet) {
       cli::cli_alert_info("downloading ENEM {.val {year}}...")
-      cli::cli_alert_warning(
-        "ENEM files are large (1-3 GB). this may take a while..."
-      )
     }
     download_inep_file(url, zip_path, quiet = quiet)
   } else if (!quiet) {
