@@ -43,6 +43,7 @@ validate_data <- function(data, dataset, year) {
   switch(
     dataset,
     "enem" = validate_enem(data, year),
+    "enem_participantes" = validate_enem_participantes(data, year),
     "enem_itens" = validate_enem_itens(data, year),
     "ideb" = validate_ideb(data, year),
     "censo_escolar" = validate_censo_escolar(data, year)
@@ -62,6 +63,22 @@ validate_enem <- function(data, year) {
         "i" = "expected columns starting with {.val nu_nota_}",
         "i" = "column names found: {.val {head(names(data), 10)}}",
         "i" = "{.fun enem_summary} will not work with this data"
+      )
+    )
+  }
+}
+
+# enem_participantes (2024+): check for demographic columns, no score expected
+validate_enem_participantes <- function(data, year) {
+  expected <- c("nu_inscricao", "tp_sexo")
+  found <- expected[expected %in% names(data)]
+
+  if (length(found) == 0) {
+    cli::cli_warn(
+      c(
+        "ENEM {.val {year}} participant data may have an unexpected structure",
+        "i" = "expected columns like {.val {expected}}",
+        "i" = "column names found: {.val {head(names(data), 10)}}"
       )
     )
   }

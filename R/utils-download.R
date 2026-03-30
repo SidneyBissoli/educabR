@@ -313,18 +313,18 @@ find_data_files <- function(exdir, pattern = "\\.(csv|CSV|txt|TXT)$") {
 #'
 #' @keywords internal
 detect_encoding <- function(file) {
-  # read first few lines and check for encoding issues
-  tryCatch(
-    {
-      lines <- readLines(file, n = 10, encoding = "UTF-8", warn = FALSE)
-      # if no errors, likely UTF-8
-      "UTF-8"
-    },
-    error = function(e) {
-      # try Latin-1
-      "Latin-1"
-    }
-  )
+  # read raw bytes from the first chunk of the file
+  raw_bytes <- readBin(file, "raw", n = 10000)
+  text <- rawToChar(raw_bytes)
+
+  # iconv returns NA if input is not valid UTF-8
+  result <- iconv(text, from = "UTF-8", to = "UTF-8")
+
+  if (is.na(result)) {
+    "latin1"
+  } else {
+    "UTF-8"
+  }
 }
 
 #' Read INEP data file

@@ -95,6 +95,9 @@ get_censo_escolar <- function(year,
   # standardize column names
   df <- standardize_names(df)
 
+  # convert SAS datetime columns (e.g. "12FEB2024:00:00:00") to Date
+  df <- parse_sas_dates(df)
+
   # validate data structure
   validate_data(df, "censo_escolar", year)
 
@@ -195,6 +198,33 @@ uf_to_code <- function(uf) {
   }
 
   unname(uf_map[uf_upper])
+}
+
+#' Parse SAS datetime columns to Date
+#'
+#' @description
+#' Internal function to convert columns with SAS datetime format
+#' (e.g. "12FEB2024:00:00:00") to Date objects.
+#'
+#' @param df A data frame.
+#'
+#' @return The data frame with date columns converted.
+#'
+#' @keywords internal
+parse_sas_dates <- function(df) {
+  dt_cols <- grep("^dt_", names(df), value = TRUE)
+
+  old_locale <- Sys.getlocale("LC_TIME")
+  on.exit(Sys.setlocale("LC_TIME", old_locale), add = TRUE)
+  Sys.setlocale("LC_TIME", "C")
+
+  for (col in dt_cols) {
+    if (is.character(df[[col]])) {
+      df[[col]] <- as.Date(df[[col]], format = "%d%b%Y:%H:%M:%S")
+    }
+  }
+
+  df
 }
 
 #' Standardize column names

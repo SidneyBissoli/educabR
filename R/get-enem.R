@@ -9,6 +9,10 @@
 #' high school equivalency exam.
 #'
 #' @param year The year of the exam (1998-2024).
+#' @param type Type of data to load. Only used for ENEM 2024+, where
+#'   microdata is split into separate files. Options: `"participantes"`
+#'   (demographics and socioeconomic data, default), `"resultados"` (scores).
+#'   Ignored for years before 2024 (single file with all data).
 #' @param n_max Maximum number of rows to read. Default is `Inf` (all rows).
 #'   Consider using a smaller value for exploration, as ENEM files
 #'   contain millions of rows.
@@ -33,6 +37,8 @@
 #' - Use `n_max` to read a sample first for exploration.
 #' - Column names are standardized to lowercase with underscores.
 #' - Score variables start with `nu_nota_` prefix.
+#' - From 2024 onwards, INEP split the microdata into separate files.
+#'   Use the `type` parameter to choose which file to load.
 #'
 #' @section Data dictionary:
 #' For detailed information about variables, see INEP's documentation:
@@ -48,13 +54,26 @@
 #'
 #' # get full data (warning: large file)
 #' enem_2023 <- get_enem(2023)
+#'
+#' # ENEM 2024+: choose data type
+#' participantes <- get_enem(2024, type = "participantes", n_max = 1000)
+#' resultados <- get_enem(2024, type = "resultados", n_max = 1000)
 #' }
 get_enem <- function(year,
+                     type = "participantes",
                      n_max = Inf,
                      keep_zip = TRUE,
                      quiet = FALSE) {
   # validate arguments
   validate_year(year, "enem")
+  type <- match.arg(type, c("participantes", "resultados"))
+
+  # warn if type is used for years before 2024
+  if (year < 2024 && type != "participantes") {
+    cli::cli_alert_warning(
+      "{.arg type} is only available for ENEM 2024+. Returning full microdata."
+    )
+  }
 
   # build url and file paths
   url <- build_inep_url("enem", year)
@@ -84,7 +103,7 @@ get_enem <- function(year,
   }
 
   # find the main data file
-  data_file <- find_enem_file(exdir, year)
+  data_file <- find_enem_file(exdir, year, type)
 
   if (!quiet) {
     cli::cli_alert_info("reading ENEM data...")
@@ -101,8 +120,12 @@ get_enem <- function(year,
   # standardize column names
   df <- standardize_names(df)
 
-  # validate data structure
-  validate_data(df, "enem", year)
+  # validate data structure (skip score check for participantes)
+  if (year >= 2024 && type == "participantes") {
+    validate_data(df, "enem_participantes", year)
+  } else {
+    validate_data(df, "enem", year)
+  }
 
   if (!quiet) {
     cli::cli_alert_success(
@@ -125,13 +148,21 @@ get_enem <- function(year,
 #' @return The path to the data file.
 #'
 #' @keywords internal
-find_enem_file <- function(exdir, year) {
-  # look for the main microdados file
-  patterns <- c(
-    str_c("MICRODADOS_ENEM_", year),
-    "MICRODADOS_ENEM",
-    "DADOS"
-  )
+find_enem_file <- function(exdir, year, type = "participantes") {
+  if (year >= 2024) {
+    # from 2024: separate files (PARTICIPANTES, RESULTADOS, ITENS_PROVA)
+    target <- toupper(type)
+    patterns <- c(
+      str_c(target, "_", year),
+      target
+    )
+  } else {
+    # before 2024: single MICRODADOS_ENEM_{year}.csv
+    patterns <- c(
+      str_c("MICRODADOS_ENEM_", year),
+      "MICRODADOS_ENEM"
+    )
+  }
 
   for (pattern in patterns) {
     files <- list.files(

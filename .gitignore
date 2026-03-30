@@ -9,6 +9,7 @@
 *.tar.gz
 *.zip
 /check/
+..Rcheck/
 CRAN-SUBMISSION
 
 # Documentation
