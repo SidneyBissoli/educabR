@@ -104,6 +104,9 @@ get_enem <- function(year,
   # standardize column names
   df <- standardize_names(df)
 
+  # validate data structure
+  validate_data(df, "enem", year)
+
   if (!quiet) {
     cli::cli_alert_success(
       "loaded {.val {nrow(df)}} rows and {.val {ncol(df)}} columns"
@@ -238,6 +241,9 @@ get_enem_itens <- function(year, n_max = Inf, keep_zip = TRUE, quiet = FALSE) {
 
   # standardize column names
   df <- standardize_names(df)
+
+  # validate data structure
+  validate_data(df, "enem_itens", year)
 
   if (!quiet) {
     cli::cli_alert_success(

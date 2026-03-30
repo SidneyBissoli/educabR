@@ -95,6 +95,9 @@ get_censo_escolar <- function(year,
   # standardize column names
   df <- standardize_names(df)
 
+  # validate data structure
+  validate_data(df, "censo_escolar", year)
+
   # filter by UF if requested
   if (!is.null(uf) && "co_uf" %in% names(df)) {
     uf_code <- uf_to_code(uf)

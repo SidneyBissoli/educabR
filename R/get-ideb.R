@@ -121,6 +121,9 @@ get_ideb <- function(year,
   # standardize column names
   df <- standardize_names(df)
 
+  # validate data structure
+  validate_data(df, "ideb", year)
+
   # filter by UF if requested
   if (!is.null(uf) && level %in% c("escola", "municipio")) {
     uf_code <- uf_to_code(uf)
