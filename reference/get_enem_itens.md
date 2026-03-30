@@ -6,7 +6,7 @@ contains detailed information about each question.
 ## Usage
 
 ``` r
-get_enem_itens(year, n_max = Inf, quiet = FALSE)
+get_enem_itens(year, n_max = Inf, keep_zip = TRUE, quiet = FALSE)
 ```
 
 ## Arguments
@@ -19,6 +19,10 @@ get_enem_itens(year, n_max = Inf, quiet = FALSE)
 
   Maximum number of rows to read.
 
+- keep_zip:
+
+  Logical. If `TRUE`, keeps the downloaded ZIP file in cache.
+
 - quiet:
 
   Logical. If `TRUE`, suppresses progress messages.
@@ -26,6 +30,12 @@ get_enem_itens(year, n_max = Inf, quiet = FALSE)
 ## Value
 
 A tibble with item response data.
+
+## See also
+
+Other ENEM functions:
+[`enem_summary()`](https://sidneybissoli.github.io/educabR/reference/enem_summary.md),
+[`get_enem()`](https://sidneybissoli.github.io/educabR/reference/get_enem.md)
 
 ## Examples
 

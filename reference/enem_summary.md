@@ -24,6 +24,12 @@ enem_summary(data, by = NULL)
 
 A tibble with summary statistics for each score area.
 
+## See also
+
+Other ENEM functions:
+[`get_enem()`](https://sidneybissoli.github.io/educabR/reference/get_enem.md),
+[`get_enem_itens()`](https://sidneybissoli.github.io/educabR/reference/get_enem_itens.md)
+
 ## Examples
 
 ``` r

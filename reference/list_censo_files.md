@@ -18,6 +18,11 @@ list_censo_files(year)
 
 A character vector of file names found.
 
+## See also
+
+Other School Census functions:
+[`get_censo_escolar()`](https://sidneybissoli.github.io/educabR/reference/get_censo_escolar.md)
+
 ## Examples
 
 ``` r

@@ -18,7 +18,8 @@
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/introducao-educabr.html">Introducao ao educabR</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/getting-started.html">Getting Started with educabR</a></li>
+    <li><a class="dropdown-item" href="../articles/introducao-educabr.html">Introducao ao educabR</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -36,57 +37,85 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.2" id="educabr-012">educabR 0.1.2<a class="anchor" aria-label="anchor" href="#educabr-012"></a></h2><p class="text-muted">CRAN release: 2026-02-19</p>
+<div class="section level3">
+<h3 id="new-features-0-1-2">New features<a class="anchor" aria-label="anchor" href="#new-features-0-1-2"></a></h3>
+<ul><li>
+<code><a href="../reference/get_ideb_series.html">get_ideb_series()</a></code> now shows per-year progress indication (e.g., “processing IDEB 2017 (1/4)”) and propagates the <code>quiet</code> parameter to inner <code><a href="../reference/get_ideb.html">get_ideb()</a></code> calls.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-0-1-2">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-1-2"></a></h3>
+<ul><li>Added English README (<code>README.md</code>) as default; Portuguese version renamed to <code>README.pt-br.md</code> with cross-links between both.</li>
+<li>Fixed <code>@param year</code> ranges in documentation to match <code><a href="../reference/available_years.html">available_years()</a></code>:
+<ul><li>
+<code><a href="../reference/get_enem.html">get_enem()</a></code> / <code><a href="../reference/get_enem_itens.html">get_enem_itens()</a></code>: 2009-2023 -&gt; 1998-2024</li>
+<li>
+<code><a href="../reference/get_censo_escolar.html">get_censo_escolar()</a></code>: 2007-2024 -&gt; 1995-2024</li>
+</ul></li>
+<li>Added <code>@family</code> tags to group related functions in help pages (ENEM, IDEB, School Census, cache).</li>
+<li>Fixed Portuguese accents in <code>README.pt-br.md</code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="tests-0-1-2">Tests<a class="anchor" aria-label="anchor" href="#tests-0-1-2"></a></h3>
+<ul><li>Added tests for <code><a href="../reference/enem_summary.html">enem_summary()</a></code>: statistics calculation, NA handling, grouping by variable, and error on missing score columns.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="cran-0-1-2">CRAN<a class="anchor" aria-label="anchor" href="#cran-0-1-2"></a></h3>
+<ul><li>Replaced <code>\donttest</code> with <code>\dontrun</code> in all examples per CRAN request.</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.1" id="educabr-011">educabR 0.1.1<a class="anchor" aria-label="anchor" href="#educabr-011"></a></h2>
 <div class="section level3">
-<h3 id="correcoes-0-1-1">Correcoes<a class="anchor" aria-label="anchor" href="#correcoes-0-1-1"></a></h3>
-<ul><li>Corrigido exemplo de <code><a href="../reference/set_cache_dir.html">set_cache_dir()</a></code> que criava diretorio no home do usuario (<code>~/educabR_cache</code>) durante verificacoes do CRAN. Agora usa <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code> nos exemplos.</li>
+<h3 id="bug-fixes-0-1-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-1"></a></h3>
+<ul><li>Fixed <code><a href="../reference/set_cache_dir.html">set_cache_dir()</a></code> example that created a directory in the user’s home (<code>~/educabR_cache</code>) during CRAN checks. Now uses <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code> in examples.</li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="educabr-010">educabR 0.1.0<a class="anchor" aria-label="anchor" href="#educabr-010"></a></h2><p class="text-muted">CRAN release: 2026-02-03</p>
-<p>Primeira versao publica do pacote.</p>
+<p>First public release.</p>
 <div class="section level3">
-<h3 id="novas-funcionalidades-0-1-0">Novas funcionalidades<a class="anchor" aria-label="anchor" href="#novas-funcionalidades-0-1-0"></a></h3>
+<h3 id="new-features-0-1-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-1-0"></a></h3>
 <div class="section level4">
 <h4 id="ideb-0-1-0">IDEB<a class="anchor" aria-label="anchor" href="#ideb-0-1-0"></a></h4>
 <ul><li>
-<code><a href="../reference/get_ideb.html">get_ideb()</a></code>: Baixa dados do IDEB (anos 2017, 2019, 2021, 2023)</li>
+<code><a href="../reference/get_ideb.html">get_ideb()</a></code>: Download IDEB data (years 2017, 2019, 2021, 2023).</li>
 <li>
-<code><a href="../reference/get_ideb_series.html">get_ideb_series()</a></code>: Baixa serie historica do IDEB</li>
+<code><a href="../reference/get_ideb_series.html">get_ideb_series()</a></code>: Download IDEB historical series across multiple years.</li>
 <li>
-<code><a href="../reference/list_ideb_available.html">list_ideb_available()</a></code>: Lista combinacoes disponiveis de ano/etapa/nivel</li>
+<code><a href="../reference/list_ideb_available.html">list_ideb_available()</a></code>: List available year/stage/level combinations.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="enem-0-1-0">ENEM<a class="anchor" aria-label="anchor" href="#enem-0-1-0"></a></h4>
 <ul><li>
-<code><a href="../reference/get_enem.html">get_enem()</a></code>: Baixa microdados do ENEM (anos 1998-2024)</li>
+<code><a href="../reference/get_enem.html">get_enem()</a></code>: Download ENEM microdata (years 1998-2024).</li>
 <li>
-<code><a href="../reference/get_enem_itens.html">get_enem_itens()</a></code>: Baixa dados dos itens das provas</li>
+<code><a href="../reference/get_enem_itens.html">get_enem_itens()</a></code>: Download ENEM item response data.</li>
 <li>
-<code><a href="../reference/enem_summary.html">enem_summary()</a></code>: Gera resumo estatistico dos dados do ENEM</li>
+<code><a href="../reference/enem_summary.html">enem_summary()</a></code>: Calculate summary statistics for ENEM scores.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="censo-escolar-0-1-0">Censo Escolar<a class="anchor" aria-label="anchor" href="#censo-escolar-0-1-0"></a></h4>
+<h4 id="school-census-0-1-0">School Census<a class="anchor" aria-label="anchor" href="#school-census-0-1-0"></a></h4>
 <ul><li>
-<code><a href="../reference/get_censo_escolar.html">get_censo_escolar()</a></code>: Baixa microdados do Censo Escolar (anos 1995-2024)</li>
+<code><a href="../reference/get_censo_escolar.html">get_censo_escolar()</a></code>: Download School Census microdata (years 1995-2024).</li>
 <li>
-<code><a href="../reference/list_censo_files.html">list_censo_files()</a></code>: Lista arquivos disponiveis no Censo</li>
+<code><a href="../reference/list_censo_files.html">list_censo_files()</a></code>: List available files in a downloaded census.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="gerenciamento-de-cache-0-1-0">Gerenciamento de cache<a class="anchor" aria-label="anchor" href="#gerenciamento-de-cache-0-1-0"></a></h4>
+<h4 id="cache-management-0-1-0">Cache management<a class="anchor" aria-label="anchor" href="#cache-management-0-1-0"></a></h4>
 <ul><li>
-<code><a href="../reference/set_cache_dir.html">set_cache_dir()</a></code>: Define diretorio de cache personalizado</li>
+<code><a href="../reference/set_cache_dir.html">set_cache_dir()</a></code>: Set custom cache directory.</li>
 <li>
-<code><a href="../reference/get_cache_dir.html">get_cache_dir()</a></code>: Retorna diretorio de cache atual</li>
+<code><a href="../reference/get_cache_dir.html">get_cache_dir()</a></code>: Get current cache directory.</li>
 <li>
-<code><a href="../reference/clear_cache.html">clear_cache()</a></code>: Limpa arquivos em cache</li>
+<code><a href="../reference/clear_cache.html">clear_cache()</a></code>: Clear cached files.</li>
 <li>
-<code><a href="../reference/list_cache.html">list_cache()</a></code>: Lista arquivos em cache</li>
+<code><a href="../reference/list_cache.html">list_cache()</a></code>: List cached files with metadata.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="utilitarios-0-1-0">Utilitarios<a class="anchor" aria-label="anchor" href="#utilitarios-0-1-0"></a></h4>
+<h4 id="utilities-0-1-0">Utilities<a class="anchor" aria-label="anchor" href="#utilities-0-1-0"></a></h4>
 <ul><li>
-<code><a href="../reference/available_years.html">available_years()</a></code>: Retorna anos disponiveis para cada dataset</li>
+<code><a href="../reference/available_years.html">available_years()</a></code>: Get available years for each dataset.</li>
 </ul></div>
 </div>
 </div>

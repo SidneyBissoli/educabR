@@ -25,6 +25,13 @@ set_cache_dir(path = NULL, persistent = FALSE)
 
 Invisibly returns the cache directory path.
 
+## See also
+
+Other cache functions:
+[`clear_cache()`](https://sidneybissoli.github.io/educabR/reference/clear_cache.md),
+[`get_cache_dir()`](https://sidneybissoli.github.io/educabR/reference/get_cache_dir.md),
+[`list_cache()`](https://sidneybissoli.github.io/educabR/reference/list_cache.md)
+
 ## Examples
 
 ``` r

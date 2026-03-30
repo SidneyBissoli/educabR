@@ -71,6 +71,12 @@ so no `n_max` parameter is provided.
 Official IDEB portal:
 <https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/ideb>
 
+## See also
+
+Other IDEB functions:
+[`get_ideb_series()`](https://sidneybissoli.github.io/educabR/reference/get_ideb_series.md),
+[`list_ideb_available()`](https://sidneybissoli.github.io/educabR/reference/list_ideb_available.md)
+
 ## Examples
 
 ``` r

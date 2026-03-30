@@ -1,60 +1,99 @@
 # Changelog
 
+## educabR 0.1.2
+
+CRAN release: 2026-02-19
+
+### New features
+
+- [`get_ideb_series()`](https://sidneybissoli.github.io/educabR/reference/get_ideb_series.md)
+  now shows per-year progress indication (e.g., “processing IDEB 2017
+  (1/4)”) and propagates the `quiet` parameter to inner
+  [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)
+  calls.
+
+### Documentation
+
+- Added English README (`README.md`) as default; Portuguese version
+  renamed to `README.pt-br.md` with cross-links between both.
+- Fixed `@param year` ranges in documentation to match
+  [`available_years()`](https://sidneybissoli.github.io/educabR/reference/available_years.md):
+  - [`get_enem()`](https://sidneybissoli.github.io/educabR/reference/get_enem.md)
+    /
+    [`get_enem_itens()`](https://sidneybissoli.github.io/educabR/reference/get_enem_itens.md):
+    2009-2023 -\> 1998-2024
+  - [`get_censo_escolar()`](https://sidneybissoli.github.io/educabR/reference/get_censo_escolar.md):
+    2007-2024 -\> 1995-2024
+- Added `@family` tags to group related functions in help pages (ENEM,
+  IDEB, School Census, cache).
+- Fixed Portuguese accents in `README.pt-br.md`.
+
+### Tests
+
+- Added tests for
+  [`enem_summary()`](https://sidneybissoli.github.io/educabR/reference/enem_summary.md):
+  statistics calculation, NA handling, grouping by variable, and error
+  on missing score columns.
+
+### CRAN
+
+- Replaced `\donttest` with `\dontrun` in all examples per CRAN request.
+
 ## educabR 0.1.1
 
-### Correcoes
+### Bug fixes
 
-- Corrigido exemplo de
+- Fixed
   [`set_cache_dir()`](https://sidneybissoli.github.io/educabR/reference/set_cache_dir.md)
-  que criava diretorio no home do usuario (`~/educabR_cache`) durante
-  verificacoes do CRAN. Agora usa
-  [`tempdir()`](https://rdrr.io/r/base/tempfile.html) nos exemplos.
+  example that created a directory in the user’s home
+  (`~/educabR_cache`) during CRAN checks. Now uses
+  [`tempdir()`](https://rdrr.io/r/base/tempfile.html) in examples.
 
 ## educabR 0.1.0
 
 CRAN release: 2026-02-03
 
-Primeira versao publica do pacote.
+First public release.
 
-### Novas funcionalidades
+### New features
 
 #### IDEB
 
 - [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md):
-  Baixa dados do IDEB (anos 2017, 2019, 2021, 2023)
+  Download IDEB data (years 2017, 2019, 2021, 2023).
 - [`get_ideb_series()`](https://sidneybissoli.github.io/educabR/reference/get_ideb_series.md):
-  Baixa serie historica do IDEB
+  Download IDEB historical series across multiple years.
 - [`list_ideb_available()`](https://sidneybissoli.github.io/educabR/reference/list_ideb_available.md):
-  Lista combinacoes disponiveis de ano/etapa/nivel
+  List available year/stage/level combinations.
 
 #### ENEM
 
 - [`get_enem()`](https://sidneybissoli.github.io/educabR/reference/get_enem.md):
-  Baixa microdados do ENEM (anos 1998-2024)
+  Download ENEM microdata (years 1998-2024).
 - [`get_enem_itens()`](https://sidneybissoli.github.io/educabR/reference/get_enem_itens.md):
-  Baixa dados dos itens das provas
+  Download ENEM item response data.
 - [`enem_summary()`](https://sidneybissoli.github.io/educabR/reference/enem_summary.md):
-  Gera resumo estatistico dos dados do ENEM
+  Calculate summary statistics for ENEM scores.
 
-#### Censo Escolar
+#### School Census
 
 - [`get_censo_escolar()`](https://sidneybissoli.github.io/educabR/reference/get_censo_escolar.md):
-  Baixa microdados do Censo Escolar (anos 1995-2024)
+  Download School Census microdata (years 1995-2024).
 - [`list_censo_files()`](https://sidneybissoli.github.io/educabR/reference/list_censo_files.md):
-  Lista arquivos disponiveis no Censo
+  List available files in a downloaded census.
 
-#### Gerenciamento de cache
+#### Cache management
 
 - [`set_cache_dir()`](https://sidneybissoli.github.io/educabR/reference/set_cache_dir.md):
-  Define diretorio de cache personalizado
+  Set custom cache directory.
 - [`get_cache_dir()`](https://sidneybissoli.github.io/educabR/reference/get_cache_dir.md):
-  Retorna diretorio de cache atual
+  Get current cache directory.
 - [`clear_cache()`](https://sidneybissoli.github.io/educabR/reference/clear_cache.md):
-  Limpa arquivos em cache
+  Clear cached files.
 - [`list_cache()`](https://sidneybissoli.github.io/educabR/reference/list_cache.md):
-  Lista arquivos em cache
+  List cached files with metadata.
 
-#### Utilitarios
+#### Utilities
 
 - [`available_years()`](https://sidneybissoli.github.io/educabR/reference/available_years.md):
-  Retorna anos disponiveis para cada dataset
+  Get available years for each dataset.

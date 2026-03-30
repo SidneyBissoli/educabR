@@ -12,6 +12,12 @@ list_ideb_available()
 
 A tibble with available IDEB datasets.
 
+## See also
+
+Other IDEB functions:
+[`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md),
+[`get_ideb_series()`](https://sidneybissoli.github.io/educabR/reference/get_ideb_series.md)
+
 ## Examples
 
 ``` r

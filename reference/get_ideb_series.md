@@ -41,6 +41,12 @@ get_ideb_series(
 
 A tibble with IDEB data for all requested years.
 
+## See also
+
+Other IDEB functions:
+[`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md),
+[`list_ideb_available()`](https://sidneybissoli.github.io/educabR/reference/list_ideb_available.md)
+
 ## Examples
 
 ``` r

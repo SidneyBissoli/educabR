@@ -12,9 +12,16 @@ get_cache_dir()
 
 A character string with the path to the cache directory.
 
+## See also
+
+Other cache functions:
+[`clear_cache()`](https://sidneybissoli.github.io/educabR/reference/clear_cache.md),
+[`list_cache()`](https://sidneybissoli.github.io/educabR/reference/list_cache.md),
+[`set_cache_dir()`](https://sidneybissoli.github.io/educabR/reference/set_cache_dir.md)
+
 ## Examples
 
 ``` r
 get_cache_dir()
-#> [1] "/tmp/RtmpmQqYtq/educabR_cache"
+#> [1] "/tmp/RtmpzlcuIq/educabR_cache"
 ```

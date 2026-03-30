@@ -64,6 +64,12 @@ with millions of participants. The microdata includes:
 For detailed information about variables, see INEP's documentation:
 <https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/enem>
 
+## See also
+
+Other ENEM functions:
+[`enem_summary()`](https://sidneybissoli.github.io/educabR/reference/enem_summary.md),
+[`get_enem_itens()`](https://sidneybissoli.github.io/educabR/reference/get_enem_itens.md)
+
 ## Examples
 
 ``` r

@@ -19,6 +19,13 @@ clear_cache(dataset = NULL)
 
 Invisibly returns `TRUE` if successful.
 
+## See also
+
+Other cache functions:
+[`get_cache_dir()`](https://sidneybissoli.github.io/educabR/reference/get_cache_dir.md),
+[`list_cache()`](https://sidneybissoli.github.io/educabR/reference/list_cache.md),
+[`set_cache_dir()`](https://sidneybissoli.github.io/educabR/reference/set_cache_dir.md)
+
 ## Examples
 
 ``` r

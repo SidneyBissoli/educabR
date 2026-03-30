@@ -56,6 +56,11 @@ basic education (early childhood, elementary, and high school).
 For detailed information about variables, see INEP's documentation:
 <https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-escolar>
 
+## See also
+
+Other School Census functions:
+[`list_censo_files()`](https://sidneybissoli.github.io/educabR/reference/list_censo_files.md)
+
 ## Examples
 
 ``` r
