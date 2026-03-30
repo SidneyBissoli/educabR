@@ -13,7 +13,7 @@ get_enem_itens(year, n_max = Inf, quiet = FALSE)
 
 - year:
 
-  The year of the exam (2009-2023).
+  The year of the exam (1998-2024).
 
 - n_max:
 

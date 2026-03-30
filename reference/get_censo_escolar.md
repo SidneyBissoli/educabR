@@ -15,7 +15,7 @@ get_censo_escolar(year, uf = NULL, n_max = Inf, keep_zip = TRUE, quiet = FALSE)
 
 - year:
 
-  The year of the census (2007-2024).
+  The year of the census (1995-2024).
 
 - uf:
 
