@@ -38,6 +38,7 @@
 #' For detailed information about variables, see INEP's documentation:
 #' \url{https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/enem}
 #'
+#' @family ENEM functions
 #' @export
 #'
 #' @examples
@@ -171,6 +172,7 @@ find_enem_file <- function(exdir, year) {
 #'
 #' @return A tibble with item response data.
 #'
+#' @family ENEM functions
 #' @export
 #'
 #' @examples
@@ -250,6 +252,7 @@ get_enem_itens <- function(year, n_max = Inf, quiet = FALSE) {
 #'
 #' @return A tibble with summary statistics for each score area.
 #'
+#' @family ENEM functions
 #' @export
 #'
 #' @examples

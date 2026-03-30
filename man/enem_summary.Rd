@@ -29,3 +29,9 @@ enem_summary(enem)
 enem_summary(enem, by = "tp_sexo")
 }
 }
+\seealso{
+Other ENEM functions: 
+\code{\link{get_enem}()},
+\code{\link{get_enem_itens}()}
+}
+\concept{ENEM functions}

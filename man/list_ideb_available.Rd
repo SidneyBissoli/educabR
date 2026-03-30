@@ -15,3 +15,9 @@ Lists the IDEB data files available in the INEP portal.
 \examples{
 list_ideb_available()
 }
+\seealso{
+Other IDEB functions: 
+\code{\link{get_ideb}()},
+\code{\link{get_ideb_series}()}
+}
+\concept{IDEB functions}

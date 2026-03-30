@@ -70,3 +70,9 @@ ideb_sp <- get_ideb(2021, level = "municipio", stage = "anos_iniciais", uf = "SP
 ideb_em <- get_ideb(2023, level = "municipio", stage = "ensino_medio")
 }
 }
+\seealso{
+Other IDEB functions: 
+\code{\link{get_ideb_series}()},
+\code{\link{list_ideb_available}()}
+}
+\concept{IDEB functions}

@@ -20,3 +20,8 @@ Lists the data files available in a downloaded School Census.
 list_censo_files(2023)
 }
 }
+\seealso{
+Other School Census functions: 
+\code{\link{get_censo_escolar}()}
+}
+\concept{School Census functions}

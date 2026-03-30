@@ -36,6 +36,7 @@
 #' @section Data source:
 #' Official IDEB portal: \url{https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/ideb}
 #'
+#' @family IDEB functions
 #' @export
 #'
 #' @examples
@@ -188,6 +189,7 @@ read_ideb_excel <- function(file) {
 #'
 #' @return A tibble with IDEB data for all requested years.
 #'
+#' @family IDEB functions
 #' @export
 #'
 #' @examples
@@ -275,6 +277,7 @@ get_ideb_series <- function(years = NULL,
 #'
 #' @return A tibble with available IDEB datasets.
 #'
+#' @family IDEB functions
 #' @export
 #'
 #' @examples

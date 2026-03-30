@@ -17,6 +17,7 @@
 #'
 #' @return Invisibly returns the cache directory path.
 #'
+#' @family cache functions
 #' @export
 #'
 #' @examples
@@ -61,6 +62,7 @@ set_cache_dir <- function(path = NULL, persistent = FALSE) {
 #'
 #' @return A character string with the path to the cache directory.
 #'
+#' @family cache functions
 #' @export
 #'
 #' @examples
@@ -98,6 +100,7 @@ get_cache_dir <- function() {
 #'
 #' @return Invisibly returns `TRUE` if successful.
 #'
+#' @family cache functions
 #' @export
 #'
 #' @examples
@@ -143,6 +146,7 @@ clear_cache <- function(dataset = NULL) {
 #'
 #' @return A tibble with information about cached files.
 #'
+#' @family cache functions
 #' @export
 #'
 #' @examples

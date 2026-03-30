@@ -26,3 +26,9 @@ which contains detailed information about each question.
 itens <- get_enem_itens(2023)
 }
 }
+\seealso{
+Other ENEM functions: 
+\code{\link{enem_summary}()},
+\code{\link{get_enem}()}
+}
+\concept{ENEM functions}

@@ -25,3 +25,10 @@ clear_cache()
 clear_cache("enem")
 }
 }
+\seealso{
+Other cache functions: 
+\code{\link{get_cache_dir}()},
+\code{\link{list_cache}()},
+\code{\link{set_cache_dir}()}
+}
+\concept{cache functions}

@@ -55,3 +55,8 @@ escolas_sp <- get_censo_escolar(2023, uf = "SP")
 escolas_sample <- get_censo_escolar(2023, n_max = 1000)
 }
 }
+\seealso{
+Other School Census functions: 
+\code{\link{list_censo_files}()}
+}
+\concept{School Census functions}

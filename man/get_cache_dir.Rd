@@ -15,3 +15,10 @@ Returns the current cache directory used by educabR.
 \examples{
 get_cache_dir()
 }
+\seealso{
+Other cache functions: 
+\code{\link{clear_cache}()},
+\code{\link{list_cache}()},
+\code{\link{set_cache_dir}()}
+}
+\concept{cache functions}

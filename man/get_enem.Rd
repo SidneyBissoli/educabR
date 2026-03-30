@@ -59,3 +59,9 @@ enem_sample <- get_enem(2023, n_max = 10000)
 enem_2023 <- get_enem(2023)
 }
 }
+\seealso{
+Other ENEM functions: 
+\code{\link{enem_summary}()},
+\code{\link{get_enem_itens}()}
+}
+\concept{ENEM functions}

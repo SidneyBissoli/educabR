@@ -40,3 +40,9 @@ ideb_hist <- get_ideb_series(
 )
 }
 }
+\seealso{
+Other IDEB functions: 
+\code{\link{get_ideb}()},
+\code{\link{list_ideb_available}()}
+}
+\concept{IDEB functions}

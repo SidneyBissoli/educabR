@@ -31,6 +31,7 @@
 #' For detailed information about variables, see INEP's documentation:
 #' \url{https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-escolar}
 #'
+#' @family School Census functions
 #' @export
 #'
 #' @examples
@@ -224,6 +225,7 @@ standardize_names <- function(df) {
 #'
 #' @return A character vector of file names found.
 #'
+#' @family School Census functions
 #' @export
 #'
 #' @examples
