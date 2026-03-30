@@ -2,7 +2,10 @@
 
 ## New features
 
+* Added post-read data validation for all datasets. Errors on empty or corrupted files; warns when expected columns are missing (e.g., score columns for ENEM, UF columns for IDEB/Census) with actionable messages.
+* Downloads now show estimated file size before starting (e.g., "downloading 2.3 GB from INEP...") via HTTP HEAD request, with graceful fallback if size is unavailable.
 * `get_ideb_series()` now shows per-year progress indication (e.g., "processing IDEB 2017 (1/4)") and propagates the `quiet` parameter to inner `get_ideb()` calls.
+* `get_enem_itens()` now has `keep_zip` parameter for consistency with `get_enem()` and `get_censo_escolar()`.
 
 ## Documentation
 
@@ -11,11 +14,13 @@
   - `get_enem()` / `get_enem_itens()`: 2009-2023 -> 1998-2024
   - `get_censo_escolar()`: 2007-2024 -> 1995-2024
 * Added `@family` tags to group related functions in help pages (ENEM, IDEB, School Census, cache).
+* Added English vignette (`getting-started.Rmd`).
 * Fixed Portuguese accents in `README.pt-br.md`.
 
 ## Tests
 
 * Added tests for `enem_summary()`: statistics calculation, NA handling, grouping by variable, and error on missing score columns.
+* Added tests for `validate_data()`: empty data, few columns, missing expected columns per dataset.
 
 ## CRAN
 
