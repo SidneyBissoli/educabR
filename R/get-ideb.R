@@ -231,10 +231,14 @@ get_ideb_series <- function(years = NULL,
   }
 
   # download and combine
-  df_list <- purrr::map(years, function(y) {
+  total <- length(years)
+  df_list <- purrr::imap(years, function(y, i) {
+    if (!quiet) {
+      cli::cli_alert_info("processing IDEB {.val {y}} ({i}/{total})...")
+    }
     tryCatch(
       {
-        df <- get_ideb(y, level = level, stage = stage, uf = uf, quiet = TRUE)
+        df <- get_ideb(y, level = level, stage = stage, uf = uf, quiet = quiet)
         df$ano_ideb <- y
         df
       },
