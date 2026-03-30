@@ -121,6 +121,9 @@ get_ideb <- function(year,
   # standardize column names
   df <- standardize_names(df)
 
+  # convert vl_* columns to numeric ("-" and "ND" become NA, fix comma decimals)
+  df <- clean_ideb_values(df)
+
   # validate data structure
   validate_data(df, "ideb", year)
 
@@ -147,6 +150,33 @@ get_ideb <- function(year,
     cli::cli_alert_success(
       "loaded {.val {nrow(df)}} rows and {.val {ncol(df)}} columns"
     )
+  }
+
+  df
+}
+
+#' Clean IDEB numeric columns
+#'
+#' @description
+#' Internal function to convert `vl_*` columns from character to numeric.
+#' Handles `"-"` and `"ND"` as `NA`, and replaces comma decimal separators
+#' with dots.
+#'
+#' @param df A data frame with IDEB data.
+#'
+#' @return The data frame with `vl_*` columns as numeric.
+#'
+#' @keywords internal
+clean_ideb_values <- function(df) {
+  vl_cols <- grep("^vl_", names(df), value = TRUE)
+
+  for (col in vl_cols) {
+    if (is.character(df[[col]])) {
+      values <- df[[col]]
+      values[values %in% c("-", "ND")] <- NA_character_
+      values <- gsub(",", ".", values)
+      df[[col]] <- suppressWarnings(as.numeric(values))
+    }
   }
 
   df
