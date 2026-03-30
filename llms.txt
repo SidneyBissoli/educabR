@@ -1,33 +1,36 @@
 # educabR
 
-O **educabR** facilita o acesso a dados educacionais brasileiros do
-INEP, incluindo IDEB, ENEM e Censo Escolar.
+*[Leia em
+Português](https://sidneybissoli.github.io/educabR/README.pt-br.md)*
 
-## Instalação
+**educabR** provides easy access to Brazilian educational data from
+INEP, including IDEB, ENEM, and School Census (Censo Escolar).
 
-Você pode instalar a versão de desenvolvimento do educabR pelo GitHub:
+## Installation
+
+You can install the development version of educabR from GitHub:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("SidneyBissoli/educabR")
 ```
 
-## Funcionalidades
+## Features
 
-| Dataset       | Função                                                                                          | Anos disponíveis       |
+| Dataset       | Function                                                                                        | Available Years        |
 |---------------|-------------------------------------------------------------------------------------------------|------------------------|
 | IDEB          | [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)                   | 2017, 2019, 2021, 2023 |
 | ENEM          | [`get_enem()`](https://sidneybissoli.github.io/educabR/reference/get_enem.md)                   | 1998-2024              |
-| Censo Escolar | [`get_censo_escolar()`](https://sidneybissoli.github.io/educabR/reference/get_censo_escolar.md) | 1995-2024              |
+| School Census | [`get_censo_escolar()`](https://sidneybissoli.github.io/educabR/reference/get_censo_escolar.md) | 1995-2024              |
 
-## Exemplos
+## Examples
 
 ### IDEB
 
 ``` r
 library(educabR)
 
-# Baixar IDEB 2021 - Anos Iniciais - Escolas
+# Download IDEB 2021 - Early Years - Schools
 ideb <- get_ideb(
   year  = 2021,
   stage = "anos_iniciais",
@@ -38,42 +41,42 @@ ideb <- get_ideb(
 ### ENEM
 
 ``` r
-# Baixar microdados do ENEM 2023
+# Download ENEM 2023 microdata
 enem <- get_enem(year = 2023)
 
-# Resumo estatístico
+# Statistical summary
 enem_summary(enem)
 ```
 
-### Censo Escolar
+### School Census
 
 ``` r
-# Baixar Censo Escolar 2023
+# Download School Census 2023
 censo <- get_censo_escolar(year = 2023)
 ```
 
 ## Cache
 
-O pacote usa cache local para evitar downloads repetidos:
+The package uses local caching to avoid repeated downloads:
 
 ``` r
-# Ver arquivos em cache
+# List cached files
 list_cache()
 
-# Limpar cache
+# Clear cache
 clear_cache()
 
-# Definir diretório de cache personalizado
-set_cache_dir("~/meu_cache")
+# Set custom cache directory
+set_cache_dir("~/my_cache")
 ```
 
-## Documentação
+## Documentation
 
-- [Site do pacote](https://sidneybissoli.github.io/educabR/)
-- [Vignette de
-  introdução](https://sidneybissoli.github.io/educabR/articles/introducao-educabr.html)
+- [Package website](https://sidneybissoli.github.io/educabR/)
+- [Getting started
+  vignette](https://sidneybissoli.github.io/educabR/articles/introducao-educabr.html)
 
-## Licença
+## License
 
 MIT
 

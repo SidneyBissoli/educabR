@@ -16,5 +16,5 @@ A character string with the path to the cache directory.
 
 ``` r
 get_cache_dir()
-#> [1] "/tmp/RtmptzhQq0/educabR_cache"
+#> [1] "/tmp/Rtmp0yQ0pf/educabR_cache"
 ```
