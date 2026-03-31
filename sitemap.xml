@@ -11,6 +11,7 @@
 <url><loc>https://sidneybissoli.github.io/educabR/news/index.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/available_years.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/build_inep_url.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/clean_ideb_values.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/clear_cache.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/detect_encoding.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/download_inep_file.html</loc></url>
@@ -30,11 +31,13 @@
 <url><loc>https://sidneybissoli.github.io/educabR/reference/list_cache.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/list_censo_files.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/list_ideb_available.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/parse_sas_dates.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/read_ideb_excel.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/read_inep_file.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/set_cache_dir.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/standardize_names.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/uf_to_code.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/validate_data.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/validate_year.html</loc></url>
 </urlset>
 

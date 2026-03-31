@@ -7,7 +7,13 @@ equivalency exam.
 ## Usage
 
 ``` r
-get_enem(year, n_max = Inf, keep_zip = TRUE, quiet = FALSE)
+get_enem(
+  year,
+  type = "participantes",
+  n_max = Inf,
+  keep_zip = TRUE,
+  quiet = FALSE
+)
 ```
 
 ## Arguments
@@ -15,6 +21,13 @@ get_enem(year, n_max = Inf, keep_zip = TRUE, quiet = FALSE)
 - year:
 
   The year of the exam (1998-2024).
+
+- type:
+
+  Type of data to load. Only used for ENEM 2024+, where microdata is
+  split into separate files. Options: `"participantes"` (demographics
+  and socioeconomic data, default), `"resultados"` (scores). Ignored for
+  years before 2024 (single file with all data).
 
 - n_max:
 
@@ -59,6 +72,9 @@ with millions of participants. The microdata includes:
 
 - Score variables start with `nu_nota_` prefix.
 
+- From 2024 onwards, INEP split the microdata into separate files. Use
+  the `type` parameter to choose which file to load.
+
 ## Data dictionary
 
 For detailed information about variables, see INEP's documentation:
@@ -79,5 +95,9 @@ enem_sample <- get_enem(2023, n_max = 10000)
 
 # get full data (warning: large file)
 enem_2023 <- get_enem(2023)
+
+# ENEM 2024+: choose data type
+participantes <- get_enem(2024, type = "participantes", n_max = 1000)
+resultados <- get_enem(2024, type = "resultados", n_max = 1000)
 } # }
 ```

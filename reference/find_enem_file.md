@@ -6,7 +6,7 @@ directory.
 ## Usage
 
 ``` r
-find_enem_file(exdir, year)
+find_enem_file(exdir, year, type = "participantes")
 ```
 
 ## Arguments

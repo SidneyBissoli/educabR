@@ -47,8 +47,9 @@ CRAN release: 2026-02-19
   [`enem_summary()`](https://sidneybissoli.github.io/educabR/reference/enem_summary.md):
   statistics calculation, NA handling, grouping by variable, and error
   on missing score columns.
-- Added tests for `validate_data()`: empty data, few columns, missing
-  expected columns per dataset.
+- Added tests for
+  [`validate_data()`](https://sidneybissoli.github.io/educabR/reference/validate_data.md):
+  empty data, few columns, missing expected columns per dataset.
 
 ### CRAN
 
