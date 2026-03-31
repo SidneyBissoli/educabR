@@ -224,6 +224,9 @@ build_inep_url <- function(dataset, year, ...) {
     "enade" = str_c(
       base, "/microdados/microdados_enade_", year, ".zip"
     ),
+    "encceja" = str_c(
+      base, "/microdados/microdados_encceja_", year, ".zip"
+    ),
     "ideb" = {
       # ideb has different structure, handled separately
       str_c(base, "/ideb/", year, "/")
@@ -251,7 +254,7 @@ build_inep_url <- function(dataset, year, ...) {
 available_years <- function(dataset) {
   dataset <- match.arg(
     dataset,
-    choices = c("censo_escolar", "enem", "saeb", "censo_superior", "enade", "ideb")
+    choices = c("censo_escolar", "enem", "saeb", "censo_superior", "enade", "encceja", "ideb")
   )
 
   switch(
@@ -261,6 +264,7 @@ available_years <- function(dataset) {
     "saeb" = c(2011L, 2013L, 2015L, 2017L, 2019L, 2021L, 2023L),
     "censo_superior" = 2009:2024,
     "enade" = 2004:2024,
+    "encceja" = 2014:2024,
     "ideb" = c(2017L, 2019L, 2021L, 2023L)
   )
 }

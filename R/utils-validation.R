@@ -48,6 +48,7 @@ validate_data <- function(data, dataset, year) {
     "saeb" = validate_saeb(data, year),
     "censo_superior" = validate_censo_superior(data, year),
     "enade" = validate_enade(data, year),
+    "encceja" = validate_encceja(data, year),
     "ideb" = validate_ideb(data, year),
     "censo_escolar" = validate_censo_escolar(data, year)
   )
@@ -129,6 +130,22 @@ validate_enade <- function(data, year) {
     cli::cli_warn(
       c(
         "ENADE {.val {year}} data may have an unexpected structure",
+        "i" = "expected columns like {.val {expected}}",
+        "i" = "column names found: {.val {head(names(data), 10)}}"
+      )
+    )
+  }
+}
+
+# encceja: check for participant identifiers
+validate_encceja <- function(data, year) {
+  expected <- c("nu_inscricao", "nu_ano", "tp_sexo", "co_municipio_residencia")
+  found <- expected[expected %in% names(data)]
+
+  if (length(found) == 0) {
+    cli::cli_warn(
+      c(
+        "ENCCEJA {.val {year}} data may have an unexpected structure",
         "i" = "expected columns like {.val {expected}}",
         "i" = "column names found: {.val {head(names(data), 10)}}"
       )

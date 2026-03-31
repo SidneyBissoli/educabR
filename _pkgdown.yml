@@ -33,6 +33,11 @@ reference:
     contents:
       - get_enade
 
+  - title: "ENCCEJA"
+    desc: "Functions for ENCCEJA data"
+    contents:
+      - get_encceja
+
   - title: "Censo da Educação Superior"
     desc: "Functions for Higher Education Census data"
     contents:

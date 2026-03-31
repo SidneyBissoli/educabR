@@ -1,3 +1,11 @@
+# educabR 0.4.0
+
+## New features
+
+### ENCCEJA (Exame Nacional para Certificação de Competências de Jovens e Adultos)
+* `get_encceja()`: Download ENCCEJA microdata (years 2014-2024).
+* Automatic delimiter detection and dash-to-NA cleaning.
+
 # educabR 0.3.0
 
 ## New features

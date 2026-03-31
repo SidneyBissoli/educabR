@@ -6,7 +6,7 @@
 \alias{educabR}
 \title{educabR: Download and Process Brazilian Education Data from INEP}
 \description{
-Download and process public education data from INEP (Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira). Provides functions to access microdata from the School Census (Censo Escolar), ENEM (Exame Nacional do Ensino Médio), SAEB (Sistema de Avaliação da Educação Básica), Higher Education Census (Censo da Educação Superior), ENADE (Exame Nacional de Desempenho dos Estudantes), IDEB (Índice de Desenvolvimento da Educação Básica), and other educational datasets. Returns data in tidy format ready for analysis. Data source: INEP Open Data Portal \url{https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos}.
+Download and process public education data from INEP (Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira). Provides functions to access microdata from the School Census (Censo Escolar), ENEM (Exame Nacional do Ensino Médio), SAEB (Sistema de Avaliação da Educação Básica), Higher Education Census (Censo da Educação Superior), ENADE (Exame Nacional de Desempenho dos Estudantes), ENCCEJA (Exame Nacional para Certificação de Competências de Jovens e Adultos), IDEB (Índice de Desenvolvimento da Educação Básica), and other educational datasets. Returns data in tidy format ready for analysis. Data source: INEP Open Data Portal \url{https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos}.
 
 The educabR package provides functions to download and process public
 education data from INEP (Instituto Nacional de Estudos e Pesquisas
@@ -19,6 +19,7 @@ teachers, and classes in basic education
 \item \strong{Higher Education Census (Censo da Educação Superior)}: Annual data
 on institutions, courses, students, and faculty in higher education
 \item \strong{ENADE}: National Student Performance Exam (higher education)
+\item \strong{ENCCEJA}: Youth and Adult Education Certification Exam
 \item \strong{IDEB}: Basic Education Development Index
 }
 
@@ -51,6 +52,11 @@ tools.
 \strong{ENADE:}
 \itemize{
 \item \code{\link[=get_enade]{get_enade()}}: Download ENADE microdata
+}
+
+\strong{ENCCEJA:}
+\itemize{
+\item \code{\link[=get_encceja]{get_encceja()}}: Download ENCCEJA microdata
 }
 
 \strong{IDEB:}

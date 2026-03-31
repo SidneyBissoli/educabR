@@ -1,6 +1,6 @@
 Package: educabR
 Title: Download and Process Brazilian Education Data from INEP
-Version: 0.3.0
+Version: 0.4.0
 Authors@R: 
     person("Sidney da Silva Pereira", "Bissoli", 
            email = "sbissoli76@gmail.com", 
@@ -12,6 +12,7 @@ Description: Download and process public education data from INEP (Instituto
     ENEM (Exame Nacional do Ensino Médio), SAEB (Sistema de Avaliação da
     Educação Básica), Higher Education Census (Censo da Educação Superior),
     ENADE (Exame Nacional de Desempenho dos Estudantes),
+    ENCCEJA (Exame Nacional para Certificação de Competências de Jovens e Adultos),
     IDEB (Índice de Desenvolvimento da Educação Básica),
     and other educational datasets. Returns data in
     tidy format ready for analysis. Data source: INEP Open Data Portal

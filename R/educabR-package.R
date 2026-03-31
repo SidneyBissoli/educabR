@@ -15,6 +15,7 @@
 #' - **Higher Education Census (Censo da Educação Superior)**: Annual data
 #'   on institutions, courses, students, and faculty in higher education
 #' - **ENADE**: National Student Performance Exam (higher education)
+#' - **ENCCEJA**: Youth and Adult Education Certification Exam
 #' - **IDEB**: Basic Education Development Index
 #'
 #' All functions return data in tidy format, ready for analysis with tidyverse
@@ -36,6 +37,9 @@
 #'
 #' **ENADE:**
 #' - [get_enade()]: Download ENADE microdata
+#'
+#' **ENCCEJA:**
+#' - [get_encceja()]: Download ENCCEJA microdata
 #'
 #' **IDEB:**
 #' - [get_ideb()]: Download IDEB data
