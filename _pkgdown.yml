@@ -23,6 +23,17 @@ reference:
       - get_enem_itens
       - enem_summary
 
+  - title: "SAEB"
+    desc: "Functions for SAEB data"
+    contents:
+      - get_saeb
+
+  - title: "Censo da Educação Superior"
+    desc: "Functions for Higher Education Census data"
+    contents:
+      - get_censo_superior
+      - list_censo_superior_files
+
   - title: "Censo Escolar"
     desc: "Functions for School Census data"
     contents:
