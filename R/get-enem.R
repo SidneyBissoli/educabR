@@ -144,6 +144,7 @@ get_enem <- function(year,
 #'
 #' @param exdir The extraction directory.
 #' @param year The year.
+#' @param type The data type (`"participantes"` or `"resultados"`).
 #'
 #' @return The path to the data file.
 #'

@@ -10,6 +10,8 @@ find_enem_file(exdir, year, type = "participantes")
 \item{exdir}{The extraction directory.}
 
 \item{year}{The year.}
+
+\item{type}{The data type (\code{"participantes"} or \code{"resultados"}).}
 }
 \value{
 The path to the data file.
