@@ -2,6 +2,10 @@
 
 ## New features
 
+### ENEM por Escola (ENEM by School)
+* `get_enem_escola()`: Download ENEM results aggregated by school (2005-2015).
+* Single bundled file covering all years. Discontinued after 2015.
+
 ### IDD (Indicador de Diferença entre os Desempenhos Observado e Esperado)
 * `get_idd()`: Download IDD microdata (years 2014-2019, 2021-2023; no 2020 edition).
 * Measures the value added by undergraduate courses to student performance.

@@ -301,6 +301,9 @@ build_inep_url <- function(dataset, year, ...) {
     "encceja" = str_c(
       base, "/microdados/microdados_encceja_", year, ".zip"
     ),
+    "enem_escola" = str_c(
+      base, "/microdados/enem_por_escola/2005_a_2015/microdados_enem_por_escola.zip"
+    ),
     "idd" = {
       ext <- if (year >= 2021) ".zip" else ".7z"
       str_c(base, "/microdados/microdados_IDD_", year, ext)

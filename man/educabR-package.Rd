@@ -50,6 +50,11 @@ tools.
 \item \code{\link[=get_censo_superior]{get_censo_superior()}}: Download Higher Education Census microdata
 }
 
+\strong{ENEM por Escola:}
+\itemize{
+\item \code{\link[=get_enem_escola]{get_enem_escola()}}: Download ENEM results aggregated by school
+}
+
 \strong{ENADE:}
 \itemize{
 \item \code{\link[=get_enade]{get_enade()}}: Download ENADE microdata

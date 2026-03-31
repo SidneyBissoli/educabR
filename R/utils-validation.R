@@ -49,6 +49,7 @@ validate_data <- function(data, dataset, year) {
     "censo_superior" = validate_censo_superior(data, year),
     "enade" = validate_enade(data, year),
     "encceja" = validate_encceja(data, year),
+    "enem_escola" = validate_enem_escola(data, year),
     "idd" = validate_idd(data, year),
     "ideb" = validate_ideb(data, year),
     "censo_escolar" = validate_censo_escolar(data, year)
@@ -147,6 +148,23 @@ validate_encceja <- function(data, year) {
     cli::cli_warn(
       c(
         "ENCCEJA {.val {year}} data may have an unexpected structure",
+        "i" = "expected columns like {.val {expected}}",
+        "i" = "column names found: {.val {head(names(data), 10)}}"
+      )
+    )
+  }
+}
+
+# enem_escola: check for school and score columns
+validate_enem_escola <- function(data, year) {
+  expected <- c("co_escola_educacenso", "no_escola", "nu_ano",
+                "nu_media_cn", "nu_media_ch", "nu_media_lc", "nu_media_mt")
+  found <- expected[expected %in% names(data)]
+
+  if (length(found) == 0) {
+    cli::cli_warn(
+      c(
+        "ENEM por Escola data may have an unexpected structure",
         "i" = "expected columns like {.val {expected}}",
         "i" = "column names found: {.val {head(names(data), 10)}}"
       )

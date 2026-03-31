@@ -28,6 +28,11 @@ reference:
     contents:
       - get_saeb
 
+  - title: "ENEM por Escola"
+    desc: "Functions for ENEM by School data"
+    contents:
+      - get_enem_escola
+
   - title: "ENADE"
     desc: "Functions for ENADE data"
     contents:

@@ -36,6 +36,9 @@
 #' **Higher Education Census:**
 #' - [get_censo_superior()]: Download Higher Education Census microdata
 #'
+#' **ENEM por Escola:**
+#' - [get_enem_escola()]: Download ENEM results aggregated by school
+#'
 #' **ENADE:**
 #' - [get_enade()]: Download ENADE microdata
 #'
