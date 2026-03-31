@@ -118,6 +118,14 @@ Functions for ENADE data
 - [`get_enade()`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)
   : Get ENADE (Exame Nacional de Desempenho dos Estudantes) data
 
+## ENCCEJA
+
+Functions for ENCCEJA data
+
+- [`get_encceja()`](https://sidneybissoli.github.io/educabR/reference/get_encceja.md)
+  : Get ENCCEJA (Exame Nacional para Certificação de Competências de
+  Jovens e Adultos) data
+
 ## Censo da Educação Superior
 
 Functions for Higher Education Census data
