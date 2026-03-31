@@ -1,3 +1,20 @@
+# educabR 0.2.0
+
+## New features
+
+### SAEB (Sistema de Avaliação da Educação Básica)
+* `get_saeb()`: Download SAEB microdata (years 2011, 2013, 2015, 2017, 2019, 2021, 2023).
+* Supports multiple data types: student results (`"aluno"`), school (`"escola"`), principal (`"diretor"`), and teacher (`"professor"`) questionnaires.
+* Handles SAEB 2021 special case where INEP split downloads into elementary/high school and early childhood education files via the `level` parameter.
+
+## Bug fixes
+
+* Fixed encoding detection on Windows using `iconv()` instead of `validEnc()`.
+* Fixed `"Latin-1"` encoding name to `"latin1"` for Windows codepage compatibility.
+* Fixed ENEM 2024+ support: new `type` parameter for split files (`"participantes"`, `"resultados"`).
+* Added SAS datetime parsing for Censo Escolar date columns (`dt_*`).
+* Converted IDEB `vl_*` columns from character to numeric, handling `"-"`, `"ND"`, and comma decimals.
+
 # educabR 0.1.2
 
 ## New features

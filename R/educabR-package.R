@@ -11,6 +11,7 @@
 #' - **School Census (Censo Escolar)**: Annual data on schools, enrollment,
 #'   teachers, and classes in basic education
 #' - **ENEM**: Data from the National High School Exam
+#' - **SAEB**: Basic Education Assessment System (student performance)
 #' - **IDEB**: Basic Education Development Index
 #'
 #' All functions return data in tidy format, ready for analysis with tidyverse
@@ -23,6 +24,9 @@
 #'
 #' **ENEM:**
 #' - [get_enem()]: Download ENEM microdata
+#'
+#' **SAEB:**
+#' - [get_saeb()]: Download SAEB microdata
 #'
 #' **IDEB:**
 #' - [get_ideb()]: Download IDEB data

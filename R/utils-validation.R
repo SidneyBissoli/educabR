@@ -45,6 +45,7 @@ validate_data <- function(data, dataset, year) {
     "enem" = validate_enem(data, year),
     "enem_participantes" = validate_enem_participantes(data, year),
     "enem_itens" = validate_enem_itens(data, year),
+    "saeb" = validate_saeb(data, year),
     "ideb" = validate_ideb(data, year),
     "censo_escolar" = validate_censo_escolar(data, year)
   )
@@ -93,6 +94,23 @@ validate_enem_itens <- function(data, year) {
     cli::cli_warn(
       c(
         "ENEM {.val {year}} item data may have an unexpected structure",
+        "i" = "expected columns like {.val {expected}}",
+        "i" = "column names found: {.val {head(names(data), 10)}}"
+      )
+    )
+  }
+}
+
+# saeb: check for student or school identifiers
+validate_saeb <- function(data, year) {
+  expected <- c("id_aluno", "id_escola", "id_saeb", "id_educacao_infantil",
+                "nu_ano_saeb")
+  found <- expected[expected %in% names(data)]
+
+  if (length(found) == 0) {
+    cli::cli_warn(
+      c(
+        "SAEB {.val {year}} data may have an unexpected structure",
         "i" = "expected columns like {.val {expected}}",
         "i" = "column names found: {.val {head(names(data), 10)}}"
       )

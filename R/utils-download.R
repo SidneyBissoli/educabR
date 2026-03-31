@@ -205,6 +205,19 @@ build_inep_url <- function(dataset, year, ...) {
     "enem" = str_c(
       base, "/microdados/microdados_enem_", year, ".zip"
     ),
+    "saeb" = {
+      level <- list(...)$level %||% "fundamental_medio"
+      if (year == 2021) {
+        level_suffix <- switch(
+          level,
+          "fundamental_medio" = "_ensino_fundamental_e_medio",
+          "educacao_infantil" = "_educacao_infantil"
+        )
+        str_c(base, "/microdados/microdados_saeb_", year, level_suffix, ".zip")
+      } else {
+        str_c(base, "/microdados/microdados_saeb_", year, ".zip")
+      }
+    },
     "ideb" = {
       # ideb has different structure, handled separately
       str_c(base, "/ideb/", year, "/")
@@ -232,13 +245,14 @@ build_inep_url <- function(dataset, year, ...) {
 available_years <- function(dataset) {
   dataset <- match.arg(
     dataset,
-    choices = c("censo_escolar", "enem", "ideb")
+    choices = c("censo_escolar", "enem", "saeb", "ideb")
   )
 
   switch(
     dataset,
     "censo_escolar" = 1995:2024,
     "enem" = 1998:2024,
+    "saeb" = c(2011L, 2013L, 2015L, 2017L, 2019L, 2021L, 2023L),
     "ideb" = c(2017L, 2019L, 2021L, 2023L)
   )
 }
@@ -299,6 +313,30 @@ find_data_files <- function(exdir, pattern = "\\.(csv|CSV|txt|TXT)$") {
   }
 
   files
+}
+
+#' Detect file delimiter
+#'
+#' @description
+#' Internal function to detect the delimiter used in a CSV file by reading
+#' the first line and counting occurrences of common delimiters.
+#'
+#' @param file Path to the data file.
+#'
+#' @return The detected delimiter character.
+#'
+#' @keywords internal
+detect_delim <- function(file) {
+  first_line <- readLines(file, n = 1, warn = FALSE)
+
+  counts <- c(
+    ";" = str_count(first_line, ";"),
+    "|" = str_count(first_line, "\\|"),
+    "," = str_count(first_line, ","),
+    "\t" = str_count(first_line, "\t")
+  )
+
+  names(which.max(counts))
 }
 
 #' Detect file encoding
