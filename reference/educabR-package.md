@@ -6,7 +6,8 @@ to access microdata from the School Census (Censo Escolar), ENEM (Exame
 Nacional do Ensino Médio), SAEB (Sistema de Avaliação da Educação
 Básica), Higher Education Census (Censo da Educação Superior), ENADE
 (Exame Nacional de Desempenho dos Estudantes), ENCCEJA (Exame Nacional
-para Certificação de Competências de Jovens e Adultos), IDEB (Índice de
+para Certificação de Competências de Jovens e Adultos), IDD (Indicador
+de Diferença entre os Desempenhos Observado e Esperado), IDEB (Índice de
 Desenvolvimento da Educação Básica), and other educational datasets.
 Returns data in tidy format ready for analysis. Data source: INEP Open
 Data Portal
@@ -27,6 +28,8 @@ Educacionais Anísio Teixeira). It offers easy access to microdata from:
   on institutions, courses, students, and faculty in higher education
 
 - **ENADE**: National Student Performance Exam (higher education)
+
+- **IDD**: Value-added indicator for undergraduate courses
 
 - **ENCCEJA**: Youth and Adult Education Certification Exam
 
@@ -61,6 +64,11 @@ tidyverse tools.
 
 - [`get_enade()`](https://sidneybissoli.github.io/educabR/reference/get_enade.md):
   Download ENADE microdata
+
+**IDD:**
+
+- [`get_idd()`](https://sidneybissoli.github.io/educabR/reference/get_idd.md):
+  Download IDD data
 
 **ENCCEJA:**
 

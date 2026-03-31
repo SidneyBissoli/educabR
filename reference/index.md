@@ -36,6 +36,14 @@ Functions for ENADE data
 - [`get_enade()`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)
   : Get ENADE (Exame Nacional de Desempenho dos Estudantes) data
 
+## IDD
+
+Functions for IDD data
+
+- [`get_idd()`](https://sidneybissoli.github.io/educabR/reference/get_idd.md)
+  : Get IDD (Indicador de Diferença entre os Desempenhos Observado e
+  Esperado) data
+
 ## ENCCEJA
 
 Functions for ENCCEJA data

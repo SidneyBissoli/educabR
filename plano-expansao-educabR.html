@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">educabR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,35 +40,235 @@
 
 <div class="section level2">
 <h2 id="contexto">Contexto<a class="anchor" aria-label="anchor" href="#contexto"></a></h2>
-<p>O pacote educabR atualmente suporta 3 datasets do INEP: Censo Escolar, ENEM e IDEB. O objetivo é expandir para cobrir mais fontes de dados educacionais brasileiros, mantendo compatibilidade com o CRAN e seguindo os padrões já estabelecidos no pacote.</p>
+<p>O pacote educabR atualmente suporta 7 datasets do INEP: Censo Escolar, ENEM, IDEB, SAEB, Censo da Educação Superior, ENADE e ENCCEJA. O objetivo é expandir para cobrir mais fontes de dados educacionais brasileiros, mantendo compatibilidade com o CRAN e seguindo os padrões já estabelecidos no pacote.</p>
 <p>A arquitetura atual é bem modular: cada dataset tem seu próprio <code>R/get-{dataset}.R</code>, e as utilidades compartilhadas (<code>utils-download.R</code>, <code>utils-cache.R</code>, <code>utils-validation.R</code>) são reutilizáveis. Não serão necessárias novas dependências.</p>
 <hr></div>
 <div class="section level2">
-<h2 id="fases-de-implementação">Fases de Implementação<a class="anchor" aria-label="anchor" href="#fases-de-implementa%C3%A7%C3%A3o"></a></h2>
+<h2 id="fases-concluídas">Fases concluídas<a class="anchor" aria-label="anchor" href="#fases-conclu%C3%ADdas"></a></h2>
 <div class="section level3">
-<h3 id="fase-1-saeb--versão-020">Fase 1: SAEB — Versão 0.2.0<a class="anchor" aria-label="anchor" href="#fase-1-saeb--vers%C3%A3o-020"></a></h3>
-<p><strong>Por quê primeiro</strong>: O SAEB é o componente de aprendizagem do IDEB (complementa diretamente os dados já existentes). Alta demanda da comunidade acadêmica.</p>
-<p><strong>Criar:</strong> - <code>R/get-saeb.R</code> - <code>get_saeb(year, type = c("aluno", "escola", "diretor", "professor"), n_max, keep_zip, quiet)</code> - <code>find_saeb_file(exdir, year, type)</code> — internal - Anos: <code>c(2011, 2013, 2015, 2017, 2019, 2021, 2023)</code> (biennial) - URL: <code>{base}/microdados/microdados_saeb_{year}.zip</code> (verificar antes) - <code>tests/testthat/test-saeb.R</code> — validação de anos, URLs, dados sintéticos</p>
-<p><strong>Modificar:</strong> - <code>R/utils-download.R</code> — adicionar <code>"saeb"</code> em <code><a href="reference/build_inep_url.html">build_inep_url()</a></code> e <code><a href="reference/available_years.html">available_years()</a></code> - <code>R/utils-validation.R</code> — adicionar <code>validate_saeb()</code> e registrar no <code>switch</code> de <code><a href="reference/validate_data.html">validate_data()</a></code> - <code>DESCRIPTION</code> — bump para 0.2.0 - <code>NEWS.md</code> — documentar SAEB - <code>R/educabR-package.R</code> — mencionar SAEB na documentação do pacote</p>
+<h3 id="fase-1-saeb--versão-020-">Fase 1: SAEB — Versão 0.2.0 ✓<a class="anchor" aria-label="anchor" href="#fase-1-saeb--vers%C3%A3o-020-"></a></h3>
+<ul><li><code>get_saeb(year, type, level, n_max, keep_zip, quiet)</code></li>
+<li>Tipos: aluno, escola, diretor, professor</li>
+<li>Anos: 2011, 2013, 2015, 2017, 2019, 2021, 2023</li>
+</ul></div>
+<div class="section level3">
+<h3 id="fase-2-censo-da-educação-superior--versão-030-">Fase 2: Censo da Educação Superior — Versão 0.3.0 ✓<a class="anchor" aria-label="anchor" href="#fase-2-censo-da-educa%C3%A7%C3%A3o-superior--vers%C3%A3o-030-"></a></h3>
+<ul><li><code>get_censo_superior(year, type, uf, n_max, keep_zip, quiet)</code></li>
+<li><code>list_censo_superior_files(year)</code></li>
+<li>Tipos: ies, cursos, alunos, docentes</li>
+<li>Anos: 2009–2024</li>
+</ul></div>
+<div class="section level3">
+<h3 id="fase-3-enade--versão-030-">Fase 3: ENADE — Versão 0.3.0 ✓<a class="anchor" aria-label="anchor" href="#fase-3-enade--vers%C3%A3o-030-"></a></h3>
+<ul><li><code>get_enade(year, n_max, keep_zip, quiet)</code></li>
+<li>Anos: 2004–2024</li>
+</ul></div>
+<div class="section level3">
+<h3 id="fase-4-encceja--versão-040-">Fase 4: ENCCEJA — Versão 0.4.0 ✓<a class="anchor" aria-label="anchor" href="#fase-4-encceja--vers%C3%A3o-040-"></a></h3>
+<ul><li><code>get_encceja(year, n_max, keep_zip, quiet)</code></li>
+<li>Anos: 2014–2024</li>
+</ul><hr></div>
+</div>
+<div class="section level2">
+<h2 id="fases-futuras--inep">Fases futuras — INEP<a class="anchor" aria-label="anchor" href="#fases-futuras--inep"></a></h2>
+<div class="section level3">
+<h3 id="fase-5-idd--versão-050">Fase 5: IDD — Versão 0.5.0<a class="anchor" aria-label="anchor" href="#fase-5-idd--vers%C3%A3o-050"></a></h3>
+<p><strong>Prioridade:</strong> Alta<br><strong>Por quê</strong>: Complementa diretamente o ENADE — mede o valor agregado pelo curso de graduação (diferença entre desempenho no ENADE e nota de entrada via ENEM). Mesmo padrão ZIP+CSV do INEP.</p>
+<p><strong>Criar:</strong><br>
+- <code>R/get-idd.R</code><br>
+- <code>get_idd(year, n_max, keep_zip, quiet)</code><br>
+- <code>find_idd_file(exdir, year)</code> — internal<br>
+- Anos: 2014–2023<br>
+- URL: <code>{base}/microdados/microdados_idd_{year}.zip</code> (verificar)<br>
+- <code>tests/testthat/test-idd.R</code></p>
+<p><strong>Modificar:</strong> <code>utils-download.R</code>, <code>utils-validation.R</code>, <code>_pkgdown.yml</code>, <code>DESCRIPTION</code>, <code>NEWS.md</code>, <code>educabR-package.R</code></p>
 <hr></div>
 <div class="section level3">
-<h3 id="fase-2-censo-da-educação-superior--versão-030">Fase 2: Censo da Educação Superior — Versão 0.3.0<a class="anchor" aria-label="anchor" href="#fase-2-censo-da-educa%C3%A7%C3%A3o-superior--vers%C3%A3o-030"></a></h3>
-<p><strong>Por quê</strong>: Expande o pacote para educação superior. Dataset anual com múltiplas tabelas.</p>
-<p><strong>Criar:</strong> - <code>R/get-censo-superior.R</code> - <code>get_censo_superior(year, type = c("ies", "cursos", "alunos", "docentes"), uf, n_max, keep_zip, quiet)</code> - <code>find_censo_superior_file(exdir, year, type)</code> — internal - <code>list_censo_superior_files(year)</code> — exported - Anos: 2009–2024 - URL: <code>{base}/microdados/microdados_censo_da_educacao_superior_{year}.zip</code> (verificar) - <code>tests/testthat/test-censo-superior.R</code></p>
+<h3 id="fase-6-enem-por-escola--versão-050-bundled-com-fase-5">Fase 6: ENEM por Escola — Versão 0.5.0 (bundled com Fase 5)<a class="anchor" aria-label="anchor" href="#fase-6-enem-por-escola--vers%C3%A3o-050-bundled-com-fase-5"></a></h3>
+<p><strong>Prioridade:</strong> Alta<br><strong>Por quê</strong>: Dados de desempenho no ENEM agregados por escola. Altíssima demanda de pesquisadores, jornalistas e gestores educacionais.</p>
+<p><strong>Criar:</strong><br>
+- <code>R/get-enem-escola.R</code><br>
+- <code>get_enem_escola(n_max, keep_zip, quiet)</code> — pacote único 2005-2015<br>
+- <code>find_enem_escola_file(exdir)</code> — internal<br>
+- Anos: 2005–2015 (arquivo único)<br>
+- URL: <code>{base}/microdados/enem_por_escola/2005_a_2015/microdados_enem_por_escola.zip</code> (verificar)<br>
+- <code>tests/testthat/test-enem-escola.R</code></p>
 <p><strong>Modificar:</strong> mesmos arquivos utilitários + DESCRIPTION + NEWS.md</p>
 <hr></div>
 <div class="section level3">
-<h3 id="fase-3-enade--versão-030-bundled-com-fase-2">Fase 3: ENADE — Versão 0.3.0 (bundled com Fase 2)<a class="anchor" aria-label="anchor" href="#fase-3-enade--vers%C3%A3o-030-bundled-com-fase-2"></a></h3>
-<p><strong>Por quê</strong>: Completa o ecossistema de educação superior. Estrutura simples (ZIP+CSV único), implementação rápida. Submeter junto com Fase 2 para evitar submissões frequentes ao CRAN.</p>
-<p><strong>Criar:</strong> - <code>R/get-enade.R</code> - <code>get_enade(year, n_max, keep_zip, quiet)</code> - <code>find_enade_file(exdir, year)</code> — internal - <code>enade_summary(data, by)</code> — opcional, análogo a <code><a href="reference/enem_summary.html">enem_summary()</a></code> - Anos: 2004–2024 - URL: <code>{base}/microdados/microdados_enade_{year}.zip</code> (verificar) - <code>tests/testthat/test-enade.R</code></p>
+<h3 id="fase-7-cpcigc-indicadores-de-qualidade-da-educação-superior--versão-050-bundled-com-fases-5-6">Fase 7: CPC/IGC (Indicadores de Qualidade da Educação Superior) — Versão 0.5.0 (bundled com Fases 5-6)<a class="anchor" aria-label="anchor" href="#fase-7-cpcigc-indicadores-de-qualidade-da-educa%C3%A7%C3%A3o-superior--vers%C3%A3o-050-bundled-com-fases-5-6"></a></h3>
+<p><strong>Prioridade:</strong> Alta<br><strong>Por quê</strong>: Conceito Preliminar de Curso (CPC) e Índice Geral de Cursos (IGC) são os indicadores oficiais de qualidade do ensino superior. Completa o ecossistema ENADE + IDD + CPC/IGC.</p>
+<p><strong>Criar:</strong><br>
+- <code>R/get-cpc.R</code><br>
+- <code>get_cpc(year, n_max, keep_zip, quiet)</code><br>
+- Anos: 2014–2023<br>
+- <code>R/get-igc.R</code><br>
+- <code>get_igc(year, n_max, keep_zip, quiet)</code><br>
+- Anos: 2014–2023<br>
+- Testes correspondentes</p>
 <p><strong>Modificar:</strong> mesmos arquivos utilitários + DESCRIPTION + NEWS.md</p>
+<hr></div>
+</div>
+<div class="section level2">
+<h2 id="fases-futuras--outras-fontes">Fases futuras — Outras fontes<a class="anchor" aria-label="anchor" href="#fases-futuras--outras-fontes"></a></h2>
+<div class="section level3">
+<h3 id="fase-8-capes-dados-abertos-da-pós-graduação--versão-060">Fase 8: CAPES (Dados Abertos da Pós-Graduação) — Versão 0.6.0<a class="anchor" aria-label="anchor" href="#fase-8-capes-dados-abertos-da-p%C3%B3s-gradua%C3%A7%C3%A3o--vers%C3%A3o-060"></a></h3>
+<p><strong>Prioridade:</strong> Alta<br><strong>Por quê</strong>: Expande o pacote para pós-graduação stricto sensu. Dados anuais em CSV via portal CKAN da CAPES.</p>
+<p><strong>Criar:</strong><br>
+- <code>R/get-capes.R</code><br>
+- <code>get_capes(year, type = c("programas", "discentes", "docentes", "producao"), n_max, quiet)</code><br>
+- Anos: 2017–2024<br>
+- URL: <code>https://dadosabertos.capes.gov.br/dataset/</code> (verificar estrutura)<br>
+- <code>tests/testthat/test-capes.R</code></p>
+<p><strong>Nota:</strong> Requer adaptação da infraestrutura de download (CAPES usa portal CKAN, não o padrão INEP). Pode necessitar funções de download específicas.</p>
 <hr></div>
 <div class="section level3">
-<h3 id="fase-4-encceja--versão-040">Fase 4: ENCCEJA — Versão 0.4.0<a class="anchor" aria-label="anchor" href="#fase-4-encceja--vers%C3%A3o-040"></a></h3>
-<p><strong>Por quê</strong>: Cobre educação de jovens e adultos, público distinto.</p>
-<p><strong>Criar:</strong> - <code>R/get-encceja.R</code> - <code>get_encceja(year, n_max, keep_zip, quiet)</code> - <code>find_encceja_file(exdir, year)</code> — internal - Anos: 2014–2024 - URL: <code>{base}/microdados/microdados_encceja_{year}.zip</code> (verificar) - <code>tests/testthat/test-encceja.R</code></p>
-<p><strong>Modificar:</strong> mesmos arquivos utilitários + DESCRIPTION + NEWS.md</p>
+<h3 id="fase-9-fundeb--versão-060-bundled-com-fase-8">Fase 9: FUNDEB — Versão 0.6.0 (bundled com Fase 8)<a class="anchor" aria-label="anchor" href="#fase-9-fundeb--vers%C3%A3o-060-bundled-com-fase-8"></a></h3>
+<p><strong>Prioridade:</strong> Alta<br><strong>Por quê</strong>: Principal mecanismo de financiamento da educação básica. Dados de distribuição de recursos por município/estado.</p>
+<p><strong>Criar:</strong><br>
+- <code>R/get-fundeb.R</code><br>
+- <code>get_fundeb(year, n_max, quiet)</code><br>
+- Anos: 2010–2024<br>
+- URL: via dados.gov.br/FNDE (verificar)<br>
+- <code>tests/testthat/test-fundeb.R</code></p>
 <hr></div>
+<div class="section level3">
+<h3 id="fase-10-fies--versão-060-bundled-com-fases-8-9">Fase 10: FIES — Versão 0.6.0 (bundled com Fases 8-9)<a class="anchor" aria-label="anchor" href="#fase-10-fies--vers%C3%A3o-060-bundled-com-fases-8-9"></a></h3>
+<p><strong>Prioridade:</strong> Alta<br><strong>Por quê</strong>: Complementa o Censo Superior com dados de financiamento estudantil.</p>
+<p><strong>Criar:</strong><br>
+- <code>R/get-fies.R</code><br>
+- <code>get_fies(year, n_max, quiet)</code><br>
+- Anos: 2010–2024<br>
+- URL: via dados.gov.br/FNDE (verificar)<br>
+- <code>tests/testthat/test-fies.R</code></p>
+<hr></div>
+</div>
+<div class="section level2">
+<h2 id="outras-fontes-mapeadas-para-avaliação-futura">Outras fontes mapeadas (para avaliação futura)<a class="anchor" aria-label="anchor" href="#outras-fontes-mapeadas-para-avalia%C3%A7%C3%A3o-futura"></a></h2>
+<div class="section level3">
+<h3 id="fontes-do-inep-prioridade-médiabaixa">Fontes do INEP (prioridade média/baixa)<a class="anchor" aria-label="anchor" href="#fontes-do-inep-prioridade-m%C3%A9diabaixa"></a></h3>
+<table class="table"><colgroup><col width="24%"><col width="27%"><col width="16%"><col width="32%"></colgroup><thead><tr class="header"><th>Dataset</th>
+<th>Conteúdo</th>
+<th align="center">Anos</th>
+<th align="center">Prioridade</th>
+</tr></thead><tbody><tr class="odd"><td>ENAMED</td>
+<td>Avaliação de cursos de Medicina</td>
+<td align="center">2025</td>
+<td align="center">Média</td>
+</tr><tr class="even"><td>TALIS</td>
+<td>Pesquisa OCDE sobre professores</td>
+<td align="center">2018, 2024</td>
+<td align="center">Média</td>
+</tr><tr class="odd"><td>Indicadores Educacionais</td>
+<td>Taxas de rendimento, distorção, INSE, etc.</td>
+<td align="center">Vários</td>
+<td align="center">Média</td>
+</tr><tr class="even"><td>ANA</td>
+<td>Avaliação da Alfabetização (absorvida pelo SAEB)</td>
+<td align="center">2014, 2016</td>
+<td align="center">Baixa</td>
+</tr><tr class="odd"><td>ENC-Provão</td>
+<td>Predecessor do ENADE</td>
+<td align="center">1997-2003</td>
+<td align="center">Baixa</td>
+</tr><tr class="even"><td>Sinopses Estatísticas</td>
+<td>Tabelas agregadas</td>
+<td align="center">Vários</td>
+<td align="center">Baixa</td>
+</tr></tbody></table></div>
+<div class="section level3">
+<h3 id="outras-fontes-governamentais">Outras fontes governamentais<a class="anchor" aria-label="anchor" href="#outras-fontes-governamentais"></a></h3>
+<table class="table"><colgroup><col width="12%"><col width="15%"><col width="17%"><col width="10%"><col width="21%"><col width="22%"></colgroup><thead><tr class="header"><th align="center">Fonte</th>
+<th>Dataset</th>
+<th>Conteúdo</th>
+<th align="center">Anos</th>
+<th align="center">Prioridade</th>
+<th>Viabilidade</th>
+</tr></thead><tbody><tr class="odd"><td align="center">MEC</td>
+<td>Plataforma Nilo Peçanha</td>
+<td>Rede Federal (IFs/CEFETs)</td>
+<td align="center">2017-2024</td>
+<td align="center">Média</td>
+<td>Média — CSV/JSON</td>
+</tr><tr class="even"><td align="center">MEC</td>
+<td>e-MEC</td>
+<td>Cadastro de IES e cursos</td>
+<td align="center">Contínuo</td>
+<td align="center">Média</td>
+<td>Média — CSV</td>
+</tr><tr class="odd"><td align="center">IBGE</td>
+<td>PNAD Contínua (Educação)</td>
+<td>Escolaridade por domicílio</td>
+<td align="center">2012-2024</td>
+<td align="center">Média</td>
+<td>Média — pacote <code>PNADcIBGE</code> existe</td>
+</tr><tr class="even"><td align="center">IBGE</td>
+<td>Censo Demográfico</td>
+<td>Escolaridade da população</td>
+<td align="center">1991-2022</td>
+<td align="center">Média</td>
+<td>Média — formato complexo</td>
+</tr><tr class="odd"><td align="center">IBGE</td>
+<td>SIDRA</td>
+<td>Tabelas agregadas educacionais</td>
+<td align="center">Décadas</td>
+<td align="center">Baixa</td>
+<td>Média — pacote <code>sidrar</code> existe</td>
+</tr><tr class="even"><td align="center">CNPq</td>
+<td>Bolsas e Auxílios</td>
+<td>Bolsas por área/instituição</td>
+<td align="center">2001-2024</td>
+<td align="center">Média</td>
+<td>Média — formato XML</td>
+</tr><tr class="odd"><td align="center">IPEA</td>
+<td>Ipeadata</td>
+<td>Séries históricas educacionais</td>
+<td align="center">Décadas</td>
+<td align="center">Baixa</td>
+<td>Baixa — pacote <code>ipeadatar</code> existe</td>
+</tr><tr class="even"><td align="center">IPEA</td>
+<td>Atlas Brasil (IDH-M Educação)</td>
+<td>IDH municipal educação</td>
+<td align="center">1991-2010</td>
+<td align="center">Baixa</td>
+<td>Média — CSV</td>
+</tr><tr class="odd"><td align="center">MTE</td>
+<td>RAIS</td>
+<td>Emprego formal com escolaridade</td>
+<td align="center">1985-2023</td>
+<td align="center">Baixa</td>
+<td>Média — FTP, arquivos grandes</td>
+</tr><tr class="even"><td align="center">FNDE</td>
+<td>PNAE (Alimentação Escolar)</td>
+<td>Alunos atendidos, transferências</td>
+<td align="center">2010-2024</td>
+<td align="center">Média</td>
+<td>Alta — CSV</td>
+</tr><tr class="odd"><td align="center">FNDE</td>
+<td>PDDE (Dinheiro na Escola)</td>
+<td>Execução financeira</td>
+<td align="center">2010-2024</td>
+<td align="center">Média</td>
+<td>Alta — CSV</td>
+</tr><tr class="even"><td align="center">FNDE</td>
+<td>PNLD (Livro Didático)</td>
+<td>Distribuição de livros</td>
+<td align="center">2010-2024</td>
+<td align="center">Baixa</td>
+<td>Alta — CSV</td>
+</tr><tr class="odd"><td align="center">FNDE</td>
+<td>PNATE (Transporte Escolar)</td>
+<td>Repasses para transporte</td>
+<td align="center">2010-2024</td>
+<td align="center">Baixa</td>
+<td>Alta — CSV</td>
+</tr><tr class="even"><td align="center">CGU</td>
+<td>Portal da Transparência</td>
+<td>Orçamento federal em Educação</td>
+<td align="center">2013-2024</td>
+<td align="center">Baixa</td>
+<td>Alta — CSV</td>
+</tr></tbody></table><hr></div>
 </div>
 <div class="section level2">
 <h2 id="padrão-para-cada-novo-dataset">Padrão para cada novo dataset<a class="anchor" aria-label="anchor" href="#padr%C3%A3o-para-cada-novo-dataset"></a></h2>
@@ -84,33 +284,44 @@
 <li>Criar testes (sem downloads reais — dados sintéticos)</li>
 <li>Rodar <code>devtools::document()</code> para gerar man pages</li>
 <li>Rodar <code>devtools::check()</code> localmente</li>
-<li>Atualizar NEWS.md, DESCRIPTION, vignettes</li>
+<li>Atualizar NEWS.md, DESCRIPTION, <code>_pkgdown.yml</code>, vignettes</li>
 <li>Commit, push, verificar CI</li>
 </ol><hr></div>
 <div class="section level2">
 <h2 id="estratégia-de-submissão-ao-cran">Estratégia de submissão ao CRAN<a class="anchor" aria-label="anchor" href="#estrat%C3%A9gia-de-submiss%C3%A3o-ao-cran"></a></h2>
-<table class="table"><thead><tr class="header"><th>Versão</th>
+<table class="table"><colgroup><col width="30%"><col width="38%"><col width="30%"></colgroup><thead><tr class="header"><th align="center">Versão</th>
 <th>Conteúdo</th>
 <th>Timing</th>
-</tr></thead><tbody><tr class="odd"><td>0.2.0</td>
-<td>SAEB</td>
-<td>Após implementação e testes</td>
-</tr><tr class="even"><td>0.3.0</td>
-<td>Censo Superior + ENADE (bundled)</td>
-<td>Mín. 1-2 meses após 0.2.0</td>
-</tr><tr class="odd"><td>0.4.0</td>
+</tr></thead><tbody><tr class="odd"><td align="center">0.4.0</td>
 <td>ENCCEJA</td>
-<td>Mín. 1-2 meses após 0.3.0</td>
-</tr></tbody></table><p><strong>Checklist CRAN por submissão:</strong> - Exemplos com <code>\dontrun{}</code> - Cache em <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code> por padrão - <code>R CMD check</code>: 0 errors, 0 warnings, 0 notes - <code>cran-comments.md</code> atualizado - Nenhuma dependência nova</p>
+<td>Próxima submissão</td>
+</tr><tr class="even"><td align="center">0.5.0</td>
+<td>IDD + ENEM por Escola + CPC/IGC (bundled)</td>
+<td>Mín. 1-2 meses após 0.4.0</td>
+</tr><tr class="odd"><td align="center">0.6.0</td>
+<td>CAPES + FUNDEB + FIES (bundled)</td>
+<td>Mín. 1-2 meses após 0.5.0</td>
+</tr></tbody></table><p><strong>Checklist CRAN por submissão:</strong><br>
+- Exemplos com <code>\dontrun{}</code><br>
+- Cache em <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code> por padrão<br>
+- <code>R CMD check</code>: 0 errors, 0 warnings, 0 notes<br>
+- <code>cran-comments.md</code> atualizado<br>
+- Nenhuma dependência nova</p>
 <hr></div>
 <div class="section level2">
 <h2 id="verificação">Verificação<a class="anchor" aria-label="anchor" href="#verifica%C3%A7%C3%A3o"></a></h2>
-<p>Para cada dataset implementado: 1. <code>devtools::load_all()</code> + <code>get_dataset(year, n_max = 100)</code> com cache limpo 2. Verificar encoding (acentos corretos) 3. Verificar tipos de colunas (numéricas como <code>&lt;dbl&gt;</code>, não <code>&lt;chr&gt;</code>) 4. Testar com pelo menos 2 anos diferentes (mais antigo e mais recente) 5. <code>devtools::check()</code> sem erros/warnings 6. CI verde no GitHub Actions</p>
+<p>Para cada dataset implementado:<br>
+1. <code>devtools::load_all()</code> + <code>get_dataset(year, n_max = 100)</code> com cache limpo<br>
+2. Verificar encoding (acentos corretos)<br>
+3. Verificar tipos de colunas (numéricas como <code>&lt;dbl&gt;</code>, não <code>&lt;chr&gt;</code>)<br>
+4. Testar com pelo menos 2 anos diferentes (mais antigo e mais recente)<br>
+5. <code>devtools::check()</code> sem erros/warnings<br>
+6. CI verde no GitHub Actions</p>
 <hr></div>
 <div class="section level2">
 <h2 id="arquivos-críticos">Arquivos críticos<a class="anchor" aria-label="anchor" href="#arquivos-cr%C3%ADticos"></a></h2>
 <ul><li>
-<code>R/utils-download.R</code> (linhas ~197-244) — <code><a href="reference/build_inep_url.html">build_inep_url()</a></code> e <code><a href="reference/available_years.html">available_years()</a></code>
+<code>R/utils-download.R</code> (linhas ~197-270) — <code><a href="reference/build_inep_url.html">build_inep_url()</a></code> e <code><a href="reference/available_years.html">available_years()</a></code>
 </li>
 <li>
 <code>R/utils-validation.R</code> — <code><a href="reference/validate_data.html">validate_data()</a></code> switch</li>
@@ -120,6 +331,8 @@
 <code>DESCRIPTION</code> — versão e descrição</li>
 <li>
 <code>NEWS.md</code> — changelog</li>
+<li>
+<code>_pkgdown.yml</code> — índice de referência do site</li>
 </ul></div>
 </div>
 
