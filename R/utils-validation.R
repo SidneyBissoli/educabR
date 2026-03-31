@@ -49,6 +49,7 @@ validate_data <- function(data, dataset, year) {
     "censo_superior" = validate_censo_superior(data, year),
     "enade" = validate_enade(data, year),
     "encceja" = validate_encceja(data, year),
+    "idd" = validate_idd(data, year),
     "ideb" = validate_ideb(data, year),
     "censo_escolar" = validate_censo_escolar(data, year)
   )
@@ -146,6 +147,23 @@ validate_encceja <- function(data, year) {
     cli::cli_warn(
       c(
         "ENCCEJA {.val {year}} data may have an unexpected structure",
+        "i" = "expected columns like {.val {expected}}",
+        "i" = "column names found: {.val {head(names(data), 10)}}"
+      )
+    )
+  }
+}
+
+# idd: check for course and IDD score columns
+validate_idd <- function(data, year) {
+  expected <- c("co_curso", "co_ies", "idd_continuo", "idd_faixa",
+                "no_curso", "co_grupo")
+  found <- expected[expected %in% names(data)]
+
+  if (length(found) == 0) {
+    cli::cli_warn(
+      c(
+        "IDD {.val {year}} data may have an unexpected structure",
         "i" = "expected columns like {.val {expected}}",
         "i" = "column names found: {.val {head(names(data), 10)}}"
       )

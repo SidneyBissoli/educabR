@@ -33,6 +33,11 @@ reference:
     contents:
       - get_enade
 
+  - title: "IDD"
+    desc: "Functions for IDD data"
+    contents:
+      - get_idd
+
   - title: "ENCCEJA"
     desc: "Functions for ENCCEJA data"
     contents:

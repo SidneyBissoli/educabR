@@ -15,6 +15,7 @@
 #' - **Higher Education Census (Censo da Educação Superior)**: Annual data
 #'   on institutions, courses, students, and faculty in higher education
 #' - **ENADE**: National Student Performance Exam (higher education)
+#' - **IDD**: Value-added indicator for undergraduate courses
 #' - **ENCCEJA**: Youth and Adult Education Certification Exam
 #' - **IDEB**: Basic Education Development Index
 #'
@@ -37,6 +38,9 @@
 #'
 #' **ENADE:**
 #' - [get_enade()]: Download ENADE microdata
+#'
+#' **IDD:**
+#' - [get_idd()]: Download IDD data
 #'
 #' **ENCCEJA:**
 #' - [get_encceja()]: Download ENCCEJA microdata

@@ -182,6 +182,80 @@ extract_zip <- function(zipfile, exdir, quiet = FALSE) {
   )
 }
 
+#' Extract an archive file (ZIP or 7z)
+#'
+#' @description
+#' Internal function to extract archive files. Supports ZIP and 7z formats.
+#' For ZIP files, delegates to [extract_zip()]. For 7z files, uses the
+#' system `7z` command.
+#'
+#' @param archive Path to the archive file.
+#' @param exdir Directory to extract to.
+#' @param quiet Logical. If `TRUE`, suppresses progress messages.
+#'
+#' @return A character vector of extracted file paths.
+#'
+#' @keywords internal
+extract_archive <- function(archive, exdir, quiet = FALSE) {
+  ext <- tools::file_ext(archive)
+
+  if (tolower(ext) == "zip") {
+    return(extract_zip(archive, exdir, quiet = quiet))
+  }
+
+  if (tolower(ext) == "7z") {
+    if (!quiet) {
+      cli::cli_alert_info("extracting 7z archive...")
+    }
+
+    dir.create(exdir, recursive = TRUE, showWarnings = FALSE)
+
+    # try 7z command (available on most systems, including GitHub Actions)
+    sevenz_cmd <- if (.Platform$OS.type == "windows") "7z" else "7z"
+
+    result <- tryCatch(
+      {
+        system2(
+          sevenz_cmd,
+          args = c("x", shQuote(normalizePath(archive, winslash = "/")),
+                   paste0("-o", shQuote(normalizePath(exdir, winslash = "/", mustWork = FALSE))),
+                   "-y"),
+          stdout = TRUE, stderr = TRUE
+        )
+      },
+      error = function(e) {
+        cli::cli_abort(
+          c(
+            "failed to extract 7z archive",
+            "x" = "file: {.path {archive}}",
+            "i" = "install 7-Zip ({.url https://www.7-zip.org/}) and ensure {.code 7z} is in PATH",
+            "i" = "error: {conditionMessage(e)}"
+          )
+        )
+      }
+    )
+
+    files <- list.files(exdir, recursive = TRUE, full.names = TRUE)
+
+    if (length(files) == 0) {
+      cli::cli_abort(
+        c(
+          "no files extracted from 7z archive",
+          "x" = "file: {.path {archive}}"
+        )
+      )
+    }
+
+    if (!quiet) {
+      cli::cli_alert_success("extracted {.val {length(files)}} file(s)")
+    }
+
+    return(files)
+  }
+
+  cli::cli_abort("unsupported archive format: {.val {ext}}")
+}
+
 #' Build INEP microdata URL
 #'
 #' @description
@@ -227,6 +301,10 @@ build_inep_url <- function(dataset, year, ...) {
     "encceja" = str_c(
       base, "/microdados/microdados_encceja_", year, ".zip"
     ),
+    "idd" = {
+      ext <- if (year >= 2021) ".zip" else ".7z"
+      str_c(base, "/microdados/microdados_IDD_", year, ext)
+    },
     "ideb" = {
       # ideb has different structure, handled separately
       str_c(base, "/ideb/", year, "/")
@@ -254,7 +332,7 @@ build_inep_url <- function(dataset, year, ...) {
 available_years <- function(dataset) {
   dataset <- match.arg(
     dataset,
-    choices = c("censo_escolar", "enem", "saeb", "censo_superior", "enade", "encceja", "ideb")
+    choices = c("censo_escolar", "enem", "saeb", "censo_superior", "enade", "encceja", "idd", "ideb")
   )
 
   switch(
@@ -265,6 +343,7 @@ available_years <- function(dataset) {
     "censo_superior" = 2009:2024,
     "enade" = 2004:2024,
     "encceja" = 2014:2024,
+    "idd" = c(2014L:2019L, 2021L:2023L),
     "ideb" = c(2017L, 2019L, 2021L, 2023L)
   )
 }
