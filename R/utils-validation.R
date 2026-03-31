@@ -51,6 +51,8 @@ validate_data <- function(data, dataset, year) {
     "encceja" = validate_encceja(data, year),
     "enem_escola" = validate_enem_escola(data, year),
     "idd" = validate_idd(data, year),
+    "cpc" = validate_cpc(data, year),
+    "igc" = validate_igc(data, year),
     "ideb" = validate_ideb(data, year),
     "censo_escolar" = validate_censo_escolar(data, year)
   )
@@ -182,6 +184,40 @@ validate_idd <- function(data, year) {
     cli::cli_warn(
       c(
         "IDD {.val {year}} data may have an unexpected structure",
+        "i" = "expected columns like {.val {expected}}",
+        "i" = "column names found: {.val {head(names(data), 10)}}"
+      )
+    )
+  }
+}
+
+# cpc: check for course and CPC score columns
+validate_cpc <- function(data, year) {
+  expected <- c("co_curso", "co_ies", "cpc_continuo", "cpc_faixa",
+                "no_curso", "co_grupo")
+  found <- expected[expected %in% names(data)]
+
+  if (length(found) == 0) {
+    cli::cli_warn(
+      c(
+        "CPC {.val {year}} data may have an unexpected structure",
+        "i" = "expected columns like {.val {expected}}",
+        "i" = "column names found: {.val {head(names(data), 10)}}"
+      )
+    )
+  }
+}
+
+# igc: check for institution and IGC score columns
+validate_igc <- function(data, year) {
+  expected <- c("co_ies", "no_ies", "igc_continuo", "igc_faixa",
+                "sigla_ies", "co_mantenedora")
+  found <- expected[expected %in% names(data)]
+
+  if (length(found) == 0) {
+    cli::cli_warn(
+      c(
+        "IGC {.val {year}} data may have an unexpected structure",
         "i" = "expected columns like {.val {expected}}",
         "i" = "column names found: {.val {head(names(data), 10)}}"
       )

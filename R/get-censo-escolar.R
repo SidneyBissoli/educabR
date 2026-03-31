@@ -241,6 +241,7 @@ parse_sas_dates <- function(df) {
 standardize_names <- function(df) {
   names(df) <- names(df) |>
     str_to_lower() |>
+    iconv(from = "UTF-8", to = "ASCII//TRANSLIT") |>
     str_replace_all("[^a-z0-9]", "_") |>
     str_replace_all("_+", "_") |>
     str_remove("^_") |>

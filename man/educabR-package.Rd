@@ -6,7 +6,7 @@
 \alias{educabR}
 \title{educabR: Download and Process Brazilian Education Data from INEP}
 \description{
-Download and process public education data from INEP (Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira). Provides functions to access microdata from the School Census (Censo Escolar), ENEM (Exame Nacional do Ensino Médio), SAEB (Sistema de Avaliação da Educação Básica), Higher Education Census (Censo da Educação Superior), ENADE (Exame Nacional de Desempenho dos Estudantes), ENCCEJA (Exame Nacional para Certificação de Competências de Jovens e Adultos), IDD (Indicador de Diferença entre os Desempenhos Observado e Esperado), IDEB (Índice de Desenvolvimento da Educação Básica), and other educational datasets. Returns data in tidy format ready for analysis. Data source: INEP Open Data Portal \url{https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos}.
+Download and process public education data from INEP (Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira). Provides functions to access microdata from the School Census (Censo Escolar), ENEM (Exame Nacional do Ensino Médio), SAEB (Sistema de Avaliação da Educação Básica), Higher Education Census (Censo da Educação Superior), ENADE (Exame Nacional de Desempenho dos Estudantes), ENCCEJA (Exame Nacional para Certificação de Competências de Jovens e Adultos), IDD (Indicador de Diferença entre os Desempenhos Observado e Esperado), CPC (Conceito Preliminar de Curso), IGC (Índice Geral de Cursos), IDEB (Índice de Desenvolvimento da Educação Básica), and other educational datasets. Returns data in tidy format ready for analysis. Data source: INEP Open Data Portal \url{https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos}.
 
 The educabR package provides functions to download and process public
 education data from INEP (Instituto Nacional de Estudos e Pesquisas
@@ -20,6 +20,8 @@ teachers, and classes in basic education
 on institutions, courses, students, and faculty in higher education
 \item \strong{ENADE}: National Student Performance Exam (higher education)
 \item \strong{IDD}: Value-added indicator for undergraduate courses
+\item \strong{CPC}: Preliminary Course Concept (undergraduate quality indicator)
+\item \strong{IGC}: General Index of Courses (institutional quality indicator)
 \item \strong{ENCCEJA}: Youth and Adult Education Certification Exam
 \item \strong{IDEB}: Basic Education Development Index
 }
@@ -63,6 +65,16 @@ tools.
 \strong{IDD:}
 \itemize{
 \item \code{\link[=get_idd]{get_idd()}}: Download IDD data
+}
+
+\strong{CPC:}
+\itemize{
+\item \code{\link[=get_cpc]{get_cpc()}}: Download CPC data
+}
+
+\strong{IGC:}
+\itemize{
+\item \code{\link[=get_igc]{get_igc()}}: Download IGC data
 }
 
 \strong{ENCCEJA:}

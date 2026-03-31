@@ -1,3 +1,22 @@
+# educabR 0.6.0
+
+## New features
+
+### CPC (Conceito Preliminar de Curso)
+* `get_cpc()`: Download CPC data (years 2007-2019, 2021-2023; no 2020 edition).
+* Quality indicator for undergraduate courses, part of SINAES.
+* Files are in Excel format (xls/xlsx) — requires the `readxl` package.
+* Hardcoded URL map due to completely inconsistent INEP naming patterns.
+
+### IGC (Indice Geral de Cursos)
+* `get_igc()`: Download IGC data (years 2007-2019, 2021-2023; no 2020 edition).
+* Institutional quality indicator based on weighted CPC averages and CAPES scores.
+* Files are in Excel format (xls/xlsx), except 2007 which is a 7z archive.
+* Hardcoded URL map due to completely inconsistent INEP naming patterns.
+
+### Shared utilities
+* `read_excel_safe()`: Internal helper to read Excel files with error handling.
+
 # educabR 0.5.0
 
 ## New features

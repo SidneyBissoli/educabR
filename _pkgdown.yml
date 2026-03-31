@@ -43,6 +43,16 @@ reference:
     contents:
       - get_idd
 
+  - title: "CPC"
+    desc: "Functions for CPC data"
+    contents:
+      - get_cpc
+
+  - title: "IGC"
+    desc: "Functions for IGC data"
+    contents:
+      - get_igc
+
   - title: "ENCCEJA"
     desc: "Functions for ENCCEJA data"
     contents:

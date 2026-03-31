@@ -335,7 +335,8 @@ build_inep_url <- function(dataset, year, ...) {
 available_years <- function(dataset) {
   dataset <- match.arg(
     dataset,
-    choices = c("censo_escolar", "enem", "saeb", "censo_superior", "enade", "encceja", "idd", "ideb")
+    choices = c("censo_escolar", "enem", "saeb", "censo_superior", "enade",
+                "encceja", "idd", "cpc", "igc", "ideb")
   )
 
   switch(
@@ -347,6 +348,8 @@ available_years <- function(dataset) {
     "enade" = 2004:2024,
     "encceja" = 2014:2024,
     "idd" = c(2014L:2019L, 2021L:2023L),
+    "cpc" = c(2007L:2019L, 2021L:2023L),
+    "igc" = c(2007L:2019L, 2021L:2023L),
     "ideb" = c(2017L, 2019L, 2021L, 2023L)
   )
 }

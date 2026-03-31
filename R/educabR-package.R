@@ -16,6 +16,8 @@
 #'   on institutions, courses, students, and faculty in higher education
 #' - **ENADE**: National Student Performance Exam (higher education)
 #' - **IDD**: Value-added indicator for undergraduate courses
+#' - **CPC**: Preliminary Course Concept (undergraduate quality indicator)
+#' - **IGC**: General Index of Courses (institutional quality indicator)
 #' - **ENCCEJA**: Youth and Adult Education Certification Exam
 #' - **IDEB**: Basic Education Development Index
 #'
@@ -44,6 +46,12 @@
 #'
 #' **IDD:**
 #' - [get_idd()]: Download IDD data
+#'
+#' **CPC:**
+#' - [get_cpc()]: Download CPC data
+#'
+#' **IGC:**
+#' - [get_igc()]: Download IGC data
 #'
 #' **ENCCEJA:**
 #' - [get_encceja()]: Download ENCCEJA microdata
