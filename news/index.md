@@ -1,5 +1,48 @@
 # Changelog
 
+## educabR 0.3.0
+
+### New features
+
+#### Censo da Educação Superior (Higher Education Census)
+
+- [`get_censo_superior()`](https://sidneybissoli.github.io/educabR/reference/get_censo_superior.md):
+  Download Higher Education Census microdata (years 2009-2024).
+- Supports multiple data types: institutions (`"ies"`), courses
+  (`"cursos"`), students (`"alunos"`), and faculty (`"docentes"`).
+- [`list_censo_superior_files()`](https://sidneybissoli.github.io/educabR/reference/list_censo_superior_files.md):
+  List available files in a downloaded census.
+- UF filtering via the `uf` parameter.
+
+## educabR 0.2.0
+
+### New features
+
+#### SAEB (Sistema de Avaliação da Educação Básica)
+
+- [`get_saeb()`](https://sidneybissoli.github.io/educabR/reference/get_saeb.md):
+  Download SAEB microdata (years 2011, 2013, 2015, 2017, 2019, 2021,
+  2023).
+- Supports multiple data types: student results (`"aluno"`), school
+  (`"escola"`), principal (`"diretor"`), and teacher (`"professor"`)
+  questionnaires.
+- Handles SAEB 2021 special case where INEP split downloads into
+  elementary/high school and early childhood education files via the
+  `level` parameter.
+
+### Bug fixes
+
+- Fixed encoding detection on Windows using
+  [`iconv()`](https://rdrr.io/r/base/iconv.html) instead of
+  [`validEnc()`](https://rdrr.io/r/base/validUTF8.html).
+- Fixed `"Latin-1"` encoding name to `"latin1"` for Windows codepage
+  compatibility.
+- Fixed ENEM 2024+ support: new `type` parameter for split files
+  (`"participantes"`, `"resultados"`).
+- Added SAS datetime parsing for Censo Escolar date columns (`dt_*`).
+- Converted IDEB `vl_*` columns from character to numeric, handling
+  `"-"`, `"ND"`, and comma decimals.
+
 ## educabR 0.1.2
 
 CRAN release: 2026-02-19

@@ -19,6 +19,10 @@ find_enem_file(exdir, year, type = "participantes")
 
   The year.
 
+- type:
+
+  The data type (`"participantes"` or `"resultados"`).
+
 ## Value
 
 The path to the data file.

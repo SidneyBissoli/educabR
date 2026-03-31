@@ -3,9 +3,11 @@
 Download and process public education data from INEP (Instituto Nacional
 de Estudos e Pesquisas Educacionais Anísio Teixeira). Provides functions
 to access microdata from the School Census (Censo Escolar), ENEM (Exame
-Nacional do Ensino Médio), IDEB (Índice de Desenvolvimento da Educação
-Básica), and other educational datasets. Returns data in tidy format
-ready for analysis. Data source: INEP Open Data Portal
+Nacional do Ensino Médio), SAEB (Sistema de Avaliação da Educação
+Básica), Higher Education Census (Censo da Educação Superior), IDEB
+(Índice de Desenvolvimento da Educação Básica), and other educational
+datasets. Returns data in tidy format ready for analysis. Data source:
+INEP Open Data Portal
 <https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos>.
 
 The educabR package provides functions to download and process public
@@ -16,6 +18,11 @@ Educacionais Anísio Teixeira). It offers easy access to microdata from:
   teachers, and classes in basic education
 
 - **ENEM**: Data from the National High School Exam
+
+- **SAEB**: Basic Education Assessment System (student performance)
+
+- **Higher Education Census (Censo da Educação Superior)**: Annual data
+  on institutions, courses, students, and faculty in higher education
 
 - **IDEB**: Basic Education Development Index
 
@@ -33,6 +40,16 @@ tidyverse tools.
 
 - [`get_enem()`](https://sidneybissoli.github.io/educabR/reference/get_enem.md):
   Download ENEM microdata
+
+**SAEB:**
+
+- [`get_saeb()`](https://sidneybissoli.github.io/educabR/reference/get_saeb.md):
+  Download SAEB microdata
+
+**Higher Education Census:**
+
+- [`get_censo_superior()`](https://sidneybissoli.github.io/educabR/reference/get_censo_superior.md):
+  Download Higher Education Census microdata
 
 **IDEB:**
 

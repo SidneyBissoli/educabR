@@ -104,6 +104,22 @@ Functions for ENEM data
 - [`enem_summary()`](https://sidneybissoli.github.io/educabR/reference/enem_summary.md)
   : Summary statistics for ENEM scores
 
+## SAEB
+
+Functions for SAEB data
+
+- [`get_saeb()`](https://sidneybissoli.github.io/educabR/reference/get_saeb.md)
+  : Get SAEB (Sistema de Avaliação da Educação Básica) data
+
+## Censo da Educação Superior
+
+Functions for Higher Education Census data
+
+- [`get_censo_superior()`](https://sidneybissoli.github.io/educabR/reference/get_censo_superior.md)
+  : Get Higher Education Census (Censo da Educação Superior) data
+- [`list_censo_superior_files()`](https://sidneybissoli.github.io/educabR/reference/list_censo_superior_files.md)
+  : List available Higher Education Census files
+
 ## Censo Escolar
 
 Functions for School Census data

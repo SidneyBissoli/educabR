@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">educabR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,42 @@
       <small>Source: <a href="https://github.com/SidneyBissoli/educabR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.0" id="educabr-030">educabR 0.3.0<a class="anchor" aria-label="anchor" href="#educabr-030"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-3-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-3-0"></a></h3>
+<div class="section level4">
+<h4 id="censo-da-educação-superior-higher-education-census-0-3-0">Censo da Educação Superior (Higher Education Census)<a class="anchor" aria-label="anchor" href="#censo-da-educa%C3%A7%C3%A3o-superior-higher-education-census-0-3-0"></a></h4>
+<ul><li>
+<code><a href="../reference/get_censo_superior.html">get_censo_superior()</a></code>: Download Higher Education Census microdata (years 2009-2024).</li>
+<li>Supports multiple data types: institutions (<code>"ies"</code>), courses (<code>"cursos"</code>), students (<code>"alunos"</code>), and faculty (<code>"docentes"</code>).</li>
+<li>
+<code><a href="../reference/list_censo_superior_files.html">list_censo_superior_files()</a></code>: List available files in a downloaded census.</li>
+<li>UF filtering via the <code>uf</code> parameter.</li>
+</ul></div>
+</div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.0" id="educabr-020">educabR 0.2.0<a class="anchor" aria-label="anchor" href="#educabr-020"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-2-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-2-0"></a></h3>
+<div class="section level4">
+<h4 id="saeb-sistema-de-avaliação-da-educação-básica-0-2-0">SAEB (Sistema de Avaliação da Educação Básica)<a class="anchor" aria-label="anchor" href="#saeb-sistema-de-avalia%C3%A7%C3%A3o-da-educa%C3%A7%C3%A3o-b%C3%A1sica-0-2-0"></a></h4>
+<ul><li>
+<code><a href="../reference/get_saeb.html">get_saeb()</a></code>: Download SAEB microdata (years 2011, 2013, 2015, 2017, 2019, 2021, 2023).</li>
+<li>Supports multiple data types: student results (<code>"aluno"</code>), school (<code>"escola"</code>), principal (<code>"diretor"</code>), and teacher (<code>"professor"</code>) questionnaires.</li>
+<li>Handles SAEB 2021 special case where INEP split downloads into elementary/high school and early childhood education files via the <code>level</code> parameter.</li>
+</ul></div>
+</div>
+<div class="section level3">
+<h3 id="bug-fixes-0-2-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-2-0"></a></h3>
+<ul><li>Fixed encoding detection on Windows using <code><a href="https://rdrr.io/r/base/iconv.html" class="external-link">iconv()</a></code> instead of <code><a href="https://rdrr.io/r/base/validUTF8.html" class="external-link">validEnc()</a></code>.</li>
+<li>Fixed <code>"Latin-1"</code> encoding name to <code>"latin1"</code> for Windows codepage compatibility.</li>
+<li>Fixed ENEM 2024+ support: new <code>type</code> parameter for split files (<code>"participantes"</code>, <code>"resultados"</code>).</li>
+<li>Added SAS datetime parsing for Censo Escolar date columns (<code>dt_*</code>).</li>
+<li>Converted IDEB <code>vl_*</code> columns from character to numeric, handling <code>"-"</code>, <code>"ND"</code>, and comma decimals.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.2" id="educabr-012">educabR 0.1.2<a class="anchor" aria-label="anchor" href="#educabr-012"></a></h2><p class="text-muted">CRAN release: 2026-02-19</p>
 <div class="section level3">
