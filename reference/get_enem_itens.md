@@ -35,7 +35,8 @@ A tibble with item response data.
 
 Other ENEM functions:
 [`enem_summary()`](https://sidneybissoli.github.io/educabR/reference/enem_summary.md),
-[`get_enem()`](https://sidneybissoli.github.io/educabR/reference/get_enem.md)
+[`get_enem()`](https://sidneybissoli.github.io/educabR/reference/get_enem.md),
+[`get_enem_escola()`](https://sidneybissoli.github.io/educabR/reference/get_enem_escola.md)
 
 ## Examples
 

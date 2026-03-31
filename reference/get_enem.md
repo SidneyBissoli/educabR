@@ -84,6 +84,7 @@ For detailed information about variables, see INEP's documentation:
 
 Other ENEM functions:
 [`enem_summary()`](https://sidneybissoli.github.io/educabR/reference/enem_summary.md),
+[`get_enem_escola()`](https://sidneybissoli.github.io/educabR/reference/get_enem_escola.md),
 [`get_enem_itens()`](https://sidneybissoli.github.io/educabR/reference/get_enem_itens.md)
 
 ## Examples

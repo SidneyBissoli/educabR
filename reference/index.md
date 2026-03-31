@@ -29,6 +29,13 @@ Functions for SAEB data
 - [`get_saeb()`](https://sidneybissoli.github.io/educabR/reference/get_saeb.md)
   : Get SAEB (Sistema de Avaliação da Educação Básica) data
 
+## ENEM por Escola
+
+Functions for ENEM by School data
+
+- [`get_enem_escola()`](https://sidneybissoli.github.io/educabR/reference/get_enem_escola.md)
+  : Get ENEM por Escola (ENEM by School) data
+
 ## ENADE
 
 Functions for ENADE data

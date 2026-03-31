@@ -4,6 +4,12 @@
 
 ### New features
 
+#### ENEM por Escola (ENEM by School)
+
+- [`get_enem_escola()`](https://sidneybissoli.github.io/educabR/reference/get_enem_escola.md):
+  Download ENEM results aggregated by school (2005-2015).
+- Single bundled file covering all years. Discontinued after 2015.
+
 #### IDD (Indicador de Diferença entre os Desempenhos Observado e Esperado)
 
 - [`get_idd()`](https://sidneybissoli.github.io/educabR/reference/get_idd.md):

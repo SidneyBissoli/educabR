@@ -28,6 +28,7 @@ A tibble with summary statistics for each score area.
 
 Other ENEM functions:
 [`get_enem()`](https://sidneybissoli.github.io/educabR/reference/get_enem.md),
+[`get_enem_escola()`](https://sidneybissoli.github.io/educabR/reference/get_enem_escola.md),
 [`get_enem_itens()`](https://sidneybissoli.github.io/educabR/reference/get_enem_itens.md)
 
 ## Examples

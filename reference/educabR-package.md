@@ -60,6 +60,11 @@ tidyverse tools.
 - [`get_censo_superior()`](https://sidneybissoli.github.io/educabR/reference/get_censo_superior.md):
   Download Higher Education Census microdata
 
+**ENEM por Escola:**
+
+- [`get_enem_escola()`](https://sidneybissoli.github.io/educabR/reference/get_enem_escola.md):
+  Download ENEM results aggregated by school
+
 **ENADE:**
 
 - [`get_enade()`](https://sidneybissoli.github.io/educabR/reference/get_enade.md):
