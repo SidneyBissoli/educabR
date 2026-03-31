@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">educabR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,33 @@
       <small>Source: <a href="https://github.com/SidneyBissoli/educabR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.6.0" id="educabr-060">educabR 0.6.0<a class="anchor" aria-label="anchor" href="#educabr-060"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-6-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-6-0"></a></h3>
+<div class="section level4">
+<h4 id="cpc-conceito-preliminar-de-curso-0-6-0">CPC (Conceito Preliminar de Curso)<a class="anchor" aria-label="anchor" href="#cpc-conceito-preliminar-de-curso-0-6-0"></a></h4>
+<ul><li>
+<code><a href="../reference/get_cpc.html">get_cpc()</a></code>: Download CPC data (years 2007-2019, 2021-2023; no 2020 edition).</li>
+<li>Quality indicator for undergraduate courses, part of SINAES.</li>
+<li>Files are in Excel format (xls/xlsx) — requires the <code>readxl</code> package.</li>
+<li>Hardcoded URL map due to completely inconsistent INEP naming patterns.</li>
+</ul></div>
+<div class="section level4">
+<h4 id="igc-indice-geral-de-cursos-0-6-0">IGC (Indice Geral de Cursos)<a class="anchor" aria-label="anchor" href="#igc-indice-geral-de-cursos-0-6-0"></a></h4>
+<ul><li>
+<code><a href="../reference/get_igc.html">get_igc()</a></code>: Download IGC data (years 2007-2019, 2021-2023; no 2020 edition).</li>
+<li>Institutional quality indicator based on weighted CPC averages and CAPES scores.</li>
+<li>Files are in Excel format (xls/xlsx), except 2007 which is a 7z archive.</li>
+<li>Hardcoded URL map due to completely inconsistent INEP naming patterns.</li>
+</ul></div>
+<div class="section level4">
+<h4 id="shared-utilities-0-6-0">Shared utilities<a class="anchor" aria-label="anchor" href="#shared-utilities-0-6-0"></a></h4>
+<ul><li>
+<code><a href="../reference/read_excel_safe.html">read_excel_safe()</a></code>: Internal helper to read Excel files with error handling.</li>
+</ul></div>
+</div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.0" id="educabr-050">educabR 0.5.0<a class="anchor" aria-label="anchor" href="#educabr-050"></a></h2>
 <div class="section level3">

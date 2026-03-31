@@ -51,6 +51,20 @@ Functions for IDD data
   : Get IDD (Indicador de Diferença entre os Desempenhos Observado e
   Esperado) data
 
+## CPC
+
+Functions for CPC data
+
+- [`get_cpc()`](https://sidneybissoli.github.io/educabR/reference/get_cpc.md)
+  : Get CPC (Conceito Preliminar de Curso) data
+
+## IGC
+
+Functions for IGC data
+
+- [`get_igc()`](https://sidneybissoli.github.io/educabR/reference/get_igc.md)
+  : Get IGC (Indice Geral de Cursos) data
+
 ## ENCCEJA
 
 Functions for ENCCEJA data

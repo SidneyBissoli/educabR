@@ -7,7 +7,8 @@ Nacional do Ensino Médio), SAEB (Sistema de Avaliação da Educação
 Básica), Higher Education Census (Censo da Educação Superior), ENADE
 (Exame Nacional de Desempenho dos Estudantes), ENCCEJA (Exame Nacional
 para Certificação de Competências de Jovens e Adultos), IDD (Indicador
-de Diferença entre os Desempenhos Observado e Esperado), IDEB (Índice de
+de Diferença entre os Desempenhos Observado e Esperado), CPC (Conceito
+Preliminar de Curso), IGC (Índice Geral de Cursos), IDEB (Índice de
 Desenvolvimento da Educação Básica), and other educational datasets.
 Returns data in tidy format ready for analysis. Data source: INEP Open
 Data Portal
@@ -30,6 +31,10 @@ Educacionais Anísio Teixeira). It offers easy access to microdata from:
 - **ENADE**: National Student Performance Exam (higher education)
 
 - **IDD**: Value-added indicator for undergraduate courses
+
+- **CPC**: Preliminary Course Concept (undergraduate quality indicator)
+
+- **IGC**: General Index of Courses (institutional quality indicator)
 
 - **ENCCEJA**: Youth and Adult Education Certification Exam
 
@@ -74,6 +79,16 @@ tidyverse tools.
 
 - [`get_idd()`](https://sidneybissoli.github.io/educabR/reference/get_idd.md):
   Download IDD data
+
+**CPC:**
+
+- [`get_cpc()`](https://sidneybissoli.github.io/educabR/reference/get_cpc.md):
+  Download CPC data
+
+**IGC:**
+
+- [`get_igc()`](https://sidneybissoli.github.io/educabR/reference/get_igc.md):
+  Download IGC data
 
 **ENCCEJA:**
 

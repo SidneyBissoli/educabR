@@ -16,6 +16,7 @@
 <url><loc>https://sidneybissoli.github.io/educabR/reference/clean_dash_values.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/clean_ideb_values.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/clear_cache.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/convert_faixa_columns.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/detect_delim.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/detect_encoding.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/download_inep_file.html</loc></url>
@@ -35,6 +36,7 @@
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_cache_dir.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_censo_escolar.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_censo_superior.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/get_cpc.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_enade.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_encceja.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_enem.html</loc></url>
@@ -43,6 +45,7 @@
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_idd.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_ideb.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_ideb_series.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/get_igc.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_saeb.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/index.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/list_cache.html</loc></url>
@@ -50,6 +53,7 @@
 <url><loc>https://sidneybissoli.github.io/educabR/reference/list_censo_superior_files.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/list_ideb_available.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/parse_sas_dates.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/read_excel_safe.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/read_ideb_excel.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/read_inep_file.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/set_cache_dir.html</loc></url>
