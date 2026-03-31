@@ -4,10 +4,21 @@
 \alias{get_enem}
 \title{Get ENEM (Exame Nacional do Ensino Médio) data}
 \usage{
-get_enem(year, n_max = Inf, keep_zip = TRUE, quiet = FALSE)
+get_enem(
+  year,
+  type = "participantes",
+  n_max = Inf,
+  keep_zip = TRUE,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{year}{The year of the exam (1998-2024).}
+
+\item{type}{Type of data to load. Only used for ENEM 2024+, where
+microdata is split into separate files. Options: \code{"participantes"}
+(demographics and socioeconomic data, default), \code{"resultados"} (scores).
+Ignored for years before 2024 (single file with all data).}
 
 \item{n_max}{Maximum number of rows to read. Default is \code{Inf} (all rows).
 Consider using a smaller value for exploration, as ENEM files
@@ -42,6 +53,8 @@ with millions of participants. The microdata includes:
 \item Use \code{n_max} to read a sample first for exploration.
 \item Column names are standardized to lowercase with underscores.
 \item Score variables start with \code{nu_nota_} prefix.
+\item From 2024 onwards, INEP split the microdata into separate files.
+Use the \code{type} parameter to choose which file to load.
 }
 }
 \section{Data dictionary}{
@@ -57,6 +70,10 @@ enem_sample <- get_enem(2023, n_max = 10000)
 
 # get full data (warning: large file)
 enem_2023 <- get_enem(2023)
+
+# ENEM 2024+: choose data type
+participantes <- get_enem(2024, type = "participantes", n_max = 1000)
+resultados <- get_enem(2024, type = "resultados", n_max = 1000)
 }
 }
 \seealso{
