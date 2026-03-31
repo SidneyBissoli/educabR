@@ -29,6 +29,13 @@ Functions for SAEB data
 - [`get_saeb()`](https://sidneybissoli.github.io/educabR/reference/get_saeb.md)
   : Get SAEB (Sistema de Avaliação da Educação Básica) data
 
+## ENADE
+
+Functions for ENADE data
+
+- [`get_enade()`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)
+  : Get ENADE (Exame Nacional de Desempenho dos Estudantes) data
+
 ## Censo da Educação Superior
 
 Functions for Higher Education Census data

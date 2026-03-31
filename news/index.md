@@ -4,6 +4,12 @@
 
 ### New features
 
+#### ENADE (Exame Nacional de Desempenho dos Estudantes)
+
+- [`get_enade()`](https://sidneybissoli.github.io/educabR/reference/get_enade.md):
+  Download ENADE microdata (years 2004-2024).
+- Automatic delimiter detection and dash-to-NA cleaning.
+
 #### Censo da Educação Superior (Higher Education Census)
 
 - [`get_censo_superior()`](https://sidneybissoli.github.io/educabR/reference/get_censo_superior.md):
