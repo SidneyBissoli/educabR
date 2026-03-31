@@ -11,6 +11,7 @@ Description: Download and process public education data from INEP (Instituto
     functions to access microdata from the School Census (Censo Escolar),
     ENEM (Exame Nacional do Ensino Médio), SAEB (Sistema de Avaliação da
     Educação Básica), Higher Education Census (Censo da Educação Superior),
+    ENADE (Exame Nacional de Desempenho dos Estudantes),
     IDEB (Índice de Desenvolvimento da Educação Básica),
     and other educational datasets. Returns data in
     tidy format ready for analysis. Data source: INEP Open Data Portal

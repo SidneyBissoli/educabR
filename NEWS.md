@@ -2,6 +2,10 @@
 
 ## New features
 
+### ENADE (Exame Nacional de Desempenho dos Estudantes)
+* `get_enade()`: Download ENADE microdata (years 2004-2024).
+* Automatic delimiter detection and dash-to-NA cleaning.
+
 ### Censo da Educação Superior (Higher Education Census)
 * `get_censo_superior()`: Download Higher Education Census microdata (years 2009-2024).
 * Supports multiple data types: institutions (`"ies"`), courses (`"cursos"`), students (`"alunos"`), and faculty (`"docentes"`).

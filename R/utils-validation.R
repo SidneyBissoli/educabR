@@ -47,6 +47,7 @@ validate_data <- function(data, dataset, year) {
     "enem_itens" = validate_enem_itens(data, year),
     "saeb" = validate_saeb(data, year),
     "censo_superior" = validate_censo_superior(data, year),
+    "enade" = validate_enade(data, year),
     "ideb" = validate_ideb(data, year),
     "censo_escolar" = validate_censo_escolar(data, year)
   )
@@ -112,6 +113,22 @@ validate_saeb <- function(data, year) {
     cli::cli_warn(
       c(
         "SAEB {.val {year}} data may have an unexpected structure",
+        "i" = "expected columns like {.val {expected}}",
+        "i" = "column names found: {.val {head(names(data), 10)}}"
+      )
+    )
+  }
+}
+
+# enade: check for year and score columns
+validate_enade <- function(data, year) {
+  expected <- c("nu_ano", "co_curso", "co_ies", "nt_ger", "nt_fg", "nt_ce")
+  found <- expected[expected %in% names(data)]
+
+  if (length(found) == 0) {
+    cli::cli_warn(
+      c(
+        "ENADE {.val {year}} data may have an unexpected structure",
         "i" = "expected columns like {.val {expected}}",
         "i" = "column names found: {.val {head(names(data), 10)}}"
       )

@@ -28,6 +28,11 @@ reference:
     contents:
       - get_saeb
 
+  - title: "ENADE"
+    desc: "Functions for ENADE data"
+    contents:
+      - get_enade
+
   - title: "Censo da Educação Superior"
     desc: "Functions for Higher Education Census data"
     contents:

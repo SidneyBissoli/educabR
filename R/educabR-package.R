@@ -14,6 +14,7 @@
 #' - **SAEB**: Basic Education Assessment System (student performance)
 #' - **Higher Education Census (Censo da Educação Superior)**: Annual data
 #'   on institutions, courses, students, and faculty in higher education
+#' - **ENADE**: National Student Performance Exam (higher education)
 #' - **IDEB**: Basic Education Development Index
 #'
 #' All functions return data in tidy format, ready for analysis with tidyverse
@@ -32,6 +33,9 @@
 #'
 #' **Higher Education Census:**
 #' - [get_censo_superior()]: Download Higher Education Census microdata
+#'
+#' **ENADE:**
+#' - [get_enade()]: Download ENADE microdata
 #'
 #' **IDEB:**
 #' - [get_ideb()]: Download IDEB data
