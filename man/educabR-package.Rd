@@ -6,7 +6,7 @@
 \alias{educabR}
 \title{educabR: Download and Process Brazilian Education Data from INEP}
 \description{
-Download and process public education data from INEP (Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira). Provides functions to access microdata from the School Census (Censo Escolar), ENEM (Exame Nacional do Ensino Médio), SAEB (Sistema de Avaliação da Educação Básica), IDEB (Índice de Desenvolvimento da Educação Básica), and other educational datasets. Returns data in tidy format ready for analysis. Data source: INEP Open Data Portal \url{https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos}.
+Download and process public education data from INEP (Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira). Provides functions to access microdata from the School Census (Censo Escolar), ENEM (Exame Nacional do Ensino Médio), SAEB (Sistema de Avaliação da Educação Básica), Higher Education Census (Censo da Educação Superior), IDEB (Índice de Desenvolvimento da Educação Básica), and other educational datasets. Returns data in tidy format ready for analysis. Data source: INEP Open Data Portal \url{https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos}.
 
 The educabR package provides functions to download and process public
 education data from INEP (Instituto Nacional de Estudos e Pesquisas
@@ -16,6 +16,8 @@ Educacionais Anísio Teixeira). It offers easy access to microdata from:
 teachers, and classes in basic education
 \item \strong{ENEM}: Data from the National High School Exam
 \item \strong{SAEB}: Basic Education Assessment System (student performance)
+\item \strong{Higher Education Census (Censo da Educação Superior)}: Annual data
+on institutions, courses, students, and faculty in higher education
 \item \strong{IDEB}: Basic Education Development Index
 }
 
@@ -38,6 +40,11 @@ tools.
 \strong{SAEB:}
 \itemize{
 \item \code{\link[=get_saeb]{get_saeb()}}: Download SAEB microdata
+}
+
+\strong{Higher Education Census:}
+\itemize{
+\item \code{\link[=get_censo_superior]{get_censo_superior()}}: Download Higher Education Census microdata
 }
 
 \strong{IDEB:}

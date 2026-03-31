@@ -46,6 +46,7 @@ validate_data <- function(data, dataset, year) {
     "enem_participantes" = validate_enem_participantes(data, year),
     "enem_itens" = validate_enem_itens(data, year),
     "saeb" = validate_saeb(data, year),
+    "censo_superior" = validate_censo_superior(data, year),
     "ideb" = validate_ideb(data, year),
     "censo_escolar" = validate_censo_escolar(data, year)
   )
@@ -127,6 +128,23 @@ validate_ideb <- function(data, year) {
       c(
         "no UF/state column found in IDEB {.val {year}} data",
         "i" = "state filtering will not work",
+        "i" = "column names found: {.val {head(names(data), 10)}}"
+      )
+    )
+  }
+}
+
+# censo_superior: check for institution or course identifiers
+validate_censo_superior <- function(data, year) {
+  expected <- c("co_ies", "co_curso", "co_aluno", "co_docente",
+                "no_ies", "no_curso")
+  found <- expected[expected %in% names(data)]
+
+  if (length(found) == 0) {
+    cli::cli_warn(
+      c(
+        "Higher Education Census {.val {year}} data may have an unexpected structure",
+        "i" = "expected columns like {.val {expected}}",
         "i" = "column names found: {.val {head(names(data), 10)}}"
       )
     )

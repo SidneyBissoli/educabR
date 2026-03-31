@@ -1,3 +1,13 @@
+# educabR 0.3.0
+
+## New features
+
+### Censo da Educação Superior (Higher Education Census)
+* `get_censo_superior()`: Download Higher Education Census microdata (years 2009-2024).
+* Supports multiple data types: institutions (`"ies"`), courses (`"cursos"`), students (`"alunos"`), and faculty (`"docentes"`).
+* `list_censo_superior_files()`: List available files in a downloaded census.
+* UF filtering via the `uf` parameter.
+
 # educabR 0.2.0
 
 ## New features

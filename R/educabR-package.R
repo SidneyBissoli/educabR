@@ -12,6 +12,8 @@
 #'   teachers, and classes in basic education
 #' - **ENEM**: Data from the National High School Exam
 #' - **SAEB**: Basic Education Assessment System (student performance)
+#' - **Higher Education Census (Censo da Educação Superior)**: Annual data
+#'   on institutions, courses, students, and faculty in higher education
 #' - **IDEB**: Basic Education Development Index
 #'
 #' All functions return data in tidy format, ready for analysis with tidyverse
@@ -27,6 +29,9 @@
 #'
 #' **SAEB:**
 #' - [get_saeb()]: Download SAEB microdata
+#'
+#' **Higher Education Census:**
+#' - [get_censo_superior()]: Download Higher Education Census microdata
 #'
 #' **IDEB:**
 #' - [get_ideb()]: Download IDEB data
@@ -50,7 +55,7 @@
 #' @importFrom dplyr ungroup left_join inner_join bind_rows distinct across
 #' @importFrom dplyr if_else case_when pull n
 #' @importFrom purrr map map_chr map_dfr walk possibly
-#' @importFrom stringr str_c str_detect str_extract str_remove str_replace
+#' @importFrom stringr str_c str_count str_detect str_extract str_remove str_replace
 #' @importFrom stringr str_to_lower str_to_upper str_trim str_squish str_replace_all
 #' @importFrom stats sd median quantile
 #' @importFrom readr read_csv read_csv2 read_delim locale cols col_character
