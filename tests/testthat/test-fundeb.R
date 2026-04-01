@@ -61,16 +61,16 @@ test_that("FUNDEB URL map has entry for every available year", {
 
 # --- argument validation ---
 
-test_that("get_fundeb_distribuicao rejects invalid source", {
+test_that("get_fundeb_distribution rejects invalid source", {
   expect_error(
-    get_fundeb_distribuicao(2023, source = "INVALID"),
+    get_fundeb_distribution(2023, source = "INVALID"),
     "invalid source"
   )
 })
 
-test_that("get_fundeb_distribuicao rejects invalid destination", {
+test_that("get_fundeb_distribution rejects invalid destination", {
   expect_error(
-    get_fundeb_distribuicao(2023, destination = "invalid"),
+    get_fundeb_distribution(2023, destination = "invalid"),
     "should be one of"
   )
 })
@@ -104,7 +104,7 @@ test_that("validate_data warns for unexpected FUNDEB enrollment structure", {
   bad_data <- data.frame(col1 = 1:5, col2 = 6:10, col3 = 11:15)
 
   expect_warning(
-    validate_data(bad_data, "fundeb_matriculas", 2023),
+    validate_data(bad_data, "fundeb_enrollment", 2023),
     "unexpected structure"
   )
 })
@@ -116,7 +116,7 @@ test_that("validate_data passes for valid FUNDEB enrollment structure", {
     qtd_matricula = c(1000, 2000)
   )
 
-  expect_silent(validate_data(good_data, "fundeb_matriculas", 2023))
+  expect_silent(validate_data(good_data, "fundeb_enrollment", 2023))
 })
 
 # --- constants ---

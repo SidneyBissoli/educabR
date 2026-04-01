@@ -56,7 +56,7 @@ validate_data <- function(data, dataset, year) {
     "capes" = validate_capes(data, year),
     "ideb" = validate_ideb(data, year),
     "fundeb" = validate_fundeb(data, year),
-    "fundeb_matriculas" = validate_fundeb_matriculas(data, year),
+    "fundeb_enrollment" = validate_fundeb_enrollment(data, year),
     "censo_escolar" = validate_censo_escolar(data, year)
   )
 
@@ -294,7 +294,7 @@ validate_fundeb <- function(data, year) {
 }
 
 # fundeb enrollment: check for census/enrollment columns
-validate_fundeb_matriculas <- function(data, year) {
+validate_fundeb_enrollment <- function(data, year) {
   expected <- c("ano_censo", "uf", "qtd_matricula", "tipo_rede_educacao",
                 "descricao_tipo_educacao")
   found <- expected[expected %in% names(data)]

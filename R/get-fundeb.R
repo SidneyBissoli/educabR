@@ -41,7 +41,7 @@ fundeb_month_map <- c(
 )
 
 # OData API base URL for FUNDEB matriculas (FNDE)
-fundeb_matriculas_api_url <- function() {
+fundeb_enrollment_api_url <- function() {
   "https://www.fnde.gov.br/olinda-ide/servico/FUNDEB_Matriculas/versao/v1/odata/FUNDEBMatriculas"
 }
 
@@ -107,16 +107,16 @@ fundeb_matriculas_api_url <- function() {
 #' @examples
 #' \dontrun{
 #' # get all FUNDEB distribution data for 2023
-#' dist_2023 <- get_fundeb_distribuicao(2023)
+#' dist_2023 <- get_fundeb_distribution(2023)
 #'
 #' # get only FPE transfers to states
-#' fpe_estados <- get_fundeb_distribuicao(2023, source = "FPE",
+#' fpe_estados <- get_fundeb_distribution(2023, source = "FPE",
 #'                                         destination = "uf")
 #'
 #' # get data for Sao Paulo only
-#' sp <- get_fundeb_distribuicao(2023, uf = "SP")
+#' sp <- get_fundeb_distribution(2023, uf = "SP")
 #' }
-get_fundeb_distribuicao <- function(year,
+get_fundeb_distribution <- function(year,
                                     uf = NULL,
                                     source = NULL,
                                     destination = NULL,
@@ -155,7 +155,7 @@ get_fundeb_distribuicao <- function(year,
 
   # download if not cached
   url <- build_fundeb_url(year)
-  filename <- str_c("fundeb_distribuicao_", year, ".xls")
+  filename <- str_c("fundeb_distribution_", year, ".xls")
   file_path <- cache_path("fundeb", filename)
 
   if (!is_cached("fundeb", filename)) {
@@ -239,12 +239,12 @@ get_fundeb_distribuicao <- function(year,
 #' @examples
 #' \dontrun{
 #' # get FUNDEB enrollment data for 2023
-#' mat_2023 <- get_fundeb_matriculas(2023)
+#' mat_2023 <- get_fundeb_enrollment(2023)
 #'
 #' # get enrollment data with limited rows
-#' mat_sample <- get_fundeb_matriculas(2023, n_max = 1000)
+#' mat_sample <- get_fundeb_enrollment(2023, n_max = 1000)
 #' }
-get_fundeb_matriculas <- function(year,
+get_fundeb_enrollment <- function(year,
                                   n_max = Inf,
                                   keep_file = TRUE,
                                   quiet = FALSE) {
@@ -262,7 +262,7 @@ get_fundeb_matriculas <- function(year,
   }
 
   # check cache first
-  filename <- str_c("fundeb_matriculas_", year, ".csv")
+  filename <- str_c("fundeb_enrollment_", year, ".csv")
   file_path <- cache_path("fundeb", filename)
 
   if (is_cached("fundeb", filename)) {
@@ -291,7 +291,7 @@ get_fundeb_matriculas <- function(year,
     cli::cli_alert_info("fetching FUNDEB enrollment {.val {year}} from FNDE API...")
   }
 
-  df <- fetch_fundeb_matriculas(year, n_max = n_max, quiet = quiet)
+  df <- fetch_fundeb_enrollment(year, n_max = n_max, quiet = quiet)
   df <- standardize_names(df)
 
   validate_data(df, "fundeb_matriculas", year)
@@ -552,8 +552,8 @@ tidy_fundeb_table <- function(df, year, source_name, dest_name, tabela) {
 #' @return A tibble with enrollment data.
 #'
 #' @keywords internal
-fetch_fundeb_matriculas <- function(year, n_max = Inf, quiet = FALSE) {
-  base_url <- fundeb_matriculas_api_url()
+fetch_fundeb_enrollment <- function(year, n_max = Inf, quiet = FALSE) {
+  base_url <- fundeb_enrollment_api_url()
   page_size <- 10000L
   all_rows <- list()
   skip <- 0L
