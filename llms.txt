@@ -154,6 +154,15 @@ Functions for CAPES graduate education data
 - [`get_capes()`](https://sidneybissoli.github.io/educabR/reference/get_capes.md)
   : Get CAPES graduate education data
 
+## FUNDEB
+
+Functions for FUNDEB data
+
+- [`get_fundeb_distribution()`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_distribution.md)
+  : Get FUNDEB distribution data
+- [`get_fundeb_enrollment()`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_enrollment.md)
+  : Get FUNDEB enrollment data
+
 ## ENCCEJA
 
 Functions for ENCCEJA data

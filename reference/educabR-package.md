@@ -9,8 +9,9 @@ Básica), Higher Education Census (Censo da Educação Superior), ENADE
 para Certificação de Competências de Jovens e Adultos), IDD (Indicador
 de Diferença entre os Desempenhos Observado e Esperado), CPC (Conceito
 Preliminar de Curso), IGC (Índice Geral de Cursos), CAPES graduate
-education data, IDEB (Índice de Desenvolvimento da Educação Básica), and
-other educational datasets. Returns data in tidy format ready for
+education data, FUNDEB (Fundo de Manutencao e Desenvolvimento da
+Educacao Basica), IDEB (Índice de Desenvolvimento da Educação Básica),
+and other educational datasets. Returns data in tidy format ready for
 analysis. Data source: INEP Open Data Portal
 <https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos>.
 

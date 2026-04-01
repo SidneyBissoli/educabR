@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">educabR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,21 @@
       <small>Source: <a href="https://github.com/SidneyBissoli/educabR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.8.0" id="educabr-080">educabR 0.8.0<a class="anchor" aria-label="anchor" href="#educabr-080"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-8-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-8-0"></a></h3>
+<div class="section level4">
+<h4 id="fundeb-fundo-de-manutencao-e-desenvolvimento-da-educacao-basica-0-8-0">FUNDEB (Fundo de Manutencao e Desenvolvimento da Educacao Basica)<a class="anchor" aria-label="anchor" href="#fundeb-fundo-de-manutencao-e-desenvolvimento-da-educacao-basica-0-8-0"></a></h4>
+<ul><li>
+<code><a href="../reference/get_fundeb_distribution.html">get_fundeb_distribution()</a></code>: Download FUNDEB resource distribution data (years 2007-2026). Reads all sheets from STN Excel files and returns tidy long-format data with monthly transfer amounts by state, funding source, destination (states/municipalities), and table type (fundeb/adjustment).</li>
+<li>
+<code><a href="../reference/get_fundeb_enrollment.html">get_fundeb_enrollment()</a></code>: Download FUNDEB enrollment data (years 2007-2026). Fetches from FNDE OData API with automatic pagination. Results cached as CSV.</li>
+<li>Filtering parameters for distribution: <code>uf</code>, <code>source</code> (FPE, FPM, ICMS, etc.), and <code>destination</code> (“uf” or “municipio”).</li>
+<li>Data sources: Tesouro Transparente (<code>https://www.tesourotransparente.gov.br</code>) and FNDE (<code>https://www.fnde.gov.br</code>).</li>
+</ul></div>
+</div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.0" id="educabr-070">educabR 0.7.0<a class="anchor" aria-label="anchor" href="#educabr-070"></a></h2>
 <div class="section level3">

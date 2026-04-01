@@ -11,6 +11,7 @@
 <url><loc>https://sidneybissoli.github.io/educabR/news/index.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/plano-expansao-educabR.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/available_years.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/build_fundeb_url.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/build_inep_url.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/build_saeb_zip_filename.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/clean_dash_values.html</loc></url>
@@ -25,6 +26,7 @@
 <url><loc>https://sidneybissoli.github.io/educabR/reference/enem_summary.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/extract_archive.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/extract_zip.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/fetch_fundeb_enrollment.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/find_censo_file.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/find_censo_superior_file.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/find_data_files.html</loc></url>
@@ -44,6 +46,8 @@
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_enem.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_enem_escola.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_enem_itens.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/get_fundeb_distribution.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/get_fundeb_enrollment.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_idd.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_ideb.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_ideb_series.html</loc></url>
