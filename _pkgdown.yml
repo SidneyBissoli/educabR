@@ -58,6 +58,12 @@ reference:
     contents:
       - get_capes
 
+  - title: "FUNDEB"
+    desc: "Functions for FUNDEB data"
+    contents:
+      - get_fundeb_distribution
+      - get_fundeb_enrollment
+
   - title: "ENCCEJA"
     desc: "Functions for ENCCEJA data"
     contents:
