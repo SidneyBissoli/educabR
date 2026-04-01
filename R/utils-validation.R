@@ -55,6 +55,8 @@ validate_data <- function(data, dataset, year) {
     "igc" = validate_igc(data, year),
     "capes" = validate_capes(data, year),
     "ideb" = validate_ideb(data, year),
+    "fundeb" = validate_fundeb(data, year),
+    "fundeb_matriculas" = validate_fundeb_matriculas(data, year),
     "censo_escolar" = validate_censo_escolar(data, year)
   )
 
@@ -268,6 +270,39 @@ validate_censo_superior <- function(data, year) {
     cli::cli_warn(
       c(
         "Higher Education Census {.val {year}} data may have an unexpected structure",
+        "i" = "expected columns like {.val {expected}}",
+        "i" = "column names found: {.val {head(names(data), 10)}}"
+      )
+    )
+  }
+}
+
+# fundeb distribution: check for tidy columns
+validate_fundeb <- function(data, year) {
+  expected <- c("uf", "estados", "mes_ano", "origem", "destino", "valor")
+  found <- expected[expected %in% names(data)]
+
+  if (length(found) == 0) {
+    cli::cli_warn(
+      c(
+        "FUNDEB distribution {.val {year}} data may have an unexpected structure",
+        "i" = "expected columns like {.val {expected}}",
+        "i" = "column names found: {.val {head(names(data), 10)}}"
+      )
+    )
+  }
+}
+
+# fundeb enrollment: check for census/enrollment columns
+validate_fundeb_matriculas <- function(data, year) {
+  expected <- c("ano_censo", "uf", "qtd_matricula", "tipo_rede_educacao",
+                "descricao_tipo_educacao")
+  found <- expected[expected %in% names(data)]
+
+  if (length(found) == 0) {
+    cli::cli_warn(
+      c(
+        "FUNDEB enrollment {.val {year}} data may have an unexpected structure",
         "i" = "expected columns like {.val {expected}}",
         "i" = "column names found: {.val {head(names(data), 10)}}"
       )

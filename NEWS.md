@@ -1,3 +1,20 @@
+# educabR 0.8.0
+
+## New features
+
+### FUNDEB (Fundo de Manutencao e Desenvolvimento da Educacao Basica)
+* `get_fundeb_distribuicao()`: Download FUNDEB resource distribution data
+  (years 2007-2026). Reads all sheets from STN Excel files and returns
+  tidy long-format data with monthly transfer amounts by state, funding
+  source, destination (states/municipalities), and table type
+  (fundeb/adjustment).
+* `get_fundeb_matriculas()`: Download FUNDEB enrollment data (years 2007-2026).
+  Fetches from FNDE OData API with automatic pagination. Results cached as CSV.
+* Filtering parameters for distribution: `uf`, `source` (FPE, FPM, ICMS, etc.),
+  and `destination` ("uf" or "municipio").
+* Data sources: Tesouro Transparente (`https://www.tesourotransparente.gov.br`)
+  and FNDE (`https://www.fnde.gov.br`).
+
 # educabR 0.7.0
 
 ## New features
