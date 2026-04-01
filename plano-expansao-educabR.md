@@ -2,16 +2,17 @@
 
 ## Contexto
 
-O pacote educabR atualmente suporta 7 datasets do INEP: Censo Escolar,
-ENEM, IDEB, SAEB, Censo da Educação Superior, ENADE e ENCCEJA. O
-objetivo é expandir para cobrir mais fontes de dados educacionais
-brasileiros, mantendo compatibilidade com o CRAN e seguindo os padrões
-já estabelecidos no pacote.
+O pacote educabR atualmente suporta 12 datasets: Censo Escolar, ENEM,
+IDEB, SAEB, Censo da Educação Superior, ENADE, ENCCEJA, IDD, ENEM por
+Escola, CPC, IGC (todos do INEP) e CAPES (dados abertos da
+pós-graduação). O objetivo é expandir para cobrir mais fontes de dados
+educacionais brasileiros, mantendo compatibilidade com o CRAN e seguindo
+os padrões já estabelecidos no pacote.
 
 A arquitetura atual é bem modular: cada dataset tem seu próprio
 `R/get-{dataset}.R`, e as utilidades compartilhadas (`utils-download.R`,
-`utils-cache.R`, `utils-validation.R`) são reutilizáveis. Não serão
-necessárias novas dependências.
+`utils-cache.R`, `utils-validation.R`) são reutilizáveis. CPC e IGC usam
+`readxl` (em Suggests) para ler arquivos Excel.
 
 ------------------------------------------------------------------------
 
@@ -40,94 +41,55 @@ necessárias novas dependências.
 - `get_encceja(year, n_max, keep_zip, quiet)`
 - Anos: 2014–2024
 
-------------------------------------------------------------------------
+### Fase 5: IDD — Versão 0.5.0 ✓
 
-## Fases futuras — INEP
+- `get_idd(year, n_max, keep_zip, quiet)`
+- Anos: 2014–2019, 2021–2023 (sem edição 2020)
+- URL com capitalização: `microdados_IDD_{year}.{zip|7z}`
+- Anos 2014–2019 usam formato 7z (via
+  [`extract_archive()`](https://sidneybissoli.github.io/educabR/reference/extract_archive.md))
 
-### Fase 5: IDD — Versão 0.5.0
+### Fase 6: ENEM por Escola — Versão 0.5.0 ✓
 
-**Prioridade:** Alta  
-**Por quê**: Complementa diretamente o ENADE — mede o valor agregado
-pelo curso de graduação (diferença entre desempenho no ENADE e nota de
-entrada via ENEM). Mesmo padrão ZIP+CSV do INEP.
-
-**Criar:**  
-- `R/get-idd.R`  
-- `get_idd(year, n_max, keep_zip, quiet)`  
-- `find_idd_file(exdir, year)` — internal  
-- Anos: 2014–2023  
-- URL: `{base}/microdados/microdados_idd_{year}.zip` (verificar)  
-- `tests/testthat/test-idd.R`
-
-**Modificar:** `utils-download.R`, `utils-validation.R`, `_pkgdown.yml`,
-`DESCRIPTION`, `NEWS.md`, `educabR-package.R`
-
-------------------------------------------------------------------------
-
-### Fase 6: ENEM por Escola — Versão 0.5.0 (bundled com Fase 5)
-
-**Prioridade:** Alta  
-**Por quê**: Dados de desempenho no ENEM agregados por escola. Altíssima
-demanda de pesquisadores, jornalistas e gestores educacionais.
-
-**Criar:**  
-- `R/get-enem-escola.R`  
-- `get_enem_escola(n_max, keep_zip, quiet)` — pacote único 2005-2015  
-- `find_enem_escola_file(exdir)` — internal  
-- Anos: 2005–2015 (arquivo único)  
+- `get_enem_escola(n_max, keep_zip, quiet)`
+- Anos: 2005–2015 (arquivo único, descontinuado)
 - URL:
-`{base}/microdados/enem_por_escola/2005_a_2015/microdados_enem_por_escola.zip`
-(verificar)  
-- `tests/testthat/test-enem-escola.R`
+  `{base}/microdados/enem_por_escola/2005_a_2015/microdados_enem_por_escola.zip`
 
-**Modificar:** mesmos arquivos utilitários + DESCRIPTION + NEWS.md
+### Fase 7: CPC/IGC — Versão 0.6.0 ✓
+
+- `get_cpc(year, n_max, keep_file, quiet)`
+- `get_igc(year, n_max, keep_file, quiet)`
+- Anos: 2007–2019, 2021–2023 (sem edição 2020)
+- Arquivos Excel (xls/xlsx) — requer `readxl` (em Suggests)
+- URLs completamente irregulares — lookup table hardcoded por ano
+- IGC 2007 é arquivo 7z contendo Excel
+- [`read_excel_safe()`](https://sidneybissoli.github.io/educabR/reference/read_excel_safe.md):
+  helper para leitura de Excel com tratamento de erros
+- [`convert_faixa_columns()`](https://sidneybissoli.github.io/educabR/reference/convert_faixa_columns.md):
+  converte colunas `_faixa` de character para numeric
+- [`standardize_names()`](https://sidneybissoli.github.io/educabR/reference/standardize_names.md)
+  corrigido para transliterar acentos via
+  [`iconv()`](https://rdrr.io/r/base/iconv.html)
 
 ------------------------------------------------------------------------
 
-### Fase 7: CPC/IGC (Indicadores de Qualidade da Educação Superior) — Versão 0.5.0 (bundled com Fases 5-6)
+### Fase 8: CAPES (Dados Abertos da Pós-Graduação) — Versão 0.7.0 ✓
 
-**Prioridade:** Alta  
-**Por quê**: Conceito Preliminar de Curso (CPC) e Índice Geral de Cursos
-(IGC) são os indicadores oficiais de qualidade do ensino superior.
-Completa o ecossistema ENADE + IDD + CPC/IGC.
-
-**Criar:**  
-- `R/get-cpc.R`  
-- `get_cpc(year, n_max, keep_zip, quiet)`  
-- Anos: 2014–2023  
-- `R/get-igc.R`  
-- `get_igc(year, n_max, keep_zip, quiet)`  
-- Anos: 2014–2023  
-- Testes correspondentes
-
-**Modificar:** mesmos arquivos utilitários + DESCRIPTION + NEWS.md
+- `get_capes(year, type, n_max, keep_file, quiet)`
+- Tipos: programas, discentes, docentes, cursos, catalogo
+- Anos: 2013–2024
+- Fonte: Portal de Dados Abertos da CAPES (CKAN), não INEP
+- [`discover_capes_url()`](https://sidneybissoli.github.io/educabR/reference/discover_capes_url.md):
+  descobre URLs via API CKAN (URLs contêm UUIDs)
+- [`parse_sas_dates()`](https://sidneybissoli.github.io/educabR/reference/parse_sas_dates.md)
+  ampliado para capturar colunas `dh_*` além de `dt_*`
 
 ------------------------------------------------------------------------
 
 ## Fases futuras — Outras fontes
 
-### Fase 8: CAPES (Dados Abertos da Pós-Graduação) — Versão 0.6.0
-
-**Prioridade:** Alta  
-**Por quê**: Expande o pacote para pós-graduação stricto sensu. Dados
-anuais em CSV via portal CKAN da CAPES.
-
-**Criar:**  
-- `R/get-capes.R`  
--
-`get_capes(year, type = c("programas", "discentes", "docentes", "producao"), n_max, quiet)`  
-- Anos: 2017–2024  
-- URL: `https://dadosabertos.capes.gov.br/dataset/` (verificar
-estrutura)  
-- `tests/testthat/test-capes.R`
-
-**Nota:** Requer adaptação da infraestrutura de download (CAPES usa
-portal CKAN, não o padrão INEP). Pode necessitar funções de download
-específicas.
-
-------------------------------------------------------------------------
-
-### Fase 9: FUNDEB — Versão 0.6.0 (bundled com Fase 8)
+### Fase 9: FUNDEB — Versão 0.8.0
 
 **Prioridade:** Alta  
 **Por quê**: Principal mecanismo de financiamento da educação básica.
@@ -142,7 +104,7 @@ Dados de distribuição de recursos por município/estado.
 
 ------------------------------------------------------------------------
 
-### Fase 10: FIES — Versão 0.6.0 (bundled com Fases 8-9)
+### Fase 10: FIES — Versão 0.8.0 (bundled com Fase 9)
 
 **Prioridade:** Alta  
 **Por quê**: Complementa o Censo Superior com dados de financiamento
@@ -215,11 +177,13 @@ Para cada dataset, os passos são idênticos:
 
 ## Estratégia de submissão ao CRAN
 
-| Versão | Conteúdo                                  | Timing                    |
-|:------:|-------------------------------------------|---------------------------|
-| 0.4.0  | ENCCEJA                                   | Próxima submissão         |
-| 0.5.0  | IDD + ENEM por Escola + CPC/IGC (bundled) | Mín. 1-2 meses após 0.4.0 |
-| 0.6.0  | CAPES + FUNDEB + FIES (bundled)           | Mín. 1-2 meses após 0.5.0 |
+| Versão | Conteúdo                | Timing                    |
+|:------:|-------------------------|---------------------------|
+| 0.4.0  | ENCCEJA                 | Concluída                 |
+| 0.5.0  | IDD + ENEM por Escola   | Concluída                 |
+| 0.6.0  | CPC + IGC               | Concluída                 |
+| 0.7.0  | CAPES                   | Concluída                 |
+| 0.8.0  | FUNDEB + FIES (bundled) | Mín. 1-2 meses após 0.7.0 |
 
 **Checklist CRAN por submissão:**  
 - Exemplos com `\dontrun{}`  
@@ -227,7 +191,7 @@ Para cada dataset, os passos são idênticos:
 padrão  
 - `R CMD check`: 0 errors, 0 warnings, 0 notes  
 - `cran-comments.md` atualizado  
-- Nenhuma dependência nova
+- Nenhuma dependência nova obrigatória (readxl em Suggests para CPC/IGC)
 
 ------------------------------------------------------------------------
 

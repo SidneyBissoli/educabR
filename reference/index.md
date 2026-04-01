@@ -65,6 +65,13 @@ Functions for IGC data
 - [`get_igc()`](https://sidneybissoli.github.io/educabR/reference/get_igc.md)
   : Get IGC (Indice Geral de Cursos) data
 
+## CAPES
+
+Functions for CAPES graduate education data
+
+- [`get_capes()`](https://sidneybissoli.github.io/educabR/reference/get_capes.md)
+  : Get CAPES graduate education data
+
 ## ENCCEJA
 
 Functions for ENCCEJA data

@@ -19,6 +19,7 @@
 <url><loc>https://sidneybissoli.github.io/educabR/reference/convert_faixa_columns.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/detect_delim.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/detect_encoding.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/discover_capes_url.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/download_inep_file.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/educabR-package.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/enem_summary.html</loc></url>
@@ -34,6 +35,7 @@
 <url><loc>https://sidneybissoli.github.io/educabR/reference/find_idd_file.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/find_saeb_file.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_cache_dir.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/get_capes.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_censo_escolar.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_censo_superior.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_cpc.html</loc></url>

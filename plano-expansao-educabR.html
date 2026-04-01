@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">educabR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,8 +40,8 @@
 
 <div class="section level2">
 <h2 id="contexto">Contexto<a class="anchor" aria-label="anchor" href="#contexto"></a></h2>
-<p>O pacote educabR atualmente suporta 7 datasets do INEP: Censo Escolar, ENEM, IDEB, SAEB, Censo da Educação Superior, ENADE e ENCCEJA. O objetivo é expandir para cobrir mais fontes de dados educacionais brasileiros, mantendo compatibilidade com o CRAN e seguindo os padrões já estabelecidos no pacote.</p>
-<p>A arquitetura atual é bem modular: cada dataset tem seu próprio <code>R/get-{dataset}.R</code>, e as utilidades compartilhadas (<code>utils-download.R</code>, <code>utils-cache.R</code>, <code>utils-validation.R</code>) são reutilizáveis. Não serão necessárias novas dependências.</p>
+<p>O pacote educabR atualmente suporta 12 datasets: Censo Escolar, ENEM, IDEB, SAEB, Censo da Educação Superior, ENADE, ENCCEJA, IDD, ENEM por Escola, CPC, IGC (todos do INEP) e CAPES (dados abertos da pós-graduação). O objetivo é expandir para cobrir mais fontes de dados educacionais brasileiros, mantendo compatibilidade com o CRAN e seguindo os padrões já estabelecidos no pacote.</p>
+<p>A arquitetura atual é bem modular: cada dataset tem seu próprio <code>R/get-{dataset}.R</code>, e as utilidades compartilhadas (<code>utils-download.R</code>, <code>utils-cache.R</code>, <code>utils-validation.R</code>) são reutilizáveis. CPC e IGC usam <code>readxl</code> (em Suggests) para ler arquivos Excel.</p>
 <hr></div>
 <div class="section level2">
 <h2 id="fases-concluídas">Fases concluídas<a class="anchor" aria-label="anchor" href="#fases-conclu%C3%ADdas"></a></h2>
@@ -67,63 +67,55 @@
 <h3 id="fase-4-encceja--versão-040-">Fase 4: ENCCEJA — Versão 0.4.0 ✓<a class="anchor" aria-label="anchor" href="#fase-4-encceja--vers%C3%A3o-040-"></a></h3>
 <ul><li><code>get_encceja(year, n_max, keep_zip, quiet)</code></li>
 <li>Anos: 2014–2024</li>
+</ul></div>
+<div class="section level3">
+<h3 id="fase-5-idd--versão-050-">Fase 5: IDD — Versão 0.5.0 ✓<a class="anchor" aria-label="anchor" href="#fase-5-idd--vers%C3%A3o-050-"></a></h3>
+<ul><li><code>get_idd(year, n_max, keep_zip, quiet)</code></li>
+<li>Anos: 2014–2019, 2021–2023 (sem edição 2020)</li>
+<li>URL com capitalização: <code>microdados_IDD_{year}.{zip|7z}</code>
+</li>
+<li>Anos 2014–2019 usam formato 7z (via <code><a href="reference/extract_archive.html">extract_archive()</a></code>)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="fase-6-enem-por-escola--versão-050-">Fase 6: ENEM por Escola — Versão 0.5.0 ✓<a class="anchor" aria-label="anchor" href="#fase-6-enem-por-escola--vers%C3%A3o-050-"></a></h3>
+<ul><li><code>get_enem_escola(n_max, keep_zip, quiet)</code></li>
+<li>Anos: 2005–2015 (arquivo único, descontinuado)</li>
+<li>URL: <code>{base}/microdados/enem_por_escola/2005_a_2015/microdados_enem_por_escola.zip</code>
+</li>
+</ul></div>
+<div class="section level3">
+<h3 id="fase-7-cpcigc--versão-060-">Fase 7: CPC/IGC — Versão 0.6.0 ✓<a class="anchor" aria-label="anchor" href="#fase-7-cpcigc--vers%C3%A3o-060-"></a></h3>
+<ul><li><code>get_cpc(year, n_max, keep_file, quiet)</code></li>
+<li><code>get_igc(year, n_max, keep_file, quiet)</code></li>
+<li>Anos: 2007–2019, 2021–2023 (sem edição 2020)</li>
+<li>Arquivos Excel (xls/xlsx) — requer <code>readxl</code> (em Suggests)</li>
+<li>URLs completamente irregulares — lookup table hardcoded por ano</li>
+<li>IGC 2007 é arquivo 7z contendo Excel</li>
+<li>
+<code><a href="reference/read_excel_safe.html">read_excel_safe()</a></code>: helper para leitura de Excel com tratamento de erros</li>
+<li>
+<code><a href="reference/convert_faixa_columns.html">convert_faixa_columns()</a></code>: converte colunas <code>_faixa</code> de character para numeric</li>
+<li>
+<code><a href="reference/standardize_names.html">standardize_names()</a></code> corrigido para transliterar acentos via <code><a href="https://rdrr.io/r/base/iconv.html" class="external-link">iconv()</a></code>
+</li>
 </ul><hr></div>
-</div>
-<div class="section level2">
-<h2 id="fases-futuras--inep">Fases futuras — INEP<a class="anchor" aria-label="anchor" href="#fases-futuras--inep"></a></h2>
 <div class="section level3">
-<h3 id="fase-5-idd--versão-050">Fase 5: IDD — Versão 0.5.0<a class="anchor" aria-label="anchor" href="#fase-5-idd--vers%C3%A3o-050"></a></h3>
-<p><strong>Prioridade:</strong> Alta<br><strong>Por quê</strong>: Complementa diretamente o ENADE — mede o valor agregado pelo curso de graduação (diferença entre desempenho no ENADE e nota de entrada via ENEM). Mesmo padrão ZIP+CSV do INEP.</p>
-<p><strong>Criar:</strong><br>
-- <code>R/get-idd.R</code><br>
-- <code>get_idd(year, n_max, keep_zip, quiet)</code><br>
-- <code>find_idd_file(exdir, year)</code> — internal<br>
-- Anos: 2014–2023<br>
-- URL: <code>{base}/microdados/microdados_idd_{year}.zip</code> (verificar)<br>
-- <code>tests/testthat/test-idd.R</code></p>
-<p><strong>Modificar:</strong> <code>utils-download.R</code>, <code>utils-validation.R</code>, <code>_pkgdown.yml</code>, <code>DESCRIPTION</code>, <code>NEWS.md</code>, <code>educabR-package.R</code></p>
-<hr></div>
-<div class="section level3">
-<h3 id="fase-6-enem-por-escola--versão-050-bundled-com-fase-5">Fase 6: ENEM por Escola — Versão 0.5.0 (bundled com Fase 5)<a class="anchor" aria-label="anchor" href="#fase-6-enem-por-escola--vers%C3%A3o-050-bundled-com-fase-5"></a></h3>
-<p><strong>Prioridade:</strong> Alta<br><strong>Por quê</strong>: Dados de desempenho no ENEM agregados por escola. Altíssima demanda de pesquisadores, jornalistas e gestores educacionais.</p>
-<p><strong>Criar:</strong><br>
-- <code>R/get-enem-escola.R</code><br>
-- <code>get_enem_escola(n_max, keep_zip, quiet)</code> — pacote único 2005-2015<br>
-- <code>find_enem_escola_file(exdir)</code> — internal<br>
-- Anos: 2005–2015 (arquivo único)<br>
-- URL: <code>{base}/microdados/enem_por_escola/2005_a_2015/microdados_enem_por_escola.zip</code> (verificar)<br>
-- <code>tests/testthat/test-enem-escola.R</code></p>
-<p><strong>Modificar:</strong> mesmos arquivos utilitários + DESCRIPTION + NEWS.md</p>
-<hr></div>
-<div class="section level3">
-<h3 id="fase-7-cpcigc-indicadores-de-qualidade-da-educação-superior--versão-050-bundled-com-fases-5-6">Fase 7: CPC/IGC (Indicadores de Qualidade da Educação Superior) — Versão 0.5.0 (bundled com Fases 5-6)<a class="anchor" aria-label="anchor" href="#fase-7-cpcigc-indicadores-de-qualidade-da-educa%C3%A7%C3%A3o-superior--vers%C3%A3o-050-bundled-com-fases-5-6"></a></h3>
-<p><strong>Prioridade:</strong> Alta<br><strong>Por quê</strong>: Conceito Preliminar de Curso (CPC) e Índice Geral de Cursos (IGC) são os indicadores oficiais de qualidade do ensino superior. Completa o ecossistema ENADE + IDD + CPC/IGC.</p>
-<p><strong>Criar:</strong><br>
-- <code>R/get-cpc.R</code><br>
-- <code>get_cpc(year, n_max, keep_zip, quiet)</code><br>
-- Anos: 2014–2023<br>
-- <code>R/get-igc.R</code><br>
-- <code>get_igc(year, n_max, keep_zip, quiet)</code><br>
-- Anos: 2014–2023<br>
-- Testes correspondentes</p>
-<p><strong>Modificar:</strong> mesmos arquivos utilitários + DESCRIPTION + NEWS.md</p>
-<hr></div>
+<h3 id="fase-8-capes-dados-abertos-da-pós-graduação--versão-070-">Fase 8: CAPES (Dados Abertos da Pós-Graduação) — Versão 0.7.0 ✓<a class="anchor" aria-label="anchor" href="#fase-8-capes-dados-abertos-da-p%C3%B3s-gradua%C3%A7%C3%A3o--vers%C3%A3o-070-"></a></h3>
+<ul><li><code>get_capes(year, type, n_max, keep_file, quiet)</code></li>
+<li>Tipos: programas, discentes, docentes, cursos, catalogo</li>
+<li>Anos: 2013–2024</li>
+<li>Fonte: Portal de Dados Abertos da CAPES (CKAN), não INEP</li>
+<li>
+<code><a href="reference/discover_capes_url.html">discover_capes_url()</a></code>: descobre URLs via API CKAN (URLs contêm UUIDs)</li>
+<li>
+<code><a href="reference/parse_sas_dates.html">parse_sas_dates()</a></code> ampliado para capturar colunas <code>dh_*</code> além de <code>dt_*</code>
+</li>
+</ul><hr></div>
 </div>
 <div class="section level2">
 <h2 id="fases-futuras--outras-fontes">Fases futuras — Outras fontes<a class="anchor" aria-label="anchor" href="#fases-futuras--outras-fontes"></a></h2>
 <div class="section level3">
-<h3 id="fase-8-capes-dados-abertos-da-pós-graduação--versão-060">Fase 8: CAPES (Dados Abertos da Pós-Graduação) — Versão 0.6.0<a class="anchor" aria-label="anchor" href="#fase-8-capes-dados-abertos-da-p%C3%B3s-gradua%C3%A7%C3%A3o--vers%C3%A3o-060"></a></h3>
-<p><strong>Prioridade:</strong> Alta<br><strong>Por quê</strong>: Expande o pacote para pós-graduação stricto sensu. Dados anuais em CSV via portal CKAN da CAPES.</p>
-<p><strong>Criar:</strong><br>
-- <code>R/get-capes.R</code><br>
-- <code>get_capes(year, type = c("programas", "discentes", "docentes", "producao"), n_max, quiet)</code><br>
-- Anos: 2017–2024<br>
-- URL: <code>https://dadosabertos.capes.gov.br/dataset/</code> (verificar estrutura)<br>
-- <code>tests/testthat/test-capes.R</code></p>
-<p><strong>Nota:</strong> Requer adaptação da infraestrutura de download (CAPES usa portal CKAN, não o padrão INEP). Pode necessitar funções de download específicas.</p>
-<hr></div>
-<div class="section level3">
-<h3 id="fase-9-fundeb--versão-060-bundled-com-fase-8">Fase 9: FUNDEB — Versão 0.6.0 (bundled com Fase 8)<a class="anchor" aria-label="anchor" href="#fase-9-fundeb--vers%C3%A3o-060-bundled-com-fase-8"></a></h3>
+<h3 id="fase-9-fundeb--versão-080">Fase 9: FUNDEB — Versão 0.8.0<a class="anchor" aria-label="anchor" href="#fase-9-fundeb--vers%C3%A3o-080"></a></h3>
 <p><strong>Prioridade:</strong> Alta<br><strong>Por quê</strong>: Principal mecanismo de financiamento da educação básica. Dados de distribuição de recursos por município/estado.</p>
 <p><strong>Criar:</strong><br>
 - <code>R/get-fundeb.R</code><br>
@@ -133,7 +125,7 @@
 - <code>tests/testthat/test-fundeb.R</code></p>
 <hr></div>
 <div class="section level3">
-<h3 id="fase-10-fies--versão-060-bundled-com-fases-8-9">Fase 10: FIES — Versão 0.6.0 (bundled com Fases 8-9)<a class="anchor" aria-label="anchor" href="#fase-10-fies--vers%C3%A3o-060-bundled-com-fases-8-9"></a></h3>
+<h3 id="fase-10-fies--versão-080-bundled-com-fase-9">Fase 10: FIES — Versão 0.8.0 (bundled com Fase 9)<a class="anchor" aria-label="anchor" href="#fase-10-fies--vers%C3%A3o-080-bundled-com-fase-9"></a></h3>
 <p><strong>Prioridade:</strong> Alta<br><strong>Por quê</strong>: Complementa o Censo Superior com dados de financiamento estudantil.</p>
 <p><strong>Criar:</strong><br>
 - <code>R/get-fies.R</code><br>
@@ -289,24 +281,30 @@
 </ol><hr></div>
 <div class="section level2">
 <h2 id="estratégia-de-submissão-ao-cran">Estratégia de submissão ao CRAN<a class="anchor" aria-label="anchor" href="#estrat%C3%A9gia-de-submiss%C3%A3o-ao-cran"></a></h2>
-<table class="table"><colgroup><col width="30%"><col width="38%"><col width="30%"></colgroup><thead><tr class="header"><th align="center">Versão</th>
+<table class="table"><thead><tr class="header"><th align="center">Versão</th>
 <th>Conteúdo</th>
 <th>Timing</th>
 </tr></thead><tbody><tr class="odd"><td align="center">0.4.0</td>
 <td>ENCCEJA</td>
-<td>Próxima submissão</td>
+<td>Concluída</td>
 </tr><tr class="even"><td align="center">0.5.0</td>
-<td>IDD + ENEM por Escola + CPC/IGC (bundled)</td>
-<td>Mín. 1-2 meses após 0.4.0</td>
+<td>IDD + ENEM por Escola</td>
+<td>Concluída</td>
 </tr><tr class="odd"><td align="center">0.6.0</td>
-<td>CAPES + FUNDEB + FIES (bundled)</td>
-<td>Mín. 1-2 meses após 0.5.0</td>
+<td>CPC + IGC</td>
+<td>Concluída</td>
+</tr><tr class="even"><td align="center">0.7.0</td>
+<td>CAPES</td>
+<td>Concluída</td>
+</tr><tr class="odd"><td align="center">0.8.0</td>
+<td>FUNDEB + FIES (bundled)</td>
+<td>Mín. 1-2 meses após 0.7.0</td>
 </tr></tbody></table><p><strong>Checklist CRAN por submissão:</strong><br>
 - Exemplos com <code>\dontrun{}</code><br>
 - Cache em <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code> por padrão<br>
 - <code>R CMD check</code>: 0 errors, 0 warnings, 0 notes<br>
 - <code>cran-comments.md</code> atualizado<br>
-- Nenhuma dependência nova</p>
+- Nenhuma dependência nova obrigatória (readxl em Suggests para CPC/IGC)</p>
 <hr></div>
 <div class="section level2">
 <h2 id="verificação">Verificação<a class="anchor" aria-label="anchor" href="#verifica%C3%A7%C3%A3o"></a></h2>

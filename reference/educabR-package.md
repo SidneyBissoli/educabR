@@ -8,10 +8,10 @@ Básica), Higher Education Census (Censo da Educação Superior), ENADE
 (Exame Nacional de Desempenho dos Estudantes), ENCCEJA (Exame Nacional
 para Certificação de Competências de Jovens e Adultos), IDD (Indicador
 de Diferença entre os Desempenhos Observado e Esperado), CPC (Conceito
-Preliminar de Curso), IGC (Índice Geral de Cursos), IDEB (Índice de
-Desenvolvimento da Educação Básica), and other educational datasets.
-Returns data in tidy format ready for analysis. Data source: INEP Open
-Data Portal
+Preliminar de Curso), IGC (Índice Geral de Cursos), CAPES graduate
+education data, IDEB (Índice de Desenvolvimento da Educação Básica), and
+other educational datasets. Returns data in tidy format ready for
+analysis. Data source: INEP Open Data Portal
 <https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos>.
 
 The educabR package provides functions to download and process public
@@ -35,6 +35,8 @@ Educacionais Anísio Teixeira). It offers easy access to microdata from:
 - **CPC**: Preliminary Course Concept (undergraduate quality indicator)
 
 - **IGC**: General Index of Courses (institutional quality indicator)
+
+- **CAPES**: Graduate education data (programs, students, faculty)
 
 - **ENCCEJA**: Youth and Adult Education Certification Exam
 
@@ -90,6 +92,11 @@ tidyverse tools.
 - [`get_igc()`](https://sidneybissoli.github.io/educabR/reference/get_igc.md):
   Download IGC data
 
+**CAPES:**
+
+- [`get_capes()`](https://sidneybissoli.github.io/educabR/reference/get_capes.md):
+  Download CAPES graduate education data
+
 **ENCCEJA:**
 
 - [`get_encceja()`](https://sidneybissoli.github.io/educabR/reference/get_encceja.md):
@@ -111,8 +118,11 @@ to check the current cache location.
 
 ## Data source
 
-All data is downloaded from INEP's official portal:
+Most data is downloaded from INEP's official portal:
 <https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados>
+
+CAPES data is downloaded from the CAPES Open Data Portal:
+<https://dadosabertos.capes.gov.br>
 
 ## See also
 

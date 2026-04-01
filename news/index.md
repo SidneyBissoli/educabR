@@ -1,5 +1,21 @@
 # Changelog
 
+## educabR 0.7.0
+
+### New features
+
+#### CAPES (Dados Abertos da Pos-Graduacao)
+
+- [`get_capes()`](https://sidneybissoli.github.io/educabR/reference/get_capes.md):
+  Download CAPES graduate education data (years 2013-2024).
+- Supports 5 data types: programs (`"programas"`), students
+  (`"discentes"`), faculty (`"docentes"`), courses (`"cursos"`), and
+  theses/dissertations catalog (`"catalogo"`).
+- Uses CKAN API to dynamically discover download URLs (CAPES URLs
+  contain UUIDs).
+- Data source: CAPES Open Data Portal
+  (`https://dadosabertos.capes.gov.br`).
+
 ## educabR 0.6.0
 
 ### New features
