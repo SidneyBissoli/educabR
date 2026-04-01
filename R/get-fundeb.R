@@ -203,6 +203,20 @@ get_fundeb_distribution <- function(year,
   df
 }
 
+# column name mapping for FUNDEB enrollment (OData CamelCase -> snake_case)
+fundeb_enrollment_col_names <- c(
+  "anocenso"                   = "ano_censo",
+  "uf"                         = "uf",
+  "municipioge"                = "municipio",
+  "tiporedeeducacao"           = "tipo_rede_educacao",
+  "descricaotipoeducacao"      = "descricao_tipo_educacao",
+  "descricaotipoensino"        = "descricao_tipo_ensino",
+  "descricaotipoturma"         = "descricao_tipo_turma",
+  "descricaotipocargahoraria"  = "descricao_tipo_carga_horaria",
+  "descricaotipolocalizacao"   = "descricao_tipo_localizacao",
+  "qtdmatricula"               = "qtd_matricula"
+)
+
 #' Get FUNDEB enrollment data
 #'
 #' @description
@@ -210,12 +224,27 @@ get_fundeb_distribution <- function(year,
 #' These are the enrollment counts considered for FUNDEB funding calculation.
 #'
 #' @param year The year of the data (2007-2026).
+#' @param uf Optional. A UF code (e.g., `"SP"`, `"RJ"`) to filter by state.
+#'   The filter is applied at the API level for efficiency. Default is `NULL`
+#'   (all states).
 #' @param n_max Maximum number of rows to read. Default is `Inf` (all rows).
 #' @param keep_file Logical. If `TRUE`, caches the API result as a local CSV
 #'   file. Default is `TRUE`.
 #' @param quiet Logical. If `TRUE`, suppresses progress messages.
 #'
-#' @return A tibble with FUNDEB enrollment data in tidy format.
+#' @return A tibble with columns:
+#'   \describe{
+#'     \item{ano_censo}{Census year}
+#'     \item{uf}{State code (UF)}
+#'     \item{municipio}{Municipality name}
+#'     \item{tipo_rede_educacao}{Education network type}
+#'     \item{descricao_tipo_educacao}{Education type description}
+#'     \item{descricao_tipo_ensino}{Teaching type description}
+#'     \item{descricao_tipo_turma}{Class type description}
+#'     \item{descricao_tipo_carga_horaria}{Class hours type description}
+#'     \item{descricao_tipo_localizacao}{Location type description}
+#'     \item{qtd_matricula}{Number of enrollments}
+#'   }
 #'
 #' @details
 #' Enrollment data comes from FNDE (Fundo Nacional de Desenvolvimento da
@@ -229,6 +258,7 @@ get_fundeb_distribution <- function(year,
 #' - Requires the `jsonlite` package.
 #' - Results are cached locally as CSV after first download.
 #' - Column names are standardized to lowercase with underscores.
+#' - When `uf` is used with a cached file, filtering is done locally.
 #'
 #' @section Data source:
 #' \url{https://www.fnde.gov.br}
@@ -241,10 +271,14 @@ get_fundeb_distribution <- function(year,
 #' # get FUNDEB enrollment data for 2023
 #' mat_2023 <- get_fundeb_enrollment(2023)
 #'
+#' # get enrollment data for Sao Paulo only
+#' mat_sp <- get_fundeb_enrollment(2023, uf = "SP")
+#'
 #' # get enrollment data with limited rows
 #' mat_sample <- get_fundeb_enrollment(2023, n_max = 1000)
 #' }
 get_fundeb_enrollment <- function(year,
+                                  uf = NULL,
                                   n_max = Inf,
                                   keep_file = TRUE,
                                   quiet = FALSE) {
@@ -273,9 +307,15 @@ get_fundeb_enrollment <- function(year,
 
     delim <- detect_delim(file_path)
     df <- read_inep_file(file_path, delim = delim, n_max = n_max)
-    df <- standardize_names(df)
+    df <- rename_fundeb_enrollment(df)
 
-    validate_data(df, "fundeb_matriculas", year)
+    # filter by UF locally on cached data
+    if (!is.null(uf)) {
+      uf <- toupper(uf)
+      df <- df[toupper(df$uf) == uf, ]
+    }
+
+    validate_data(df, "fundeb_enrollment", year)
 
     if (!quiet) {
       cli::cli_alert_success(
@@ -291,10 +331,10 @@ get_fundeb_enrollment <- function(year,
     cli::cli_alert_info("fetching FUNDEB enrollment {.val {year}} from FNDE API...")
   }
 
-  df <- fetch_fundeb_enrollment(year, n_max = n_max, quiet = quiet)
-  df <- standardize_names(df)
+  df <- fetch_fundeb_enrollment(year, uf = uf, n_max = n_max, quiet = quiet)
+  df <- rename_fundeb_enrollment(df)
 
-  validate_data(df, "fundeb_matriculas", year)
+  validate_data(df, "fundeb_enrollment", year)
 
   # cache as CSV for future use
   if (keep_file) {
@@ -539,6 +579,15 @@ tidy_fundeb_table <- function(df, year, source_name, dest_name, tabela) {
   dplyr::as_tibble(df_long)
 }
 
+# rename FUNDEB enrollment columns from CamelCase to snake_case
+rename_fundeb_enrollment <- function(df) {
+  df <- standardize_names(df)
+  current <- names(df)
+  matched <- fundeb_enrollment_col_names[current]
+  names(df) <- ifelse(is.na(matched), current, matched)
+  df
+}
+
 #' Fetch FUNDEB enrollment data from FNDE OData API
 #'
 #' @description
@@ -546,41 +595,45 @@ tidy_fundeb_table <- function(df, year, source_name, dest_name, tabela) {
 #' with pagination support.
 #'
 #' @param year The year.
+#' @param uf Optional UF code to filter at the API level.
 #' @param n_max Maximum number of rows to fetch.
 #' @param quiet Logical. If `TRUE`, suppresses progress messages.
 #'
 #' @return A tibble with enrollment data.
 #'
 #' @keywords internal
-fetch_fundeb_enrollment <- function(year, n_max = Inf, quiet = FALSE) {
+fetch_fundeb_enrollment <- function(year, uf = NULL, n_max = Inf, quiet = FALSE) {
   base_url <- fundeb_enrollment_api_url()
   page_size <- 10000L
   all_rows <- list()
   skip <- 0L
   total_fetched <- 0L
 
+  # build OData filter clause
+  filter_clause <- str_c("AnoCenso eq ", year)
+  if (!is.null(uf)) {
+    filter_clause <- str_c(filter_clause, " and Uf eq '", toupper(uf), "'")
+  }
+
   repeat {
     # determine how many to fetch this page
     remaining <- if (is.infinite(n_max)) page_size else min(page_size, n_max - total_fetched)
     if (remaining <= 0) break
 
-    # build OData query URL
-    query_url <- str_c(
-      base_url,
-      "?$filter=AnoCenso eq ", year,
-      "&$top=", remaining,
-      "&$skip=", skip,
-      "&$format=json"
-    )
-
     if (!quiet) {
       cli::cli_alert_info("fetching records {.val {skip + 1}} to {.val {skip + remaining}}...")
     }
 
-    # perform request
+    # perform request (use req_url_query for proper URL encoding)
     page_data <- tryCatch(
       {
-        req <- httr2::request(query_url) |>
+        req <- httr2::request(base_url) |>
+          httr2::req_url_query(
+            `$filter` = filter_clause,
+            `$top` = remaining,
+            `$skip` = skip,
+            `$format` = "json"
+          ) |>
           httr2::req_timeout(seconds = 300) |>
           httr2::req_retry(max_tries = 3, backoff = ~ 15)
 
@@ -593,7 +646,7 @@ fetch_fundeb_enrollment <- function(year, n_max = Inf, quiet = FALSE) {
         cli::cli_abort(
           c(
             "failed to fetch FUNDEB enrollment data from FNDE API",
-            "x" = "url: {.url {query_url}}",
+            "x" = "year: {.val {year}}, skip: {.val {skip}}",
             "i" = "error: {conditionMessage(e)}",
             "i" = "check your internet connection"
           )

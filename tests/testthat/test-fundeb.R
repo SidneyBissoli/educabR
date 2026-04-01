@@ -119,6 +119,33 @@ test_that("validate_data passes for valid FUNDEB enrollment structure", {
   expect_silent(validate_data(good_data, "fundeb_enrollment", 2023))
 })
 
+# --- column rename ---
+
+test_that("rename_fundeb_enrollment converts CamelCase to snake_case", {
+  df <- data.frame(
+    AnoCenso = 2023,
+    Uf = "SP",
+    MunicipioGe = "SAO PAULO",
+    TipoRedeEducacao = "PUBLICA",
+    DescricaoTipoEducacao = "REGULAR",
+    DescricaoTipoEnsino = "FUNDAMENTAL",
+    DescricaoTipoTurma = "ANOS INICIAIS",
+    DescricaoTipoCargaHoraria = "PARCIAL",
+    DescricaoTipoLocalizacao = "URBANA",
+    QtdMatricula = 1000
+  )
+
+  result <- rename_fundeb_enrollment(df)
+
+  expect_equal(
+    names(result),
+    c("ano_censo", "uf", "municipio", "tipo_rede_educacao",
+      "descricao_tipo_educacao", "descricao_tipo_ensino",
+      "descricao_tipo_turma", "descricao_tipo_carga_horaria",
+      "descricao_tipo_localizacao", "qtd_matricula")
+  )
+})
+
 # --- constants ---
 
 test_that("fundeb_sources contains all expected sources", {
