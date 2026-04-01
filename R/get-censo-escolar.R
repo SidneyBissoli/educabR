@@ -212,7 +212,7 @@ uf_to_code <- function(uf) {
 #'
 #' @keywords internal
 parse_sas_dates <- function(df) {
-  dt_cols <- grep("^dt_", names(df), value = TRUE)
+  dt_cols <- grep("^(dt_|dh_)", names(df), value = TRUE)
 
   old_locale <- Sys.getlocale("LC_TIME")
   on.exit(Sys.setlocale("LC_TIME", old_locale), add = TRUE)

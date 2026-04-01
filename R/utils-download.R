@@ -336,7 +336,7 @@ available_years <- function(dataset) {
   dataset <- match.arg(
     dataset,
     choices = c("censo_escolar", "enem", "saeb", "censo_superior", "enade",
-                "encceja", "idd", "cpc", "igc", "ideb")
+                "encceja", "idd", "cpc", "igc", "capes", "ideb")
   )
 
   switch(
@@ -350,6 +350,7 @@ available_years <- function(dataset) {
     "idd" = c(2014L:2019L, 2021L:2023L),
     "cpc" = c(2007L:2019L, 2021L:2023L),
     "igc" = c(2007L:2019L, 2021L:2023L),
+    "capes" = 2013:2024,
     "ideb" = c(2017L, 2019L, 2021L, 2023L)
   )
 }

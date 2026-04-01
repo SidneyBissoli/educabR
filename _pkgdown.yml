@@ -53,6 +53,11 @@ reference:
     contents:
       - get_igc
 
+  - title: "CAPES"
+    desc: "Functions for CAPES graduate education data"
+    contents:
+      - get_capes
+
   - title: "ENCCEJA"
     desc: "Functions for ENCCEJA data"
     contents:

@@ -1,6 +1,6 @@
 Package: educabR
 Title: Download and Process Brazilian Education Data from INEP
-Version: 0.6.0
+Version: 0.7.0
 Authors@R: 
     person("Sidney da Silva Pereira", "Bissoli", 
            email = "sbissoli76@gmail.com", 
@@ -16,6 +16,7 @@ Description: Download and process public education data from INEP (Instituto
     IDD (Indicador de Diferença entre os Desempenhos Observado e Esperado),
     CPC (Conceito Preliminar de Curso),
     IGC (Índice Geral de Cursos),
+    CAPES graduate education data,
     IDEB (Índice de Desenvolvimento da Educação Básica),
     and other educational datasets. Returns data in
     tidy format ready for analysis. Data source: INEP Open Data Portal

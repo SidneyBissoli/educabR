@@ -53,6 +53,7 @@ validate_data <- function(data, dataset, year) {
     "idd" = validate_idd(data, year),
     "cpc" = validate_cpc(data, year),
     "igc" = validate_igc(data, year),
+    "capes" = validate_capes(data, year),
     "ideb" = validate_ideb(data, year),
     "censo_escolar" = validate_censo_escolar(data, year)
   )
@@ -218,6 +219,23 @@ validate_igc <- function(data, year) {
     cli::cli_warn(
       c(
         "IGC {.val {year}} data may have an unexpected structure",
+        "i" = "expected columns like {.val {expected}}",
+        "i" = "column names found: {.val {head(names(data), 10)}}"
+      )
+    )
+  }
+}
+
+# capes: check for program or student identifiers
+validate_capes <- function(data, year) {
+  expected <- c("cd_programa_ies", "nm_programa", "sg_entidade_ensino",
+                "nm_entidade_ensino", "an_base", "cd_conceito_curso")
+  found <- expected[expected %in% names(data)]
+
+  if (length(found) == 0) {
+    cli::cli_warn(
+      c(
+        "CAPES {.val {year}} data may have an unexpected structure",
         "i" = "expected columns like {.val {expected}}",
         "i" = "column names found: {.val {head(names(data), 10)}}"
       )
