@@ -49,14 +49,14 @@ SAEB is conducted every two years: 2011, 2013, 2015, 2017, 2019, 2021,
 ``` r
 # 2021 data is split by education level
 saeb_fund <- get_saeb(
-  year = 2021,
-  type = "aluno",
+  year  = 2021,
+  type  = "aluno",
   level = "fundamental_medio"
 )
 
 saeb_infantil <- get_saeb(
-  year = 2021,
-  type = "aluno",
+  year  = 2021,
+  type  = "aluno",
   level = "educacao_infantil"
 )
 ```
@@ -74,9 +74,9 @@ saeb_sample |>
   geom_histogram(bins = 50, fill = "steelblue", alpha = 0.7) +
   labs(
     title = "SAEB 2023 - Mathematics Proficiency Distribution",
-    x = "Mathematics Score",
-    y = "Count"
-  ) +
+    x     = "Mathematics Score",
+    y     = "Count"
+    ) +
   theme_minimal()
 ```
 
@@ -114,7 +114,8 @@ glimpse(encceja_sample)
 encceja_2023 <- get_encceja(2023, n_max = 50000)
 
 # Count participants by state
-participants_by_state <- encceja_2023 |>
+participants_by_state <- 
+  encceja_2023 |>
   count(sg_uf_prova, sort = TRUE) |>
   head(10)
 
@@ -126,9 +127,9 @@ ggplot(participants_by_state, aes(
   coord_flip() +
   labs(
     title = "ENCCEJA 2023 - Top 10 States by Participation",
-    x = "State",
-    y = "Number of Participants"
-  ) +
+    x     = "State",
+    y     = "Number of Participants"
+    ) +
   theme_minimal()
 ```
 
@@ -165,12 +166,13 @@ glimpse(enem_escola_sample)
 enem_escola <- get_enem_escola()
 
 # Average scores over time (public vs private)
-trend <- enem_escola |>
+trend <- 
+  enem_escola |>
   filter(!is.na(nu_media_tot)) |>
   group_by(nu_ano, tp_dependencia_adm_escola) |>
   summarise(
     mean_score = mean(nu_media_tot, na.rm = TRUE),
-    .groups = "drop"
+    .groups    = "drop"
   ) |>
   mutate(
     admin_type = case_when(
@@ -186,9 +188,9 @@ ggplot(trend, aes(x = nu_ano, y = mean_score, color = admin_type)) +
   geom_point(size = 2) +
   labs(
     title = "ENEM Average Score by School Type (2005-2015)",
-    x = "Year",
-    y = "Average Total Score",
+    x     = "Year",
+    y     = "Average Total Score",
     color = "School Type"
-  ) +
+    ) +
   theme_minimal()
 ```
