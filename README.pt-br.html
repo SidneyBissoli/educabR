@@ -35,36 +35,97 @@
 <div id="educabr" class="section level1">
 
 <!-- badges: start -->
-<p><a href="https://github.com/SidneyBissoli/educabR/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/SidneyBissoli/educabR/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a> <a href="https://app.codecov.io/gh/SidneyBissoli/educabR" class="external-link"><img src="https://codecov.io/gh/SidneyBissoli/educabR/branch/main/graph/badge.svg" alt="codecov"></a> <a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a> <!-- badges: end --></p>
+<p><a href="https://CRAN.R-project.org/package=educabR" class="external-link"><img src="https://www.r-pkg.org/badges/version/educabR" alt="CRAN status"></a> <a href="https://CRAN.R-project.org/package=educabR" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/educabR" alt="CRAN downloads"></a> <a href="https://github.com/SidneyBissoli/educabR/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/SidneyBissoli/educabR/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a> <a href="https://app.codecov.io/gh/SidneyBissoli/educabR" class="external-link"><img src="https://codecov.io/gh/SidneyBissoli/educabR/branch/main/graph/badge.svg" alt="codecov"></a> <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a> <!-- badges: end --></p>
 <p><em><a href="README.html">Read in English</a></em></p>
-<p>O <strong>educabR</strong> facilita o acesso a dados educacionais brasileiros do INEP, incluindo IDEB, ENEM e Censo Escolar.</p>
+<p>O <strong>educabR</strong> facilita o acesso a dados educacionais públicos brasileiros do INEP, FNDE, CAPES e STN. Com funções simples, você pode baixar e processar dados de 14 conjuntos de dados cobrindo educação básica, educação superior, pós-graduação e financiamento da educação.</p>
 <div class="section level2">
 <h2 id="instalação">Instalação<a class="anchor" aria-label="anchor" href="#instala%C3%A7%C3%A3o"></a></h2>
-<p>Você pode instalar a versão de desenvolvimento do educabR pelo GitHub:</p>
+<p>Instale do CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"SidneyBissoli/educabR"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"educabR"</span><span class="op">)</span></span></code></pre></div>
+<p>Ou instale a versão de desenvolvimento do GitHub:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"SidneyBissoli/educabR"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="funcionalidades">Funcionalidades<a class="anchor" aria-label="anchor" href="#funcionalidades"></a></h2>
-<table class="table"><thead><tr class="header"><th>Dataset</th>
+<div class="section level3">
+<h3 id="educação-básica">Educação Básica<a class="anchor" aria-label="anchor" href="#educa%C3%A7%C3%A3o-b%C3%A1sica"></a></h3>
+<table style="width:100%;" class="table"><colgroup><col width="25%"><col width="22%"><col width="51%"></colgroup><thead><tr class="header"><th>Dataset</th>
 <th>Função</th>
 <th>Anos disponíveis</th>
-</tr></thead><tbody><tr class="odd"><td>IDEB</td>
-<td><code><a href="reference/get_ideb.html">get_ideb()</a></code></td>
+</tr></thead><tbody><tr class="odd"><td>IDEB - Índice de Desenvolvimento da Educação Básica</td>
+<td>
+<code><a href="reference/get_ideb.html">get_ideb()</a></code>, <code><a href="reference/get_ideb_series.html">get_ideb_series()</a></code>
+</td>
 <td>2017, 2019, 2021, 2023</td>
-</tr><tr class="even"><td>ENEM</td>
-<td><code><a href="reference/get_enem.html">get_enem()</a></code></td>
+</tr><tr class="even"><td>ENEM - Exame Nacional do Ensino Médio</td>
+<td>
+<code><a href="reference/get_enem.html">get_enem()</a></code>, <code><a href="reference/get_enem_itens.html">get_enem_itens()</a></code>
+</td>
 <td>1998-2024</td>
 </tr><tr class="odd"><td>Censo Escolar</td>
 <td><code><a href="reference/get_censo_escolar.html">get_censo_escolar()</a></code></td>
 <td>1995-2024</td>
+</tr><tr class="even"><td>SAEB - Sistema de Avaliação da Educação Básica</td>
+<td><code><a href="reference/get_saeb.html">get_saeb()</a></code></td>
+<td>2011-2023 (bienal)</td>
+</tr><tr class="odd"><td>ENCCEJA - Exame Nacional de Certificação de Jovens e Adultos</td>
+<td><code><a href="reference/get_encceja.html">get_encceja()</a></code></td>
+<td>2014-2024</td>
+</tr><tr class="even"><td>ENEM por Escola (descontinuado)</td>
+<td><code><a href="reference/get_enem_escola.html">get_enem_escola()</a></code></td>
+<td>2005-2015</td>
 </tr></tbody></table></div>
+<div class="section level3">
+<h3 id="educação-superior">Educação Superior<a class="anchor" aria-label="anchor" href="#educa%C3%A7%C3%A3o-superior"></a></h3>
+<table style="width:100%;" class="table"><colgroup><col width="25%"><col width="22%"><col width="51%"></colgroup><thead><tr class="header"><th>Dataset</th>
+<th>Função</th>
+<th>Anos disponíveis</th>
+</tr></thead><tbody><tr class="odd"><td>Censo da Educação Superior</td>
+<td><code><a href="reference/get_censo_superior.html">get_censo_superior()</a></code></td>
+<td>2009-2024</td>
+</tr><tr class="even"><td>ENADE - Exame Nacional de Desempenho dos Estudantes</td>
+<td><code><a href="reference/get_enade.html">get_enade()</a></code></td>
+<td>2004-2024</td>
+</tr><tr class="odd"><td>IDD - Indicador de Diferença entre os Desempenhos</td>
+<td><code><a href="reference/get_idd.html">get_idd()</a></code></td>
+<td>2014-2023</td>
+</tr><tr class="even"><td>CPC - Conceito Preliminar de Curso</td>
+<td><code><a href="reference/get_cpc.html">get_cpc()</a></code></td>
+<td>2007-2023</td>
+</tr><tr class="odd"><td>IGC - Índice Geral de Cursos</td>
+<td><code><a href="reference/get_igc.html">get_igc()</a></code></td>
+<td>2007-2023</td>
+</tr></tbody></table></div>
+<div class="section level3">
+<h3 id="pós-graduação">Pós-Graduação<a class="anchor" aria-label="anchor" href="#p%C3%B3s-gradua%C3%A7%C3%A3o"></a></h3>
+<table class="table"><thead><tr class="header"><th>Dataset</th>
+<th>Função</th>
+<th>Anos disponíveis</th>
+</tr></thead><tbody><tr class="odd"><td>CAPES - Programas, discentes, docentes</td>
+<td><code><a href="reference/get_capes.html">get_capes()</a></code></td>
+<td>2013-2024</td>
+</tr></tbody></table></div>
+<div class="section level3">
+<h3 id="financiamento-da-educação">Financiamento da Educação<a class="anchor" aria-label="anchor" href="#financiamento-da-educa%C3%A7%C3%A3o"></a></h3>
+<table style="width:100%;" class="table"><colgroup><col width="25%"><col width="22%"><col width="51%"></colgroup><thead><tr class="header"><th>Dataset</th>
+<th>Função</th>
+<th>Anos disponíveis</th>
+</tr></thead><tbody><tr class="odd"><td>FUNDEB - Distribuição de recursos</td>
+<td><code><a href="reference/get_fundeb_distribution.html">get_fundeb_distribution()</a></code></td>
+<td>2007-2026</td>
+</tr><tr class="even"><td>FUNDEB - Matrículas</td>
+<td><code><a href="reference/get_fundeb_enrollment.html">get_fundeb_enrollment()</a></code></td>
+<td>2007-2026</td>
+</tr></tbody></table></div>
+</div>
 <div class="section level2">
 <h2 id="exemplos">Exemplos<a class="anchor" aria-label="anchor" href="#exemplos"></a></h2>
 <div class="section level3">
 <h3 id="ideb">IDEB<a class="anchor" aria-label="anchor" href="#ideb"></a></h3>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/SidneyBissoli/educabR" class="external-link">educabR</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Baixar IDEB 2021 - Anos Iniciais - Escolas</span></span>
@@ -72,41 +133,75 @@
 <span>  year  <span class="op">=</span> <span class="fl">2021</span>,</span>
 <span>  stage <span class="op">=</span> <span class="st">"anos_iniciais"</span>,</span>
 <span>  level <span class="op">=</span> <span class="st">"escola"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Série histórica</span></span>
+<span><span class="va">ideb_serie</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_ideb_series.html">get_ideb_series</a></span><span class="op">(</span></span>
+<span>  years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2017</span>, <span class="fl">2019</span>, <span class="fl">2021</span>, <span class="fl">2023</span><span class="op">)</span>,</span>
+<span>  level <span class="op">=</span> <span class="st">"municipio"</span>,</span>
+<span>  stage <span class="op">=</span> <span class="st">"anos_iniciais"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="enem">ENEM<a class="anchor" aria-label="anchor" href="#enem"></a></h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Baixar microdados do ENEM 2023</span></span>
-<span><span class="va">enem</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_enem.html">get_enem</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2023</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Baixar amostra para exploração</span></span>
+<span><span class="va">enem</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_enem.html">get_enem</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2023</span>, n_max <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Resumo estatístico</span></span>
-<span><span class="fu"><a href="reference/enem_summary.html">enem_summary</a></span><span class="op">(</span><span class="va">enem</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/enem_summary.html">enem_summary</a></span><span class="op">(</span><span class="va">enem</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Resumo por sexo</span></span>
+<span><span class="fu"><a href="reference/enem_summary.html">enem_summary</a></span><span class="op">(</span><span class="va">enem</span>, by <span class="op">=</span> <span class="st">"tp_sexo"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="censo-escolar">Censo Escolar<a class="anchor" aria-label="anchor" href="#censo-escolar"></a></h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Baixar Censo Escolar 2023</span></span>
-<span><span class="va">censo</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_censo_escolar.html">get_censo_escolar</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2023</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Baixar Censo Escolar 2023 - filtrar por estado</span></span>
+<span><span class="va">censo_sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_censo_escolar.html">get_censo_escolar</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2023</span>, uf <span class="op">=</span> <span class="st">"SP"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="educação-superior-1">Educação Superior<a class="anchor" aria-label="anchor" href="#educa%C3%A7%C3%A3o-superior-1"></a></h3>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Censo da Educação Superior - instituições</span></span>
+<span><span class="va">ies</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_censo_superior.html">get_censo_superior</a></span><span class="op">(</span><span class="fl">2023</span>, type <span class="op">=</span> <span class="st">"ies"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Microdados do ENADE</span></span>
+<span><span class="va">enade</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_enade.html">get_enade</a></span><span class="op">(</span><span class="fl">2023</span>, n_max <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Programas de pós-graduação (CAPES)</span></span>
+<span><span class="va">programas</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_capes.html">get_capes</a></span><span class="op">(</span><span class="fl">2023</span>, type <span class="op">=</span> <span class="st">"programas"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="fundeb">FUNDEB<a class="anchor" aria-label="anchor" href="#fundeb"></a></h3>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Distribuição de recursos por estado</span></span>
+<span><span class="va">dist</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_fundeb_distribution.html">get_fundeb_distribution</a></span><span class="op">(</span><span class="fl">2023</span>, uf <span class="op">=</span> <span class="st">"SP"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Matrículas</span></span>
+<span><span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_fundeb_enrollment.html">get_fundeb_enrollment</a></span><span class="op">(</span><span class="fl">2023</span>, uf <span class="op">=</span> <span class="st">"SP"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="cache">Cache<a class="anchor" aria-label="anchor" href="#cache"></a></h2>
 <p>O pacote usa cache local para evitar downloads repetidos:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Ver arquivos em cache</span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Definir diretório de cache permanente</span></span>
+<span><span class="fu"><a href="reference/set_cache_dir.html">set_cache_dir</a></span><span class="op">(</span><span class="st">"~/educabR_data"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Ver arquivos em cache</span></span>
 <span><span class="fu"><a href="reference/list_cache.html">list_cache</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Limpar cache</span></span>
-<span><span class="fu"><a href="reference/clear_cache.html">clear_cache</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Definir diretório de cache personalizado</span></span>
-<span><span class="fu"><a href="reference/set_cache_dir.html">set_cache_dir</a></span><span class="op">(</span><span class="st">"~/meu_cache"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/clear_cache.html">clear_cache</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="documentação">Documentação<a class="anchor" aria-label="anchor" href="#documenta%C3%A7%C3%A3o"></a></h2>
 <ul><li><a href="https://sidneybissoli.github.io/educabR/">Site do pacote</a></li>
-<li><a href="https://sidneybissoli.github.io/educabR/articles/introducao-educabr.html">Vignette de introdução</a></li>
+<li><a href="https://sidneybissoli.github.io/educabR/articles/getting-started.html">Primeiros passos</a></li>
+<li><a href="https://sidneybissoli.github.io/educabR/articles/basic-education-assessments.html">Avaliações da educação básica</a></li>
+<li><a href="https://sidneybissoli.github.io/educabR/articles/higher-education.html">Educação superior</a></li>
+<li><a href="https://sidneybissoli.github.io/educabR/articles/education-funding.html">Financiamento da educação</a></li>
 </ul></div>
 <div class="section level2">
 <h2 id="licença">Licença<a class="anchor" aria-label="anchor" href="#licen%C3%A7a"></a></h2>
