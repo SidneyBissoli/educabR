@@ -117,8 +117,8 @@ institutions, courses, student enrollment, and faculty.</p>
 <span></span>
 <span><span class="co"># Faculty data with limited rows</span></span>
 <span><span class="va">docentes_sample</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_censo_superior.html">get_censo_superior</a></span><span class="op">(</span></span>
-<span>  year <span class="op">=</span> <span class="fl">2023</span>,</span>
-<span>  type <span class="op">=</span> <span class="st">"docentes"</span>,</span>
+<span>  year  <span class="op">=</span> <span class="fl">2023</span>,</span>
+<span>  type  <span class="op">=</span> <span class="st">"docentes"</span>,</span>
 <span>  n_max <span class="op">=</span> <span class="fl">10000</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -140,7 +140,8 @@ institutions, courses, student enrollment, and faculty.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_censo_superior.html">get_censo_superior</a></span><span class="op">(</span><span class="fl">2023</span>, type <span class="op">=</span> <span class="st">"ies"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">ies_summary</span> <span class="op">&lt;-</span> <span class="va">ies</span> <span class="op">|&gt;</span></span>
+<span><span class="va">ies_summary</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">ies</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    admin_type <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">tp_categoria_administrativa</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"Public Federal"</span>,</span>
@@ -158,9 +159,9 @@ institutions, courses, student enrollment, and faculty.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"Higher Education Institutions by Type (2023)"</span>,</span>
-<span>    x <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>    y <span class="op">=</span> <span class="st">"Number of Institutions"</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>    x     <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    y     <span class="op">=</span> <span class="st">"Number of Institutions"</span></span>
+<span>    <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
@@ -199,9 +200,9 @@ where different course areas are evaluated each year.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">40</span>, fill <span class="op">=</span> <span class="st">"darkgreen"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"ENADE 2023 - General Score Distribution"</span>,</span>
-<span>    x <span class="op">=</span> <span class="st">"General Score"</span>,</span>
-<span>    y <span class="op">=</span> <span class="st">"Count"</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>    x     <span class="op">=</span> <span class="st">"General Score"</span>,</span>
+<span>    y     <span class="op">=</span> <span class="st">"Count"</span></span>
+<span>    <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
@@ -276,9 +277,9 @@ considered unsatisfactory.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"coral"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"CPC 2023 - Course Quality Distribution"</span>,</span>
-<span>    x <span class="op">=</span> <span class="st">"CPC Score (1-5)"</span>,</span>
-<span>    y <span class="op">=</span> <span class="st">"Number of Courses"</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>    x     <span class="op">=</span> <span class="st">"CPC Score (1-5)"</span>,</span>
+<span>    y     <span class="op">=</span> <span class="st">"Number of Courses"</span></span>
+<span>    <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
@@ -324,9 +325,9 @@ Note: IGC 2007 comes as a 7z archive containing an Excel file.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"Top 20 Institutions by IGC (2023)"</span>,</span>
-<span>    x <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>    y <span class="op">=</span> <span class="st">"IGC (Continuous)"</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>    x     <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    y     <span class="op">=</span> <span class="st">"IGC (Continuous)"</span></span>
+<span>    <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
@@ -406,9 +407,9 @@ Open Data Portal via CKAN API.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"Graduate Programs by Knowledge Area (2023)"</span>,</span>
-<span>    x <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>    y <span class="op">=</span> <span class="st">"Number of Programs"</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>    x     <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    y     <span class="op">=</span> <span class="st">"Number of Programs"</span></span>
+<span>    <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
@@ -426,18 +427,20 @@ how to combine them for a comprehensive view.</p>
 <span><span class="co"># Compare institution-level quality</span></span>
 <span><span class="co"># IGC gives the overall institution score</span></span>
 <span><span class="co"># CPC gives individual course scores within each institution</span></span>
-<span><span class="va">igc_summary</span> <span class="op">&lt;-</span> <span class="va">igc</span> <span class="op">|&gt;</span></span>
+<span><span class="va">igc_summary</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">igc</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">igc_faixa</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">codigo_ies</span>, <span class="va">sigla_ies</span>, <span class="va">igc_continuo</span>, <span class="va">igc_faixa</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">cpc_summary</span> <span class="op">&lt;-</span> <span class="va">cpc</span> <span class="op">|&gt;</span></span>
+<span><span class="va">cpc_summary</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">cpc</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">cpc_continuo</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">codigo_ies</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
 <span>    n_courses <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    mean_cpc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">cpc_continuo</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>    .groups <span class="op">=</span> <span class="st">"drop"</span></span>
-<span>  <span class="op">)</span></span>
+<span>    mean_cpc  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">cpc_continuo</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    .groups   <span class="op">=</span> <span class="st">"drop"</span></span>
+<span>    <span class="op">)</span></span>
 <span></span>
 <span><span class="va">combined</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join</a></span><span class="op">(</span><span class="va">igc_summary</span>, <span class="va">cpc_summary</span>, by <span class="op">=</span> <span class="st">"codigo_ies"</span><span class="op">)</span></span>
 <span></span>
@@ -445,10 +448,10 @@ how to combine them for a comprehensive view.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.4</span>, color <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"IGC vs Average CPC by Institution (2023)"</span>,</span>
-<span>    x <span class="op">=</span> <span class="st">"Average CPC (Continuous)"</span>,</span>
-<span>    y <span class="op">=</span> <span class="st">"IGC (Continuous)"</span>,</span>
-<span>    size <span class="op">=</span> <span class="st">"Courses Evaluated"</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>    x     <span class="op">=</span> <span class="st">"Average CPC (Continuous)"</span>,</span>
+<span>    y     <span class="op">=</span> <span class="st">"IGC (Continuous)"</span>,</span>
+<span>    size  <span class="op">=</span> <span class="st">"Courses Evaluated"</span></span>
+<span>    <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

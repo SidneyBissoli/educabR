@@ -172,7 +172,7 @@ month.</p>
 <span></span>
 <span><span class="co"># Filter by destination (states or municipalities)</span></span>
 <span><span class="va">dist_estados</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_fundeb_distribution.html">get_fundeb_distribution</a></span><span class="op">(</span></span>
-<span>  year <span class="op">=</span> <span class="fl">2023</span>,</span>
+<span>  year        <span class="op">=</span> <span class="fl">2023</span>,</span>
 <span>  destination <span class="op">=</span> <span class="st">"estados"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -195,7 +195,8 @@ month.</p>
 <code class="sourceCode R"><span><span class="va">dist</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_fundeb_distribution.html">get_fundeb_distribution</a></span><span class="op">(</span><span class="fl">2023</span>, uf <span class="op">=</span> <span class="st">"SP"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Total monthly transfers by funding source</span></span>
-<span><span class="va">monthly</span> <span class="op">&lt;-</span> <span class="va">dist</span> <span class="op">|&gt;</span></span>
+<span><span class="va">monthly</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">dist</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">fonte</span>, <span class="va">mes</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">valor</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
 <span></span>
@@ -203,10 +204,10 @@ month.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"FUNDEB Transfers to Sao Paulo by Source (2023)"</span>,</span>
-<span>    x <span class="op">=</span> <span class="st">"Month"</span>,</span>
-<span>    y <span class="op">=</span> <span class="st">"Total (millions R$)"</span>,</span>
-<span>    fill <span class="op">=</span> <span class="st">"Source"</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>    x     <span class="op">=</span> <span class="st">"Month"</span>,</span>
+<span>    y     <span class="op">=</span> <span class="st">"Total (millions R$)"</span>,</span>
+<span>    fill  <span class="op">=</span> <span class="st">"Source"</span></span>
+<span>    <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -217,7 +218,8 @@ month.</p>
 <code class="sourceCode R"><span><span class="va">dist</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_fundeb_distribution.html">get_fundeb_distribution</a></span><span class="op">(</span><span class="fl">2023</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Total annual transfers by state</span></span>
-<span><span class="va">by_state</span> <span class="op">&lt;-</span> <span class="va">dist</span> <span class="op">|&gt;</span></span>
+<span><span class="va">by_state</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">dist</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">uf</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">valor</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">total</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -228,9 +230,9 @@ month.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"Top 10 States by FUNDEB Transfers (2023)"</span>,</span>
-<span>    x <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>    y <span class="op">=</span> <span class="st">"Total (billions R$)"</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>    x     <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    y     <span class="op">=</span> <span class="st">"Total (billions R$)"</span></span>
+<span>    <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
@@ -323,7 +325,8 @@ OData API with automatic pagination.</p>
 <code class="sourceCode R"><span><span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_fundeb_enrollment.html">get_fundeb_enrollment</a></span><span class="op">(</span><span class="fl">2023</span>, uf <span class="op">=</span> <span class="st">"SP"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Total enrollment by education type</span></span>
-<span><span class="va">by_type</span> <span class="op">&lt;-</span> <span class="va">mat</span> <span class="op">|&gt;</span></span>
+<span><span class="va">by_type</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">mat</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">descricao_tipo_educacao</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">qtd_matricula</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">total</span><span class="op">)</span><span class="op">)</span></span>
@@ -333,9 +336,9 @@ OData API with automatic pagination.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"FUNDEB Enrollment by Education Type - SP (2023)"</span>,</span>
-<span>    x <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>    y <span class="op">=</span> <span class="st">"Enrollments (thousands)"</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>    x     <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    y     <span class="op">=</span> <span class="st">"Enrollments (thousands)"</span></span>
+<span>    <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -345,7 +348,8 @@ OData API with automatic pagination.</p>
 <code class="sourceCode R"><span><span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_fundeb_enrollment.html">get_fundeb_enrollment</a></span><span class="op">(</span><span class="fl">2023</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Compare urban vs rural</span></span>
-<span><span class="va">by_location</span> <span class="op">&lt;-</span> <span class="va">mat</span> <span class="op">|&gt;</span></span>
+<span><span class="va">by_location</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">mat</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">uf</span>, <span class="va">descricao_tipo_localizacao</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">qtd_matricula</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
 <span></span>
@@ -353,10 +357,10 @@ OData API with automatic pagination.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"FUNDEB Enrollment: Urban vs Rural by State (2023)"</span>,</span>
-<span>    x <span class="op">=</span> <span class="st">"State"</span>,</span>
-<span>    y <span class="op">=</span> <span class="st">"Enrollments (thousands)"</span>,</span>
-<span>    fill <span class="op">=</span> <span class="st">"Location"</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>    x     <span class="op">=</span> <span class="st">"State"</span>,</span>
+<span>    y     <span class="op">=</span> <span class="st">"Enrollments (thousands)"</span>,</span>
+<span>    fill  <span class="op">=</span> <span class="st">"Location"</span></span>
+<span>    <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">45</span>, hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <hr>
@@ -370,18 +374,21 @@ states.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Total transfers by state</span></span>
 <span><span class="va">dist</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_fundeb_distribution.html">get_fundeb_distribution</a></span><span class="op">(</span><span class="fl">2023</span><span class="op">)</span></span>
-<span><span class="va">transfers</span> <span class="op">&lt;-</span> <span class="va">dist</span> <span class="op">|&gt;</span></span>
+<span><span class="va">transfers</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">dist</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">uf</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>total_transfer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">valor</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Total enrollment by state</span></span>
 <span><span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_fundeb_enrollment.html">get_fundeb_enrollment</a></span><span class="op">(</span><span class="fl">2023</span><span class="op">)</span></span>
-<span><span class="va">enrollment</span> <span class="op">&lt;-</span> <span class="va">mat</span> <span class="op">|&gt;</span></span>
+<span><span class="va">enrollment</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">mat</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">uf</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>total_students <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">qtd_matricula</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Per-student funding</span></span>
-<span><span class="va">funding</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join</a></span><span class="op">(</span><span class="va">transfers</span>, <span class="va">enrollment</span>, by <span class="op">=</span> <span class="st">"uf"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="va">funding</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join</a></span><span class="op">(</span><span class="va">transfers</span>, <span class="va">enrollment</span>, by <span class="op">=</span> <span class="st">"uf"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>per_student <span class="op">=</span> <span class="va">total_transfer</span> <span class="op">/</span> <span class="va">total_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">per_student</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -390,9 +397,9 @@ states.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"FUNDEB Per-Student Funding by State (2023)"</span>,</span>
-<span>    x <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>    y <span class="op">=</span> <span class="st">"R$ per Student"</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>    x     <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    y     <span class="op">=</span> <span class="st">"R$ per Student"</span></span>
+<span>    <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
