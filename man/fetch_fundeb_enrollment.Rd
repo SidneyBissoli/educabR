@@ -4,10 +4,12 @@
 \alias{fetch_fundeb_enrollment}
 \title{Fetch FUNDEB enrollment data from FNDE OData API}
 \usage{
-fetch_fundeb_enrollment(year, n_max = Inf, quiet = FALSE)
+fetch_fundeb_enrollment(year, uf = NULL, n_max = Inf, quiet = FALSE)
 }
 \arguments{
 \item{year}{The year.}
+
+\item{uf}{Optional UF code to filter at the API level.}
 
 \item{n_max}{Maximum number of rows to fetch.}
 

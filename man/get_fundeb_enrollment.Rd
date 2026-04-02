@@ -4,10 +4,20 @@
 \alias{get_fundeb_enrollment}
 \title{Get FUNDEB enrollment data}
 \usage{
-get_fundeb_enrollment(year, n_max = Inf, keep_file = TRUE, quiet = FALSE)
+get_fundeb_enrollment(
+  year,
+  uf = NULL,
+  n_max = Inf,
+  keep_file = TRUE,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{year}{The year of the data (2007-2026).}
+
+\item{uf}{Optional. A UF code (e.g., \code{"SP"}, \code{"RJ"}) to filter by state.
+The filter is applied at the API level for efficiency. Default is \code{NULL}
+(all states).}
 
 \item{n_max}{Maximum number of rows to read. Default is \code{Inf} (all rows).}
 
@@ -17,7 +27,19 @@ file. Default is \code{TRUE}.}
 \item{quiet}{Logical. If \code{TRUE}, suppresses progress messages.}
 }
 \value{
-A tibble with FUNDEB enrollment data in tidy format.
+A tibble with columns:
+\describe{
+\item{ano_censo}{Census year}
+\item{uf}{State code (UF)}
+\item{municipio}{Municipality name}
+\item{tipo_rede_educacao}{Education network type}
+\item{descricao_tipo_educacao}{Education type description}
+\item{descricao_tipo_ensino}{Teaching type description}
+\item{descricao_tipo_turma}{Class type description}
+\item{descricao_tipo_carga_horaria}{Class hours type description}
+\item{descricao_tipo_localizacao}{Location type description}
+\item{qtd_matricula}{Number of enrollments}
+}
 }
 \description{
 Downloads and processes FUNDEB enrollment data from FNDE's OData API.
@@ -35,6 +57,7 @@ education type, school network, class type, and location.
 \item Requires the \code{jsonlite} package.
 \item Results are cached locally as CSV after first download.
 \item Column names are standardized to lowercase with underscores.
+\item When \code{uf} is used with a cached file, filtering is done locally.
 }
 }
 \section{Data source}{
@@ -46,6 +69,9 @@ education type, school network, class type, and location.
 \dontrun{
 # get FUNDEB enrollment data for 2023
 mat_2023 <- get_fundeb_enrollment(2023)
+
+# get enrollment data for Sao Paulo only
+mat_sp <- get_fundeb_enrollment(2023, uf = "SP")
 
 # get enrollment data with limited rows
 mat_sample <- get_fundeb_enrollment(2023, n_max = 1000)
