@@ -1,5 +1,7 @@
 # tests for SAEB functions
 
+# --- year validation ---
+
 test_that("validate_year accepts valid SAEB years", {
   expect_silent(validate_year(2023, "saeb"))
   expect_silent(validate_year(2021, "saeb"))
@@ -16,6 +18,16 @@ test_that("validate_year rejects invalid SAEB years", {
     validate_year(2010, "saeb"),
     "not available"
   )
+
+  expect_error(
+    validate_year(2024, "saeb"),
+    "not available"
+  )
+})
+
+test_that("validate_year accepts SAEB boundary years", {
+  expect_silent(validate_year(2011, "saeb"))
+  expect_silent(validate_year(2023, "saeb"))
 })
 
 test_that("available_years returns expected SAEB years", {
@@ -27,6 +39,8 @@ test_that("available_years returns expected SAEB years", {
   expect_false(2022 %in% years)
   expect_equal(length(years), 7)
 })
+
+# --- build_inep_url ---
 
 test_that("build_inep_url returns valid SAEB URL", {
   url_2023 <- build_inep_url("saeb", 2023)
@@ -42,6 +56,16 @@ test_that("build_inep_url handles SAEB 2021 split", {
   expect_true(grepl("educacao_infantil", url_ei))
 })
 
+test_that("build_inep_url for SAEB boundary years", {
+  url_2011 <- build_inep_url("saeb", 2011)
+  expect_true(grepl("microdados_saeb_2011", url_2011))
+
+  url_2023 <- build_inep_url("saeb", 2023)
+  expect_true(grepl("microdados_saeb_2023", url_2023))
+})
+
+# --- build_saeb_zip_filename ---
+
 test_that("build_saeb_zip_filename handles regular years", {
   filename <- build_saeb_zip_filename(2023)
   expect_equal(filename, "microdados_saeb_2023.zip")
@@ -54,6 +78,16 @@ test_that("build_saeb_zip_filename handles 2021 split", {
   expect_true(grepl("ensino_fundamental_e_medio", filename_fm))
   expect_true(grepl("educacao_infantil", filename_ei))
 })
+
+test_that("build_saeb_zip_filename for non-2021 ignores level parameter", {
+  filename_default <- build_saeb_zip_filename(2019)
+  filename_with_level <- build_saeb_zip_filename(2019, "fundamental_medio")
+
+  expect_equal(filename_default, filename_with_level)
+  expect_equal(filename_default, "microdados_saeb_2019.zip")
+})
+
+# --- validate_data ---
 
 test_that("validate_data warns for unexpected SAEB structure", {
   bad_data <- data.frame(col1 = 1:5, col2 = 6:10, col3 = 11:15)
@@ -72,4 +106,32 @@ test_that("validate_data passes for valid SAEB structure", {
   )
 
   expect_silent(validate_data(good_data, "saeb", 2023))
+})
+
+# --- get_saeb: argument validation ---
+
+test_that("get_saeb rejects invalid year", {
+  expect_error(
+    get_saeb(2022),
+    "not available"
+  )
+
+  expect_error(
+    get_saeb(2010),
+    "not available"
+  )
+})
+
+test_that("get_saeb rejects invalid type via match.arg", {
+  expect_error(
+    get_saeb(2023, type = "invalido"),
+    "arg"
+  )
+})
+
+test_that("get_saeb rejects invalid level via match.arg", {
+  expect_error(
+    get_saeb(2023, level = "invalido"),
+    "arg"
+  )
 })
