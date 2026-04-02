@@ -30,13 +30,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="active nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/getting-started.html">Getting Started with educabR</a></li>
-    <li><a class="dropdown-item" href="../articles/introducao-educabr.html">Introducao ao educabR</a></li>
-  </ul>
-</li>
+<li class="active nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -66,11 +60,30 @@
     
     
 <p>The <strong>educabR</strong> package provides easy access to
-Brazilian public education data from INEP (Instituto Nacional de Estudos
-e Pesquisas Educacionais Anisio Teixeira). With simple functions, you
-can download and process data from: - <strong>IDEB</strong> - Basic
+Brazilian public education data from INEP, FNDE, and CAPES. With simple
+functions, you can download and process data from 14 datasets:</p>
+<p><strong>Basic Education:</strong> - <strong>IDEB</strong> - Basic
 Education Development Index - <strong>ENEM</strong> - National High
-School Exam - <strong>School Census</strong> (Censo Escolar)</p>
+School Exam - <strong>School Census</strong> (Censo Escolar) -
+<strong>SAEB</strong> - Basic Education Assessment System -
+<strong>ENCCEJA</strong> - Youth and Adult Education Certification Exam
+- <strong>ENEM by School</strong> - ENEM results aggregated by school
+(2005-2015)</p>
+<p><strong>Higher Education:</strong> - <strong>Higher Education
+Census</strong> (Censo da Educação Superior) - <strong>ENADE</strong> -
+National Student Performance Exam - <strong>IDD</strong> - Value-Added
+Indicator - <strong>CPC</strong> - Preliminary Course Concept -
+<strong>IGC</strong> - General Courses Index</p>
+<p><strong>Graduate Education:</strong> - <strong>CAPES</strong> -
+Graduate programs, students, faculty, courses, and theses</p>
+<p><strong>Education Funding:</strong> - <strong>FUNDEB</strong> -
+Resource distribution and enrollment data</p>
+<p>This vignette covers IDEB, ENEM, and the School Census. For other
+datasets, see: - <code><a href="../articles/basic-education-assessments.html">vignette("basic-education-assessments")</a></code> —
+SAEB, ENCCEJA, ENEM by School -
+<code><a href="../articles/higher-education.html">vignette("higher-education")</a></code> — Higher Education Census,
+ENADE, IDD, CPC, IGC, CAPES - <code><a href="../articles/education-funding.html">vignette("education-funding")</a></code>
+— FUNDEB</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -435,7 +448,7 @@ education, covering all public and private schools.</p>
 <div class="section level2">
 <h2 id="data-dictionary">Data dictionary<a class="anchor" aria-label="anchor" href="#data-dictionary"></a>
 </h2>
-<p>For detailed information about variables, see INEP’s official
+<p>For detailed information about variables, see the official
 documentation:</p>
 <ul>
 <li>
@@ -446,6 +459,18 @@ documentation:</p>
 </li>
 <li>
 <strong>School Census</strong>: <a href="https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-escolar" class="external-link uri">https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-escolar</a>
+</li>
+<li>
+<strong>SAEB</strong>: <a href="https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/saeb" class="external-link uri">https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/saeb</a>
+</li>
+<li>
+<strong>ENADE</strong>: <a href="https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/enade" class="external-link uri">https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/enade</a>
+</li>
+<li>
+<strong>CAPES</strong>: <a href="https://dadosabertos.capes.gov.br" class="external-link uri">https://dadosabertos.capes.gov.br</a>
+</li>
+<li>
+<strong>FUNDEB/FNDE</strong>: <a href="https://www.fnde.gov.br" class="external-link uri">https://www.fnde.gov.br</a>
 </li>
 </ul>
 </div>

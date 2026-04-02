@@ -1,10 +1,34 @@
 # Getting Started with educabR
 
 The **educabR** package provides easy access to Brazilian public
-education data from INEP (Instituto Nacional de Estudos e Pesquisas
-Educacionais Anisio Teixeira). With simple functions, you can download
-and process data from: - **IDEB** - Basic Education Development Index -
-**ENEM** - National High School Exam - **School Census** (Censo Escolar)
+education data from INEP, FNDE, and CAPES. With simple functions, you
+can download and process data from 14 datasets:
+
+**Basic Education:** - **IDEB** - Basic Education Development Index -
+**ENEM** - National High School Exam - **School Census** (Censo
+Escolar) - **SAEB** - Basic Education Assessment System - **ENCCEJA** -
+Youth and Adult Education Certification Exam - **ENEM by School** - ENEM
+results aggregated by school (2005-2015)
+
+**Higher Education:** - **Higher Education Census** (Censo da Educação
+Superior) - **ENADE** - National Student Performance Exam - **IDD** -
+Value-Added Indicator - **CPC** - Preliminary Course Concept - **IGC** -
+General Courses Index
+
+**Graduate Education:** - **CAPES** - Graduate programs, students,
+faculty, courses, and theses
+
+**Education Funding:** - **FUNDEB** - Resource distribution and
+enrollment data
+
+This vignette covers IDEB, ENEM, and the School Census. For other
+datasets, see: -
+[`vignette("basic-education-assessments")`](https://sidneybissoli.github.io/educabR/articles/basic-education-assessments.md)
+— SAEB, ENCCEJA, ENEM by School -
+[`vignette("higher-education")`](https://sidneybissoli.github.io/educabR/articles/higher-education.md)
+— Higher Education Census, ENADE, IDD, CPC, IGC, CAPES -
+[`vignette("education-funding")`](https://sidneybissoli.github.io/educabR/articles/education-funding.md)
+— FUNDEB
 
 ## Installation
 
@@ -365,7 +389,7 @@ gc()
 
 ## Data dictionary
 
-For detailed information about variables, see INEP’s official
+For detailed information about variables, see the official
 documentation:
 
 - **IDEB**:
@@ -374,6 +398,12 @@ documentation:
   <https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/enem>
 - **School Census**:
   <https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-escolar>
+- **SAEB**:
+  <https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/saeb>
+- **ENADE**:
+  <https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/enade>
+- **CAPES**: <https://dadosabertos.capes.gov.br>
+- **FUNDEB/FNDE**: <https://www.fnde.gov.br>
 
 ## Known issues
 
