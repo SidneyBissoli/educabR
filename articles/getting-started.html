@@ -62,28 +62,35 @@
 <p>The <strong>educabR</strong> package provides easy access to
 Brazilian public education data from INEP, FNDE, and CAPES. With simple
 functions, you can download and process data from 14 datasets:</p>
-<p><strong>Basic Education:</strong> - <strong>IDEB</strong> - Basic
-Education Development Index - <strong>ENEM</strong> - National High
-School Exam - <strong>School Census</strong> (Censo Escolar) -
-<strong>SAEB</strong> - Basic Education Assessment System -
-<strong>ENCCEJA</strong> - Youth and Adult Education Certification Exam
+<p><strong>Basic Education:</strong><br>
+- <strong>IDEB</strong> - Basic Education Development Index<br>
+- <strong>ENEM</strong> - National High School Exam<br>
+- <strong>School Census</strong> (Censo Escolar)<br>
+- <strong>SAEB</strong> - Basic Education Assessment System<br>
+- <strong>ENCCEJA</strong> - Youth and Adult Education Certification
+Exam<br>
 - <strong>ENEM by School</strong> - ENEM results aggregated by school
 (2005-2015)</p>
-<p><strong>Higher Education:</strong> - <strong>Higher Education
-Census</strong> (Censo da Educação Superior) - <strong>ENADE</strong> -
-National Student Performance Exam - <strong>IDD</strong> - Value-Added
-Indicator - <strong>CPC</strong> - Preliminary Course Concept -
-<strong>IGC</strong> - General Courses Index</p>
-<p><strong>Graduate Education:</strong> - <strong>CAPES</strong> -
-Graduate programs, students, faculty, courses, and theses</p>
-<p><strong>Education Funding:</strong> - <strong>FUNDEB</strong> -
-Resource distribution and enrollment data</p>
+<p><strong>Higher Education:</strong><br>
+- <strong>Higher Education Census</strong> (Censo da Educação
+Superior)<br>
+- <strong>ENADE</strong> - National Student Performance Exam<br>
+- <strong>IDD</strong> - Value-Added Indicator<br>
+- <strong>CPC</strong> - Preliminary Course Concept<br>
+- <strong>IGC</strong> - General Courses Index</p>
+<p><strong>Graduate Education:</strong><br>
+- <strong>CAPES</strong> - Graduate programs, students, faculty,
+courses, and theses</p>
+<p><strong>Education Funding:</strong><br>
+- <strong>FUNDEB</strong> - Resource distribution and enrollment
+data</p>
 <p>This vignette covers IDEB, ENEM, and the School Census. For other
-datasets, see: - <code><a href="../articles/basic-education-assessments.html">vignette("basic-education-assessments")</a></code> —
-SAEB, ENCCEJA, ENEM by School -
-<code><a href="../articles/higher-education.html">vignette("higher-education")</a></code> — Higher Education Census,
-ENADE, IDD, CPC, IGC, CAPES - <code><a href="../articles/education-funding.html">vignette("education-funding")</a></code>
-— FUNDEB</p>
+datasets, see:<br>
+- <code><a href="../articles/basic-education-assessments.html">vignette("basic-education-assessments")</a></code> — SAEB, ENCCEJA,
+ENEM by School<br>
+- <code><a href="../articles/higher-education.html">vignette("higher-education")</a></code> — Higher Education Census,
+ENADE, IDD, CPC, IGC, CAPES<br>
+- <code><a href="../articles/education-funding.html">vignette("education-funding")</a></code> — FUNDEB</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -141,24 +148,24 @@ combining test performance (SAEB) with grade promotion rates.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># IDEB by school - Early elementary (1st-5th grade)</span></span>
 <span><span class="va">ideb_schools</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_ideb.html">get_ideb</a></span><span class="op">(</span></span>
-<span>  year <span class="op">=</span> <span class="fl">2021</span>,</span>
+<span>  year  <span class="op">=</span> <span class="fl">2021</span>,</span>
 <span>  level <span class="op">=</span> <span class="st">"escola"</span>,</span>
 <span>  stage <span class="op">=</span> <span class="st">"anos_iniciais"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># IDEB by municipality - High school</span></span>
 <span><span class="va">ideb_municipalities</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_ideb.html">get_ideb</a></span><span class="op">(</span></span>
-<span>  year <span class="op">=</span> <span class="fl">2023</span>,</span>
+<span>  year  <span class="op">=</span> <span class="fl">2023</span>,</span>
 <span>  level <span class="op">=</span> <span class="st">"municipio"</span>,</span>
 <span>  stage <span class="op">=</span> <span class="st">"ensino_medio"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Filter by state (faster)</span></span>
 <span><span class="va">ideb_sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_ideb.html">get_ideb</a></span><span class="op">(</span></span>
-<span>  year <span class="op">=</span> <span class="fl">2021</span>,</span>
+<span>  year  <span class="op">=</span> <span class="fl">2021</span>,</span>
 <span>  level <span class="op">=</span> <span class="st">"escola"</span>,</span>
 <span>  stage <span class="op">=</span> <span class="st">"anos_iniciais"</span>,</span>
-<span>  uf <span class="op">=</span> <span class="st">"SP"</span></span>
+<span>  uf    <span class="op">=</span> <span class="st">"SP"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -187,12 +194,13 @@ combining test performance (SAEB) with grade promotion rates.</p>
 </h3>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calculate average IDEB by state</span></span>
-<span><span class="va">ideb_by_state</span> <span class="op">&lt;-</span> <span class="va">ideb_schools</span> <span class="op">|&gt;</span></span>
+<span><span class="va">ideb_by_state</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">ideb_schools</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">vl_observado_2021</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">sg_uf</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
-<span>    n_schools <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    mean_ideb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">vl_observado_2021</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    n_schools   <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    mean_ideb   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">vl_observado_2021</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>    median_ideb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">vl_observado_2021</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">mean_ideb</span><span class="op">)</span><span class="op">)</span></span>
@@ -203,9 +211,9 @@ combining test performance (SAEB) with grade promotion rates.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"Average IDEB by State - Early Elementary (2021)"</span>,</span>
-<span>    x <span class="op">=</span> <span class="st">"State"</span>,</span>
-<span>    y <span class="op">=</span> <span class="st">"Average IDEB"</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>    x     <span class="op">=</span> <span class="st">"State"</span>,</span>
+<span>    y     <span class="op">=</span> <span class="st">"Average IDEB"</span></span>
+<span>    <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -220,7 +228,8 @@ combining test performance (SAEB) with grade promotion rates.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># National trend</span></span>
-<span><span class="va">trend</span> <span class="op">&lt;-</span> <span class="va">ideb_history</span> <span class="op">|&gt;</span></span>
+<span><span class="va">trend</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">ideb_history</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">ano_ideb</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>mean_ideb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">vl_observado</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -229,8 +238,8 @@ combining test performance (SAEB) with grade promotion rates.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"darkgreen"</span>, size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"IDEB Trend - Early Elementary"</span>,</span>
-<span>    x <span class="op">=</span> <span class="st">"Year"</span>,</span>
-<span>    y <span class="op">=</span> <span class="st">"National Average IDEB"</span></span>
+<span>    x     <span class="op">=</span> <span class="st">"Year"</span>,</span>
+<span>    y     <span class="op">=</span> <span class="st">"National Average IDEB"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -283,7 +292,8 @@ scores.</p>
 <span><span class="fu"><a href="../reference/enem_summary.html">enem_summary</a></span><span class="op">(</span><span class="va">enem_sample</span>, by <span class="op">=</span> <span class="st">"tp_sexo"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Average scores by race/ethnicity</span></span>
-<span><span class="va">scores_by_race</span> <span class="op">&lt;-</span> <span class="va">enem_sample</span> <span class="op">|&gt;</span></span>
+<span><span class="va">scores_by_race</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">enem_sample</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">nu_nota_mt</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    race <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
@@ -297,8 +307,8 @@ scores.</p>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">race</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
-<span>    n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    mean_math <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">nu_nota_mt</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    n          <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    mean_math  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">nu_nota_mt</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>    mean_essay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">nu_nota_redacao</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 </div>
@@ -358,7 +368,8 @@ education, covering all public and private schools.</p>
 </h3>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Count by administrative type</span></span>
-<span><span class="va">schools_by_type</span> <span class="op">&lt;-</span> <span class="va">schools_2023</span> <span class="op">|&gt;</span></span>
+<span><span class="va">schools_by_type</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">schools_2023</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    admin_type <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">tp_dependencia</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"Federal"</span>,</span>
@@ -388,13 +399,14 @@ education, covering all public and private schools.</p>
 </h3>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Check infrastructure availability in public schools</span></span>
-<span><span class="va">infra</span> <span class="op">&lt;-</span> <span class="va">schools_2023</span> <span class="op">|&gt;</span></span>
+<span><span class="va">infra</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">schools_2023</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">tp_dependencia</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span>  <span class="co"># Public schools only</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
-<span>    pct_internet <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">in_internet</span> <span class="op">==</span> <span class="fl">1</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>,</span>
-<span>    pct_library <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">in_biblioteca</span> <span class="op">==</span> <span class="fl">1</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>,</span>
-<span>    pct_computer_lab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">in_laboratorio_informatica</span> <span class="op">==</span> <span class="fl">1</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>,</span>
-<span>    pct_sports_court <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">in_quadra_esportes</span> <span class="op">==</span> <span class="fl">1</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>,</span>
+<span>    pct_internet      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">in_internet</span> <span class="op">==</span> <span class="fl">1</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>,</span>
+<span>    pct_library       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">in_biblioteca</span> <span class="op">==</span> <span class="fl">1</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>,</span>
+<span>    pct_computer_lab  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">in_laboratorio_informatica</span> <span class="op">==</span> <span class="fl">1</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>,</span>
+<span>    pct_sports_court  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">in_quadra_esportes</span> <span class="op">==</span> <span class="fl">1</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>,</span>
 <span>    pct_accessibility <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">in_acessibilidade</span> <span class="op">==</span> <span class="fl">1</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
@@ -439,7 +451,8 @@ education, covering all public and private schools.</p>
 <code class="sourceCode R"><span><span class="co"># Large files can consume a lot of RAM</span></span>
 <span><span class="co"># Use n_max or filter data after loading</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_censo_escolar.html">get_censo_escolar</a></span><span class="op">(</span><span class="fl">2023</span><span class="op">)</span></span>
-<span><span class="va">data_filtered</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op">|&gt;</span></span>
+<span><span class="va">data_filtered</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">data</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">co_entidade</span>, <span class="va">no_entidade</span>, <span class="va">sg_uf</span>, <span class="va">tp_dependencia</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>  <span class="co"># Free memory</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/gc.html" class="external-link">gc</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>

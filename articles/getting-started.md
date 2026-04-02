@@ -4,29 +4,36 @@ The **educabR** package provides easy access to Brazilian public
 education data from INEP, FNDE, and CAPES. With simple functions, you
 can download and process data from 14 datasets:
 
-**Basic Education:** - **IDEB** - Basic Education Development Index -
-**ENEM** - National High School Exam - **School Census** (Censo
-Escolar) - **SAEB** - Basic Education Assessment System - **ENCCEJA** -
-Youth and Adult Education Certification Exam - **ENEM by School** - ENEM
-results aggregated by school (2005-2015)
+**Basic Education:**  
+- **IDEB** - Basic Education Development Index  
+- **ENEM** - National High School Exam  
+- **School Census** (Censo Escolar)  
+- **SAEB** - Basic Education Assessment System  
+- **ENCCEJA** - Youth and Adult Education Certification Exam  
+- **ENEM by School** - ENEM results aggregated by school (2005-2015)
 
-**Higher Education:** - **Higher Education Census** (Censo da Educação
-Superior) - **ENADE** - National Student Performance Exam - **IDD** -
-Value-Added Indicator - **CPC** - Preliminary Course Concept - **IGC** -
-General Courses Index
+**Higher Education:**  
+- **Higher Education Census** (Censo da Educação Superior)  
+- **ENADE** - National Student Performance Exam  
+- **IDD** - Value-Added Indicator  
+- **CPC** - Preliminary Course Concept  
+- **IGC** - General Courses Index
 
-**Graduate Education:** - **CAPES** - Graduate programs, students,
-faculty, courses, and theses
+**Graduate Education:**  
+- **CAPES** - Graduate programs, students, faculty, courses, and theses
 
-**Education Funding:** - **FUNDEB** - Resource distribution and
-enrollment data
+**Education Funding:**  
+- **FUNDEB** - Resource distribution and enrollment data
 
 This vignette covers IDEB, ENEM, and the School Census. For other
-datasets, see: -
+datasets, see:  
+-
 [`vignette("basic-education-assessments")`](https://sidneybissoli.github.io/educabR/articles/basic-education-assessments.md)
-— SAEB, ENCCEJA, ENEM by School -
+— SAEB, ENCCEJA, ENEM by School  
+-
 [`vignette("higher-education")`](https://sidneybissoli.github.io/educabR/articles/higher-education.md)
-— Higher Education Census, ENADE, IDD, CPC, IGC, CAPES -
+— Higher Education Census, ENADE, IDD, CPC, IGC, CAPES  
+-
 [`vignette("education-funding")`](https://sidneybissoli.github.io/educabR/articles/education-funding.md)
 — FUNDEB
 
@@ -88,24 +95,24 @@ list_ideb_available()
 ``` r
 # IDEB by school - Early elementary (1st-5th grade)
 ideb_schools <- get_ideb(
-  year = 2021,
+  year  = 2021,
   level = "escola",
   stage = "anos_iniciais"
 )
 
 # IDEB by municipality - High school
 ideb_municipalities <- get_ideb(
-  year = 2023,
+  year  = 2023,
   level = "municipio",
   stage = "ensino_medio"
 )
 
 # Filter by state (faster)
 ideb_sp <- get_ideb(
-  year = 2021,
+  year  = 2021,
   level = "escola",
   stage = "anos_iniciais",
-  uf = "SP"
+  uf    = "SP"
 )
 ```
 
@@ -134,12 +141,13 @@ glimpse(ideb_schools)
 
 ``` r
 # Calculate average IDEB by state
-ideb_by_state <- ideb_schools |>
+ideb_by_state <- 
+  ideb_schools |>
   filter(!is.na(vl_observado_2021)) |>
   group_by(sg_uf) |>
   summarise(
-    n_schools = n(),
-    mean_ideb = mean(vl_observado_2021, na.rm = TRUE),
+    n_schools   = n(),
+    mean_ideb   = mean(vl_observado_2021, na.rm = TRUE),
     median_ideb = median(vl_observado_2021, na.rm = TRUE)
   ) |>
   arrange(desc(mean_ideb))
@@ -150,9 +158,9 @@ ggplot(ideb_by_state, aes(x = reorder(sg_uf, mean_ideb), y = mean_ideb)) +
   coord_flip() +
   labs(
     title = "Average IDEB by State - Early Elementary (2021)",
-    x = "State",
-    y = "Average IDEB"
-  ) +
+    x     = "State",
+    y     = "Average IDEB"
+    ) +
   theme_minimal()
 ```
 
@@ -167,7 +175,8 @@ ideb_history <- get_ideb_series(
 )
 
 # National trend
-trend <- ideb_history |>
+trend <- 
+  ideb_history |>
   group_by(ano_ideb) |>
   summarise(mean_ideb = mean(vl_observado, na.rm = TRUE))
 
@@ -176,8 +185,8 @@ ggplot(trend, aes(x = ano_ideb, y = mean_ideb)) +
   geom_point(color = "darkgreen", size = 3) +
   labs(
     title = "IDEB Trend - Early Elementary",
-    x = "Year",
-    y = "National Average IDEB"
+    x     = "Year",
+    y     = "National Average IDEB"
   ) +
   theme_minimal()
 ```
@@ -228,7 +237,8 @@ enem_summary(enem_sample)
 enem_summary(enem_sample, by = "tp_sexo")
 
 # Average scores by race/ethnicity
-scores_by_race <- enem_sample |>
+scores_by_race <- 
+  enem_sample |>
   filter(!is.na(nu_nota_mt)) |>
   mutate(
     race = case_when(
@@ -242,8 +252,8 @@ scores_by_race <- enem_sample |>
   ) |>
   group_by(race) |>
   summarise(
-    n = n(),
-    mean_math = mean(nu_nota_mt, na.rm = TRUE),
+    n          = n(),
+    mean_math  = mean(nu_nota_mt, na.rm = TRUE),
     mean_essay = mean(nu_nota_redacao, na.rm = TRUE)
   )
 ```
@@ -302,7 +312,8 @@ glimpse(schools_2023)
 
 ``` r
 # Count by administrative type
-schools_by_type <- schools_2023 |>
+schools_by_type <- 
+  schools_2023 |>
   mutate(
     admin_type = case_when(
       tp_dependencia == 1 ~ "Federal",
@@ -332,13 +343,14 @@ ggplot(schools_by_type, aes(x = reorder(admin_type, n), y = n, fill = admin_type
 
 ``` r
 # Check infrastructure availability in public schools
-infra <- schools_2023 |>
+infra <- 
+  schools_2023 |>
   filter(tp_dependencia %in% c(2, 3)) |>  # Public schools only
   summarise(
-    pct_internet = mean(in_internet == 1, na.rm = TRUE) * 100,
-    pct_library = mean(in_biblioteca == 1, na.rm = TRUE) * 100,
-    pct_computer_lab = mean(in_laboratorio_informatica == 1, na.rm = TRUE) * 100,
-    pct_sports_court = mean(in_quadra_esportes == 1, na.rm = TRUE) * 100,
+    pct_internet      = mean(in_internet == 1, na.rm = TRUE) * 100,
+    pct_library       = mean(in_biblioteca == 1, na.rm = TRUE) * 100,
+    pct_computer_lab  = mean(in_laboratorio_informatica == 1, na.rm = TRUE) * 100,
+    pct_sports_court  = mean(in_quadra_esportes == 1, na.rm = TRUE) * 100,
     pct_accessibility = mean(in_acessibilidade == 1, na.rm = TRUE) * 100
   )
 
@@ -381,7 +393,8 @@ data_sp <- get_ideb(2021, level = "escola", stage = "anos_iniciais", uf = "SP")
 # Large files can consume a lot of RAM
 # Use n_max or filter data after loading
 data <- get_censo_escolar(2023)
-data_filtered <- data |>
+data_filtered <- 
+  data |>
   select(co_entidade, no_entidade, sg_uf, tp_dependencia)
 rm(data)  # Free memory
 gc()
