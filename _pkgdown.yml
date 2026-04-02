@@ -8,6 +8,16 @@ navbar:
     left:  [intro, reference, articles]
     right: [search, github]
 
+articles:
+  - title: "Getting Started"
+    contents:
+      - getting-started
+  - title: "Datasets"
+    contents:
+      - basic-education-assessments
+      - higher-education
+      - education-funding
+
 reference:
   - title: "IDEB"
     desc: "Functions for IDEB data"

@@ -16,3 +16,6 @@
 ^Meta$
 ^plano-expansao-educabR\.md$
 ^README\.pt-br\.md$
+^vignettes/\.build\.timestamp$
+^vignettes/.*\.html$
+^vignettes/.*\.knit\.md$

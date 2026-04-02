@@ -1,0 +1,4 @@
+*.html
+*.R
+*.knit.md
+.build.timestamp
