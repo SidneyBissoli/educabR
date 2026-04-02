@@ -6,7 +6,7 @@ with pagination support.
 ## Usage
 
 ``` r
-fetch_fundeb_enrollment(year, n_max = Inf, quiet = FALSE)
+fetch_fundeb_enrollment(year, uf = NULL, n_max = Inf, quiet = FALSE)
 ```
 
 ## Arguments
@@ -14,6 +14,10 @@ fetch_fundeb_enrollment(year, n_max = Inf, quiet = FALSE)
 - year:
 
   The year.
+
+- uf:
+
+  Optional UF code to filter at the API level.
 
 - n_max:
 
