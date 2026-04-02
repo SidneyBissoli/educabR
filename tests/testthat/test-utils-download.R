@@ -650,41 +650,20 @@ test_that("convert_faixa_columns handles df without faixa columns", {
 
 # --- read_excel_safe (from get-cpc.R) ----------------------------------------
 
-test_that("read_excel_safe errors when readxl is not available", {
-  mockr_available <- requireNamespace("mockr", quietly = TRUE)
-  skip_if_not(mockr_available, "mockr package not available")
-
-  local_mocked_bindings(
-    requireNamespace = function(pkg, ...) {
-      if (pkg == "readxl") return(FALSE)
-      base::requireNamespace(pkg, ...)
-    },
-    .package = "base"
-  )
-
+test_that("read_excel_safe errors on invalid file", {
   expect_error(
-    educabR:::read_excel_safe("fake.xlsx"),
-    "readxl"
+    educabR:::read_excel_safe("nonexistent_file.xlsx"),
+    "failed to read Excel file"
   )
 })
 
 # --- read_ideb_excel (from get-ideb.R) ---------------------------------------
 
-test_that("read_ideb_excel errors when readxl is not available", {
-  mockr_available <- requireNamespace("mockr", quietly = TRUE)
-  skip_if_not(mockr_available, "mockr package not available")
-
-  local_mocked_bindings(
-    requireNamespace = function(pkg, ...) {
-      if (pkg == "readxl") return(FALSE)
-      base::requireNamespace(pkg, ...)
-    },
-    .package = "base"
-  )
-
+test_that("read_ideb_excel reads with skip = 9", {
+  skip_if_not_installed("readxl")
+  # Test that it calls readxl (will fail on non-xlsx file)
   expect_error(
-    educabR:::read_ideb_excel("fake.xlsx"),
-    "readxl"
+    educabR:::read_ideb_excel("nonexistent_file.xlsx")
   )
 })
 

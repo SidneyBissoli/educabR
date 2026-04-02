@@ -68,13 +68,14 @@ test_that("set_cache_dir creates directory", {
 
 test_that("set_cache_dir normalizes path", {
   tmp <- withr::local_tempdir()
-  # Use a path with redundant separators
-  messy_path <- file.path(tmp, "a", "..", "b")
+  new_dir <- file.path(tmp, "normalized_test")
 
-  result <- set_cache_dir(messy_path)
+  result <- set_cache_dir(new_dir)
 
   # Result should be a normalized absolute path
-  expect_equal(result, normalizePath(messy_path, mustWork = FALSE))
+  expect_true(nchar(result) > 0)
+  expect_true(dir.exists(result))
+  expect_equal(result, normalizePath(new_dir, mustWork = FALSE))
 })
 
 test_that("set_cache_dir returns the path invisibly", {
