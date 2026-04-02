@@ -10,8 +10,8 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
-  eval = FALSE
+  comment  = "#>",
+  eval     = FALSE
 )
 ```
 
@@ -51,8 +51,8 @@ cursos_sp <- get_censo_superior(year = 2023, type = "cursos", uf = "SP")
 
 # Faculty data with limited rows
 docentes_sample <- get_censo_superior(
-  year = 2023,
-  type = "docentes",
+  year  = 2023,
+  type  = "docentes",
   n_max = 10000
 )
 ```
@@ -73,7 +73,8 @@ list_censo_superior_files(2023)
 ```{r censo-superior-analysis}
 ies <- get_censo_superior(2023, type = "ies")
 
-ies_summary <- ies |>
+ies_summary <- 
+  ies |>
   mutate(
     admin_type = case_when(
       tp_categoria_administrativa == 1 ~ "Public Federal",
@@ -91,9 +92,9 @@ ggplot(ies_summary, aes(x = reorder(admin_type, n), y = n)) +
   coord_flip() +
   labs(
     title = "Higher Education Institutions by Type (2023)",
-    x = NULL,
-    y = "Number of Institutions"
-  ) +
+    x     = NULL,
+    y     = "Number of Institutions"
+    ) +
   theme_minimal()
 ```
 
@@ -131,9 +132,9 @@ enade |>
   geom_histogram(bins = 40, fill = "darkgreen", alpha = 0.7) +
   labs(
     title = "ENADE 2023 - General Score Distribution",
-    x = "General Score",
-    y = "Count"
-  ) +
+    x     = "General Score",
+    y     = "Count"
+    ) +
   theme_minimal()
 ```
 
@@ -205,9 +206,9 @@ cpc |>
   geom_col(fill = "coral") +
   labs(
     title = "CPC 2023 - Course Quality Distribution",
-    x = "CPC Score (1-5)",
-    y = "Number of Courses"
-  ) +
+    x     = "CPC Score (1-5)",
+    y     = "Number of Courses"
+    ) +
   theme_minimal()
 ```
 
@@ -252,9 +253,9 @@ igc |>
   coord_flip() +
   labs(
     title = "Top 20 Institutions by IGC (2023)",
-    x = NULL,
-    y = "IGC (Continuous)"
-  ) +
+    x     = NULL,
+    y     = "IGC (Continuous)"
+    ) +
   theme_minimal()
 ```
 
@@ -311,9 +312,9 @@ programas |>
   coord_flip() +
   labs(
     title = "Graduate Programs by Knowledge Area (2023)",
-    x = NULL,
-    y = "Number of Programs"
-  ) +
+    x     = NULL,
+    y     = "Number of Programs"
+    ) +
   theme_minimal()
 ```
 
@@ -332,18 +333,20 @@ igc <- get_igc(2023)
 # Compare institution-level quality
 # IGC gives the overall institution score
 # CPC gives individual course scores within each institution
-igc_summary <- igc |>
+igc_summary <- 
+  igc |>
   filter(!is.na(igc_faixa)) |>
   select(codigo_ies, sigla_ies, igc_continuo, igc_faixa)
 
-cpc_summary <- cpc |>
+cpc_summary <- 
+  cpc |>
   filter(!is.na(cpc_continuo)) |>
   group_by(codigo_ies) |>
   summarise(
     n_courses = n(),
-    mean_cpc = mean(cpc_continuo, na.rm = TRUE),
-    .groups = "drop"
-  )
+    mean_cpc  = mean(cpc_continuo, na.rm = TRUE),
+    .groups   = "drop"
+    )
 
 combined <- inner_join(igc_summary, cpc_summary, by = "codigo_ies")
 
@@ -351,9 +354,9 @@ ggplot(combined, aes(x = mean_cpc, y = igc_continuo, size = n_courses)) +
   geom_point(alpha = 0.4, color = "steelblue") +
   labs(
     title = "IGC vs Average CPC by Institution (2023)",
-    x = "Average CPC (Continuous)",
-    y = "IGC (Continuous)",
-    size = "Courses Evaluated"
-  ) +
+    x     = "Average CPC (Continuous)",
+    y     = "IGC (Continuous)",
+    size  = "Courses Evaluated"
+    ) +
   theme_minimal()
 ```
