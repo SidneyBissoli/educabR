@@ -20,8 +20,8 @@ test_that("validate_year rejects invalid ENEM years", {
   )
 })
 
-test_that("available_years returns expected ENEM year range", {
-  years <- available_years("enem")
+test_that("fallback_years returns expected ENEM year range", {
+  years <- fallback_years("enem")
 
   expect_true(1998 %in% years)
   expect_true(2024 %in% years)

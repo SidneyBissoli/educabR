@@ -20,8 +20,8 @@ test_that("validate_year rejects invalid censo_escolar years", {
   )
 })
 
-test_that("available_years returns expected censo_escolar years", {
-  years <- available_years("censo_escolar")
+test_that("fallback_years returns expected censo_escolar years", {
+  years <- fallback_years("censo_escolar")
 
   expect_true(1995 %in% years)
   expect_true(2024 %in% years)

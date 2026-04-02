@@ -25,8 +25,8 @@ test_that("validate_year accepts ENCCEJA boundary years", {
   expect_silent(validate_year(2024, "encceja"))
 })
 
-test_that("available_years returns expected ENCCEJA years", {
-  years <- available_years("encceja")
+test_that("fallback_years returns expected ENCCEJA years", {
+  years <- fallback_years("encceja")
 
   expect_true(2014 %in% years)
   expect_true(2023 %in% years)

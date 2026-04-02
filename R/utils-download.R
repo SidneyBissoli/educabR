@@ -563,8 +563,11 @@ available_years <- function(dataset) {
   cached <- .educabr_env[[cache_key]]
   if (!is.null(cached)) return(cached)
 
+  # skip discovery if disabled (e.g., during testing)
+  skip_discovery <- identical(Sys.getenv("EDUCABR_SKIP_DISCOVERY"), "true")
+
   # try dynamic discovery
-  years <- tryCatch(
+  years <- if (skip_discovery) NULL else tryCatch(
     discover_available_years(dataset),
     error = function(e) NULL
   )

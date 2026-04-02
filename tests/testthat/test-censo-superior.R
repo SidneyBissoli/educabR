@@ -25,8 +25,8 @@ test_that("validate_year accepts censo_superior boundary years", {
   expect_silent(validate_year(2024, "censo_superior"))
 })
 
-test_that("available_years returns expected censo_superior years", {
-  years <- available_years("censo_superior")
+test_that("fallback_years returns expected censo_superior years", {
+  years <- fallback_years("censo_superior")
 
   expect_true(2009 %in% years)
   expect_true(2023 %in% years)

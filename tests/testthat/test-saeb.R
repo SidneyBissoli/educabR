@@ -30,8 +30,8 @@ test_that("validate_year accepts SAEB boundary years", {
   expect_silent(validate_year(2023, "saeb"))
 })
 
-test_that("available_years returns expected SAEB years", {
-  years <- available_years("saeb")
+test_that("fallback_years returns expected SAEB years", {
+  years <- fallback_years("saeb")
 
   expect_true(2023 %in% years)
   expect_true(2021 %in% years)

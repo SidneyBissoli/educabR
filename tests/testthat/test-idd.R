@@ -32,8 +32,8 @@ test_that("validate_year accepts IDD boundary years", {
   expect_silent(validate_year(2021, "idd"))
 })
 
-test_that("available_years returns expected IDD years", {
-  years <- available_years("idd")
+test_that("fallback_years returns expected IDD years", {
+  years <- fallback_years("idd")
 
   expect_true(2014 %in% years)
   expect_true(2023 %in% years)
