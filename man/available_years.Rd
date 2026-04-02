@@ -13,9 +13,15 @@ available_years(dataset)
 An integer vector of available years.
 }
 \description{
-Returns the years available for a given INEP dataset.
+Returns the years available for a given dataset. On the first call in a
+session, queries the data source to discover which years are actually
+available (requires internet). Results are cached for the session.
+Falls back to a known list if discovery fails.
 }
 \examples{
-available_years("censo_escolar")
+\dontrun{
 available_years("enem")
+available_years("enade")
+available_years("fundeb_enrollment")
+}
 }

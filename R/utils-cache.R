@@ -115,11 +115,23 @@ clear_cache <- function(dataset = NULL) {
   cache_dir <- get_cache_dir()
 
   if (is.null(dataset)) {
-    # clear all
-    files <- list.files(cache_dir, full.names = TRUE, recursive = TRUE)
-    if (length(files) > 0) {
-      unlink(files, recursive = TRUE)
-      cli::cli_alert_success("cleared {length(files)} cached file(s)")
+    # clear all — delete subdirectories entirely (more reliable on Windows)
+    subdirs <- list.dirs(cache_dir, recursive = FALSE, full.names = TRUE)
+    if (length(subdirs) > 0) {
+      # release any memory-mapped files
+      gc(verbose = FALSE)
+      unlink(subdirs, recursive = TRUE, force = TRUE)
+
+      # check for locked files that survived
+      remaining <- list.files(cache_dir, recursive = TRUE)
+      if (length(remaining) > 0) {
+        cli::cli_alert_warning(
+          "{.val {length(remaining)}} file(s) could not be deleted (may be locked by R session)"
+        )
+        cli::cli_alert_info("restart R session and try again to fully clear cache")
+      } else {
+        cli::cli_alert_success("cache cleared")
+      }
     } else {
       cli::cli_alert_info("cache is already empty")
     }
@@ -127,8 +139,16 @@ clear_cache <- function(dataset = NULL) {
     # clear specific dataset
     dataset_dir <- file.path(cache_dir, dataset)
     if (dir.exists(dataset_dir)) {
-      unlink(dataset_dir, recursive = TRUE)
-      cli::cli_alert_success("cleared cache for {.val {dataset}}")
+      gc(verbose = FALSE)
+      unlink(dataset_dir, recursive = TRUE, force = TRUE)
+
+      if (dir.exists(dataset_dir)) {
+        cli::cli_alert_warning(
+          "some files in {.val {dataset}} could not be deleted (may be locked)"
+        )
+      } else {
+        cli::cli_alert_success("cleared cache for {.val {dataset}}")
+      }
     } else {
       cli::cli_alert_info("no cache found for {.val {dataset}}")
     }

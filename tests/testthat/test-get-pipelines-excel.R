@@ -558,19 +558,19 @@ test_that("get_fundeb_distribution passes source and destination to reader", {
 test_that("get_fundeb_enrollment reads cached CSV correctly", {
   mock_csv_content <- paste(
     "AnoCenso;Uf;MunicipioGe;TipoRedeEducacao;DescricaoTipoEducacao;DescricaoTipoEnsino;DescricaoTipoTurma;DescricaoTipoCargaHoraria;DescricaoTipoLocalizacao;QtdMatricula",
-    "2023;SP;SAO PAULO;PUBLICA;REGULAR;FUNDAMENTAL;ANOS INICIAIS;PARCIAL;URBANA;1000",
-    "2023;RJ;RIO DE JANEIRO;PUBLICA;REGULAR;FUNDAMENTAL;ANOS INICIAIS;PARCIAL;URBANA;2000",
+    "2018;SP;SAO PAULO;PUBLICA;REGULAR;FUNDAMENTAL;ANOS INICIAIS;PARCIAL;URBANA;1000",
+    "2018;RJ;RIO DE JANEIRO;PUBLICA;REGULAR;FUNDAMENTAL;ANOS INICIAIS;PARCIAL;URBANA;2000",
     sep = "\n"
   )
 
   # Write mock CSV to cache location
-  filename <- "fundeb_enrollment_2023.csv"
+  filename <- "fundeb_enrollment_2018.csv"
   file_path <- educabR:::cache_path("fundeb", filename)
   dir.create(dirname(file_path), recursive = TRUE, showWarnings = FALSE)
   writeLines(mock_csv_content, file_path)
   withr::defer(unlink(file_path))
 
-  result <- get_fundeb_enrollment(2023, quiet = TRUE)
+  result <- get_fundeb_enrollment(2018, quiet = TRUE)
 
   expect_s3_class(result, "tbl_df")
   expect_equal(nrow(result), 2)
@@ -584,18 +584,18 @@ test_that("get_fundeb_enrollment reads cached CSV correctly", {
 test_that("get_fundeb_enrollment filters by UF on cached data", {
   mock_csv_content <- paste(
     "AnoCenso;Uf;MunicipioGe;TipoRedeEducacao;DescricaoTipoEducacao;DescricaoTipoEnsino;DescricaoTipoTurma;DescricaoTipoCargaHoraria;DescricaoTipoLocalizacao;QtdMatricula",
-    "2023;SP;SAO PAULO;PUBLICA;REGULAR;FUNDAMENTAL;ANOS INICIAIS;PARCIAL;URBANA;1000",
-    "2023;RJ;RIO DE JANEIRO;PUBLICA;REGULAR;FUNDAMENTAL;ANOS INICIAIS;PARCIAL;URBANA;2000",
+    "2018;SP;SAO PAULO;PUBLICA;REGULAR;FUNDAMENTAL;ANOS INICIAIS;PARCIAL;URBANA;1000",
+    "2018;RJ;RIO DE JANEIRO;PUBLICA;REGULAR;FUNDAMENTAL;ANOS INICIAIS;PARCIAL;URBANA;2000",
     sep = "\n"
   )
 
-  filename <- "fundeb_enrollment_2023.csv"
+  filename <- "fundeb_enrollment_2018.csv"
   file_path <- educabR:::cache_path("fundeb", filename)
   dir.create(dirname(file_path), recursive = TRUE, showWarnings = FALSE)
   writeLines(mock_csv_content, file_path)
   withr::defer(unlink(file_path))
 
-  result <- get_fundeb_enrollment(2023, uf = "SP", quiet = TRUE)
+  result <- get_fundeb_enrollment(2018, uf = "SP", quiet = TRUE)
 
   expect_equal(nrow(result), 1)
   expect_equal(result$uf[1], "SP")
@@ -604,18 +604,18 @@ test_that("get_fundeb_enrollment filters by UF on cached data", {
 test_that("get_fundeb_enrollment respects n_max on cached data", {
   lines <- c(
     "AnoCenso;Uf;MunicipioGe;TipoRedeEducacao;DescricaoTipoEducacao;DescricaoTipoEnsino;DescricaoTipoTurma;DescricaoTipoCargaHoraria;DescricaoTipoLocalizacao;QtdMatricula",
-    "2023;SP;SAO PAULO;PUBLICA;REGULAR;FUNDAMENTAL;ANOS INICIAIS;PARCIAL;URBANA;1000",
-    "2023;RJ;RIO DE JANEIRO;PUBLICA;REGULAR;FUNDAMENTAL;ANOS INICIAIS;PARCIAL;URBANA;2000",
-    "2023;MG;BELO HORIZONTE;PUBLICA;REGULAR;FUNDAMENTAL;ANOS INICIAIS;PARCIAL;URBANA;3000"
+    "2018;SP;SAO PAULO;PUBLICA;REGULAR;FUNDAMENTAL;ANOS INICIAIS;PARCIAL;URBANA;1000",
+    "2018;RJ;RIO DE JANEIRO;PUBLICA;REGULAR;FUNDAMENTAL;ANOS INICIAIS;PARCIAL;URBANA;2000",
+    "2018;MG;BELO HORIZONTE;PUBLICA;REGULAR;FUNDAMENTAL;ANOS INICIAIS;PARCIAL;URBANA;3000"
   )
 
-  filename <- "fundeb_enrollment_2023.csv"
+  filename <- "fundeb_enrollment_2018.csv"
   file_path <- educabR:::cache_path("fundeb", filename)
   dir.create(dirname(file_path), recursive = TRUE, showWarnings = FALSE)
   writeLines(paste(lines, collapse = "\n"), file_path)
   withr::defer(unlink(file_path))
 
-  result <- get_fundeb_enrollment(2023, n_max = 2, quiet = TRUE)
+  result <- get_fundeb_enrollment(2018, n_max = 2, quiet = TRUE)
 
   expect_equal(nrow(result), 2)
 })
@@ -626,7 +626,7 @@ test_that("get_fundeb_enrollment respects n_max on cached data", {
 
 test_that("get_fundeb_enrollment fetches from API when not cached", {
   mock_api_data <- dplyr::tibble(
-    AnoCenso = c(2023L, 2023L),
+    AnoCenso = c(2018L, 2018L),
     Uf = c("SP", "RJ"),
     MunicipioGe = c("SAO PAULO", "RIO DE JANEIRO"),
     TipoRedeEducacao = c("PUBLICA", "PUBLICA"),
@@ -639,7 +639,7 @@ test_that("get_fundeb_enrollment fetches from API when not cached", {
   )
 
   # Ensure no cached file exists
-  filename <- "fundeb_enrollment_2023.csv"
+  filename <- "fundeb_enrollment_2018.csv"
   file_path <- educabR:::cache_path("fundeb", filename)
   if (file.exists(file_path)) unlink(file_path)
   withr::defer(if (file.exists(file_path)) unlink(file_path))
@@ -652,7 +652,7 @@ test_that("get_fundeb_enrollment fetches from API when not cached", {
     .package = "educabR"
   )
 
-  result <- get_fundeb_enrollment(2023, keep_file = FALSE, quiet = TRUE)
+  result <- get_fundeb_enrollment(2018, keep_file = FALSE, quiet = TRUE)
 
   expect_s3_class(result, "tbl_df")
   expect_equal(nrow(result), 2)
@@ -663,7 +663,7 @@ test_that("get_fundeb_enrollment fetches from API when not cached", {
 
 test_that("get_fundeb_enrollment caches result when keep_file=TRUE", {
   mock_api_data <- dplyr::tibble(
-    AnoCenso = c(2023L),
+    AnoCenso = c(2018L),
     Uf = c("SP"),
     MunicipioGe = c("SAO PAULO"),
     TipoRedeEducacao = c("PUBLICA"),
@@ -675,7 +675,7 @@ test_that("get_fundeb_enrollment caches result when keep_file=TRUE", {
     QtdMatricula = c(1000L)
   )
 
-  filename <- "fundeb_enrollment_2023.csv"
+  filename <- "fundeb_enrollment_2018.csv"
   file_path <- educabR:::cache_path("fundeb", filename)
   if (file.exists(file_path)) unlink(file_path)
   withr::defer(if (file.exists(file_path)) unlink(file_path))
@@ -688,7 +688,7 @@ test_that("get_fundeb_enrollment caches result when keep_file=TRUE", {
     .package = "educabR"
   )
 
-  result <- get_fundeb_enrollment(2023, keep_file = TRUE, quiet = TRUE)
+  result <- get_fundeb_enrollment(2018, keep_file = TRUE, quiet = TRUE)
 
   expect_true(file.exists(file_path))
 })

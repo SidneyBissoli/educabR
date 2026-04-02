@@ -120,7 +120,7 @@ extract_zip <- function(zipfile, exdir, quiet = FALSE) {
     },
     error = function(e) {
       # check if it's an encoding error (common with INEP files)
-      if (grepl("multibyte|encoding|invalid", conditionMessage(e), ignore.case = TRUE)) {
+      if (grepl("multibyte|encoding|invalid|illegal|byte sequence|abrir o arquivo", conditionMessage(e), ignore.case = TRUE)) {
         if (!quiet) {
           cli::cli_alert_warning(
             "standard extraction failed due to encoding, trying alternative method..."
@@ -182,12 +182,35 @@ extract_zip <- function(zipfile, exdir, quiet = FALSE) {
   )
 }
 
-#' Extract an archive file (ZIP or 7z)
+# find the 7z executable (checks PATH and common install locations)
+find_7z <- function() {
+  # try PATH first
+  path_result <- Sys.which("7z")
+  if (nzchar(path_result)) return(unname(path_result))
+
+  # common install locations on Windows
+  if (.Platform$OS.type == "windows") {
+    candidates <- c(
+      file.path(Sys.getenv("ProgramFiles"), "7-Zip", "7z.exe"),
+      file.path(Sys.getenv("ProgramFiles(x86)"), "7-Zip", "7z.exe"),
+      "C:/Program Files/7-Zip/7z.exe",
+      "C:/Program Files (x86)/7-Zip/7z.exe"
+    )
+    for (path in candidates) {
+      if (file.exists(path)) return(normalizePath(path, winslash = "/"))
+    }
+  }
+
+  # not found — return "7z" and let system2 produce the error
+  "7z"
+}
+
+#' Extract an archive file (ZIP, 7z, or RAR)
 #'
 #' @description
-#' Internal function to extract archive files. Supports ZIP and 7z formats.
-#' For ZIP files, delegates to [extract_zip()]. For 7z files, uses the
-#' system `7z` command.
+#' Internal function to extract archive files. Supports ZIP, 7z, and RAR
+#' formats. For ZIP files, delegates to [extract_zip()]. For 7z and RAR
+#' files, uses the system `7z` command.
 #'
 #' @param archive Path to the archive file.
 #' @param exdir Directory to extract to.
@@ -203,15 +226,15 @@ extract_archive <- function(archive, exdir, quiet = FALSE) {
     return(extract_zip(archive, exdir, quiet = quiet))
   }
 
-  if (tolower(ext) == "7z") {
+  if (tolower(ext) %in% c("7z", "rar")) {
     if (!quiet) {
-      cli::cli_alert_info("extracting 7z archive...")
+      cli::cli_alert_info("extracting {.val {ext}} archive...")
     }
 
     dir.create(exdir, recursive = TRUE, showWarnings = FALSE)
 
-    # try 7z command (available on most systems, including GitHub Actions)
-    sevenz_cmd <- if (.Platform$OS.type == "windows") "7z" else "7z"
+    # 7z handles both .7z and .rar formats
+    sevenz_cmd <- find_7z()
 
     result <- tryCatch(
       {
@@ -226,7 +249,7 @@ extract_archive <- function(archive, exdir, quiet = FALSE) {
       error = function(e) {
         cli::cli_abort(
           c(
-            "failed to extract 7z archive",
+            "failed to extract {.val {ext}} archive",
             "x" = "file: {.path {archive}}",
             "i" = "install 7-Zip ({.url https://www.7-zip.org/}) and ensure {.code 7z} is in PATH",
             "i" = "error: {conditionMessage(e)}"
@@ -240,7 +263,7 @@ extract_archive <- function(archive, exdir, quiet = FALSE) {
     if (length(files) == 0) {
       cli::cli_abort(
         c(
-          "no files extracted from 7z archive",
+          "no files extracted from {.val {ext}} archive",
           "x" = "file: {.path {archive}}"
         )
       )
@@ -318,10 +341,201 @@ build_inep_url <- function(dataset, year, ...) {
   url
 }
 
+# hardcoded fallback years (used when dynamic discovery fails)
+fallback_years <- function(dataset) {
+  switch(
+    dataset,
+    "censo_escolar" = 1995:2024,
+    "enem" = 1998:2024,
+    "saeb" = c(2011L, 2013L, 2015L, 2017L, 2019L, 2021L, 2023L),
+    "censo_superior" = 2009:2024,
+    "enade" = c(2004L:2019L, 2021L:2023L),
+    "encceja" = 2014:2024,
+    "idd" = c(2014L:2019L, 2021L:2023L),
+    "cpc" = c(2007L:2019L, 2021L:2023L),
+    "igc" = c(2007L:2019L, 2021L:2023L),
+    "capes" = 2013:2024,
+    "ideb" = c(2017L, 2019L, 2021L, 2023L),
+    "fundeb" = as.integer(names(fundeb_recursos_ids)),
+    "fundeb_enrollment" = 2017:2018
+  )
+}
+
+# candidate year range for HEAD-check discovery
+# returns NULL for datasets that don't use HEAD discovery
+candidate_year_range <- function(dataset) {
+  current_year <- as.integer(format(Sys.Date(), "%Y"))
+  switch(
+    dataset,
+    "censo_escolar" = 1995:current_year,
+    "enem" = 1998:current_year,
+    "saeb" = seq(2011L, current_year, by = 2L),
+    "censo_superior" = 2009:current_year,
+    "encceja" = 2014:current_year,
+    "idd" = setdiff(2014:current_year, 2020L),
+    NULL
+  )
+}
+
+# discover available years via HEAD requests to INEP URLs
+# only checks last 3 known years + new candidates (fast)
+discover_inep_years <- function(dataset) {
+  candidates <- candidate_year_range(dataset)
+  if (is.null(candidates)) return(NULL)
+
+  known <- fallback_years(dataset)
+  max_known <- max(known)
+
+  # only check: last 3 known years (re-verify) + new candidates beyond known
+  to_check <- sort(unique(c(
+    intersect(candidates, seq(max_known - 2L, max_known)),
+    candidates[candidates > max_known]
+  )))
+
+  if (length(to_check) == 0) return(known)
+
+  check_results <- vapply(to_check, function(year) {
+    url <- tryCatch(
+      build_inep_url(dataset, year),
+      error = function(e) NA_character_
+    )
+    if (is.na(url)) return(FALSE)
+
+    tryCatch(
+      {
+        req <- httr2::request(url) |>
+          httr2::req_method("HEAD") |>
+          httr2::req_timeout(seconds = 5) |>
+          httr2::req_error(is_error = function(resp) FALSE)
+        resp <- httr2::req_perform(req)
+        httr2::resp_status(resp) < 400
+      },
+      error = function(e) FALSE
+    )
+  }, logical(1))
+
+  confirmed <- to_check[check_results]
+  not_confirmed <- to_check[!check_results]
+
+  # known years (removing failed re-verifications) + newly confirmed
+  sort(unique(c(setdiff(known, not_confirmed), confirmed)))
+}
+
+# discover available years for FUNDEB enrollment via OData API
+# checks ALL candidate years (API data can change unpredictably)
+discover_fundeb_enrollment_years <- function() {
+  current_year <- as.integer(format(Sys.Date(), "%Y"))
+  to_check <- 2007L:current_year
+
+  base_url <- fundeb_enrollment_api_url()
+
+  check_results <- vapply(to_check, function(year) {
+    tryCatch(
+      {
+        req <- httr2::request(base_url) |>
+          httr2::req_url_query(
+            `$filter` = paste0("AnoCenso eq ", year),
+            `$top` = 1,
+            `$format` = "json"
+          ) |>
+          httr2::req_timeout(seconds = 10) |>
+          httr2::req_error(is_error = function(resp) FALSE)
+        resp <- httr2::req_perform(req)
+        body <- httr2::resp_body_json(resp)
+        length(body$value) > 0
+      },
+      error = function(e) FALSE
+    )
+  }, logical(1))
+
+  sort(to_check[check_results])
+}
+
+# discover available years for ENADE (inconsistent URLs, needs map + pattern tries)
+discover_enade_years <- function() {
+  current_year <- as.integer(format(Sys.Date(), "%Y"))
+  known_years <- sort(as.integer(names(enade_urls)))
+  max_known <- max(known_years)
+
+  # recheck last 3 known years + try new candidates
+  to_recheck <- utils::tail(sort(known_years), 3)
+  new_candidates <- setdiff((max_known + 1L):current_year, 2020L)
+  all_to_check <- sort(unique(c(to_recheck, new_candidates)))
+
+  base <- inep_base_url()
+
+  check_results <- vapply(all_to_check, function(year) {
+    # for years in the map, use the known URL
+    # for new years, try multiple patterns
+    if (as.character(year) %in% names(enade_urls)) {
+      urls <- unname(enade_urls[as.character(year)])
+    } else {
+      urls <- c(
+        str_c(base, "/microdados/microdados_enade_", year, ".zip"),
+        str_c(base, "/microdados/microdados_enade_", year, "_LGPD.zip"),
+        str_c(base, "/microdados/microdados_enade_", year, "_LGPD.rar")
+      )
+    }
+
+    for (url in urls) {
+      ok <- tryCatch(
+        {
+          req <- httr2::request(url) |>
+            httr2::req_method("HEAD") |>
+            httr2::req_timeout(seconds = 5) |>
+            httr2::req_error(is_error = function(resp) FALSE)
+          resp <- httr2::req_perform(req)
+          httr2::resp_status(resp) < 400
+        },
+        error = function(e) FALSE
+      )
+      if (ok) return(TRUE)
+    }
+    FALSE
+  }, logical(1))
+
+  confirmed <- all_to_check[check_results]
+  not_confirmed <- all_to_check[!check_results]
+
+  sort(unique(c(setdiff(known_years, not_confirmed), confirmed)))
+}
+
+# main discovery dispatcher
+discover_available_years <- function(dataset) {
+  # datasets with HEAD-checkable INEP URLs (consistent patterns)
+  head_check <- c("censo_escolar", "enem", "saeb", "censo_superior",
+                   "encceja", "idd")
+
+  if (dataset %in% head_check) {
+    return(discover_inep_years(dataset))
+  }
+
+  # ENADE: inconsistent URLs, needs special handling
+  if (dataset == "enade") {
+    return(discover_enade_years())
+  }
+
+  # datasets with hardcoded URL maps (years = map keys)
+  if (dataset == "cpc") return(sort(as.integer(names(cpc_urls))))
+  if (dataset == "igc") return(sort(as.integer(names(igc_urls))))
+  if (dataset == "fundeb") return(sort(as.integer(names(fundeb_recursos_ids))))
+
+  # FUNDEB enrollment: query OData API
+  if (dataset == "fundeb_enrollment") {
+    return(discover_fundeb_enrollment_years())
+  }
+
+  # capes, ideb: discovery not practical, use fallback
+  NULL
+}
+
 #' Check available years for a dataset
 #'
 #' @description
-#' Returns the years available for a given INEP dataset.
+#' Returns the years available for a given dataset. On the first call in a
+#' session, queries the data source to discover which years are actually
+#' available (requires internet). Results are cached for the session.
+#' Falls back to a known list if discovery fails.
 #'
 #' @param dataset The dataset name.
 #'
@@ -330,30 +544,40 @@ build_inep_url <- function(dataset, year, ...) {
 #' @export
 #'
 #' @examples
-#' available_years("censo_escolar")
+#' \dontrun{
 #' available_years("enem")
+#' available_years("enade")
+#' available_years("fundeb_enrollment")
+#' }
 available_years <- function(dataset) {
   dataset <- match.arg(
     dataset,
     choices = c("censo_escolar", "enem", "saeb", "censo_superior", "enade",
-                "encceja", "idd", "cpc", "igc", "capes", "ideb", "fundeb")
+                "encceja", "idd", "cpc", "igc", "capes", "ideb",
+                "fundeb", "fundeb_enrollment")
   )
 
-  switch(
-    dataset,
-    "censo_escolar" = 1995:2024,
-    "enem" = 1998:2024,
-    "saeb" = c(2011L, 2013L, 2015L, 2017L, 2019L, 2021L, 2023L),
-    "censo_superior" = 2009:2024,
-    "enade" = 2004:2024,
-    "encceja" = 2014:2024,
-    "idd" = c(2014L:2019L, 2021L:2023L),
-    "cpc" = c(2007L:2019L, 2021L:2023L),
-    "igc" = c(2007L:2019L, 2021L:2023L),
-    "capes" = 2013:2024,
-    "ideb" = c(2017L, 2019L, 2021L, 2023L),
-    "fundeb" = 2007:2026
+  # check session cache
+
+  cache_key <- paste0("available_years_", dataset)
+  cached <- .educabr_env[[cache_key]]
+  if (!is.null(cached)) return(cached)
+
+  # try dynamic discovery
+  years <- tryCatch(
+    discover_available_years(dataset),
+    error = function(e) NULL
   )
+
+  # fallback to hardcoded list if discovery fails
+  if (is.null(years) || length(years) == 0) {
+    years <- fallback_years(dataset)
+  }
+
+  # cache for the session
+  .educabr_env[[cache_key]] <- years
+
+  years
 }
 
 #' Validate year parameter
@@ -488,6 +712,26 @@ read_inep_file <- function(file,
 
   cli::cli_alert_info("reading file with encoding: {.val {encoding}}")
 
+  # read header to detect code columns (CO_*, CD_* should be character)
+  header <- readr::read_delim(
+    file,
+    delim = delim,
+    locale = readr::locale(encoding = encoding),
+    show_col_types = FALSE,
+    n_max = 0
+  )
+
+  col_names <- names(header)
+  is_code <- grepl("^(CO_|CD_)", col_names, ignore.case = TRUE)
+
+  col_spec <- NULL
+  if (any(is_code)) {
+    col_spec <- readr::cols(.default = readr::col_guess())
+    for (name in col_names[is_code]) {
+      col_spec$cols[[name]] <- readr::col_character()
+    }
+  }
+
   # read with readr
   readr::read_delim(
     file,
@@ -495,6 +739,7 @@ read_inep_file <- function(file,
     locale = readr::locale(encoding = encoding),
     show_col_types = FALSE,
     n_max = n_max,
+    col_types = col_spec,
     progress = TRUE
   )
 }

@@ -351,8 +351,8 @@ test_that("available_years returns correct count for censo_superior", {
 
 test_that("available_years returns correct count for enade", {
   result <- available_years("enade")
-  expect_equal(result, 2004:2024)
-  expect_length(result, 21)
+  expect_equal(result, c(2004:2019, 2021:2023))
+  expect_length(result, 19)
 })
 
 test_that("available_years returns correct count for encceja", {

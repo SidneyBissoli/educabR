@@ -1,6 +1,29 @@
 # enade functions
 # download and process ENADE data from INEP
 
+# hardcoded URL map — INEP uses inconsistent naming for ENADE files
+enade_urls <- c(
+  "2004" = "https://download.inep.gov.br/microdados/microdados_enade_2004.zip",
+  "2005" = "https://download.inep.gov.br/microdados/microdados_enade_2005.zip",
+  "2006" = "https://download.inep.gov.br/microdados/microdados_enade_2006.zip",
+  "2007" = "https://download.inep.gov.br/microdados/microdados_enade_2007.zip",
+  "2008" = "https://download.inep.gov.br/microdados/microdados_enade_2008.zip",
+  "2009" = "https://download.inep.gov.br/microdados/microdados_enade_2009.zip",
+  "2010" = "https://download.inep.gov.br/microdados/microdados_enade_2010.zip",
+  "2011" = "https://download.inep.gov.br/microdados/microdados_enade_2011.zip",
+  "2012" = "https://download.inep.gov.br/microdados/microdados_enade_2012_LGPD.zip",
+  "2013" = "https://download.inep.gov.br/microdados/microdados_enade_2013_LGPD.zip",
+  "2014" = "https://download.inep.gov.br/microdados/microdados_enade_2014_LGPD.zip",
+  "2015" = "https://download.inep.gov.br/microdados/microdados_enade_2015_LGPD.zip",
+  "2016" = "https://download.inep.gov.br/microdados/microdados_enade_2016_LGPD.zip",
+  "2017" = "https://download.inep.gov.br/microdados/microdados_enade_2017_LGPD.zip",
+  "2018" = "https://download.inep.gov.br/microdados/microdados_enade_2018_LGPD.zip",
+  "2019" = "https://download.inep.gov.br/microdados/microdados_enade_2019_LGPD.zip",
+  "2021" = "https://download.inep.gov.br/microdados/microdados_enade_2021.zip",
+  "2022" = "https://download.inep.gov.br/microdados/microdados_enade_2022_LGPD.rar",
+  "2023" = "https://download.inep.gov.br/microdados/microdados_enade_2023.zip"
+)
+
 #' Get ENADE (Exame Nacional de Desempenho dos Estudantes) data
 #'
 #' @description
@@ -56,32 +79,38 @@ get_enade <- function(year,
   # validate arguments
   validate_year(year, "enade")
 
-  # build url and file paths
-  url <- build_inep_url("enade", year)
-  zip_filename <- str_c("microdados_enade_", year, ".zip")
-  zip_path <- cache_path("enade", zip_filename)
+  # get url from map (or build for unknown years)
+  url <- enade_urls[as.character(year)]
+  if (is.na(url)) {
+    url <- build_inep_url("enade", year)
+  }
+  url <- unname(url)
+
+  # file paths — use actual filename from URL
+  archive_filename <- basename(url)
+  archive_path <- cache_path("enade", archive_filename)
 
   # download if not cached
-  if (!is_cached("enade", zip_filename)) {
+  if (!is_cached("enade", archive_filename)) {
     if (!quiet) {
       cli::cli_alert_info("downloading ENADE {.val {year}}...")
     }
-    download_inep_file(url, zip_path, quiet = quiet)
+    download_inep_file(url, archive_path, quiet = quiet)
   } else if (!quiet) {
     cli::cli_alert_success("using cached file")
   }
 
   # extract files
-  exdir_name <- gsub("\\.zip$", "", zip_filename)
+  exdir_name <- tools::file_path_sans_ext(archive_filename)
   exdir <- cache_path("enade", exdir_name)
 
   if (!dir.exists(exdir) || length(list.files(exdir, recursive = TRUE)) == 0) {
-    extract_zip(zip_path, exdir, quiet = quiet)
+    extract_archive(archive_path, exdir, quiet = quiet)
   }
 
-  # clean up zip if requested
-  if (!keep_zip && file.exists(zip_path)) {
-    unlink(zip_path)
+  # clean up archive if requested
+  if (!keep_zip && file.exists(archive_path)) {
+    unlink(archive_path)
   }
 
   # find the data file

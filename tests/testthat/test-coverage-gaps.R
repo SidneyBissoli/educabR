@@ -670,7 +670,7 @@ test_that("get_fundeb_enrollment full pipeline fetches from API when not cached"
   temp_cache <- setup_temp_cache()
 
   mock_enrollment <- dplyr::tibble(
-    ano_censo = c(2023, 2023),
+    ano_censo = c(2018, 2018),
     uf = c("SP", "RJ"),
     municipio = c("SAO PAULO", "RIO"),
     tipo_rede_educacao = c("PUB", "PUB"),
@@ -691,12 +691,12 @@ test_that("get_fundeb_enrollment full pipeline fetches from API when not cached"
     .package = "educabR"
   )
 
-  result <- get_fundeb_enrollment(2023, keep_file = TRUE, quiet = TRUE)
+  result <- get_fundeb_enrollment(2018, keep_file = TRUE, quiet = TRUE)
   expect_s3_class(result, "tbl_df")
   expect_equal(nrow(result), 2)
 
   # Check that it was cached
-  file_path <- educabR:::cache_path("fundeb", "fundeb_enrollment_2023.csv")
+  file_path <- educabR:::cache_path("fundeb", "fundeb_enrollment_2018.csv")
   expect_true(file.exists(file_path))
 })
 

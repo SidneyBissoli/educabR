@@ -19,3 +19,5 @@
 ^vignettes/\.build\.timestamp$
 ^vignettes/.*\.html$
 ^vignettes/.*\.knit\.md$
+^coverage_report\.html$
+^lib$

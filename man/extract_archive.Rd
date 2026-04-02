@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils-download.R
 \name{extract_archive}
 \alias{extract_archive}
-\title{Extract an archive file (ZIP or 7z)}
+\title{Extract an archive file (ZIP, 7z, or RAR)}
 \usage{
 extract_archive(archive, exdir, quiet = FALSE)
 }
@@ -17,8 +17,8 @@ extract_archive(archive, exdir, quiet = FALSE)
 A character vector of extracted file paths.
 }
 \description{
-Internal function to extract archive files. Supports ZIP and 7z formats.
-For ZIP files, delegates to \code{\link[=extract_zip]{extract_zip()}}. For 7z files, uses the
-system \verb{7z} command.
+Internal function to extract archive files. Supports ZIP, 7z, and RAR
+formats. For ZIP files, delegates to \code{\link[=extract_zip]{extract_zip()}}. For 7z and RAR
+files, uses the system \verb{7z} command.
 }
 \keyword{internal}

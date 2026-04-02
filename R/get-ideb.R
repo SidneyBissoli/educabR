@@ -205,7 +205,15 @@ read_ideb_excel <- function(file) {
 
   # IDEB Excel files have 9 header rows before the actual column names
   # Row 10 contains the column names (SG_UF, CO_MUNICIPIO, etc.)
-  readxl::read_excel(file, skip = 9)
+  df <- readxl::read_excel(file, skip = 9)
+
+  # force code columns (CO_*) to character to preserve leading zeros
+  code_cols <- grep("^(CO_|CD_)", names(df), ignore.case = TRUE, value = TRUE)
+  for (col in code_cols) {
+    df[[col]] <- as.character(df[[col]])
+  }
+
+  df
 }
 
 #' Get IDEB historical series

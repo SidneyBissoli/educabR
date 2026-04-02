@@ -155,7 +155,7 @@ read_excel_safe <- function(file, n_max = Inf) {
 
   n_max_arg <- if (is.infinite(n_max)) Inf else n_max
 
-  tryCatch(
+  df <- tryCatch(
     {
       readxl::read_excel(file, n_max = n_max_arg, .name_repair = "minimal")
     },
@@ -169,6 +169,14 @@ read_excel_safe <- function(file, n_max = Inf) {
       )
     }
   )
+
+  # force code columns (CO_*, CD_*) to character to preserve leading zeros
+  code_cols <- grep("^(CO_|CD_)", names(df), ignore.case = TRUE, value = TRUE)
+  for (col in code_cols) {
+    df[[col]] <- as.character(df[[col]])
+  }
+
+  df
 }
 
 #' Convert faixa columns to numeric

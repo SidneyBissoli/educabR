@@ -248,7 +248,7 @@ test_that("available_years returns correct years for censo_superior", {
 test_that("available_years returns correct years for enade", {
   yrs <- available_years("enade")
   expect_true(2004 %in% yrs)
-  expect_true(2024 %in% yrs)
+  expect_true(2023 %in% yrs)
 })
 
 test_that("available_years returns correct years for encceja", {

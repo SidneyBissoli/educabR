@@ -32,13 +32,24 @@ fundeb_recursos_ids <- c(
 fundeb_sources <- c("FPE", "FPM", "IPI", "ITR", "VAAF", "VAAT", "VAAR",
                      "ICMS", "IPVA", "ITCMD")
 
-# Portuguese month names to month numbers
+# Portuguese month names to month numbers (ASCII only, input is normalized)
 fundeb_month_map <- c(
-  "JANEIRO" = 1L, "FEVEREIRO" = 2L, "MARCO" = 3L, "MAR\u00c7O" = 3L,
+  "JANEIRO" = 1L, "FEVEREIRO" = 2L, "MARCO" = 3L,
   "ABRIL" = 4L, "MAIO" = 5L, "JUNHO" = 6L,
   "JULHO" = 7L, "AGOSTO" = 8L, "SETEMBRO" = 9L,
   "OUTUBRO" = 10L, "NOVEMBRO" = 11L, "DEZEMBRO" = 12L
 )
+
+# strip common diacriticals to ASCII (avoids encoding issues on Windows)
+strip_diacriticals <- function(x) {
+  x <- gsub("\u00c7|\u00e7", "C", x)  # Ç/ç -> C
+  x <- gsub("\u00e3|\u00c3", "A", x)  # ã/Ã -> A
+  x <- gsub("\u00e9|\u00c9", "E", x)  # é/É -> E
+  x <- gsub("\u00ed|\u00cd", "I", x)  # í/Í -> I
+  x <- gsub("\u00f3|\u00d3", "O", x)  # ó/Ó -> O
+  x <- gsub("\u00fa|\u00da", "U", x)  # ú/Ú -> U
+  x
+}
 
 # OData API base URL for FUNDEB matriculas (FNDE)
 fundeb_enrollment_api_url <- function() {
@@ -283,7 +294,7 @@ get_fundeb_enrollment <- function(year,
                                   keep_file = TRUE,
                                   quiet = FALSE) {
   # validate arguments
-  validate_year(year, "fundeb")
+  validate_year(year, "fundeb_enrollment")
 
   # check for jsonlite
   if (!requireNamespace("jsonlite", quietly = TRUE)) {
@@ -512,15 +523,11 @@ tidy_fundeb_table <- function(df, year, source_name, dest_name, tabela) {
     upper_names <- upper_names[-total_idx]
   }
 
+  # normalize month names to ASCII before matching
+  upper_names <- strip_diacriticals(upper_names)
+
   # identify month columns
-  month_pattern <- "^(JANEIRO|FEVEREIRO|MAR[\\xC7C]O|ABRIL|MAIO|JUNHO|JULHO|AGOSTO|SETEMBRO|OUTUBRO|NOVEMBRO|DEZEMBRO)$"
-  month_idx <- which(grepl(month_pattern, upper_names, perl = TRUE))
-
-  # fallback: match by position if accent matching fails
-
-  if (length(month_idx) == 0) {
-    month_idx <- which(upper_names %in% names(fundeb_month_map))
-  }
+  month_idx <- which(upper_names %in% names(fundeb_month_map))
 
   if (length(month_idx) == 0) return(dplyr::tibble())
 
@@ -560,7 +567,7 @@ tidy_fundeb_table <- function(df, year, source_name, dest_name, tabela) {
   df_long$valor <- suppressWarnings(as.numeric(df_long$valor))
 
   # convert month names to dates (last day of each month)
-  month_num <- fundeb_month_map[toupper(trimws(df_long$mes_nome))]
+  month_num <- fundeb_month_map[strip_diacriticals(toupper(trimws(df_long$mes_nome)))]
   next_month <- ifelse(month_num == 12L, 1L, month_num + 1L)
   next_year <- ifelse(month_num == 12L, year + 1L, year)
   df_long$mes_ano <- as.Date(

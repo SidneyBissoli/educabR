@@ -5,7 +5,7 @@
 test_that("validate_year accepts valid ENADE years", {
   expect_silent(validate_year(2023, "enade"))
   expect_silent(validate_year(2004, "enade"))
-  expect_silent(validate_year(2024, "enade"))
+  expect_silent(validate_year(2023, "enade"))
 })
 
 test_that("validate_year rejects invalid ENADE years", {
@@ -22,7 +22,7 @@ test_that("validate_year rejects invalid ENADE years", {
 
 test_that("validate_year accepts ENADE boundary years", {
   expect_silent(validate_year(2004, "enade"))
-  expect_silent(validate_year(2024, "enade"))
+  expect_silent(validate_year(2023, "enade"))
 })
 
 test_that("available_years returns expected ENADE years", {
@@ -30,9 +30,9 @@ test_that("available_years returns expected ENADE years", {
 
   expect_true(2004 %in% years)
   expect_true(2023 %in% years)
-  expect_true(2024 %in% years)
+  expect_true(2023 %in% years)
   expect_false(2003 %in% years)
-  expect_equal(length(years), 21)
+  expect_equal(length(years), 19)
 })
 
 # --- build_inep_url ---
