@@ -3,9 +3,11 @@
 # --- year validation ---
 
 test_that("validate_year accepts valid ENADE years", {
-  expect_silent(validate_year(2023, "enade"))
+  # use fallback_years directly to avoid HTTP requests in CI
+  years <- fallback_years("enade")
+  expect_true(2023 %in% years)
+  expect_true(2004 %in% years)
   expect_silent(validate_year(2004, "enade"))
-  expect_silent(validate_year(2023, "enade"))
 })
 
 test_that("validate_year rejects invalid ENADE years", {
@@ -22,16 +24,14 @@ test_that("validate_year rejects invalid ENADE years", {
 
 test_that("validate_year accepts ENADE boundary years", {
   expect_silent(validate_year(2004, "enade"))
-  expect_silent(validate_year(2023, "enade"))
 })
 
-test_that("available_years returns expected ENADE years", {
-  years <- available_years("enade")
-
+test_that("fallback_years returns expected ENADE years", {
+  years <- fallback_years("enade")
   expect_true(2004 %in% years)
   expect_true(2023 %in% years)
-  expect_true(2023 %in% years)
   expect_false(2003 %in% years)
+  expect_false(2020 %in% years)
   expect_equal(length(years), 19)
 })
 

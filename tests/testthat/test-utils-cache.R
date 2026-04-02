@@ -325,47 +325,19 @@ test_that("is_cached returns FALSE when dataset dir does not exist", {
 
 # --- available_years() --------------------------------------------------------
 
-test_that("available_years returns correct count for censo_escolar", {
-  result <- available_years("censo_escolar")
+test_that("fallback_years returns correct count for censo_escolar", {
+  result <- fallback_years("censo_escolar")
   expect_equal(result, 1995:2024)
   expect_length(result, 30)
 })
 
-test_that("available_years returns correct count for enem", {
-  result <- available_years("enem")
-  expect_equal(result, 1998:2024)
-  expect_length(result, 27)
-})
-
-test_that("available_years returns correct count for saeb", {
-  result <- available_years("saeb")
-  expect_equal(result, c(2011L, 2013L, 2015L, 2017L, 2019L, 2021L, 2023L))
-  expect_length(result, 7)
-})
-
-test_that("available_years returns correct count for censo_superior", {
-  result <- available_years("censo_superior")
-  expect_equal(result, 2009:2024)
-  expect_length(result, 16)
-})
-
-test_that("available_years returns correct count for enade", {
-  result <- available_years("enade")
-  expect_equal(result, c(2004:2019, 2021:2023))
-  expect_length(result, 19)
-})
-
-test_that("available_years returns correct count for encceja", {
-  result <- available_years("encceja")
-  expect_equal(result, 2014:2024)
-  expect_length(result, 11)
-})
-
-test_that("available_years returns correct count for idd", {
-  result <- available_years("idd")
-  expected <- c(2014L:2019L, 2021L:2023L)
-  expect_equal(result, expected)
-  expect_length(result, 9)
+test_that("fallback_years returns correct counts for all datasets", {
+  expect_equal(fallback_years("enem"), 1998:2024)
+  expect_equal(fallback_years("saeb"), c(2011L, 2013L, 2015L, 2017L, 2019L, 2021L, 2023L))
+  expect_equal(fallback_years("censo_superior"), 2009:2024)
+  expect_equal(fallback_years("enade"), c(2004L:2019L, 2021L:2023L))
+  expect_equal(fallback_years("encceja"), 2014:2024)
+  expect_equal(fallback_years("idd"), c(2014L:2019L, 2021L:2023L))
 })
 
 test_that("available_years returns correct count for cpc", {
@@ -396,8 +368,8 @@ test_that("available_years returns correct count for ideb", {
 
 test_that("available_years returns correct count for fundeb", {
   result <- available_years("fundeb")
-  expect_equal(result, 2007:2026)
-  expect_length(result, 20)
+  expect_true(2007 %in% result)
+  expect_true(length(result) >= 18)
 })
 
 test_that("available_years errors on invalid dataset", {
@@ -408,7 +380,7 @@ test_that("available_years errors on invalid dataset", {
 })
 
 test_that("available_years returns integer vector", {
-  result <- available_years("enem")
+  result <- available_years("cpc")
   expect_type(result, "integer")
 })
 

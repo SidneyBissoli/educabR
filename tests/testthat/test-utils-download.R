@@ -219,63 +219,41 @@ test_that("validate_year returns year invisibly on success", {
 
 # --- available_years ---------------------------------------------------------
 
-test_that("available_years returns correct years for censo_escolar", {
-  yrs <- available_years("censo_escolar")
-  expect_true(1995 %in% yrs)
-  expect_true(2024 %in% yrs)
-  expect_equal(length(yrs), 30)
+test_that("fallback_years returns correct years for all datasets", {
+  expect_equal(fallback_years("censo_escolar"), 1995:2024)
+  expect_equal(fallback_years("enem"), 1998:2024)
+  expect_equal(fallback_years("saeb"), c(2011L, 2013L, 2015L, 2017L, 2019L, 2021L, 2023L))
+  expect_equal(fallback_years("censo_superior"), 2009:2024)
+  expect_equal(fallback_years("enade"), c(2004L:2019L, 2021L:2023L))
+  expect_equal(fallback_years("encceja"), 2014:2024)
+  expect_equal(fallback_years("idd"), c(2014L:2019L, 2021L:2023L))
+  expect_equal(fallback_years("cpc"), c(2007L:2019L, 2021L:2023L))
+  expect_equal(fallback_years("igc"), c(2007L:2019L, 2021L:2023L))
+  expect_equal(fallback_years("fundeb_enrollment"), 2017:2018)
+  expect_false(2020 %in% fallback_years("idd"))
+  expect_false(2020 %in% fallback_years("enade"))
 })
 
-test_that("available_years returns correct years for enem", {
-  yrs <- available_years("enem")
-  expect_true(1998 %in% yrs)
-  expect_true(2024 %in% yrs)
-  expect_equal(length(yrs), 27)
+test_that("available_years returns non-empty sorted integer vector", {
+  # available_years may use dynamic discovery or fallback depending on network
+  # so we only test general properties, not exact values
+  for (ds in c("censo_escolar", "enem", "saeb", "censo_superior", "enade",
+               "encceja", "idd", "cpc", "igc", "capes", "ideb", "fundeb")) {
+    yrs <- available_years(ds)
+    expect_true(length(yrs) > 0, info = paste("dataset:", ds))
+    expect_true(is.numeric(yrs), info = paste("dataset:", ds))
+    expect_equal(yrs, sort(yrs), info = paste("dataset:", ds))
+  }
 })
 
-test_that("available_years returns correct years for saeb (biennial + gaps)", {
-  yrs <- available_years("saeb")
-  expect_equal(yrs, c(2011L, 2013L, 2015L, 2017L, 2019L, 2021L, 2023L))
-  expect_false(2020 %in% yrs)
+test_that("available_years accepts fundeb_enrollment as dataset", {
+  yrs <- available_years("fundeb_enrollment")
+  expect_true(length(yrs) > 0)
+  expect_true(is.numeric(yrs))
 })
 
-test_that("available_years returns correct years for censo_superior", {
-  yrs <- available_years("censo_superior")
-  expect_true(2009 %in% yrs)
-  expect_true(2024 %in% yrs)
-})
-
-test_that("available_years returns correct years for enade", {
-  yrs <- available_years("enade")
-  expect_true(2004 %in% yrs)
-  expect_true(2023 %in% yrs)
-})
-
-test_that("available_years returns correct years for encceja", {
-  yrs <- available_years("encceja")
-  expect_true(2014 %in% yrs)
-  expect_true(2024 %in% yrs)
-})
-
-test_that("available_years returns correct years for idd (gap at 2020)", {
-  yrs <- available_years("idd")
-  expect_true(2014 %in% yrs)
-  expect_true(2023 %in% yrs)
-  expect_false(2020 %in% yrs)
-})
-
-test_that("available_years returns correct years for cpc (gap at 2020)", {
-  yrs <- available_years("cpc")
-  expect_true(2007 %in% yrs)
-  expect_true(2023 %in% yrs)
-  expect_false(2020 %in% yrs)
-})
-
-test_that("available_years returns correct years for igc", {
-  yrs <- available_years("igc")
-  expect_true(2007 %in% yrs)
-  expect_true(2023 %in% yrs)
-  expect_false(2020 %in% yrs)
+test_that("available_years rejects invalid dataset", {
+  expect_error(available_years("nonexistent"))
 })
 
 test_that("available_years returns correct years for capes", {
