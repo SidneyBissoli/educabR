@@ -1,5 +1,55 @@
 # Changelog
 
+## educabR 0.9.0
+
+### Breaking changes
+
+- [`available_years()`](https://sidneybissoli.github.io/educabR/reference/available_years.md)
+  now dynamically discovers available years by querying data sources
+  (HEAD requests for INEP, OData queries for FNDE). Results are cached
+  per session. Falls back to a hardcoded list when offline.
+- [`available_years()`](https://sidneybissoli.github.io/educabR/reference/available_years.md)
+  now accepts `"fundeb_enrollment"` as a separate dataset name.
+  Previously, `"fundeb"` was shared between distribution and enrollment.
+- Code columns (`CO_*`, `CD_*`) are now read as character instead of
+  numeric across all datasets. This prevents loss of leading zeros in
+  codes like municipality codes, course codes, and institution codes.
+
+### Bug fixes
+
+- Fixed
+  [`get_enade()`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)
+  failing for 9 of 19 available years. INEP uses inconsistent URLs for
+  ENADE: `_LGPD` suffix for 2012-2019, `.rar` format for 2022. Added
+  hardcoded URL map (`enade_urls`) with all 19 correct URLs.
+- Fixed
+  [`get_fundeb_enrollment()`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_enrollment.md)
+  accepting years with no data in the FNDE API. The API currently only
+  has data for 2017-2018.
+- Fixed encoding warning (“unable to translate MARCO”) on Windows caused
+  by Unicode cedilla in FUNDEB month name map.
+- Fixed
+  [`clear_cache()`](https://sidneybissoli.github.io/educabR/reference/clear_cache.md)
+  failing to delete files on Windows when they were memory-mapped by
+  readr. Now deletes entire directories and warns about locked files.
+- Fixed ZIP extraction fallback not triggering for ENADE 2017 (“Illegal
+  byte sequence” error was not matched by the encoding detection
+  pattern).
+
+### New features
+
+- Added `.rar` archive extraction support via 7-Zip. `find_7z()`
+  searches common Windows install paths when `7z` is not in PATH.
+- Added `strip_diacriticals()` internal helper for encoding-safe text
+  matching.
+- [`read_inep_file()`](https://sidneybissoli.github.io/educabR/reference/read_inep_file.md)
+  now auto-detects code columns (`CO_*`, `CD_*`) from the file header
+  and reads them as character. No user action required.
+- [`read_ideb_excel()`](https://sidneybissoli.github.io/educabR/reference/read_ideb_excel.md)
+  and
+  [`read_excel_safe()`](https://sidneybissoli.github.io/educabR/reference/read_excel_safe.md)
+  (CPC/IGC) now convert code columns to character after reading.
+
 ## educabR 0.8.0
 
 ### New features
@@ -12,8 +62,8 @@
   monthly transfer amounts by state, funding source, destination
   (states/municipalities), and table type (fundeb/adjustment).
 - [`get_fundeb_enrollment()`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_enrollment.md):
-  Download FUNDEB enrollment data (years 2007-2026). Fetches from FNDE
-  OData API with automatic pagination. Results cached as CSV.
+  Download FUNDEB enrollment data. Fetches from FNDE OData API with
+  automatic pagination. Results cached as CSV.
 - Filtering parameters for distribution: `uf`, `source` (FPE, FPM, ICMS,
   etc.), and `destination` (“uf” or “municipio”).
 - Data sources: Tesouro Transparente
@@ -101,7 +151,7 @@
 #### ENADE (Exame Nacional de Desempenho dos Estudantes)
 
 - [`get_enade()`](https://sidneybissoli.github.io/educabR/reference/get_enade.md):
-  Download ENADE microdata (years 2004-2024).
+  Download ENADE microdata.
 - Automatic delimiter detection and dash-to-NA cleaning.
 
 #### Censo da Educação Superior (Higher Education Census)

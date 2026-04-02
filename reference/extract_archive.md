@@ -1,9 +1,9 @@
-# Extract an archive file (ZIP or 7z)
+# Extract an archive file (ZIP, 7z, or RAR)
 
-Internal function to extract archive files. Supports ZIP and 7z formats.
-For ZIP files, delegates to
+Internal function to extract archive files. Supports ZIP, 7z, and RAR
+formats. For ZIP files, delegates to
 [`extract_zip()`](https://sidneybissoli.github.io/educabR/reference/extract_zip.md).
-For 7z files, uses the system `7z` command.
+For 7z and RAR files, uses the system `7z` command.
 
 ## Usage
 

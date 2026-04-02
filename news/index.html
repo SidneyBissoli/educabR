@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">educabR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,6 +33,34 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.9.0" id="educabr-090">educabR 0.9.0<a class="anchor" aria-label="anchor" href="#educabr-090"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-0-9-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-9-0"></a></h3>
+<ul><li>
+<code><a href="../reference/available_years.html">available_years()</a></code> now dynamically discovers available years by querying data sources (HEAD requests for INEP, OData queries for FNDE). Results are cached per session. Falls back to a hardcoded list when offline.</li>
+<li>
+<code><a href="../reference/available_years.html">available_years()</a></code> now accepts <code>"fundeb_enrollment"</code> as a separate dataset name. Previously, <code>"fundeb"</code> was shared between distribution and enrollment.</li>
+<li>Code columns (<code>CO_*</code>, <code>CD_*</code>) are now read as character instead of numeric across all datasets. This prevents loss of leading zeros in codes like municipality codes, course codes, and institution codes.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-9-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-0"></a></h3>
+<ul><li>Fixed <code><a href="../reference/get_enade.html">get_enade()</a></code> failing for 9 of 19 available years. INEP uses inconsistent URLs for ENADE: <code>_LGPD</code> suffix for 2012-2019, <code>.rar</code> format for 2022. Added hardcoded URL map (<code>enade_urls</code>) with all 19 correct URLs.</li>
+<li>Fixed <code><a href="../reference/get_fundeb_enrollment.html">get_fundeb_enrollment()</a></code> accepting years with no data in the FNDE API. The API currently only has data for 2017-2018.</li>
+<li>Fixed encoding warning (“unable to translate MARCO”) on Windows caused by Unicode cedilla in FUNDEB month name map.</li>
+<li>Fixed <code><a href="../reference/clear_cache.html">clear_cache()</a></code> failing to delete files on Windows when they were memory-mapped by readr. Now deletes entire directories and warns about locked files.</li>
+<li>Fixed ZIP extraction fallback not triggering for ENADE 2017 (“Illegal byte sequence” error was not matched by the encoding detection pattern).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-0-9-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-9-0"></a></h3>
+<ul><li>Added <code>.rar</code> archive extraction support via 7-Zip. <code>find_7z()</code> searches common Windows install paths when <code>7z</code> is not in PATH.</li>
+<li>Added <code>strip_diacriticals()</code> internal helper for encoding-safe text matching.</li>
+<li>
+<code><a href="../reference/read_inep_file.html">read_inep_file()</a></code> now auto-detects code columns (<code>CO_*</code>, <code>CD_*</code>) from the file header and reads them as character. No user action required.</li>
+<li>
+<code><a href="../reference/read_ideb_excel.html">read_ideb_excel()</a></code> and <code><a href="../reference/read_excel_safe.html">read_excel_safe()</a></code> (CPC/IGC) now convert code columns to character after reading.</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.8.0" id="educabr-080">educabR 0.8.0<a class="anchor" aria-label="anchor" href="#educabr-080"></a></h2>
 <div class="section level3">
 <h3 id="new-features-0-8-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-8-0"></a></h3>
@@ -41,7 +69,7 @@
 <ul><li>
 <code><a href="../reference/get_fundeb_distribution.html">get_fundeb_distribution()</a></code>: Download FUNDEB resource distribution data (years 2007-2026). Reads all sheets from STN Excel files and returns tidy long-format data with monthly transfer amounts by state, funding source, destination (states/municipalities), and table type (fundeb/adjustment).</li>
 <li>
-<code><a href="../reference/get_fundeb_enrollment.html">get_fundeb_enrollment()</a></code>: Download FUNDEB enrollment data (years 2007-2026). Fetches from FNDE OData API with automatic pagination. Results cached as CSV.</li>
+<code><a href="../reference/get_fundeb_enrollment.html">get_fundeb_enrollment()</a></code>: Download FUNDEB enrollment data. Fetches from FNDE OData API with automatic pagination. Results cached as CSV.</li>
 <li>Filtering parameters for distribution: <code>uf</code>, <code>source</code> (FPE, FPM, ICMS, etc.), and <code>destination</code> (“uf” or “municipio”).</li>
 <li>Data sources: Tesouro Transparente (<code>https://www.tesourotransparente.gov.br</code>) and FNDE (<code>https://www.fnde.gov.br</code>).</li>
 </ul></div>
@@ -127,7 +155,7 @@
 <div class="section level4">
 <h4 id="enade-exame-nacional-de-desempenho-dos-estudantes-0-3-0">ENADE (Exame Nacional de Desempenho dos Estudantes)<a class="anchor" aria-label="anchor" href="#enade-exame-nacional-de-desempenho-dos-estudantes-0-3-0"></a></h4>
 <ul><li>
-<code><a href="../reference/get_enade.html">get_enade()</a></code>: Download ENADE microdata (years 2004-2024).</li>
+<code><a href="../reference/get_enade.html">get_enade()</a></code>: Download ENADE microdata.</li>
 <li>Automatic delimiter detection and dash-to-NA cleaning.</li>
 </ul></div>
 <div class="section level4">
