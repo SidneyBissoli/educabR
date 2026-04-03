@@ -205,13 +205,11 @@ read_ideb_excel <- function(file) {
 
   # IDEB Excel files have 9 header rows before the actual column names
   # Row 10 contains the column names (SG_UF, CO_MUNICIPIO, etc.)
-  df <- readxl::read_excel(file, skip = 9)
+  # Read all columns as text first, then convert types explicitly.
+  # This preserves leading zeros in code columns (CO_*) and allows
 
-  # force code columns (CO_*) to character to preserve leading zeros
-  code_cols <- grep("^(CO_|CD_)", names(df), ignore.case = TRUE, value = TRUE)
-  for (col in code_cols) {
-    df[[col]] <- as.character(df[[col]])
-  }
+  # clean_ideb_values() to properly handle "-" and "ND" in vl_* columns.
+  df <- readxl::read_excel(file, skip = 9, col_types = "text")
 
   df
 }

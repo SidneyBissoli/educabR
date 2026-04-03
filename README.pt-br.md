@@ -10,10 +10,43 @@
 
 *[Read in English](README.md)*
 
-O **educabR** facilita o acesso a dados educacionais públicos brasileiros
-do INEP, FNDE, CAPES e STN. Com funções simples, você pode baixar e
-processar dados de 14 conjuntos de dados cobrindo educação básica,
-educação superior, pós-graduação e financiamento da educação.
+O **educabR** dá acesso direto aos principais dados educacionais
+públicos do Brasil — do censo escolar e exames nacionais a indicadores
+universitários e financiamento da educação — tudo de dentro do R. Sem
+downloads manuais, sem navegar portais do governo: basta escolher o
+dataset, o ano, e receber uma tabela limpa, pronta para análise.
+
+O pacote cobre 14 conjuntos de dados publicados pelo INEP, FNDE, CAPES
+e STN, abrangendo educação básica, educação superior, pós-graduação e
+financiamento via FUNDEB.
+
+## Exemplo rápido
+
+Baixar notas do IDEB por município e plotar os 10 melhores estados:
+
+```r
+library(educabR)
+library(dplyr)
+library(ggplot2)
+library(scales)
+
+ideb <- get_ideb(year = 2023, stage = "anos_iniciais", level = "municipio")
+
+ideb |>
+  summarise(ideb_medio = mean(vl_observado_2023, na.rm = TRUE), .by = sg_uf) |>
+  slice_max(ideb_medio, n = 10) |>
+  ggplot(aes(y = reorder(sg_uf, ideb_medio), x = ideb_medio)) +
+  geom_col(fill = "#2a9d8f", width = .8) +
+  labs(title = "Top 10 estados por IDEB 2023", x = NULL, y = "IDEB médio") +
+  geom_text(
+    aes(x = ideb_medio, label = number_format(accuracy = .01)(ideb_medio), y = sg_uf),
+    nudge_x = .2
+  ) +
+  theme(
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank()
+  )
+```
 
 ## Instalação
 
