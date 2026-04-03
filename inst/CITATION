@@ -6,5 +6,6 @@ bibentry(
                      comment = c(ORCID = "0009-0001-0442-3700")),
   year     = "2025",
   note     = "R package version 0.9.0",
-  url      = "https://github.com/SidneyBissoli/educabR"
+  url      = "https://github.com/SidneyBissoli/educabR",
+  doi      = "10.5281/zenodo.19410201"
 )

@@ -7,6 +7,7 @@ authors:
   - family-names: "Bissoli"
     given-names: "Sidney da Silva Pereira"
     orcid: "https://orcid.org/0009-0001-0442-3700"
+doi: "10.5281/zenodo.19410201"
 repository-code: "https://github.com/SidneyBissoli/educabR"
 url: "https://sidneybissoli.github.io/educabR/"
 license: MIT
