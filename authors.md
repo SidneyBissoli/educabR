@@ -8,16 +8,16 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/SidneyBissoli/educabR/blob/main/DESCRIPTION)
+[`inst/CITATION`](https://github.com/SidneyBissoli/educabR/blob/main/inst/CITATION)
 
-Bissoli S (2026). *educabR: Download and Process Brazilian Education
+Bissoli S (2025). *educabR: Download and Process Brazilian Education
 Data from INEP*. R package version 0.9.0,
 <https://github.com/SidneyBissoli/educabR>.
 
     @Manual{,
       title = {educabR: Download and Process Brazilian Education Data from INEP},
       author = {Sidney da Silva Pereira Bissoli},
-      year = {2026},
+      year = {2025},
       note = {R package version 0.9.0},
       url = {https://github.com/SidneyBissoli/educabR},
     }
