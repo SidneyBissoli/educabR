@@ -2,6 +2,8 @@
 
 ## educabR 0.9.0
 
+CRAN release: 2026-04-03
+
 ### Breaking changes
 
 - [`available_years()`](https://sidneybissoli.github.io/educabR/reference/available_years.md)

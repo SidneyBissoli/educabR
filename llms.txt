@@ -3,10 +3,43 @@
 *[Leia em
 Português](https://github.com/SidneyBissoli/educabR/blob/main/README.pt-br.md)*
 
-**educabR** provides easy access to Brazilian public education data from
-INEP, FNDE, CAPES, and STN. With simple functions, you can download and
-process data from 14 datasets covering basic education, higher
-education, graduate programs, and education funding.
+**educabR** gives you direct access to Brazil’s main public education
+datasets — from school census and national exams to university
+indicators and education funding — all from within R. No manual
+downloads, no navigating government portals: just pick a dataset, choose
+the year, and get a clean, analysis-ready table.
+
+The package covers 14 datasets published by INEP, FNDE, CAPES, and STN,
+spanning basic education, higher education, graduate programs, and
+FUNDEB funding.
+
+## Quick example
+
+Download IDEB scores by municipality and plot the top 10 states:
+
+``` r
+library(educabR)
+library(dplyr)
+library(ggplot2)
+library(scales)
+
+ideb <- get_ideb(year = 2023, stage = "anos_iniciais", level = "municipio")
+
+ideb |>
+  summarise(ideb_medio = mean(vl_observado_2023, na.rm = TRUE), .by = sg_uf) |>
+  slice_max(ideb_medio, n = 10) |>
+  ggplot(aes(y = reorder(sg_uf, ideb_medio), x = ideb_medio)) +
+  geom_col(fill = "#2a9d8f", width = .8) +
+  labs(title = "Top 10 states by IDEB 2023", x = NULL, y = "Average IDEB") +
+  geom_text(
+    aes(x = ideb_medio, label = number_format(accuracy = .01)(ideb_medio), y = sg_uf),
+    nudge_x = .2
+  ) +
+  theme(
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank()
+  )
+```
 
 ## Installation
 

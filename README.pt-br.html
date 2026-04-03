@@ -37,14 +37,41 @@
 <!-- badges: start -->
 <p><a href="https://CRAN.R-project.org/package=educabR" class="external-link"><img src="https://www.r-pkg.org/badges/version/educabR" alt="CRAN status"></a> <a href="https://CRAN.R-project.org/package=educabR" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/educabR" alt="CRAN downloads"></a> <a href="https://github.com/SidneyBissoli/educabR/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/SidneyBissoli/educabR/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a> <a href="https://app.codecov.io/gh/SidneyBissoli/educabR" class="external-link"><img src="https://codecov.io/gh/SidneyBissoli/educabR/branch/main/graph/badge.svg" alt="codecov"></a> <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a> <!-- badges: end --></p>
 <p><em><a href="README.html">Read in English</a></em></p>
-<p>O <strong>educabR</strong> facilita o acesso a dados educacionais públicos brasileiros do INEP, FNDE, CAPES e STN. Com funções simples, você pode baixar e processar dados de 14 conjuntos de dados cobrindo educação básica, educação superior, pós-graduação e financiamento da educação.</p>
+<p>O <strong>educabR</strong> dá acesso direto aos principais dados educacionais públicos do Brasil — do censo escolar e exames nacionais a indicadores universitários e financiamento da educação — tudo de dentro do R. Sem downloads manuais, sem navegar portais do governo: basta escolher o dataset, o ano, e receber uma tabela limpa, pronta para análise.</p>
+<p>O pacote cobre 14 conjuntos de dados publicados pelo INEP, FNDE, CAPES e STN, abrangendo educação básica, educação superior, pós-graduação e financiamento via FUNDEB.</p>
+<div class="section level2">
+<h2 id="exemplo-rápido">Exemplo rápido<a class="anchor" aria-label="anchor" href="#exemplo-r%C3%A1pido"></a></h2>
+<p>Baixar notas do IDEB por município e plotar os 10 melhores estados:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/SidneyBissoli/educabR" class="external-link">educabR</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://scales.r-lib.org" class="external-link">scales</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ideb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_ideb.html">get_ideb</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2023</span>, stage <span class="op">=</span> <span class="st">"anos_iniciais"</span>, level <span class="op">=</span> <span class="st">"municipio"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ideb</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>ideb_medio <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">vl_observado_2023</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, .by <span class="op">=</span> <span class="va">sg_uf</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_max</a></span><span class="op">(</span><span class="va">ideb_medio</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html" class="external-link">reorder</a></span><span class="op">(</span><span class="va">sg_uf</span>, <span class="va">ideb_medio</span><span class="op">)</span>, x <span class="op">=</span> <span class="va">ideb_medio</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#2a9d8f"</span>, width <span class="op">=</span> <span class="fl">.8</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Top 10 estados por IDEB 2023"</span>, x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="st">"IDEB médio"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">ideb_medio</span>, label <span class="op">=</span> <span class="fu"><a href="https://scales.r-lib.org/reference/comma.html" class="external-link">number_format</a></span><span class="op">(</span>accuracy <span class="op">=</span> <span class="fl">.01</span><span class="op">)</span><span class="op">(</span><span class="va">ideb_medio</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">sg_uf</span><span class="op">)</span>,</span>
+<span>    nudge_x <span class="op">=</span> <span class="fl">.2</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
+<span>    axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    axis.ticks.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
 <div class="section level2">
 <h2 id="instalação">Instalação<a class="anchor" aria-label="anchor" href="#instala%C3%A7%C3%A3o"></a></h2>
 <p>Instale do CRAN:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"educabR"</span><span class="op">)</span></span></code></pre></div>
 <p>Ou instale a versão de desenvolvimento do GitHub:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"SidneyBissoli/educabR"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -125,7 +152,7 @@
 <h2 id="exemplos">Exemplos<a class="anchor" aria-label="anchor" href="#exemplos"></a></h2>
 <div class="section level3">
 <h3 id="ideb">IDEB<a class="anchor" aria-label="anchor" href="#ideb"></a></h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/SidneyBissoli/educabR" class="external-link">educabR</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Baixar IDEB 2021 - Anos Iniciais - Escolas</span></span>
@@ -144,7 +171,7 @@
 </div>
 <div class="section level3">
 <h3 id="enem">ENEM<a class="anchor" aria-label="anchor" href="#enem"></a></h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Baixar amostra para exploração</span></span>
 <span><span class="va">enem</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_enem.html">get_enem</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2023</span>, n_max <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
 <span></span>
@@ -156,13 +183,13 @@
 </div>
 <div class="section level3">
 <h3 id="censo-escolar">Censo Escolar<a class="anchor" aria-label="anchor" href="#censo-escolar"></a></h3>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Baixar Censo Escolar 2023 - filtrar por estado</span></span>
 <span><span class="va">censo_sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_censo_escolar.html">get_censo_escolar</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2023</span>, uf <span class="op">=</span> <span class="st">"SP"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="educação-superior-1">Educação Superior<a class="anchor" aria-label="anchor" href="#educa%C3%A7%C3%A3o-superior-1"></a></h3>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Censo da Educação Superior - instituições</span></span>
 <span><span class="va">ies</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_censo_superior.html">get_censo_superior</a></span><span class="op">(</span><span class="fl">2023</span>, type <span class="op">=</span> <span class="st">"ies"</span><span class="op">)</span></span>
 <span></span>
@@ -174,7 +201,7 @@
 </div>
 <div class="section level3">
 <h3 id="fundeb">FUNDEB<a class="anchor" aria-label="anchor" href="#fundeb"></a></h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Distribuição de recursos por estado</span></span>
 <span><span class="va">dist</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_fundeb_distribution.html">get_fundeb_distribution</a></span><span class="op">(</span><span class="fl">2023</span>, uf <span class="op">=</span> <span class="st">"SP"</span><span class="op">)</span></span>
 <span></span>
@@ -185,7 +212,7 @@
 <div class="section level2">
 <h2 id="cache">Cache<a class="anchor" aria-label="anchor" href="#cache"></a></h2>
 <p>O pacote usa cache local para evitar downloads repetidos:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Definir diretório de cache permanente</span></span>
 <span><span class="fu"><a href="reference/set_cache_dir.html">set_cache_dir</a></span><span class="op">(</span><span class="st">"~/educabR_data"</span><span class="op">)</span></span>
 <span></span>
