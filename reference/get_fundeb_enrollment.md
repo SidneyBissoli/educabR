@@ -106,7 +106,7 @@ education type, school network, class type, and location.
 
 ## Data source
 
-<https://www.fnde.gov.br>
+FNDE: `https://www.fnde.gov.br`
 
 ## See also
 

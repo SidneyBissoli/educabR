@@ -416,7 +416,7 @@ documentation:
 - **ENADE**:
   <https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/enade>
 - **CAPES**: <https://dadosabertos.capes.gov.br>
-- **FUNDEB/FNDE**: <https://www.fnde.gov.br>
+- **FUNDEB/FNDE**: `https://www.fnde.gov.br`
 
 ## Known issues
 

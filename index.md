@@ -1,7 +1,7 @@
 # educabR
 
 *[Leia em
-Português](https://sidneybissoli.github.io/educabR/README.pt-br.md)*
+Português](https://github.com/SidneyBissoli/educabR/blob/main/README.pt-br.md)*
 
 **educabR** provides easy access to Brazilian public education data from
 INEP, FNDE, CAPES, and STN. With simple functions, you can download and
