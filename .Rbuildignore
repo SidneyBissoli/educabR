@@ -21,3 +21,4 @@
 ^vignettes/.*\.knit\.md$
 ^coverage_report\.html$
 ^lib$
+^CITATION\.cff$
