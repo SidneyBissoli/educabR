@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/SidneyBissoli/educabR/blob/main/inst/CITATION)
+[`inst/CITATION`](https://github.com/SidneyBissoli/educabR/blob/v0.9.0/inst/CITATION)
 
 Bissoli S (2025). *educabR: Download and Process Brazilian Education
 Data from INEP*. R package version 0.9.0,
