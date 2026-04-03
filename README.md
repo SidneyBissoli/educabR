@@ -8,7 +8,7 @@
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
 
-*[Leia em Português](README.pt-br.md)*
+*[Leia em Português](https://github.com/SidneyBissoli/educabR/blob/main/README.pt-br.md)*
 
 **educabR** provides easy access to Brazilian public education data from
 INEP, FNDE, CAPES, and STN. With simple functions, you can download and

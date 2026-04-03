@@ -62,7 +62,7 @@ education type, school network, class type, and location.
 }
 \section{Data source}{
 
-\url{https://www.fnde.gov.br}
+FNDE: \code{https://www.fnde.gov.br}
 }
 
 \examples{
