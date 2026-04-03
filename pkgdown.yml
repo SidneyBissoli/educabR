@@ -3,10 +3,14 @@ pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   basic-education-assessments: basic-education-assessments.html
+  cpc-public-vs-private: cpc-public-vs-private.html
   education-funding: education-funding.html
+  enem-performance-by-state: enem-performance-by-state.html
+  enrollment-by-race: enrollment-by-race.html
   getting-started: getting-started.html
   higher-education: higher-education.html
-last_built: 2026-04-03T19:36Z
+  ideb-improvement-by-municipality: ideb-improvement-by-municipality.html
+last_built: 2026-04-03T21:21Z
 urls:
   reference: https://sidneybissoli.github.io/educabR/reference
   article: https://sidneybissoli.github.io/educabR/articles
