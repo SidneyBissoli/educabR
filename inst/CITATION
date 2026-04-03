@@ -1,0 +1,10 @@
+bibentry(
+  bibtype  = "Manual",
+  title    = "educabR: Download and Process Brazilian Education Data from INEP",
+  author   = person("Sidney da Silva Pereira", "Bissoli",
+                     email = "sbissoli76@gmail.com",
+                     comment = c(ORCID = "0009-0001-0442-3700")),
+  year     = "2025",
+  note     = "R package version 0.9.0",
+  url      = "https://github.com/SidneyBissoli/educabR"
+)
