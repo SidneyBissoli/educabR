@@ -1,0 +1,135 @@
+---
+title: "What is the enrollment distribution by race in the School Census?"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{What is the enrollment distribution by race in the School Census?}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment  = "#>",
+  eval     = FALSE
+)
+```
+
+This vignette shows how to use educabR to explore the racial composition
+of school enrollment using the School Census (Censo Escolar) microdata.
+
+```{r setup}
+library(educabR)
+library(dplyr)
+library(ggplot2)
+```
+
+## Downloading School Census data
+
+The School Census contains multiple file types. The enrollment data
+(matriculas) is the one with student-level information including race.
+
+```{r download}
+# List available files to find the enrollment file
+list_censo_files(2023)
+
+# Download enrollment data - filter by state to keep manageable
+# Full national data is very large (50+ million rows)
+censo_sp <- get_censo_escolar(year = 2023, uf = "SP", n_max = 100000)
+```
+
+## Race/ethnicity distribution
+
+The School Census uses the `tp_cor_raca` variable with the following
+coding from IBGE:
+
+| Code | Category |
+|------|----------|
+| 0 | Not declared |
+| 1 | White (Branca) |
+| 2 | Black (Preta) |
+| 3 | Mixed race (Parda) |
+| 4 | Asian (Amarela) |
+| 5 | Indigenous (Indigena) |
+
+```{r race-distribution}
+race_labels <- c(
+  "0" = "Not declared",
+  "1" = "White",
+  "2" = "Black",
+  "3" = "Mixed race",
+  "4" = "Asian",
+  "5" = "Indigenous"
+)
+
+censo_sp |>
+  filter(!is.na(tp_cor_raca)) |>
+  mutate(race = race_labels[as.character(tp_cor_raca)]) |>
+  count(race, sort = TRUE) |>
+  mutate(pct = n / sum(n) * 100) |>
+  ggplot(aes(x = reorder(race, pct), y = pct)) +
+  geom_col(fill = "steelblue") +
+  coord_flip() +
+  labs(
+    title = "Student Enrollment by Race - Sao Paulo (2023)",
+    x     = NULL,
+    y     = "Percentage (%)"
+  ) +
+  theme_minimal()
+```
+
+## Race distribution by school type
+
+```{r by-school-type}
+censo_sp |>
+  filter(!is.na(tp_cor_raca), tp_cor_raca != 0) |>
+  mutate(
+    race = race_labels[as.character(tp_cor_raca)],
+    school_type = case_when(
+      tp_dependencia == 1 ~ "Federal",
+      tp_dependencia == 2 ~ "State",
+      tp_dependencia == 3 ~ "Municipal",
+      tp_dependencia == 4 ~ "Private"
+    )
+  ) |>
+  count(school_type, race) |>
+  mutate(pct = n / sum(n) * 100, .by = school_type) |>
+  ggplot(aes(x = school_type, y = pct, fill = race)) +
+  geom_col(position = "dodge") +
+  labs(
+    title = "Racial Composition by School Type - SP (2023)",
+    x     = NULL,
+    y     = "Percentage (%)",
+    fill  = "Race"
+  ) +
+  theme_minimal()
+```
+
+## Comparing states
+
+```{r compare-states}
+# Download samples from different states
+states <- c("SP", "BA", "RS")
+
+censo_list <- lapply(states, function(uf) {
+  get_censo_escolar(year = 2023, uf = uf, n_max = 50000)
+})
+
+censo_multi <- bind_rows(censo_list)
+
+censo_multi |>
+  filter(!is.na(tp_cor_raca), tp_cor_raca != 0) |>
+  mutate(race = race_labels[as.character(tp_cor_raca)]) |>
+  count(sg_uf, race) |>
+  mutate(pct = n / sum(n) * 100, .by = sg_uf) |>
+  ggplot(aes(x = race, y = pct, fill = sg_uf)) +
+  geom_col(position = "dodge") +
+  labs(
+    title = "Racial Composition of Enrollment by State (2023)",
+    x     = NULL,
+    y     = "Percentage (%)",
+    fill  = "State"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+```

@@ -12,7 +12,15 @@ articles:
   - title: "Getting Started"
     contents:
       - getting-started
-  - title: "Datasets"
+  - title: "Research Questions"
+    desc: "Step-by-step analyses answering common research questions"
+    contents:
+      - enem-performance-by-state
+      - enrollment-by-race
+      - cpc-public-vs-private
+      - ideb-improvement-by-municipality
+  - title: "Dataset Reference"
+    desc: "Detailed guides for each dataset group"
     contents:
       - basic-education-assessments
       - higher-education
