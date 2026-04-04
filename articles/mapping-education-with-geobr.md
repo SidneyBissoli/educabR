@@ -1,0 +1,114 @@
+# Mapping education indicators with geobr
+
+This vignette shows how to combine educabR with
+[geobr](https://ipeagit.github.io/geobr/) to create choropleth maps of
+education indicators across Brazilian municipalities and states.
+
+``` r
+library(educabR)
+library(geobr)
+library(dplyr)
+library(ggplot2)
+```
+
+## IDEB by state
+
+The simplest map uses state-level data. We download IDEB scores and join
+them with state geometries from geobr.
+
+``` r
+ideb_uf <- get_ideb(year = 2023, stage = "anos_iniciais", level = "estado")
+
+states <- read_state(year = 2020, showProgress = FALSE)
+
+states |>
+  left_join(ideb_uf, by = c("abbrev_state" = "uf_sigla")) |>
+  ggplot() +
+  geom_sf(aes(fill = valor), color = "white", size = .2) +
+  scale_fill_distiller(palette = "YlGn", direction = 1, name = "IDEB") +
+  labs(title = "IDEB 2023 — Early elementary by state") +
+  theme_void()
+```
+
+## IDEB by municipality
+
+Municipality-level maps reveal within-state inequality that state
+averages hide. The `municipio_codigo` column in educabR uses the 7-digit
+IBGE code, which matches `code_muni` in geobr.
+
+``` r
+ideb_muni <- get_ideb(
+  year  = 2023,
+  stage = "anos_iniciais",
+  level = "municipio"
+)
+
+# Keep only public schools and the observed IDEB indicator
+ideb_muni <- ideb_muni |>
+  filter(rede == "Publica", indicador == "observado")
+
+municipalities <- read_municipality(year = 2020, showProgress = FALSE)
+```
+
+``` r
+municipalities |>
+  left_join(ideb_muni, by = c("code_muni" = "municipio_codigo")) |>
+  ggplot() +
+  geom_sf(aes(fill = valor), color = NA) +
+  scale_fill_distiller(palette = "YlGn", direction = 1, name = "IDEB") +
+  labs(title = "IDEB 2023 — Early elementary by municipality (public schools)") +
+  theme_void()
+```
+
+## Zooming into a single state
+
+For a closer look, filter both datasets to a single state. Here we map
+IDEB across municipalities in Minas Gerais.
+
+``` r
+ideb_mg <- ideb_muni |>
+  filter(uf_sigla == "MG")
+
+munis_mg <- read_municipality(code_muni = "MG", year = 2020, showProgress = FALSE)
+
+munis_mg |>
+  left_join(ideb_mg, by = c("code_muni" = "municipio_codigo")) |>
+  ggplot() +
+  geom_sf(aes(fill = valor), color = "grey90", size = .1) +
+  scale_fill_distiller(palette = "YlGn", direction = 1, name = "IDEB") +
+  labs(title = "IDEB 2023 — Early elementary in Minas Gerais") +
+  theme_void()
+```
+
+## Comparing IDEB editions over time
+
+Side-by-side maps make it easy to visualize regional progress. We
+download two editions and use facets.
+
+``` r
+ideb_time <- get_ideb(
+  year  = c(2017, 2023),
+  stage = "anos_iniciais",
+  level = "estado"
+)
+
+states |>
+  left_join(ideb_time, by = c("abbrev_state" = "uf_sigla")) |>
+  ggplot() +
+  geom_sf(aes(fill = valor), color = "white", size = .2) +
+  scale_fill_distiller(palette = "YlGn", direction = 1, name = "IDEB") +
+  facet_wrap(~ano) +
+  labs(title = "IDEB evolution — Early elementary (2017 vs 2023)") +
+  theme_void()
+```
+
+## Next steps
+
+- Swap `"anos_iniciais"` for `"anos_finais"` or `"ensino_medio"` to map
+  other stages.
+- Use `metric = "nota"` to map SAEB proficiency scores instead of the
+  composite IDEB.
+- Combine with other educabR datasets (ENEM, School Census) using the
+  same municipality codes.
+- See the [geobr documentation](https://ipeagit.github.io/geobr/) for
+  additional geographic layers (regions, micro/mesoregions, etc.).

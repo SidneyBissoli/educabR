@@ -177,6 +177,8 @@ clear_cache()
   education](https://sidneybissoli.github.io/educabR/articles/higher-education.html)
 - [Education
   funding](https://sidneybissoli.github.io/educabR/articles/education-funding.html)
+- [Mapping education indicators with
+  geobr](https://sidneybissoli.github.io/educabR/articles/mapping-education-with-geobr.html)
 
 ## License
 

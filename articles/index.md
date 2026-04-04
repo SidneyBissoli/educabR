@@ -17,6 +17,8 @@ Step-by-step analyses answering common research questions
   institutions?](https://sidneybissoli.github.io/educabR/articles/cpc-public-vs-private.md):
 - [Which municipalities improved the most in
   IDEB?](https://sidneybissoli.github.io/educabR/articles/ideb-improvement-by-municipality.md):
+- [Mapping education indicators with
+  geobr](https://sidneybissoli.github.io/educabR/articles/mapping-education-with-geobr.md):
 
 ### Dataset Reference
 
