@@ -22,13 +22,13 @@ data from 14 datasets:
 **Basic Education:**  
 - **IDEB** - Basic Education Development Index  
 - **ENEM** - National High School Exam  
-- **School Census**
+- **School Census**  
 - **SAEB** - Basic Education Assessment System  
 - **ENCCEJA** - Youth and Adult Education Certification Exam  
 - **ENEM by School** - ENEM results aggregated by school (2005-2015)  
 
 **Higher Education:**  
-- **Higher Education Census**
+- **Higher Education Census**  
 - **ENADE** - National Student Performance Exam  
 - **IDD** - Value-Added Indicator  
 - **CPC** - Preliminary Course Concept  
@@ -56,6 +56,7 @@ remotes::install_github("SidneyBissoli/educabR")
 library(educabR)
 library(dplyr)
 library(ggplot2)
+library(kableExtra)
 ```
 
 ## Configuring Cache
@@ -87,14 +88,18 @@ combining test performance (SAEB) with grade promotion rates.
 ```{r ideb-available}
 # See available combinations
 list_ideb_available()
-#> # A tibble: 24 x 3
-#>     year level     stage
-#>    <int> <chr>     <chr>
-#>  1  2017 escola    anos_iniciais
-#>  2  2017 escola    anos_finais
-#>  3  2017 escola    ensino_medio
-#>  4  2017 municipio anos_iniciais
-#>  ...
+```
+
+```{r ideb-available-table, echo = FALSE, eval = TRUE}
+list_ideb_available() |>
+  kbl(
+    col.names = c("Level", "Stage", "Metric"),
+    align = "lll"
+  ) |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = FALSE
+  )
 ```
 
 ### Downloading IDEB data
@@ -362,10 +367,25 @@ infra <-
   )
 
 print(infra)
-#> # A tibble: 1 x 5
-#>   pct_internet pct_library pct_computer_lab pct_sports_court pct_accessibility
-#>          <dbl>       <dbl>            <dbl>            <dbl>             <dbl>
-#> 1         78.3        42.1             35.2             48.7              32.1
+```
+
+```{r censo-infra-table, echo = FALSE, eval = TRUE}
+data.frame(
+  Internet     = 78.3,
+  Library      = 42.1,
+  Computer_Lab = 35.2,
+  Sports_Court = 48.7,
+  Accessibility = 32.1
+) |>
+  kbl(
+    col.names = c("Internet", "Library", "Computer Lab", "Sports Court", "Accessibility"),
+    align = "ccccc",
+    caption = "Infrastructure availability in public schools (%)"
+  ) |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = FALSE
+  )
 ```
 
 ## Best practices

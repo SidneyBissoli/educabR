@@ -44,6 +44,7 @@ Imports:
 Suggests:
     ggplot2,
     jsonlite,
+    kableExtra,
     knitr,
     readxl,
     rmarkdown,
