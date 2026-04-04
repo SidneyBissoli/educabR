@@ -7,14 +7,13 @@ can download and process data from 14 datasets:
 **Basic Education:**  
 - **IDEB** - Basic Education Development Index  
 - **ENEM** - National High School Exam  
-- **School Census** (Censo Escolar)  
-- **SAEB** - Basic Education Assessment System  
+- **School Census** - **SAEB** - Basic Education Assessment System  
 - **ENCCEJA** - Youth and Adult Education Certification Exam  
 - **ENEM by School** - ENEM results aggregated by school (2005-2015)
 
 **Higher Education:**  
-- **Higher Education Census** (Censo da Educação Superior)  
-- **ENADE** - National Student Performance Exam  
+- **Higher Education Census** - **ENADE** - National Student Performance
+Exam  
 - **IDD** - Value-Added Indicator  
 - **CPC** - Preliminary Course Concept  
 - **IGC** - General Courses Index
