@@ -73,7 +73,7 @@ states.</p>
 <p>The simplest map uses state-level data. We download IDEB scores and
 join them with state geometries from geobr.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ideb_uf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_ideb.html">get_ideb</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2023</span>, stage <span class="op">=</span> <span class="st">"anos_iniciais"</span>, level <span class="op">=</span> <span class="st">"estado"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">ideb_uf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_ideb.html">get_ideb</a></span><span class="op">(</span>level <span class="op">=</span> <span class="st">"estado"</span>, stage <span class="op">=</span> <span class="st">"anos_iniciais"</span>, metric <span class="op">=</span> <span class="st">"indicador"</span>, year <span class="op">=</span> <span class="fl">2023</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">states</span> <span class="op">&lt;-</span> <span class="fu">read_state</span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2020</span>, showProgress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
@@ -94,9 +94,10 @@ the 7-digit IBGE code, which matches <code>code_muni</code> in
 geobr.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ideb_muni</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_ideb.html">get_ideb</a></span><span class="op">(</span></span>
-<span>  year  <span class="op">=</span> <span class="fl">2023</span>,</span>
-<span>  stage <span class="op">=</span> <span class="st">"anos_iniciais"</span>,</span>
-<span>  level <span class="op">=</span> <span class="st">"municipio"</span></span>
+<span>  level  <span class="op">=</span> <span class="st">"municipio"</span>,</span>
+<span>  stage  <span class="op">=</span> <span class="st">"anos_iniciais"</span>,</span>
+<span>  metric <span class="op">=</span> <span class="st">"indicador"</span>,</span>
+<span>  year   <span class="op">=</span> <span class="fl">2023</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Keep only public schools and the observed IDEB indicator</span></span>
@@ -139,9 +140,10 @@ map IDEB across municipalities in Minas Gerais.</p>
 download two editions and use facets.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ideb_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_ideb.html">get_ideb</a></span><span class="op">(</span></span>
-<span>  year  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2017</span>, <span class="fl">2023</span><span class="op">)</span>,</span>
-<span>  stage <span class="op">=</span> <span class="st">"anos_iniciais"</span>,</span>
-<span>  level <span class="op">=</span> <span class="st">"estado"</span></span>
+<span>  level  <span class="op">=</span> <span class="st">"estado"</span>,</span>
+<span>  stage  <span class="op">=</span> <span class="st">"anos_iniciais"</span>,</span>
+<span>  metric <span class="op">=</span> <span class="st">"indicador"</span>,</span>
+<span>  year   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2017</span>, <span class="fl">2023</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">states</span> <span class="op">|&gt;</span></span>

@@ -17,7 +17,7 @@ The simplest map uses state-level data. We download IDEB scores and join
 them with state geometries from geobr.
 
 ``` r
-ideb_uf <- get_ideb(year = 2023, stage = "anos_iniciais", level = "estado")
+ideb_uf <- get_ideb(level = "estado", stage = "anos_iniciais", metric = "indicador", year = 2023)
 
 states <- read_state(year = 2020, showProgress = FALSE)
 
@@ -38,9 +38,10 @@ IBGE code, which matches `code_muni` in geobr.
 
 ``` r
 ideb_muni <- get_ideb(
-  year  = 2023,
-  stage = "anos_iniciais",
-  level = "municipio"
+  level  = "municipio",
+  stage  = "anos_iniciais",
+  metric = "indicador",
+  year   = 2023
 )
 
 # Keep only public schools and the observed IDEB indicator
@@ -87,9 +88,10 @@ download two editions and use facets.
 
 ``` r
 ideb_time <- get_ideb(
-  year  = c(2017, 2023),
-  stage = "anos_iniciais",
-  level = "estado"
+  level  = "estado",
+  stage  = "anos_iniciais",
+  metric = "indicador",
+  year   = c(2017, 2023)
 )
 
 states |>
