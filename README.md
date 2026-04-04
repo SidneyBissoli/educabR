@@ -30,7 +30,7 @@ library(geobr)
 library(dplyr)
 library(ggplot2)
 
-ideb <- get_ideb(year = 2023, stage = "anos_iniciais", level = "estado")
+ideb <- get_ideb(level = "estado", stage = "anos_iniciais", metric = "indicador", year = 2023)
 states <- read_state(year = 2020, showProgress = FALSE)
 
 states |>
