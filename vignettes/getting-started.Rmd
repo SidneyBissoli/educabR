@@ -112,7 +112,7 @@ ideb_schools <- get_ideb(
   stage = "anos_iniciais"
 )
 
-# IDEB by municipality - High school
+# IDEB by municipality - High school (1st-4th grade)
 ideb_municipalities <- get_ideb(
   year  = 2023,
   level = "municipio",
