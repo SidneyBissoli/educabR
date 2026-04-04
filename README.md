@@ -22,30 +22,24 @@ FUNDEB funding.
 
 ## Quick example
 
-Download IDEB scores by municipality and plot the top 10 states:
+Map IDEB scores across Brazilian states with just a few lines:
 
 ```r
 library(educabR)
+library(geobr)
 library(dplyr)
 library(ggplot2)
-library(scales)
 
-ideb <- get_ideb(year = 2023, stage = "anos_iniciais", level = "municipio")
+ideb <- get_ideb(year = 2023, stage = "anos_iniciais", level = "estado")
+states <- read_state(year = 2020, showProgress = FALSE)
 
-ideb |>
-  summarise(ideb_medio = mean(vl_observado_2023, na.rm = TRUE), .by = sg_uf) |>
-  slice_max(ideb_medio, n = 10) |>
-  ggplot(aes(y = reorder(sg_uf, ideb_medio), x = ideb_medio)) +
-  geom_col(fill = "#2a9d8f", width = .8) +
-  labs(title = "Top 10 states by IDEB 2023", x = NULL, y = "Average IDEB") +
-  geom_text(
-    aes(x = ideb_medio, label = number_format(accuracy = .01)(ideb_medio), y = sg_uf),
-    nudge_x = .2
-  ) +
-  theme(
-    axis.text.x = element_blank(),
-    axis.ticks.x = element_blank()
-  )
+states |>
+  left_join(ideb, by = c("abbrev_state" = "uf_sigla")) |>
+  ggplot() +
+  geom_sf(aes(fill = valor), color = "white", size = .2) +
+  scale_fill_distiller(palette = "YlGn", direction = 1, name = "IDEB") +
+  labs(title = "IDEB 2023 — Early elementary by state") +
+  theme_void()
 ```
 
 ## Installation
