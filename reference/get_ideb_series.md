@@ -1,7 +1,11 @@
 # Get IDEB historical series
 
-Downloads and combines IDEB data across multiple years to create a
-historical series.
+**\[deprecated\]**
+
+`get_ideb_series()` is deprecated because the new
+[`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)
+already returns data in long format with all historical editions. Use
+`get_ideb(level, stage, metric)` instead.
 
 ## Usage
 
@@ -39,7 +43,7 @@ get_ideb_series(
 
 ## Value
 
-A tibble with IDEB data for all requested years.
+A tibble with IDEB data.
 
 ## See also
 
@@ -51,11 +55,7 @@ Other IDEB functions:
 
 ``` r
 if (FALSE) { # \dontrun{
-# get IDEB history for municipalities
-ideb_hist <- get_ideb_series(
-  years = c(2017, 2019, 2021),
-  level = "municipio",
-  stage = "anos_iniciais"
-)
+# deprecated: use get_ideb() instead
+ideb <- get_ideb("municipio", "anos_iniciais", "indicador")
 } # }
 ```

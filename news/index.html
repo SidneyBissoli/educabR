@@ -33,6 +33,25 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.0" id="educabr-100">educabR 1.0.0<a class="anchor" aria-label="anchor" href="#educabr-100"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-1-0-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-0-0"></a></h3>
+<ul><li>
+<strong><code><a href="../reference/get_ideb.html">get_ideb()</a></code> has a new signature</strong>: <code>get_ideb(level, stage, metric, year, quiet)</code>. The old positional usage <code>get_ideb(year, level, stage)</code> still works with a deprecation warning, but the <code>year</code> parameter now filters IDEB editions instead of selecting which file to download.</li>
+<li>
+<code><a href="../reference/get_ideb.html">get_ideb()</a></code> now returns data in tidy long format instead of wide format. Output columns depend on the <code>metric</code> parameter (<code>"indicador"</code>, <code>"aprovacao"</code>, <code>"nota"</code>, <code>"meta"</code>).</li>
+<li>
+<code><a href="../reference/get_ideb.html">get_ideb()</a></code> now supports 5 geographic levels: <code>"escola"</code>, <code>"municipio"</code>, <code>"estado"</code>, <code>"regiao"</code>, and <code>"brasil"</code> (previously only escola and municipio).</li>
+<li>
+<code><a href="../reference/get_ideb.html">get_ideb()</a></code> always downloads the most recent IDEB file available, which contains the full historical series. The <code>year</code> parameter filters editions.</li>
+<li>
+<code><a href="../reference/get_ideb_series.html">get_ideb_series()</a></code> is deprecated. Use <code>get_ideb(level, stage, metric)</code> instead.</li>
+<li>
+<code><a href="../reference/list_ideb_available.html">list_ideb_available()</a></code> now returns <code>level</code>, <code>stage</code>, and <code>metric</code> columns (previously returned <code>year</code>, <code>level</code>, <code>stage</code>).</li>
+<li>The <code>uf</code> parameter has been removed from <code><a href="../reference/get_ideb.html">get_ideb()</a></code>. Filter the result with <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">dplyr::filter()</a></code> instead.</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.9.0" id="educabr-090">educabR 0.9.0<a class="anchor" aria-label="anchor" href="#educabr-090"></a></h2><p class="text-muted">CRAN release: 2026-04-03</p>
 <div class="section level3">
 <h3 id="breaking-changes-0-9-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-9-0"></a></h3>

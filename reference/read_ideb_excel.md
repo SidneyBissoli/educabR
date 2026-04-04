@@ -5,7 +5,7 @@ Internal function to read IDEB Excel files.
 ## Usage
 
 ``` r
-read_ideb_excel(file)
+read_ideb_excel(file, sheet = NULL)
 ```
 
 ## Arguments
@@ -13,6 +13,10 @@ read_ideb_excel(file)
 - file:
 
   Path to the Excel file.
+
+- sheet:
+
+  Sheet name to read (NULL for first sheet).
 
 ## Value
 

@@ -7,7 +7,7 @@ Functions for IDEB data
 - [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)
   : Get IDEB (Índice de Desenvolvimento da Educação Básica) data
 - [`get_ideb_series()`](https://sidneybissoli.github.io/educabR/reference/get_ideb_series.md)
-  : Get IDEB historical series
+  **\[deprecated\]** : Get IDEB historical series
 - [`list_ideb_available()`](https://sidneybissoli.github.io/educabR/reference/list_ideb_available.md)
   : List available IDEB data
 

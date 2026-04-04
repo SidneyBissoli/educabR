@@ -1,5 +1,36 @@
 # Changelog
 
+## educabR 1.0.0
+
+### Breaking changes
+
+- **[`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)
+  has a new signature**: `get_ideb(level, stage, metric, year, quiet)`.
+  The old positional usage `get_ideb(year, level, stage)` still works
+  with a deprecation warning, but the `year` parameter now filters IDEB
+  editions instead of selecting which file to download.
+- [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)
+  now returns data in tidy long format instead of wide format. Output
+  columns depend on the `metric` parameter (`"indicador"`,
+  `"aprovacao"`, `"nota"`, `"meta"`).
+- [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)
+  now supports 5 geographic levels: `"escola"`, `"municipio"`,
+  `"estado"`, `"regiao"`, and `"brasil"` (previously only escola and
+  municipio).
+- [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)
+  always downloads the most recent IDEB file available, which contains
+  the full historical series. The `year` parameter filters editions.
+- [`get_ideb_series()`](https://sidneybissoli.github.io/educabR/reference/get_ideb_series.md)
+  is deprecated. Use `get_ideb(level, stage, metric)` instead.
+- [`list_ideb_available()`](https://sidneybissoli.github.io/educabR/reference/list_ideb_available.md)
+  now returns `level`, `stage`, and `metric` columns (previously
+  returned `year`, `level`, `stage`).
+- The `uf` parameter has been removed from
+  [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md).
+  Filter the result with
+  [`dplyr::filter()`](https://dplyr.tidyverse.org/reference/filter.html)
+  instead.
+
 ## educabR 0.9.0
 
 CRAN release: 2026-04-03

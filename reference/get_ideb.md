@@ -1,38 +1,35 @@
 # Get IDEB (Índice de Desenvolvimento da Educação Básica) data
 
-Downloads and processes IDEB data from INEP. IDEB is the main indicator
-of education quality in Brazil, combining student performance (from
-SAEB) with grade promotion rates.
+Downloads and processes IDEB data from INEP in tidy (long) format. IDEB
+is the main indicator of education quality in Brazil, combining student
+performance (from SAEB) with grade promotion rates.
 
 ## Usage
 
 ``` r
-get_ideb(
-  year,
-  level = c("escola", "municipio"),
-  stage = c("anos_iniciais", "anos_finais", "ensino_medio"),
-  uf = NULL,
-  quiet = FALSE
-)
+get_ideb(level, stage, metric, year = NULL, quiet = FALSE)
 ```
 
 ## Arguments
 
-- year:
-
-  The year of the IDEB (available: 2017, 2019, 2021, 2023).
-
 - level:
 
-  The aggregation level:
+  The geographic level. **Required.**
 
   - `"escola"`: School level
 
   - `"municipio"`: Municipality level
 
+  - `"estado"`: State level
+
+  - `"regiao"`: Region level (Norte, Nordeste, Sudeste, Sul,
+    Centro-Oeste)
+
+  - `"brasil"`: National level
+
 - stage:
 
-  The education stage:
+  The education stage. **Required.**
 
   - `"anos_iniciais"`: Early elementary (1st-5th grade)
 
@@ -40,9 +37,22 @@ get_ideb(
 
   - `"ensino_medio"`: High school
 
-- uf:
+- metric:
 
-  Optional. Filter by state (UF code or abbreviation).
+  The type of data to return. **Required.**
+
+  - `"indicador"`: IDEB components (rendimento, nota padronizada, ideb)
+
+  - `"aprovacao"`: Approval rates by school year
+
+  - `"nota"`: SAEB scores by subject (math/portuguese)
+
+  - `"meta"`: IDEB targets/projections
+
+- year:
+
+  Optional. Integer vector of IDEB editions to filter (e.g.,
+  `c(2019, 2021, 2023)`). `NULL` returns all available editions.
 
 - quiet:
 
@@ -50,7 +60,31 @@ get_ideb(
 
 ## Value
 
-A tibble with IDEB data in tidy format.
+A tibble in tidy (long) format. Columns vary by `level` and `metric`:
+
+**ID columns** (vary by `level`):
+
+- `escola`: `uf_sigla`, `municipio_codigo`, `municipio_nome`,
+  `escola_id`, `escola_nome`, `rede`
+
+- `municipio`: `uf_sigla`, `municipio_codigo`, `municipio_nome`, `rede`
+
+- `brasil`: `rede`
+
+- `estado`: `uf_nome`, `uf_sigla`, `rede`
+
+- `regiao`: `regiao`, `rede`
+
+**Value columns** (vary by `metric`):
+
+- `indicador`: `ano`, `indicador`, `valor`
+
+- `aprovacao`: `ano`, `ano_escolar` or `serie` (ensino_medio),
+  `taxa_aprovacao`
+
+- `nota`: `ano`, `disciplina`, `nota`
+
+- `meta`: `ano`, `meta`
 
 ## Details
 
@@ -63,8 +97,8 @@ IDEB is calculated every two years since 2005 based on:
 The index ranges from 0 to 10. Brazil's national goal is to reach 6.0 by
 2022 (the level of developed countries in PISA).
 
-**Note:** IDEB data is relatively small compared to other INEP datasets,
-so no `n_max` parameter is provided.
+The function always downloads the most recent IDEB file available from
+INEP, which contains the full historical series (2005-2023).
 
 ## Data source
 
@@ -81,13 +115,19 @@ Other IDEB functions:
 
 ``` r
 if (FALSE) { # \dontrun{
-# get school-level IDEB for early elementary in 2021
-ideb_escolas <- get_ideb(2021, level = "escola", stage = "anos_iniciais")
+# school-level IDEB indicators for early elementary
+ideb <- get_ideb("escola", "anos_iniciais", "indicador")
 
-# get municipality-level IDEB for São Paulo state
-ideb_sp <- get_ideb(2021, level = "municipio", stage = "anos_iniciais", uf = "SP")
+# municipality-level approval rates, only 2021 and 2023
+aprov <- get_ideb("municipio", "anos_finais", "aprovacao", year = c(2021, 2023))
 
-# get high school IDEB for all municipalities
-ideb_em <- get_ideb(2023, level = "municipio", stage = "ensino_medio")
+# national IDEB targets
+metas <- get_ideb("brasil", "ensino_medio", "meta")
+
+# state-level SAEB scores
+notas <- get_ideb("estado", "anos_iniciais", "nota")
+
+# region-level IDEB indicators
+regioes <- get_ideb("regiao", "anos_finais", "indicador")
 } # }
 ```

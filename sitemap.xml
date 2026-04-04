@@ -17,6 +17,7 @@
 <url><loc>https://sidneybissoli.github.io/educabR/news/index.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/available_years.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/build_fundeb_url.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/build_ideb_url.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/build_inep_url.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/build_saeb_zip_filename.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/clean_dash_values.html</loc></url>
@@ -41,6 +42,8 @@
 <url><loc>https://sidneybissoli.github.io/educabR/reference/find_enem_file.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/find_idd_file.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/find_saeb_file.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/fix_brasil_cols.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/fix_regiao_uf_cols.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_cache_dir.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_capes.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_censo_escolar.html</loc></url>
@@ -56,6 +59,7 @@
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_idd.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_ideb.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_ideb_series.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/get_ideb_sheet.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_igc.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_saeb.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/index.html</loc></url>
@@ -67,6 +71,7 @@
 <url><loc>https://sidneybissoli.github.io/educabR/reference/read_excel_safe.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/read_ideb_excel.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/read_inep_file.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/reshape_ideb.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/set_cache_dir.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/standardize_names.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/uf_to_code.html</loc></url>

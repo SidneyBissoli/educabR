@@ -1,6 +1,6 @@
 # List available IDEB data
 
-Lists the IDEB data files available in the INEP portal.
+Lists the IDEB data combinations available for download.
 
 ## Usage
 
@@ -10,7 +10,7 @@ list_ideb_available()
 
 ## Value
 
-A tibble with available IDEB datasets.
+A tibble with available IDEB datasets (level, stage, metric).
 
 ## See also
 
@@ -22,18 +22,18 @@ Other IDEB functions:
 
 ``` r
 list_ideb_available()
-#> # A tibble: 24 × 3
-#>     year level     stage        
-#>    <int> <chr>     <chr>        
-#>  1  2017 escola    anos_finais  
-#>  2  2017 escola    anos_iniciais
-#>  3  2017 escola    ensino_medio 
-#>  4  2017 municipio anos_finais  
-#>  5  2017 municipio anos_iniciais
-#>  6  2017 municipio ensino_medio 
-#>  7  2019 escola    anos_finais  
-#>  8  2019 escola    anos_iniciais
-#>  9  2019 escola    ensino_medio 
-#> 10  2019 municipio anos_finais  
-#> # ℹ 14 more rows
+#> # A tibble: 60 × 3
+#>    level  stage         metric   
+#>    <chr>  <chr>         <chr>    
+#>  1 brasil anos_finais   aprovacao
+#>  2 brasil anos_finais   indicador
+#>  3 brasil anos_finais   meta     
+#>  4 brasil anos_finais   nota     
+#>  5 brasil anos_iniciais aprovacao
+#>  6 brasil anos_iniciais indicador
+#>  7 brasil anos_iniciais meta     
+#>  8 brasil anos_iniciais nota     
+#>  9 brasil ensino_medio  aprovacao
+#> 10 brasil ensino_medio  indicador
+#> # ℹ 50 more rows
 ```
