@@ -180,6 +180,7 @@ clear_cache()
 - [Avaliações da educação básica](https://sidneybissoli.github.io/educabR/articles/basic-education-assessments.html)
 - [Educação superior](https://sidneybissoli.github.io/educabR/articles/higher-education.html)
 - [Financiamento da educação](https://sidneybissoli.github.io/educabR/articles/education-funding.html)
+- [Mapas de indicadores educacionais com geobr](https://sidneybissoli.github.io/educabR/articles/mapping-education-with-geobr.html)
 
 ## Licença
 

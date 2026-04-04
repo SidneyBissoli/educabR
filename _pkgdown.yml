@@ -19,6 +19,7 @@ articles:
       - enrollment-by-race
       - cpc-public-vs-private
       - ideb-improvement-by-municipality
+      - mapping-education-with-geobr
   - title: "Dataset Reference"
     desc: "Detailed guides for each dataset group"
     contents:
