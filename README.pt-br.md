@@ -144,9 +144,36 @@ enem <- get_enem(year = 2023, n_max = 10000)
 
 # Resumo estatístico
 enem_summary(enem)
+#> # A tibble: 10 × 10
+#>    variable            n n_valid  mean    sd   min   q25 median   q75   max
+#>    <chr>           <int>   <int> <dbl> <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl>
+#>  1 nu_nota_cn      10000    7281  492.  79.8     0  440.   489.  541.  817.
+#>  2 nu_nota_ch      10000    7562  529.  81.7     0  480.   535.  584.  823
+#>  3 nu_nota_lc      10000    7562  520.  70.4     0  476.   524.  568.  731.
+#>  4 nu_nota_mt      10000    7281  520. 121.      0  426.   507.  608   945.
+#>  5 nu_nota_comp1   10000    7562  126.  32.1     0  120    120   160   200
+#>  6 nu_nota_comp2   10000    7562  147.  48.4     0  120    160   200   200
+#>  7 nu_nota_comp3   10000    7562  124.  41.0     0  100    120   160   200
+#>  8 nu_nota_comp4   10000    7562  136.  41.2     0  120    120   160   200
+#>  9 nu_nota_comp5   10000    7562  117.  60.0     0   80    120   160   200
+#> 10 nu_nota_redacao 10000    7562  649. 201.      0  520    640   820   980
 
 # Resumo por sexo
 enem_summary(enem, by = "tp_sexo")
+#> # A tibble: 20 × 11
+#>    tp_sexo variable            n n_valid  mean    sd   min   q25 median   q75   max
+#>    <chr>   <chr>           <int>   <int> <dbl> <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl>
+#>  1 F       nu_nota_cn       7042    5130  485.  76.5     0  435    481.  532   817.
+#>  2 M       nu_nota_cn       2958    2151  507.  85.1     0  455.   508.  560.  804.
+#>  3 F       nu_nota_ch       7042    5328  527.  78.6     0  480.   532.  579.  784.
+#>  4 M       nu_nota_ch       2958    2234  535.  88.2     0  483.   542.  596.  823
+#>  5 F       nu_nota_lc       7042    5328  520.  68.2     0  476.   523.  566.  731.
+#>  6 M       nu_nota_lc       2958    2234  522.  75.5     0  478.   527.  574.  729.
+#>  7 F       nu_nota_mt       7042    5130  509. 116.      0  420.   494.  589   944.
+#>  8 M       nu_nota_mt       2958    2151  547. 129.      0  447.   540.  643.  945.
+#>  9 F       nu_nota_comp1    7042    5328  128.  30.8     0  120    120   160   200
+#> 10 M       nu_nota_comp1    2958    2234  121.  34.6     0  100    120   140   200
+#> # ℹ 10 more rows
 ```
 
 ### Censo Escolar
