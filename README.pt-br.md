@@ -25,20 +25,39 @@ financiamento via FUNDEB.
 Mapa do IDEB por estado em poucas linhas:
 
 ```r
-library(educabR)
-library(geobr)
-library(dplyr)
-library(ggplot2)
+# instalar pacote "pacman" se não estiver instalado
+if (!require("pacman")) install.packages("pacman")
 
-ideb <- get_ideb(level = "estado", stage = "anos_iniciais", metric = "indicador", year = 2023)
+# instalar e/ou carregar pacotes
+p_load(
+  educabR,
+  geobr,
+  tidyverse
+)
+
+# ler dados do IDEB
+ideb <- get_ideb(
+  level  = "estado", 
+  stage  = "anos_iniciais", 
+  metric = "indicador", 
+  year   = 2023
+  )
+
+# ler dados espaciais
 states <- read_state(year = 2020, showProgress = FALSE)
 
+# plotar dados
 states |>
   left_join(ideb, by = c("abbrev_state" = "uf_sigla")) |>
+  drop_na() |>
+  filter(rede == "Pública" & indicador == "IDEB") |>
   ggplot() +
   geom_sf(aes(fill = valor), color = "white", size = .2) +
   scale_fill_distiller(palette = "YlGn", direction = 1, name = "IDEB") +
-  labs(title = "IDEB 2023 — Anos iniciais por estado") +
+  labs(
+    title    = "IDEB - rede pública de ensino - 2023",
+    subtitle = "Anos iniciais (1º - 4º) por estado"
+  ) +
   theme_void()
 ```
 

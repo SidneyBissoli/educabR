@@ -25,20 +25,39 @@ FUNDEB funding.
 Map IDEB scores across Brazilian states with just a few lines:
 
 ```r
-library(educabR)
-library(geobr)
-library(dplyr)
-library(ggplot2)
+# install package "pacman" if it is not installed
+if (!require("pacman")) install.packages("pacman")
 
-ideb <- get_ideb(level = "estado", stage = "anos_iniciais", metric = "indicador", year = 2023)
+# install and/or load packages
+p_load(
+  educabR,
+  geobr,
+  tidyverse
+)
+
+# read ideb data
+ideb <- get_ideb(
+  level  = "estado", 
+  stage  = "anos_iniciais", 
+  metric = "indicador", 
+  year   = 2023
+  )
+
+# read spatial data
 states <- read_state(year = 2020, showProgress = FALSE)
 
+# plot data
 states |>
   left_join(ideb, by = c("abbrev_state" = "uf_sigla")) |>
+  drop_na() |>
+  filter(rede == "Pública" & indicador == "IDEB") |>
   ggplot() +
   geom_sf(aes(fill = valor), color = "white", size = .2) +
   scale_fill_distiller(palette = "YlGn", direction = 1, name = "IDEB") +
-  labs(title = "IDEB 2023 — Early elementary by state") +
+  labs(
+    title    = "IDEB - rede pública de ensino - 2023",
+    subtitle = "Early elementary (1º - 4º) by state"
+  ) +
   theme_void()
 ```
 
