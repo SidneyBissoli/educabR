@@ -4,10 +4,12 @@
 \alias{read_ideb_excel}
 \title{Read IDEB Excel file}
 \usage{
-read_ideb_excel(file)
+read_ideb_excel(file, sheet = NULL)
 }
 \arguments{
 \item{file}{Path to the Excel file.}
+
+\item{sheet}{Sheet name to read (NULL for first sheet).}
 }
 \value{
 A tibble with the data.

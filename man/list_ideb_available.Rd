@@ -7,10 +7,10 @@
 list_ideb_available()
 }
 \value{
-A tibble with available IDEB datasets.
+A tibble with available IDEB datasets (level, stage, metric).
 }
 \description{
-Lists the IDEB data files available in the INEP portal.
+Lists the IDEB data combinations available for download.
 }
 \examples{
 list_ideb_available()

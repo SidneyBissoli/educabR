@@ -30,10 +30,11 @@ URL: https://github.com/SidneyBissoli/educabR, https://sidneybissoli.github.io/e
 BugReports: https://github.com/SidneyBissoli/educabR/issues
 Depends: 
     R (>= 4.1.0)
-Imports: 
+Imports:
     cli,
     dplyr,
     httr2,
+    lifecycle,
     purrr,
     readr,
     rlang,

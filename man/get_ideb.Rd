@@ -4,41 +4,62 @@
 \alias{get_ideb}
 \title{Get IDEB (Índice de Desenvolvimento da Educação Básica) data}
 \usage{
-get_ideb(
-  year,
-  level = c("escola", "municipio"),
-  stage = c("anos_iniciais", "anos_finais", "ensino_medio"),
-  uf = NULL,
-  quiet = FALSE
-)
+get_ideb(level, stage, metric, year = NULL, quiet = FALSE)
 }
 \arguments{
-\item{year}{The year of the IDEB (available: 2017, 2019, 2021, 2023).}
-
-\item{level}{The aggregation level:
+\item{level}{The geographic level. \strong{Required.}
 \itemize{
 \item \code{"escola"}: School level
 \item \code{"municipio"}: Municipality level
+\item \code{"estado"}: State level
+\item \code{"regiao"}: Region level (Norte, Nordeste, Sudeste, Sul, Centro-Oeste)
+\item \code{"brasil"}: National level
 }}
 
-\item{stage}{The education stage:
+\item{stage}{The education stage. \strong{Required.}
 \itemize{
 \item \code{"anos_iniciais"}: Early elementary (1st-5th grade)
 \item \code{"anos_finais"}: Late elementary (6th-9th grade)
 \item \code{"ensino_medio"}: High school
 }}
 
-\item{uf}{Optional. Filter by state (UF code or abbreviation).}
+\item{metric}{The type of data to return. \strong{Required.}
+\itemize{
+\item \code{"indicador"}: IDEB components (rendimento, nota padronizada, ideb)
+\item \code{"aprovacao"}: Approval rates by school year
+\item \code{"nota"}: SAEB scores by subject (math/portuguese)
+\item \code{"meta"}: IDEB targets/projections
+}}
+
+\item{year}{Optional. Integer vector of IDEB editions to filter
+(e.g., \code{c(2019, 2021, 2023)}). \code{NULL} returns all available editions.}
 
 \item{quiet}{Logical. If \code{TRUE}, suppresses progress messages.}
 }
 \value{
-A tibble with IDEB data in tidy format.
+A tibble in tidy (long) format. Columns vary by \code{level} and \code{metric}:
+
+\strong{ID columns} (vary by \code{level}):
+\itemize{
+\item \code{escola}: \code{uf_sigla}, \code{municipio_codigo}, \code{municipio_nome}, \code{escola_id}, \code{escola_nome}, \code{rede}
+\item \code{municipio}: \code{uf_sigla}, \code{municipio_codigo}, \code{municipio_nome}, \code{rede}
+\item \code{brasil}: \code{rede}
+\item \code{estado}: \code{uf_nome}, \code{uf_sigla}, \code{rede}
+\item \code{regiao}: \code{regiao}, \code{rede}
+}
+
+\strong{Value columns} (vary by \code{metric}):
+\itemize{
+\item \code{indicador}: \code{ano}, \code{indicador}, \code{valor}
+\item \code{aprovacao}: \code{ano}, \code{ano_escolar} or \code{serie} (ensino_medio), \code{taxa_aprovacao}
+\item \code{nota}: \code{ano}, \code{disciplina}, \code{nota}
+\item \code{meta}: \code{ano}, \code{meta}
+}
 }
 \description{
-Downloads and processes IDEB data from INEP. IDEB is the main indicator
-of education quality in Brazil, combining student performance (from SAEB)
-with grade promotion rates.
+Downloads and processes IDEB data from INEP in tidy (long) format.
+IDEB is the main indicator of education quality in Brazil, combining
+student performance (from SAEB) with grade promotion rates.
 }
 \details{
 IDEB is calculated every two years since 2005 based on:
@@ -50,8 +71,8 @@ IDEB is calculated every two years since 2005 based on:
 The index ranges from 0 to 10. Brazil's national goal is to reach 6.0
 by 2022 (the level of developed countries in PISA).
 
-\strong{Note:} IDEB data is relatively small compared to other INEP datasets,
-so no \code{n_max} parameter is provided.
+The function always downloads the most recent IDEB file available from
+INEP, which contains the full historical series (2005-2023).
 }
 \section{Data source}{
 
@@ -60,14 +81,20 @@ Official IDEB portal: \url{https://www.gov.br/inep/pt-br/areas-de-atuacao/pesqui
 
 \examples{
 \dontrun{
-# get school-level IDEB for early elementary in 2021
-ideb_escolas <- get_ideb(2021, level = "escola", stage = "anos_iniciais")
+# school-level IDEB indicators for early elementary
+ideb <- get_ideb("escola", "anos_iniciais", "indicador")
 
-# get municipality-level IDEB for São Paulo state
-ideb_sp <- get_ideb(2021, level = "municipio", stage = "anos_iniciais", uf = "SP")
+# municipality-level approval rates, only 2021 and 2023
+aprov <- get_ideb("municipio", "anos_finais", "aprovacao", year = c(2021, 2023))
 
-# get high school IDEB for all municipalities
-ideb_em <- get_ideb(2023, level = "municipio", stage = "ensino_medio")
+# national IDEB targets
+metas <- get_ideb("brasil", "ensino_medio", "meta")
+
+# state-level SAEB scores
+notas <- get_ideb("estado", "anos_iniciais", "nota")
+
+# region-level IDEB indicators
+regioes <- get_ideb("regiao", "anos_finais", "indicador")
 }
 }
 \seealso{

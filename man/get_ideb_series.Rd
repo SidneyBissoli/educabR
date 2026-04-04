@@ -24,20 +24,19 @@ get_ideb_series(
 \item{quiet}{Logical. If \code{TRUE}, suppresses progress messages.}
 }
 \value{
-A tibble with IDEB data for all requested years.
+A tibble with IDEB data.
 }
 \description{
-Downloads and combines IDEB data across multiple years to create
-a historical series.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+\code{get_ideb_series()} is deprecated because the new \code{get_ideb()} already
+returns data in long format with all historical editions.
+Use \code{get_ideb(level, stage, metric)} instead.
 }
 \examples{
 \dontrun{
-# get IDEB history for municipalities
-ideb_hist <- get_ideb_series(
-  years = c(2017, 2019, 2021),
-  level = "municipio",
-  stage = "anos_iniciais"
-)
+# deprecated: use get_ideb() instead
+ideb <- get_ideb("municipio", "anos_iniciais", "indicador")
 }
 }
 \seealso{

@@ -8,14 +8,14 @@
 test_that("get_ideb full pipeline works", {
   mock_data <- dplyr::tibble(
     SG_UF = c("SP", "RJ", "MG"),
-    CO_MUNICIPIO = c(3550308, 3304557, 3106200),
+    CO_MUNICIPIO = c("3550308", "3304557", "3106200"),
     NO_MUNICIPIO = c("SAO PAULO", "RIO DE JANEIRO", "BELO HORIZONTE"),
-    ID_ESCOLA = c(1, 2, 3),
+    ID_ESCOLA = c("1", "2", "3"),
     NO_ESCOLA = c("ESCOLA A", "ESCOLA B", "ESCOLA C"),
     REDE = c("Estadual", "Municipal", "Estadual"),
     VL_OBSERVADO_2021 = c("5,2", "4,8", "-"),
-    VL_NOTA_MATEMATICA_2021 = c("5.5", "ND", "6.1"),
-    VL_NOTA_PORTUGUES_2021 = c("5.0", "4.5", "5.8")
+    VL_INDICADOR_REND_2021 = c("0,9", "0,85", "ND"),
+    VL_NOTA_MEDIA_2021 = c("5.5", "ND", "6.1")
   )
 
   local_mocked_bindings(
@@ -24,28 +24,35 @@ test_that("get_ideb full pipeline works", {
       file.create(destfile)
       destfile
     },
-    read_ideb_excel = function(file) mock_data,
+    read_ideb_excel = function(file, sheet = NULL) mock_data,
     .package = "educabR"
   )
 
-  result <- get_ideb(2021, level = "escola", stage = "anos_iniciais", quiet = TRUE)
+  result <- get_ideb("escola", "anos_iniciais", "indicador", quiet = TRUE)
 
   expect_s3_class(result, "tbl_df")
-  expect_equal(nrow(result), 3)
-  # Check standardize_names worked
-  expect_true(all(names(result) == tolower(names(result))))
-  # Check clean_ideb_values: "-" -> NA, comma -> dot
-  expect_true(is.na(result$vl_observado_2021[3]))
-  expect_true(is.na(result$vl_nota_matematica_2021[2])) # "ND" -> NA
-  expect_equal(result$vl_observado_2021[1], 5.2) # comma converted
+  # 3 schools x 3 indicators x 1 year = 9 rows
+  expect_equal(nrow(result), 9)
+  # Check standardize_names worked (long format columns)
+  expect_true(all(c("ano", "indicador", "valor") %in% names(result)))
+  # Check clean_ideb_values: "-" -> NA
+  ideb_vals <- result[result$indicador == "IDEB", ]
+  expect_true(is.na(ideb_vals$valor[3]))
+  expect_equal(ideb_vals$valor[1], 5.2) # comma converted
 })
 
-test_that("get_ideb with UF filtering returns only matching rows", {
+test_that("get_ideb year filter returns only matching years", {
   mock_data <- dplyr::tibble(
-    SG_UF = c("SP", "RJ", "MG"),
-    CO_MUNICIPIO = c(3550308, 3304557, 3106200),
-    NO_MUNICIPIO = c("SAO PAULO", "RIO DE JANEIRO", "BELO HORIZONTE"),
-    VL_OBSERVADO_2021 = c("5,2", "4,8", "6,0")
+    SG_UF = c("SP", "SP"),
+    CO_MUNICIPIO = c("3550308", "3550308"),
+    NO_MUNICIPIO = c("SAO PAULO", "SAO PAULO"),
+    REDE = c("Estadual", "Estadual"),
+    VL_OBSERVADO_2019 = c("5,0", "5,0"),
+    VL_OBSERVADO_2021 = c("5,2", "5,2"),
+    VL_INDICADOR_REND_2019 = c("0,9", "0,9"),
+    VL_INDICADOR_REND_2021 = c("0,91", "0,91"),
+    VL_NOTA_MEDIA_2019 = c("5.5", "5.5"),
+    VL_NOTA_MEDIA_2021 = c("5.6", "5.6")
   )
 
   local_mocked_bindings(
@@ -54,60 +61,45 @@ test_that("get_ideb with UF filtering returns only matching rows", {
       file.create(destfile)
       destfile
     },
-    read_ideb_excel = function(file) mock_data,
+    read_ideb_excel = function(file, sheet = NULL) mock_data,
     .package = "educabR"
   )
 
-  result <- get_ideb(2021, level = "escola", stage = "anos_iniciais",
-                     uf = "SP", quiet = TRUE)
+  result <- get_ideb("municipio", "anos_iniciais", "indicador",
+                     year = 2021, quiet = TRUE)
 
-  expect_equal(nrow(result), 1)
-  expect_equal(result$sg_uf[1], "SP")
+  # Only 2021 should be returned
+  expect_true(all(result$ano == 2021))
 })
 
-test_that("get_ideb for year 2023 uses different URL pattern", {
-  mock_data <- dplyr::tibble(
-    SG_UF = c("SP"),
-    CO_MUNICIPIO = c(3550308),
-    NO_MUNICIPIO = c("SAO PAULO"),
-    VL_OBSERVADO_2023 = c("5,5")
-  )
+test_that("get_ideb URL uses ideb/resultados base path", {
+  url <- educabR:::build_ideb_url("escola", "anos_iniciais", 2023)
+  expect_true(grepl("ideb/resultados", url))
+  expect_true(grepl("escolas", url))
 
-  captured_url <- NULL
-
-  local_mocked_bindings(
-    download_inep_file = function(url, destfile, quiet = FALSE) {
-      captured_url <<- url
-      dir.create(dirname(destfile), recursive = TRUE, showWarnings = FALSE)
-      file.create(destfile)
-      destfile
-    },
-    read_ideb_excel = function(file) mock_data,
-    .package = "educabR"
-  )
-
-  result <- get_ideb(2023, level = "escola", stage = "anos_iniciais", quiet = TRUE)
-
-  # 2023 URL should use the ideb/resultados base
-  expect_true(grepl("ideb/resultados", captured_url))
-  expect_true(grepl("2023", captured_url))
-  expect_s3_class(result, "tbl_df")
+  url2 <- educabR:::build_ideb_url("brasil", "anos_finais", 2023)
+  expect_true(grepl("ideb/resultados", url2))
+  expect_true(grepl("brasil_ideb", url2))
 })
 
 test_that("get_ideb uses cached file when it already exists", {
   mock_data <- dplyr::tibble(
     SG_UF = c("SP"),
-    CO_MUNICIPIO = c(3550308),
+    CO_MUNICIPIO = c("3550308"),
     NO_MUNICIPIO = c("SAO PAULO"),
-    VL_OBSERVADO_2021 = c("5,5")
+    REDE = c("Estadual"),
+    VL_OBSERVADO_2021 = c("5,5"),
+    VL_INDICADOR_REND_2021 = c("0,9"),
+    VL_NOTA_MEDIA_2021 = c("5.5")
   )
 
   download_called <- FALSE
 
   # Create the cached file so the download path is skipped
+  ideb_year <- max(available_years("ideb"))
   xlsx_path <- educabR:::cache_path(
     "ideb",
-    "divulgacao_anos_iniciais_escolas_2021.xlsx"
+    paste0("divulgacao_anos_iniciais_escolas_", ideb_year, ".xlsx")
   )
   dir.create(dirname(xlsx_path), recursive = TRUE, showWarnings = FALSE)
   file.create(xlsx_path)
@@ -118,18 +110,26 @@ test_that("get_ideb uses cached file when it already exists", {
       download_called <<- TRUE
       destfile
     },
-    read_ideb_excel = function(file) mock_data,
+    read_ideb_excel = function(file, sheet = NULL) mock_data,
     .package = "educabR"
   )
 
-  result <- get_ideb(2021, level = "escola", stage = "anos_iniciais", quiet = TRUE)
+  result <- get_ideb("escola", "anos_iniciais", "indicador", quiet = TRUE)
 
   expect_false(download_called)
   expect_s3_class(result, "tbl_df")
 })
 
-test_that("get_ideb_series with multiple years combines data", {
-  call_count <- 0L
+test_that("get_ideb_series delegates to get_ideb with deprecation warning", {
+  mock_data <- dplyr::tibble(
+    SG_UF = c("SP", "RJ"),
+    CO_MUNICIPIO = c("3550308", "3304557"),
+    NO_MUNICIPIO = c("SAO PAULO", "RIO DE JANEIRO"),
+    REDE = c("Estadual", "Municipal"),
+    VL_OBSERVADO_2021 = c("5,2", "4,8"),
+    VL_INDICADOR_REND_2021 = c("0,9", "0,85"),
+    VL_NOTA_MEDIA_2021 = c("5.5", "4.5")
+  )
 
   local_mocked_bindings(
     download_inep_file = function(url, destfile, quiet = FALSE) {
@@ -137,31 +137,24 @@ test_that("get_ideb_series with multiple years combines data", {
       file.create(destfile)
       destfile
     },
-    read_ideb_excel = function(file) {
-      call_count <<- call_count + 1L
-      dplyr::tibble(
-        SG_UF = c("SP", "RJ"),
-        CO_MUNICIPIO = c(3550308, 3304557),
-        NO_MUNICIPIO = c("SAO PAULO", "RIO DE JANEIRO"),
-        VL_OBSERVADO_2021 = c("5,2", "4,8")
-      )
-    },
+    read_ideb_excel = function(file, sheet = NULL) mock_data,
     .package = "educabR"
   )
 
-  result <- get_ideb_series(
-    years = c(2021, 2023),
-    level = "escola",
-    stage = "anos_iniciais",
-    quiet = TRUE
+  expect_warning(
+    result <- get_ideb_series(
+      years = c(2021),
+      level = "escola",
+      stage = "anos_iniciais",
+      quiet = TRUE
+    ),
+    "deprecated"
   )
 
   expect_s3_class(result, "tbl_df")
-  # 2 rows per year x 2 years = 4 rows
-  expect_equal(nrow(result), 4)
-  # ano_ideb column should be added
-  expect_true("ano_ideb" %in% names(result))
-  expect_equal(sort(unique(result$ano_ideb)), c(2021, 2023))
+  # Long format: 2 schools x 3 indicators x 1 year = 6 rows
+  expect_equal(nrow(result), 6)
+  expect_true("ano" %in% names(result))
 })
 
 # =============================================================================
@@ -958,8 +951,16 @@ test_that("detect_encoding detects UTF-8", {
 # Additional edge cases
 # =============================================================================
 
-test_that("get_ideb_series handles error in one year gracefully", {
-  call_count <- 0L
+test_that("get_ideb_series emits deprecation warning", {
+  mock_data <- dplyr::tibble(
+    SG_UF = c("SP"),
+    CO_MUNICIPIO = c("3550308"),
+    NO_MUNICIPIO = c("SAO PAULO"),
+    REDE = c("Estadual"),
+    VL_OBSERVADO_2021 = c("5,2"),
+    VL_INDICADOR_REND_2021 = c("0,9"),
+    VL_NOTA_MEDIA_2021 = c("5.5")
+  )
 
   local_mocked_bindings(
     download_inep_file = function(url, destfile, quiet = FALSE) {
@@ -967,32 +968,18 @@ test_that("get_ideb_series handles error in one year gracefully", {
       file.create(destfile)
       destfile
     },
-    read_ideb_excel = function(file) {
-      call_count <<- call_count + 1L
-      if (call_count == 1L) {
-        stop("simulated read error")
-      }
-      dplyr::tibble(
-        SG_UF = c("SP"),
-        CO_MUNICIPIO = c(3550308),
-        NO_MUNICIPIO = c("SAO PAULO"),
-        VL_OBSERVADO_2021 = c("5,2")
-      )
-    },
+    read_ideb_excel = function(file, sheet = NULL) mock_data,
     .package = "educabR"
   )
 
-  # First year fails, second succeeds
-  result <- get_ideb_series(
-    years = c(2021, 2023),
-    level = "escola",
-    stage = "anos_iniciais",
-    quiet = TRUE
+  expect_warning(
+    get_ideb_series(
+      level = "escola",
+      stage = "anos_iniciais",
+      quiet = TRUE
+    ),
+    "deprecated"
   )
-
-  expect_s3_class(result, "tbl_df")
-  # Only the second year should have data
-  expect_equal(nrow(result), 1)
 })
 
 test_that("get_cpc uses cached file on second call", {

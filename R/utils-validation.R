@@ -245,15 +245,13 @@ validate_capes <- function(data, year) {
   }
 }
 
-# ideb: check for UF and index columns
+# ideb: check for tidy long format columns
 validate_ideb <- function(data, year) {
-  uf_cols <- names(data)[str_detect(names(data), "uf|estado")]
-
-  if (length(uf_cols) == 0) {
+  if (!"ano" %in% names(data)) {
     cli::cli_warn(
       c(
-        "no UF/state column found in IDEB {.val {year}} data",
-        "i" = "state filtering will not work",
+        "column {.val ano} not found in IDEB {.val {year}} data",
+        "i" = "data may not have been reshaped correctly",
         "i" = "column names found: {.val {head(names(data), 10)}}"
       )
     )

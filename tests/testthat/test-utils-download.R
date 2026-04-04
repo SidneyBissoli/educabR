@@ -651,6 +651,6 @@ test_that("list_ideb_available returns expected structure", {
   result <- list_ideb_available()
 
   expect_s3_class(result, "tbl_df")
-  expect_true(all(c("year", "level", "stage") %in% names(result)))
+  expect_true(all(c("level", "stage", "metric") %in% names(result)))
   expect_true(nrow(result) > 0)
 })

@@ -52,21 +52,23 @@ test_that("validate_data passes for valid ENEM items data", {
   expect_silent(validate_data(df, "enem_itens", 2023))
 })
 
-test_that("validate_data warns when IDEB has no UF column", {
+test_that("validate_data warns when IDEB has no ano column", {
   df <- tibble::tibble(
     no_escola = c("Escola A", "Escola B"),
     vl_observado = c(5.0, 6.0),
     rede = c("Municipal", "Estadual")
   )
 
-  expect_warning(validate_data(df, "ideb", 2021), "no UF")
+  expect_warning(validate_data(df, "ideb", 2021), "ano")
 })
 
 test_that("validate_data passes for valid IDEB data", {
   df <- tibble::tibble(
     sg_uf = c("SP", "RJ"),
-    no_escola = c("Escola A", "Escola B"),
-    vl_observado = c(5.0, 6.0)
+    rede = c("Municipal", "Estadual"),
+    ano = c(2021L, 2021L),
+    indicador = c("ideb", "ideb"),
+    valor = c(5.0, 6.0)
   )
 
   expect_silent(validate_data(df, "ideb", 2021))
