@@ -62,6 +62,8 @@ states |>
   theme_void()
 ```
 
+![](reference/figures/README-quick-example-pt.png)
+
 ## Instalação
 
 Instale do CRAN:

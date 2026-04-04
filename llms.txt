@@ -48,11 +48,13 @@ states |>
   geom_sf(aes(fill = valor), color = "white", size = .2) +
   scale_fill_distiller(palette = "YlGn", direction = 1, name = "IDEB") +
   labs(
-    title    = "IDEB - rede pública de ensino - 2023",
+    title    = "IDEB - public school system - 2023",
     subtitle = "Early elementary (1º - 4º) by state"
   ) +
   theme_void()
 ```
+
+![](reference/figures/README-quick-example.png)
 
 ## Installation
 
