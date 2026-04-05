@@ -392,28 +392,786 @@ scores.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">enem_sample</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 10,000</span></span>
 <span><span class="co">#&gt; Columns: 76</span></span>
-<span><span class="co">#&gt; $ nu_inscricao      &lt;dbl&gt; 230001234567, ...</span></span>
-<span><span class="co">#&gt; $ nu_ano            &lt;dbl&gt; 2023, 2023, ...</span></span>
-<span><span class="co">#&gt; $ tp_faixa_etaria   &lt;dbl&gt; 3, 4, 2, ...</span></span>
-<span><span class="co">#&gt; $ tp_sexo           &lt;chr&gt; "F", "M", "F", ...</span></span>
-<span><span class="co">#&gt; $ tp_cor_raca       &lt;dbl&gt; 1, 3, 2, ...</span></span>
-<span><span class="co">#&gt; $ nu_nota_cn        &lt;dbl&gt; 512.3, 489.1, ...</span></span>
-<span><span class="co">#&gt; $ nu_nota_ch        &lt;dbl&gt; 598.2, 567.4, ...</span></span>
-<span><span class="co">#&gt; $ nu_nota_lc        &lt;dbl&gt; 534.8, 502.1, ...</span></span>
-<span><span class="co">#&gt; $ nu_nota_mt        &lt;dbl&gt; 478.9, 521.3, ...</span></span>
-<span><span class="co">#&gt; $ nu_nota_redacao   &lt;dbl&gt; 720, 640, ...</span></span></code></pre></div>
+<span><span class="co">#&gt; $ nu_inscricao           &lt;dbl&gt; 210059085136, 210059527735, ...</span></span>
+<span><span class="co">#&gt; $ nu_ano                 &lt;dbl&gt; 2023, 2023, ...</span></span>
+<span><span class="co">#&gt; $ tp_faixa_etaria        &lt;dbl&gt; 14, 12, 6, ...</span></span>
+<span><span class="co">#&gt; $ tp_sexo                &lt;chr&gt; "M", "M", "F", ...</span></span>
+<span><span class="co">#&gt; $ tp_estado_civil        &lt;dbl&gt; 2, 2, 1, ...</span></span>
+<span><span class="co">#&gt; $ tp_cor_raca            &lt;dbl&gt; 1, 1, 1, ...</span></span>
+<span><span class="co">#&gt; $ sg_uf_prova            &lt;chr&gt; "DF", "DF", "RS", ...</span></span>
+<span><span class="co">#&gt; $ nu_nota_cn             &lt;dbl&gt; NA, NA, 502.0, ...</span></span>
+<span><span class="co">#&gt; $ nu_nota_ch             &lt;dbl&gt; NA, NA, 498.9, ...</span></span>
+<span><span class="co">#&gt; $ nu_nota_lc             &lt;dbl&gt; NA, NA, 475.6, ...</span></span>
+<span><span class="co">#&gt; $ nu_nota_mt             &lt;dbl&gt; NA, NA, 363.2, ...</span></span>
+<span><span class="co">#&gt; $ nu_nota_redacao        &lt;dbl&gt; NA, NA, 700, ...</span></span>
+<span><span class="co">#&gt; # ... 64 more variables</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="performance-analysis">Performance analysis<a class="anchor" aria-label="anchor" href="#performance-analysis"></a>
 </h3>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Summary statistics for scores</span></span>
-<span><span class="fu"><a href="../reference/enem_summary.html">enem_summary</a></span><span class="op">(</span><span class="va">enem_sample</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Summary by sex</span></span>
-<span><span class="fu"><a href="../reference/enem_summary.html">enem_summary</a></span><span class="op">(</span><span class="va">enem_sample</span>, by <span class="op">=</span> <span class="st">"tp_sexo"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Average scores by race/ethnicity</span></span>
+<span><span class="fu"><a href="../reference/enem_summary.html">enem_summary</a></span><span class="op">(</span><span class="va">enem_sample</span><span class="op">)</span></span></code></pre></div>
+<table class="table table table-striped table-hover table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;border-bottom: 0;">
+<thead><tr>
+<th style="text-align:left;">
+Variable
+</th>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:right;">
+n_valid
+</th>
+<th style="text-align:right;">
+Mean
+</th>
+<th style="text-align:right;">
+SD
+</th>
+<th style="text-align:right;">
+Min
+</th>
+<th style="text-align:right;">
+Q25
+</th>
+<th style="text-align:right;">
+Median
+</th>
+<th style="text-align:right;">
+Q75
+</th>
+<th style="text-align:right;">
+Max
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 10em; ">
+nu_nota_cn
+</td>
+<td style="text-align:right;">
+10000
+</td>
+<td style="text-align:right;">
+7281
+</td>
+<td style="text-align:right;">
+492
+</td>
+<td style="text-align:right;">
+79.8
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+440
+</td>
+<td style="text-align:right;">
+489
+</td>
+<td style="text-align:right;">
+541
+</td>
+<td style="text-align:right;">
+817
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; ">
+nu_nota_ch
+</td>
+<td style="text-align:right;">
+10000
+</td>
+<td style="text-align:right;">
+7562
+</td>
+<td style="text-align:right;">
+529
+</td>
+<td style="text-align:right;">
+81.7
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+480
+</td>
+<td style="text-align:right;">
+535
+</td>
+<td style="text-align:right;">
+584
+</td>
+<td style="text-align:right;">
+823
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; ">
+nu_nota_lc
+</td>
+<td style="text-align:right;">
+10000
+</td>
+<td style="text-align:right;">
+7562
+</td>
+<td style="text-align:right;">
+520
+</td>
+<td style="text-align:right;">
+70.4
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+476
+</td>
+<td style="text-align:right;">
+524
+</td>
+<td style="text-align:right;">
+568
+</td>
+<td style="text-align:right;">
+731
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; ">
+nu_nota_mt
+</td>
+<td style="text-align:right;">
+10000
+</td>
+<td style="text-align:right;">
+7281
+</td>
+<td style="text-align:right;">
+520
+</td>
+<td style="text-align:right;">
+121.0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+426
+</td>
+<td style="text-align:right;">
+507
+</td>
+<td style="text-align:right;">
+608
+</td>
+<td style="text-align:right;">
+945
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; ">
+nu_nota_comp1
+</td>
+<td style="text-align:right;">
+10000
+</td>
+<td style="text-align:right;">
+7562
+</td>
+<td style="text-align:right;">
+126
+</td>
+<td style="text-align:right;">
+32.1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+120
+</td>
+<td style="text-align:right;">
+120
+</td>
+<td style="text-align:right;">
+160
+</td>
+<td style="text-align:right;">
+200
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; ">
+nu_nota_comp2
+</td>
+<td style="text-align:right;">
+10000
+</td>
+<td style="text-align:right;">
+7562
+</td>
+<td style="text-align:right;">
+147
+</td>
+<td style="text-align:right;">
+48.4
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+120
+</td>
+<td style="text-align:right;">
+160
+</td>
+<td style="text-align:right;">
+200
+</td>
+<td style="text-align:right;">
+200
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; ">
+nu_nota_comp3
+</td>
+<td style="text-align:right;">
+10000
+</td>
+<td style="text-align:right;">
+7562
+</td>
+<td style="text-align:right;">
+124
+</td>
+<td style="text-align:right;">
+41.0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+100
+</td>
+<td style="text-align:right;">
+120
+</td>
+<td style="text-align:right;">
+160
+</td>
+<td style="text-align:right;">
+200
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; ">
+nu_nota_comp4
+</td>
+<td style="text-align:right;">
+10000
+</td>
+<td style="text-align:right;">
+7562
+</td>
+<td style="text-align:right;">
+136
+</td>
+<td style="text-align:right;">
+41.2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+120
+</td>
+<td style="text-align:right;">
+120
+</td>
+<td style="text-align:right;">
+160
+</td>
+<td style="text-align:right;">
+200
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; ">
+nu_nota_comp5
+</td>
+<td style="text-align:right;">
+10000
+</td>
+<td style="text-align:right;">
+7562
+</td>
+<td style="text-align:right;">
+117
+</td>
+<td style="text-align:right;">
+60.0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+80
+</td>
+<td style="text-align:right;">
+120
+</td>
+<td style="text-align:right;">
+160
+</td>
+<td style="text-align:right;">
+200
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; ">
+nu_nota_redacao
+</td>
+<td style="text-align:right;">
+10000
+</td>
+<td style="text-align:right;">
+7562
+</td>
+<td style="text-align:right;">
+649
+</td>
+<td style="text-align:right;">
+201.0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+520
+</td>
+<td style="text-align:right;">
+640
+</td>
+<td style="text-align:right;">
+820
+</td>
+<td style="text-align:right;">
+980
+</td>
+</tr>
+</tbody>
+<tfoot><tr>
+<td style="padding: 0; " colspan="100%">
+<sup></sup> Based on a random sample of 10,000 observations
+</td>
+</tr></tfoot>
+</table>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Summary by sex</span></span>
+<span><span class="fu"><a href="../reference/enem_summary.html">enem_summary</a></span><span class="op">(</span><span class="va">enem_sample</span>, by <span class="op">=</span> <span class="st">"tp_sexo"</span><span class="op">)</span></span></code></pre></div>
+<table class="table table table-striped table-hover table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;border-bottom: 0;">
+<thead><tr>
+<th style="text-align:center;">
+Sex
+</th>
+<th style="text-align:left;">
+Variable
+</th>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:right;">
+n_valid
+</th>
+<th style="text-align:right;">
+Mean
+</th>
+<th style="text-align:right;">
+SD
+</th>
+<th style="text-align:right;">
+Min
+</th>
+<th style="text-align:right;">
+Q25
+</th>
+<th style="text-align:right;">
+Median
+</th>
+<th style="text-align:right;">
+Q75
+</th>
+<th style="text-align:right;">
+Max
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:center;width: 3em; ">
+F
+</td>
+<td style="text-align:left;width: 10em; ">
+nu_nota_cn
+</td>
+<td style="text-align:right;">
+7042
+</td>
+<td style="text-align:right;">
+5130
+</td>
+<td style="text-align:right;">
+485
+</td>
+<td style="text-align:right;">
+76.5
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+435
+</td>
+<td style="text-align:right;">
+481
+</td>
+<td style="text-align:right;">
+532
+</td>
+<td style="text-align:right;">
+817
+</td>
+</tr>
+<tr>
+<td style="text-align:center;width: 3em; ">
+M
+</td>
+<td style="text-align:left;width: 10em; ">
+nu_nota_cn
+</td>
+<td style="text-align:right;">
+2958
+</td>
+<td style="text-align:right;">
+2151
+</td>
+<td style="text-align:right;">
+507
+</td>
+<td style="text-align:right;">
+85.1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+455
+</td>
+<td style="text-align:right;">
+508
+</td>
+<td style="text-align:right;">
+560
+</td>
+<td style="text-align:right;">
+804
+</td>
+</tr>
+<tr>
+<td style="text-align:center;width: 3em; ">
+F
+</td>
+<td style="text-align:left;width: 10em; ">
+nu_nota_ch
+</td>
+<td style="text-align:right;">
+7042
+</td>
+<td style="text-align:right;">
+5328
+</td>
+<td style="text-align:right;">
+527
+</td>
+<td style="text-align:right;">
+78.6
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+480
+</td>
+<td style="text-align:right;">
+532
+</td>
+<td style="text-align:right;">
+579
+</td>
+<td style="text-align:right;">
+784
+</td>
+</tr>
+<tr>
+<td style="text-align:center;width: 3em; ">
+M
+</td>
+<td style="text-align:left;width: 10em; ">
+nu_nota_ch
+</td>
+<td style="text-align:right;">
+2958
+</td>
+<td style="text-align:right;">
+2234
+</td>
+<td style="text-align:right;">
+535
+</td>
+<td style="text-align:right;">
+88.2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+483
+</td>
+<td style="text-align:right;">
+542
+</td>
+<td style="text-align:right;">
+596
+</td>
+<td style="text-align:right;">
+823
+</td>
+</tr>
+<tr>
+<td style="text-align:center;width: 3em; ">
+F
+</td>
+<td style="text-align:left;width: 10em; ">
+nu_nota_lc
+</td>
+<td style="text-align:right;">
+7042
+</td>
+<td style="text-align:right;">
+5328
+</td>
+<td style="text-align:right;">
+520
+</td>
+<td style="text-align:right;">
+68.2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+476
+</td>
+<td style="text-align:right;">
+523
+</td>
+<td style="text-align:right;">
+566
+</td>
+<td style="text-align:right;">
+731
+</td>
+</tr>
+<tr>
+<td style="text-align:center;width: 3em; ">
+M
+</td>
+<td style="text-align:left;width: 10em; ">
+nu_nota_lc
+</td>
+<td style="text-align:right;">
+2958
+</td>
+<td style="text-align:right;">
+2234
+</td>
+<td style="text-align:right;">
+522
+</td>
+<td style="text-align:right;">
+75.5
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+478
+</td>
+<td style="text-align:right;">
+527
+</td>
+<td style="text-align:right;">
+574
+</td>
+<td style="text-align:right;">
+729
+</td>
+</tr>
+<tr>
+<td style="text-align:center;width: 3em; ">
+F
+</td>
+<td style="text-align:left;width: 10em; ">
+nu_nota_mt
+</td>
+<td style="text-align:right;">
+7042
+</td>
+<td style="text-align:right;">
+5130
+</td>
+<td style="text-align:right;">
+509
+</td>
+<td style="text-align:right;">
+116.0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+420
+</td>
+<td style="text-align:right;">
+494
+</td>
+<td style="text-align:right;">
+589
+</td>
+<td style="text-align:right;">
+944
+</td>
+</tr>
+<tr>
+<td style="text-align:center;width: 3em; ">
+M
+</td>
+<td style="text-align:left;width: 10em; ">
+nu_nota_mt
+</td>
+<td style="text-align:right;">
+2958
+</td>
+<td style="text-align:right;">
+2151
+</td>
+<td style="text-align:right;">
+547
+</td>
+<td style="text-align:right;">
+129.0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+447
+</td>
+<td style="text-align:right;">
+540
+</td>
+<td style="text-align:right;">
+643
+</td>
+<td style="text-align:right;">
+945
+</td>
+</tr>
+<tr>
+<td style="text-align:center;width: 3em; ">
+F
+</td>
+<td style="text-align:left;width: 10em; ">
+nu_nota_comp1
+</td>
+<td style="text-align:right;">
+7042
+</td>
+<td style="text-align:right;">
+5328
+</td>
+<td style="text-align:right;">
+128
+</td>
+<td style="text-align:right;">
+30.8
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+120
+</td>
+<td style="text-align:right;">
+120
+</td>
+<td style="text-align:right;">
+160
+</td>
+<td style="text-align:right;">
+200
+</td>
+</tr>
+<tr>
+<td style="text-align:center;width: 3em; ">
+M
+</td>
+<td style="text-align:left;width: 10em; ">
+nu_nota_comp1
+</td>
+<td style="text-align:right;">
+2958
+</td>
+<td style="text-align:right;">
+2234
+</td>
+<td style="text-align:right;">
+121
+</td>
+<td style="text-align:right;">
+34.6
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+100
+</td>
+<td style="text-align:right;">
+120
+</td>
+<td style="text-align:right;">
+140
+</td>
+<td style="text-align:right;">
+200
+</td>
+</tr>
+</tbody>
+<tfoot><tr>
+<td style="padding: 0; " colspan="100%">
+<sup></sup> Showing 10 of 20 rows
+</td>
+</tr></tfoot>
+</table>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Average scores by race/ethnicity</span></span>
 <span><span class="va">scores_by_race</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">enem_sample</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">nu_nota_mt</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -433,31 +1191,147 @@ scores.</p>
 <span>    mean_math  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">nu_nota_mt</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>    mean_essay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">nu_nota_redacao</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
+<table class="table table table-striped table-hover table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;border-bottom: 0;">
+<thead><tr>
+<th style="text-align:left;">
+Race
+</th>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:right;">
+Mean Math
+</th>
+<th style="text-align:right;">
+Mean Essay
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 10em; ">
+Asian
+</td>
+<td style="text-align:right;">
+116
+</td>
+<td style="text-align:right;">
+511
+</td>
+<td style="text-align:right;">
+660
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; ">
+Black
+</td>
+<td style="text-align:right;">
+1066
+</td>
+<td style="text-align:right;">
+491
+</td>
+<td style="text-align:right;">
+619
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; ">
+Indigenous
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+479
+</td>
+<td style="text-align:right;">
+550
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; ">
+Mixed race
+</td>
+<td style="text-align:right;">
+3383
+</td>
+<td style="text-align:right;">
+507
+</td>
+<td style="text-align:right;">
+643
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; ">
+Not declared
+</td>
+<td style="text-align:right;">
+74
+</td>
+<td style="text-align:right;">
+533
+</td>
+<td style="text-align:right;">
+643
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; ">
+White
+</td>
+<td style="text-align:right;">
+2612
+</td>
+<td style="text-align:right;">
+550
+</td>
+<td style="text-align:right;">
+690
+</td>
+</tr>
+</tbody>
+<tfoot><tr>
+<td style="padding: 0; " colspan="100%">
+<sup></sup> Based on a random sample of 10,000 observations
+</td>
+</tr></tfoot>
+</table>
 </div>
 <div class="section level3">
 <h3 id="item-response-data">Item response data<a class="anchor" aria-label="anchor" href="#item-response-data"></a>
 </h3>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Data about exam questions</span></span>
 <span><span class="va">items</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_enem_itens.html">get_enem_itens</a></span><span class="op">(</span><span class="fl">2023</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">items</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $ co_item        &lt;dbl&gt; 1, 2, 3, ...</span></span>
-<span><span class="co">#&gt; $ co_prova       &lt;dbl&gt; 1001, 1001, ...</span></span>
-<span><span class="co">#&gt; $ tp_lingua      &lt;dbl&gt; 0, 0, ...</span></span>
-<span><span class="co">#&gt; $ sg_area        &lt;chr&gt; "CN", "CN", ...</span></span>
-<span><span class="co">#&gt; $ co_habilidade  &lt;dbl&gt; 1, 2, ...</span></span></code></pre></div>
+<span><span class="co">#&gt; Rows: 5,550</span></span>
+<span><span class="co">#&gt; Columns: 14</span></span>
+<span><span class="co">#&gt; $ co_posicao       &lt;chr&gt; "21", "20", "11", ...</span></span>
+<span><span class="co">#&gt; $ sg_area          &lt;chr&gt; "LC", "LC", "LC", ...</span></span>
+<span><span class="co">#&gt; $ co_item          &lt;chr&gt; "141283", "118144", ...</span></span>
+<span><span class="co">#&gt; $ tx_gabarito      &lt;chr&gt; "B", "C", "D", ...</span></span>
+<span><span class="co">#&gt; $ co_habilidade    &lt;chr&gt; "14", "23", "26", ...</span></span>
+<span><span class="co">#&gt; $ in_item_aban     &lt;dbl&gt; 0, 0, 0, ...</span></span>
+<span><span class="co">#&gt; $ nu_param_a       &lt;dbl&gt; 2.20, 2.43, 1.95, ...</span></span>
+<span><span class="co">#&gt; $ nu_param_b       &lt;dbl&gt; 0.83, 0.90, -0.13, ...</span></span>
+<span><span class="co">#&gt; $ nu_param_c       &lt;dbl&gt; 0.21, 0.13, 0.20, ...</span></span>
+<span><span class="co">#&gt; $ tx_cor           &lt;chr&gt; "AMARELA", "AMARELA", ...</span></span>
+<span><span class="co">#&gt; $ co_prova         &lt;chr&gt; "1286", "1286", ...</span></span>
+<span><span class="co">#&gt; # ... 3 more variables</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 id="school-census-censo-escolar">School Census (Censo Escolar)<a class="anchor" aria-label="anchor" href="#school-census-censo-escolar"></a>
+<h2 id="school-census">School Census<a class="anchor" aria-label="anchor" href="#school-census"></a>
 </h2>
 <p>The School Census is Brazil’s main statistical survey on basic
 education, covering all public and private schools.</p>
 <div class="section level3">
 <h3 id="downloading-census-data">Downloading Census data<a class="anchor" aria-label="anchor" href="#downloading-census-data"></a>
 </h3>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># School data</span></span>
 <span><span class="va">schools_2023</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_censo_escolar.html">get_censo_escolar</a></span><span class="op">(</span><span class="fl">2023</span><span class="op">)</span></span>
 <span></span>
@@ -470,25 +1344,27 @@ education, covering all public and private schools.</p>
 <div class="section level3">
 <h3 id="data-structure-2">Data structure<a class="anchor" aria-label="anchor" href="#data-structure-2"></a>
 </h3>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># The census contains over 400 variables per school!</span></span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">schools_2023</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 217,625</span></span>
 <span><span class="co">#&gt; Columns: 408</span></span>
-<span><span class="co">#&gt; $ nu_ano_censo     &lt;dbl&gt; 2023, 2023, ...</span></span>
-<span><span class="co">#&gt; $ sg_uf            &lt;chr&gt; "RO", "RO", ...</span></span>
-<span><span class="co">#&gt; $ co_uf            &lt;dbl&gt; 11, 11, ...</span></span>
-<span><span class="co">#&gt; $ no_municipio     &lt;chr&gt; "Porto Velho", ...</span></span>
-<span><span class="co">#&gt; $ co_municipio     &lt;dbl&gt; 1100205, ...</span></span>
-<span><span class="co">#&gt; $ no_entidade      &lt;chr&gt; "EEEE ABNAEL MACHADO DE LIMA", ...</span></span>
-<span><span class="co">#&gt; $ co_entidade      &lt;dbl&gt; 11000023, ...</span></span>
-<span><span class="co">#&gt; $ tp_dependencia   &lt;dbl&gt; 2, 3, 4, ...</span></span>
-<span><span class="co">#&gt; $ tp_localizacao   &lt;dbl&gt; 1, 1, 1, ...</span></span></code></pre></div>
+<span><span class="co">#&gt; $ nu_ano_censo              &lt;dbl&gt; 2023, 2023, ...</span></span>
+<span><span class="co">#&gt; $ no_regiao                 &lt;chr&gt; "Norte", "Norte", ...</span></span>
+<span><span class="co">#&gt; $ co_regiao                 &lt;chr&gt; "1", "1", ...</span></span>
+<span><span class="co">#&gt; $ no_uf                     &lt;chr&gt; "Rondônia", "Rondônia", ...</span></span>
+<span><span class="co">#&gt; $ sg_uf                     &lt;chr&gt; "RO", "RO", ...</span></span>
+<span><span class="co">#&gt; $ co_uf                     &lt;chr&gt; "11", "11", ...</span></span>
+<span><span class="co">#&gt; $ no_municipio              &lt;chr&gt; "Porto Velho", "Porto Velho", ...</span></span>
+<span><span class="co">#&gt; $ co_municipio              &lt;chr&gt; "1100205", "1100205", ...</span></span>
+<span><span class="co">#&gt; $ no_regiao_geog_interm     &lt;chr&gt; "Porto Velho", "Porto Velho", ...</span></span>
+<span><span class="co">#&gt; $ co_regiao_geog_interm     &lt;chr&gt; "1101", "1101", ...</span></span>
+<span><span class="co">#&gt; # ... 398 more variables</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="analysis-schools-by-administrative-type">Analysis: Schools by administrative type<a class="anchor" aria-label="anchor" href="#analysis-schools-by-administrative-type"></a>
 </h3>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Count by administrative type</span></span>
 <span><span class="va">schools_by_type</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">schools_2023</span> <span class="op">|&gt;</span></span>
@@ -510,16 +1386,21 @@ education, covering all public and private schools.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set2"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"Number of Schools by Administrative Type (2023)"</span>,</span>
-<span>    x <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>    y <span class="op">=</span> <span class="st">"Number of Schools"</span></span>
+<span>    x     <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    y     <span class="op">=</span> <span class="st">"Number of Schools"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span></span>
+<span>    labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/label_number.html" class="external-link">label_number</a></span><span class="op">(</span>big.mark <span class="op">=</span> <span class="st">"."</span>, decimal.mark <span class="op">=</span> <span class="st">","</span><span class="op">)</span>,</span>
+<span>    expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.12</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="../reference/figures/vignette-gs-schools-by-type.png"></p>
 </div>
 <div class="section level3">
 <h3 id="analysis-school-infrastructure">Analysis: School infrastructure<a class="anchor" aria-label="anchor" href="#analysis-school-infrastructure"></a>
 </h3>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Check infrastructure availability in public schools</span></span>
 <span><span class="va">infra</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">schools_2023</span> <span class="op">|&gt;</span></span>
@@ -529,7 +1410,7 @@ education, covering all public and private schools.</p>
 <span>    pct_library       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">in_biblioteca</span> <span class="op">==</span> <span class="fl">1</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>,</span>
 <span>    pct_computer_lab  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">in_laboratorio_informatica</span> <span class="op">==</span> <span class="fl">1</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>,</span>
 <span>    pct_sports_court  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">in_quadra_esportes</span> <span class="op">==</span> <span class="fl">1</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>,</span>
-<span>    pct_accessibility <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">in_acessibilidade</span> <span class="op">==</span> <span class="fl">1</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span></span>
+<span>    pct_ramps         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">in_acessibilidade_rampas</span> <span class="op">==</span> <span class="fl">1</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">infra</span><span class="op">)</span></span></code></pre></div>
@@ -551,24 +1432,24 @@ Computer Lab
 Sports Court
 </th>
 <th style="text-align:center;">
-Accessibility
+Ramps
 </th>
 </tr></thead>
 <tbody><tr>
 <td style="text-align:center;">
-78.3
+88.5
 </td>
 <td style="text-align:center;">
-42.1
+31.2
 </td>
 <td style="text-align:center;">
-35.2
+29.3
 </td>
 <td style="text-align:center;">
-48.7
+36
 </td>
 <td style="text-align:center;">
-32.1
+53.5
 </td>
 </tr></tbody>
 </table>
@@ -580,14 +1461,14 @@ Accessibility
 <div class="section level3">
 <h3 id="set-a-permanent-cache">1. Set a permanent cache<a class="anchor" aria-label="anchor" href="#set-a-permanent-cache"></a>
 </h3>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># At the start of each project</span></span>
 <span><span class="fu"><a href="../reference/set_cache_dir.html">set_cache_dir</a></span><span class="op">(</span><span class="st">"~/educabR_data"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="use-samples-for-exploration">2. Use samples for exploration<a class="anchor" aria-label="anchor" href="#use-samples-for-exploration"></a>
 </h3>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Explore with a small sample first</span></span>
 <span><span class="va">test_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_enem.html">get_enem</a></span><span class="op">(</span><span class="fl">2023</span>, n_max <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span></span>
@@ -597,7 +1478,7 @@ Accessibility
 <div class="section level3">
 <h3 id="filter-by-state-after-downloading">3. Filter by state after downloading<a class="anchor" aria-label="anchor" href="#filter-by-state-after-downloading"></a>
 </h3>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Download once, then filter</span></span>
 <span><span class="va">ideb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_ideb.html">get_ideb</a></span><span class="op">(</span>level <span class="op">=</span> <span class="st">"escola"</span>, stage <span class="op">=</span> <span class="st">"anos_iniciais"</span>, metric <span class="op">=</span> <span class="st">"indicador"</span>, year <span class="op">=</span> <span class="fl">2021</span><span class="op">)</span></span>
 <span><span class="va">ideb_sp</span> <span class="op">&lt;-</span> <span class="va">ideb</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">uf_sigla</span> <span class="op">==</span> <span class="st">"SP"</span><span class="op">)</span></span></code></pre></div>
@@ -605,7 +1486,7 @@ Accessibility
 <div class="section level3">
 <h3 id="monitor-memory-usage">4. Monitor memory usage<a class="anchor" aria-label="anchor" href="#monitor-memory-usage"></a>
 </h3>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Large files can consume a lot of RAM</span></span>
 <span><span class="co"># Use n_max or filter data after loading</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_censo_escolar.html">get_censo_escolar</a></span><span class="op">(</span><span class="fl">2023</span><span class="op">)</span></span>
