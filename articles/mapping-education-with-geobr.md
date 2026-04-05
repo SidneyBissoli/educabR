@@ -44,9 +44,9 @@ ideb_muni <- get_ideb(
   year   = 2023
 )
 
-# Keep only public schools and the observed IDEB indicator
+# Keep only public schools and the IDEB indicator
 ideb_muni <- ideb_muni |>
-  filter(rede == "Publica", indicador == "observado")
+  filter(rede == "Pública", indicador == "IDEB")
 
 municipalities <- read_municipality(year = 2020, showProgress = FALSE)
 ```

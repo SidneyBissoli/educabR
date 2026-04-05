@@ -100,9 +100,9 @@ geobr.</p>
 <span>  year   <span class="op">=</span> <span class="fl">2023</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Keep only public schools and the observed IDEB indicator</span></span>
+<span><span class="co"># Keep only public schools and the IDEB indicator</span></span>
 <span><span class="va">ideb_muni</span> <span class="op">&lt;-</span> <span class="va">ideb_muni</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">rede</span> <span class="op">==</span> <span class="st">"Publica"</span>, <span class="va">indicador</span> <span class="op">==</span> <span class="st">"observado"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">rede</span> <span class="op">==</span> <span class="st">"Pública"</span>, <span class="va">indicador</span> <span class="op">==</span> <span class="st">"IDEB"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">municipalities</span> <span class="op">&lt;-</span> <span class="fu">read_municipality</span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2020</span>, showProgress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">

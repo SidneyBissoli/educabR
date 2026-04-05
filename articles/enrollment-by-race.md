@@ -1,7 +1,7 @@
 # What is the enrollment distribution by race in the School Census?
 
 This vignette shows how to use educabR to explore the racial composition
-of school enrollment using the School Census (Censo Escolar) microdata.
+of school enrollment using the School Census microdata.
 
 ``` r
 library(educabR)

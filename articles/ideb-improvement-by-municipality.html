@@ -61,33 +61,42 @@
     
 <p>This vignette shows how to use educabR to identify which
 municipalities had the largest IDEB improvement over time, using the
-historical series available in the IDEB spreadsheets.</p>
+historical series available via <code><a href="../reference/get_ideb.html">get_ideb()</a></code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/SidneyBissoli/educabR" class="external-link">educabR</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="downloading-ideb-data">Downloading IDEB data<a class="anchor" aria-label="anchor" href="#downloading-ideb-data"></a>
 </h2>
-<p>Each IDEB file already contains the full historical series (all
-editions from 2005 to the current year), so a single download is
-enough.</p>
+<p><code><a href="../reference/get_ideb.html">get_ideb()</a></code> returns data in long format with all
+available editions. A single call with <code>year = c(2005, 2023)</code>
+gives us the two endpoints we need for comparison.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ideb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_ideb.html">get_ideb</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2023</span>, stage <span class="op">=</span> <span class="st">"anos_iniciais"</span>, level <span class="op">=</span> <span class="st">"municipio"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">ideb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_ideb.html">get_ideb</a></span><span class="op">(</span></span>
+<span>  level  <span class="op">=</span> <span class="st">"municipio"</span>,</span>
+<span>  stage  <span class="op">=</span> <span class="st">"anos_iniciais"</span>,</span>
+<span>  metric <span class="op">=</span> <span class="st">"indicador"</span>,</span>
+<span>  year   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2005</span>, <span class="fl">2023</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">ideb</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="calculating-ideb-improvement">Calculating IDEB improvement<a class="anchor" aria-label="anchor" href="#calculating-ideb-improvement"></a>
 </h2>
-<p>The columns <code>vl_observado_YYYY</code> contain the observed IDEB
-for each edition. We compare the earliest and latest available
-values.</p>
+<p>We filter to the IDEB indicator, pivot to wide format to get one
+column per year, then compute the change.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ideb_change</span> <span class="op">&lt;-</span> <span class="va">ideb</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">vl_observado_2005</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">vl_observado_2023</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="va">ideb_change</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">ideb</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">indicador</span> <span class="op">==</span> <span class="st">"IDEB"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">uf_sigla</span>, <span class="va">municipio_codigo</span>, <span class="va">municipio_nome</span>, <span class="va">rede</span>, <span class="va">ano</span>, <span class="va">valor</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">ano</span>, values_from <span class="op">=</span> <span class="va">valor</span>, names_prefix <span class="op">=</span> <span class="st">"ideb_"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ideb_2005</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ideb_2023</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    change     <span class="op">=</span> <span class="va">vl_observado_2023</span> <span class="op">-</span> <span class="va">vl_observado_2005</span>,</span>
-<span>    pct_change <span class="op">=</span> <span class="va">change</span> <span class="op">/</span> <span class="va">vl_observado_2005</span> <span class="op">*</span> <span class="fl">100</span></span>
+<span>    change     <span class="op">=</span> <span class="va">ideb_2023</span> <span class="op">-</span> <span class="va">ideb_2005</span>,</span>
+<span>    pct_change <span class="op">=</span> <span class="va">change</span> <span class="op">/</span> <span class="va">ideb_2005</span> <span class="op">*</span> <span class="fl">100</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -97,14 +106,14 @@ values.</p>
 <code class="sourceCode R"><span><span class="va">ideb_change</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_max</a></span><span class="op">(</span><span class="va">change</span>, n <span class="op">=</span> <span class="fl">20</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
-<span>    x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html" class="external-link">reorder</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">no_municipio</span>, <span class="va">sg_uf</span>, sep <span class="op">=</span> <span class="st">" - "</span><span class="op">)</span>, <span class="va">change</span><span class="op">)</span>,</span>
+<span>    x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html" class="external-link">reorder</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">municipio_nome</span>, <span class="va">uf_sigla</span>, sep <span class="op">=</span> <span class="st">" - "</span><span class="op">)</span>, <span class="va">change</span><span class="op">)</span>,</span>
 <span>    y <span class="op">=</span> <span class="va">change</span></span>
 <span>  <span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#2a9d8f"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"Top 20 Municipalities by IDEB Improvement (2005-2023)"</span>,</span>
-<span>    subtitle <span class="op">=</span> <span class="st">"Early elementary (anos iniciais)"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Early elementary (1st-5th grade)"</span>,</span>
 <span>    x <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"IDEB change (2023 - 2005)"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
@@ -115,12 +124,12 @@ values.</p>
 </h2>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ideb_change</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html" class="external-link">reorder</a></span><span class="op">(</span><span class="va">sg_uf</span>, <span class="va">change</span>, FUN <span class="op">=</span> <span class="va">median</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">change</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html" class="external-link">reorder</a></span><span class="op">(</span><span class="va">uf_sigla</span>, <span class="va">change</span>, FUN <span class="op">=</span> <span class="va">median</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">change</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#2a9d8f"</span>, alpha <span class="op">=</span> <span class="fl">0.6</span>, outlier.size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"IDEB Improvement Distribution by State (2005-2023)"</span>,</span>
-<span>    subtitle <span class="op">=</span> <span class="st">"Early elementary (anos iniciais)"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Early elementary (1st-5th grade)"</span>,</span>
 <span>    x <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"IDEB change"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
@@ -131,27 +140,22 @@ values.</p>
 </h2>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Pick the top 5 improvers</span></span>
-<span><span class="va">top5</span> <span class="op">&lt;-</span> <span class="va">ideb_change</span> <span class="op">|&gt;</span></span>
+<span><span class="va">top5</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">ideb_change</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_max</a></span><span class="op">(</span><span class="va">change</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">co_municipio</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">municipio_codigo</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Reshape to long format for plotting</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
+<span><span class="co"># Get full history for these municipalities</span></span>
+<span><span class="va">ideb_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_ideb.html">get_ideb</a></span><span class="op">(</span></span>
+<span>  level  <span class="op">=</span> <span class="st">"municipio"</span>,</span>
+<span>  stage  <span class="op">=</span> <span class="st">"anos_iniciais"</span>,</span>
+<span>  metric <span class="op">=</span> <span class="st">"indicador"</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">ideb</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">co_municipio</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">top5</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">co_municipio</span>, <span class="va">no_municipio</span>, <span class="va">sg_uf</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"vl_observado_"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span></span>
-<span>    cols      <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"vl_observado_"</span><span class="op">)</span>,</span>
-<span>    names_to  <span class="op">=</span> <span class="st">"year"</span>,</span>
-<span>    values_to <span class="op">=</span> <span class="st">"ideb_score"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    year  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"vl_observado_"</span>, <span class="st">""</span>, <span class="va">year</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">no_municipio</span>, <span class="va">sg_uf</span>, sep <span class="op">=</span> <span class="st">" - "</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ideb_score</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">year</span>, y <span class="op">=</span> <span class="va">ideb_score</span>, color <span class="op">=</span> <span class="va">label</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="va">ideb_full</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">municipio_codigo</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">top5</span>, <span class="va">indicador</span> <span class="op">==</span> <span class="st">"IDEB"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">municipio_nome</span>, <span class="va">uf_sigla</span>, sep <span class="op">=</span> <span class="st">" - "</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ano</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">valor</span>, color <span class="op">=</span> <span class="va">label</span>, group <span class="op">=</span> <span class="va">label</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
@@ -171,14 +175,14 @@ values.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">change</span> <span class="op">&lt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_min</a></span><span class="op">(</span><span class="va">change</span>, n <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
-<span>    x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html" class="external-link">reorder</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">no_municipio</span>, <span class="va">sg_uf</span>, sep <span class="op">=</span> <span class="st">" - "</span><span class="op">)</span>, <span class="va">change</span><span class="op">)</span>,</span>
+<span>    x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html" class="external-link">reorder</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">municipio_nome</span>, <span class="va">uf_sigla</span>, sep <span class="op">=</span> <span class="st">" - "</span><span class="op">)</span>, <span class="va">change</span><span class="op">)</span>,</span>
 <span>    y <span class="op">=</span> <span class="va">change</span></span>
 <span>  <span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#e76f51"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"Municipalities with Largest IDEB Decline (2005-2023)"</span>,</span>
-<span>    subtitle <span class="op">=</span> <span class="st">"Early elementary (anos iniciais)"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Early elementary (1st-5th grade)"</span>,</span>
 <span>    x <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"IDEB change (2023 - 2005)"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>

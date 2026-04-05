@@ -11,7 +11,7 @@ library(dplyr)
 library(ggplot2)
 ```
 
-## Higher Education Census (Censo da Educacao Superior)
+## Higher Education Census
 
 The Higher Education Census is an annual survey covering all Brazilian
 higher education institutions (IES), including data on institutions,
