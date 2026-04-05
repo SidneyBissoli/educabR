@@ -135,7 +135,7 @@ get_censo_superior <- function(year,
 
   # filter by UF if requested
   if (!is.null(uf) && "co_uf_ies" %in% names(df)) {
-    uf_code <- uf_to_code(uf)
+    uf_code <- as.character(uf_to_code(uf))
     df <- df |>
       dplyr::filter(.data$co_uf_ies == uf_code)
   }

@@ -110,7 +110,18 @@ extract_zip <- function(zipfile, exdir, quiet = FALSE) {
   # try standard unzip first, fall back to system command if encoding issues
   tryCatch(
     {
-      files <- utils::unzip(zipfile, exdir = exdir)
+      files <- withCallingHandlers(
+        utils::unzip(zipfile, exdir = exdir),
+        warning = function(w) {
+          if (grepl("erro|error", conditionMessage(w), ignore.case = TRUE)) {
+            invokeRestart("muffleWarning")
+          }
+        }
+      )
+
+      if (length(files) == 0) {
+        stop("unzip extracted 0 files")
+      }
 
       if (!quiet) {
         cli::cli_alert_success("extracted {.val {length(files)}} file(s)")
@@ -119,8 +130,8 @@ extract_zip <- function(zipfile, exdir, quiet = FALSE) {
       files
     },
     error = function(e) {
-      # check if it's an encoding error (common with INEP files)
-      if (grepl("multibyte|encoding|invalid|illegal|byte sequence|abrir o arquivo", conditionMessage(e), ignore.case = TRUE)) {
+      # encoding errors or empty extraction — try alternative method
+      if (TRUE) {
         if (!quiet) {
           cli::cli_alert_warning(
             "standard extraction failed due to encoding, trying alternative method..."

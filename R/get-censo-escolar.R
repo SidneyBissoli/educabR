@@ -89,8 +89,11 @@ get_censo_escolar <- function(year,
     cli::cli_alert_info("reading school data...")
   }
 
+  # when filtering by UF, read all rows first, then filter and apply n_max
+  read_max <- if (!is.null(uf)) Inf else n_max
+
   # read the file
-  df <- read_inep_file(data_file, delim = ";", n_max = n_max)
+  df <- read_inep_file(data_file, delim = ";", n_max = read_max)
 
   # standardize column names
   df <- standardize_names(df)
@@ -103,9 +106,14 @@ get_censo_escolar <- function(year,
 
   # filter by UF if requested
   if (!is.null(uf) && "co_uf" %in% names(df)) {
-    uf_code <- uf_to_code(uf)
+    uf_code <- as.character(uf_to_code(uf))
     df <- df |>
       dplyr::filter(.data$co_uf == uf_code)
+  }
+
+  # apply n_max after UF filter
+  if (!is.null(uf) && is.finite(n_max) && nrow(df) > n_max) {
+    df <- df[seq_len(n_max), ]
   }
 
   if (!quiet) {
