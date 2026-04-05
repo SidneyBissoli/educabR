@@ -46,16 +46,29 @@ ideb <- get_ideb(
 glimpse(ideb)
 ```
 
+```
+#> Rows: 86,982
+#> Columns: 7
+#> $ uf_sigla         <chr> "RO", "RO", "RO", "RO", "RO", "RO", …
+#> $ municipio_codigo <chr> "1100015", "1100015", "1100015", "1100…
+#> $ municipio_nome   <chr> "Alta Floresta D'Oeste", "Alta Florest…
+#> $ rede             <chr> "Estadual", "Municipal", "Pública", "E…
+#> $ ano              <int> 2005, 2005, 2005, 2005, 2005, 2005, 20…
+#> $ indicador        <chr> "IDEB", "IDEB", "IDEB", "IDEB", "IDEB…
+#> $ valor            <dbl> 3.5, NA, 3.7, 4.0, 3.5, 3.7, 4.1, 3.4…
+```
+
 ## Calculating IDEB improvement
 
-We filter to the IDEB indicator, pivot to wide format to get one column
-per year, then compute the change.
+We filter to the IDEB indicator for municipal schools, pivot to wide
+format to get one column per year, then compute the change.
 
 ```{r improvement}
 ideb_change <-
   ideb |>
   filter(indicador == "IDEB") |>
-  select(uf_sigla, municipio_codigo, municipio_nome, rede, ano, valor) |>
+  filter(rede == "Municipal") |>
+  select(uf_sigla, municipio_codigo, municipio_nome, ano, valor) |>
   pivot_wider(names_from = ano, values_from = valor, names_prefix = "ideb_") |>
   filter(!is.na(ideb_2005), !is.na(ideb_2023)) |>
   mutate(
@@ -76,13 +89,15 @@ ideb_change |>
   geom_col(fill = "#2a9d8f") +
   coord_flip() +
   labs(
-    title = "Top 20 Municipalities by IDEB Improvement (2005-2023)",
-    subtitle = "Early elementary (1st-5th grade)",
-    x = NULL,
-    y = "IDEB change (2023 - 2005)"
+    title    = "Top 20 Municipalities by IDEB Improvement (2005-2023)",
+    subtitle = "Municipal schools, early elementary (1st-5th grade)",
+    x        = NULL,
+    y        = "IDEB change (2023 - 2005)"
   ) +
   theme_minimal()
 ```
+
+![](../man/figures/vignette-ideb-top-absolute.png)
 
 ## Distribution of improvement by state
 
@@ -92,13 +107,15 @@ ideb_change |>
   geom_boxplot(fill = "#2a9d8f", alpha = 0.6, outlier.size = 0.5) +
   coord_flip() +
   labs(
-    title = "IDEB Improvement Distribution by State (2005-2023)",
-    subtitle = "Early elementary (1st-5th grade)",
-    x = NULL,
-    y = "IDEB change"
+    title    = "IDEB Improvement Distribution by State (2005-2023)",
+    subtitle = "Municipal schools, early elementary (1st-5th grade)",
+    x        = NULL,
+    y        = "IDEB change"
   ) +
   theme_minimal()
 ```
+
+![](../man/figures/vignette-ideb-by-state.png)
 
 ## IDEB trajectory for selected municipalities
 
@@ -106,15 +123,18 @@ ideb_change |>
 # Pick the top 5 improvers
 top5 <-
   ideb_change |>
+  filter(rede == "Municipal") |>
   slice_max(change, n = 5) |>
   pull(municipio_codigo)
 
 # Get full history for these municipalities
-ideb_full <- get_ideb(
-  level  = "municipio",
-  stage  = "anos_iniciais",
-  metric = "indicador"
-)
+ideb_full <-
+  get_ideb(
+    level  = "municipio",
+    stage  = "anos_iniciais",
+    metric = "indicador"
+  ) |>
+  filter(rede == "Municipal")
 
 ideb_full |>
   filter(municipio_codigo %in% top5, indicador == "IDEB") |>
@@ -123,14 +143,17 @@ ideb_full |>
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
   labs(
-    title = "IDEB Trajectory - Top 5 Improvers",
-    x     = "Year",
+    title    = "IDEB Trajectory - Top 5 Improvers",
+    subtitle = "Municipal schools, early elementary (1st-5th grade)",
+    x        = "Year",
     y     = "IDEB",
     color = NULL
   ) +
   theme_minimal() +
   theme(legend.position = "bottom")
 ```
+
+![](../man/figures/vignette-ideb-trajectories.png)
 
 ## Municipalities that declined
 
@@ -145,10 +168,12 @@ ideb_change |>
   geom_col(fill = "#e76f51") +
   coord_flip() +
   labs(
-    title = "Municipalities with Largest IDEB Decline (2005-2023)",
-    subtitle = "Early elementary (1st-5th grade)",
-    x = NULL,
-    y = "IDEB change (2023 - 2005)"
+    title    = "Municipalities with Largest IDEB Decline (2005-2023)",
+    subtitle = "Municipal schools, early elementary (1st-5th grade)",
+    x        = NULL,
+    y        = "IDEB change (2023 - 2005)"
   ) +
   theme_minimal()
 ```
+
+![](../man/figures/vignette-ideb-declined.png)
