@@ -187,15 +187,19 @@ trend <-
   group_by(ano) |>
   summarise(mean_ideb = mean(valor, na.rm = TRUE))
 
-ggplot(trend, aes(x = ano, y = mean_ideb)) +
-  geom_line(color = "darkgreen", linewidth = 1.2) +
-  geom_point(color = "darkgreen", size = 3) +
+ggplot(trend, aes(x = factor(ano), y = mean_ideb)) +
+  geom_col(fill = "darkgreen", width = 0.6) +
+  geom_text(
+    aes(label = sprintf("%.2f", mean_ideb)),
+    vjust = -0.5, size = 3.5
+  ) +
   labs(
     title = "IDEB Trend - Early Elementary",
     x     = "Year",
     y     = "National Average IDEB"
   ) +
-  theme_minimal()
+  theme_minimal() +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1)))
 ```
 
 ![](../reference/figures/vignette-gs-ideb-trend.png)
