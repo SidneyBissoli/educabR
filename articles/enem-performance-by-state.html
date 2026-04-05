@@ -73,21 +73,20 @@ ENEM scores across Brazilian states over time.</p>
 <code>n_max</code> to work with samples. For a full analysis, remove the
 <code>n_max</code> parameter.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">years</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2019</span>, <span class="fl">2021</span>, <span class="fl">2022</span>, <span class="fl">2023</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># WARNING: each year downloads ~600 MB from INEP. This may take several minutes.</span></span>
+<span><span class="va">years</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2019</span>, <span class="fl">2021</span>, <span class="fl">2022</span>, <span class="fl">2023</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">enem_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">years</span>, <span class="kw">function</span><span class="op">(</span><span class="va">y</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_enem.html">get_enem</a></span><span class="op">(</span>year <span class="op">=</span> <span class="va">y</span>, n_max <span class="op">=</span> <span class="fl">50000</span><span class="op">)</span></span>
-<span>  <span class="va">df</span><span class="op">$</span><span class="va">year</span> <span class="op">&lt;-</span> <span class="va">y</span></span>
-<span>  <span class="va">df</span></span>
-<span><span class="op">}</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">enem</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">enem_list</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">enem</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">years</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span>\<span class="op">(</span><span class="va">y</span><span class="op">)</span> <span class="fu"><a href="../reference/get_enem.html">get_enem</a></span><span class="op">(</span>year <span class="op">=</span> <span class="va">y</span>, n_max <span class="op">=</span> <span class="fl">50000</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>year <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="average-math-score-by-state-and-year">Average math score by state and year<a class="anchor" aria-label="anchor" href="#average-math-score-by-state-and-year"></a>
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">scores_by_state</span> <span class="op">&lt;-</span> <span class="va">enem</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="va">scores_by_state</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">enem</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">nu_nota_mt</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">sg_uf_prova</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
 <span>    mean_math <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">nu_nota_mt</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
@@ -96,7 +95,8 @@ ENEM scores across Brazilian states over time.</p>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Top 5 states in the most recent year</span></span>
-<span><span class="va">top_states</span> <span class="op">&lt;-</span> <span class="va">scores_by_state</span> <span class="op">|&gt;</span></span>
+<span><span class="va">top_states</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">scores_by_state</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">year</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">year</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_max</a></span><span class="op">(</span><span class="va">mean_math</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">sg_uf_prova</span><span class="op">)</span></span>

@@ -83,7 +83,8 @@ scoring 1 or 2 are flagged for on-site evaluation.</p>
 institutions. The exact column name and coding may vary by year – check
 <code>names(cpc)</code> after downloading.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cpc_classified</span> <span class="op">&lt;-</span> <span class="va">cpc</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="va">cpc_classified</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">cpc</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    sector <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">categoria_administrativa</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>

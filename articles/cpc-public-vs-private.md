@@ -27,7 +27,8 @@ column name and coding may vary by year – check `names(cpc)` after
 downloading.
 
 ``` r
-cpc_classified <- cpc |>
+cpc_classified <-
+  cpc |>
   mutate(
     sector = case_when(
       categoria_administrativa %in% c(

@@ -45,7 +45,8 @@ ideb_muni <- get_ideb(
 )
 
 # Keep only public schools and the IDEB indicator
-ideb_muni <- ideb_muni |>
+ideb_muni <-
+  ideb_muni |>
   filter(rede == "Pública", indicador == "IDEB")
 
 municipalities <- read_municipality(year = 2020, showProgress = FALSE)
@@ -67,7 +68,8 @@ For a closer look, filter both datasets to a single state. Here we map
 IDEB across municipalities in Minas Gerais.
 
 ``` r
-ideb_mg <- ideb_muni |>
+ideb_mg <-
+  ideb_muni |>
   filter(uf_sigla == "MG")
 
 munis_mg <- read_municipality(code_muni = "MG", year = 2020, showProgress = FALSE)
