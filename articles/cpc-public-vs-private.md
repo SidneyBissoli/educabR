@@ -21,6 +21,20 @@ cpc <- get_cpc(year = 2023)
 glimpse(cpc)
 ```
 
+    #> Rows: 9,812
+    #> Columns: 39
+    #> $ ano                      <dbl> 2023, 2023, 2023, 2023, 2023, …
+    #> $ codigo_da_ies            <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, …
+    #> $ nome_da_ies              <chr> "UNIVERSIDADE FEDERAL DE MATO G…
+    #> $ sigla_da_ies             <chr> "UFMT", "UFMT", "UFMT", "UFMT"…
+    #> $ categoria_administrativa <chr> "Pública Federal", "Pública Fed…
+    #> $ codigo_do_curso          <dbl> 3, 9, 10, 12, 16, 17, 20, 37, …
+    #> $ area_de_avaliacao        <chr> "ENGENHARIA CIVIL", "AGRONOMIA"…
+    #> $ sigla_da_uf              <chr> "MT", "MT", "MT", "MT", "MT", "…
+    #> $ cpc_continuo             <dbl> 3.429, 3.482, 3.064, 2.792, 4.…
+    #> $ cpc_faixa                <dbl> 4, 4, 4, 3, 5, 4, 4, 4, 4, 5, …
+    #> # ℹ 29 more variables
+
 ## Identifying public vs private institutions
 
 The `categoria_administrativa` column classifies institutions. The exact
@@ -59,15 +73,17 @@ cpc_classified |>
   theme_minimal()
 ```
 
+![](../reference/figures/vignette-cpc-distribution.png)
+
 ## Average CPC by sector and knowledge area
 
 ``` r
 cpc_classified |>
-  filter(!is.na(cpc_continuo), !is.na(area_avaliacao)) |>
+  filter(!is.na(cpc_continuo), !is.na(area_de_avaliacao)) |>
   summarise(
     mean_cpc = mean(cpc_continuo, na.rm = TRUE),
     n = n(),
-    .by = c(sector, area_avaliacao)
+    .by = c(sector, area_de_avaliacao)
   ) |>
   filter(n >= 10) |>
   pivot_wider(
@@ -76,7 +92,7 @@ cpc_classified |>
   ) |>
   mutate(gap = mean_cpc_Public - mean_cpc_Private) |>
   slice_max(abs(gap), n = 15) |>
-  ggplot(aes(x = reorder(area_avaliacao, gap), y = gap)) +
+  ggplot(aes(x = reorder(area_de_avaliacao, gap), y = gap)) +
   geom_col(aes(fill = gap > 0)) +
   coord_flip() +
   scale_fill_manual(
@@ -89,8 +105,11 @@ cpc_classified |>
     y     = "CPC difference (public - private)",
     fill  = NULL
   ) +
-  theme_minimal()
+  theme_minimal() +
+  theme(legend.position = "none")
 ```
+
+![](../reference/figures/vignette-cpc-gap-area.png)
 
 ## Combining with IGC for institutional view
 
@@ -123,3 +142,5 @@ igc |>
   theme_minimal() +
   theme(legend.position = "none")
 ```
+
+![](../reference/figures/vignette-cpc-igc-boxplot.png)

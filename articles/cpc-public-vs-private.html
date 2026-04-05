@@ -76,6 +76,19 @@ scoring 1 or 2 are flagged for on-site evaluation.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cpc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_cpc.html">get_cpc</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2023</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">cpc</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Rows: 9,812</span></span>
+<span><span class="co">#&gt; Columns: 39</span></span>
+<span><span class="co">#&gt; $ ano                      &lt;dbl&gt; 2023, 2023, 2023, 2023, 2023, …</span></span>
+<span><span class="co">#&gt; $ codigo_da_ies            &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, …</span></span>
+<span><span class="co">#&gt; $ nome_da_ies              &lt;chr&gt; "UNIVERSIDADE FEDERAL DE MATO G…</span></span>
+<span><span class="co">#&gt; $ sigla_da_ies             &lt;chr&gt; "UFMT", "UFMT", "UFMT", "UFMT"…</span></span>
+<span><span class="co">#&gt; $ categoria_administrativa &lt;chr&gt; "Pública Federal", "Pública Fed…</span></span>
+<span><span class="co">#&gt; $ codigo_do_curso          &lt;dbl&gt; 3, 9, 10, 12, 16, 17, 20, 37, …</span></span>
+<span><span class="co">#&gt; $ area_de_avaliacao        &lt;chr&gt; "ENGENHARIA CIVIL", "AGRONOMIA"…</span></span>
+<span><span class="co">#&gt; $ sigla_da_uf              &lt;chr&gt; "MT", "MT", "MT", "MT", "MT", "…</span></span>
+<span><span class="co">#&gt; $ cpc_continuo             &lt;dbl&gt; 3.429, 3.482, 3.064, 2.792, 4.…</span></span>
+<span><span class="co">#&gt; $ cpc_faixa                &lt;dbl&gt; 4, 4, 4, 3, 5, 4, 4, 4, 4, 5, …</span></span>
+<span><span class="co">#&gt; # ℹ 29 more variables</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="identifying-public-vs-private-institutions">Identifying public vs private institutions<a class="anchor" aria-label="anchor" href="#identifying-public-vs-private-institutions"></a>
@@ -83,7 +96,7 @@ scoring 1 or 2 are flagged for on-site evaluation.</p>
 <p>The <code>categoria_administrativa</code> column classifies
 institutions. The exact column name and coding may vary by year – check
 <code>names(cpc)</code> after downloading.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cpc_classified</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">cpc</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
@@ -99,7 +112,7 @@ institutions. The exact column name and coding may vary by year – check
 <div class="section level2">
 <h2 id="cpc-score-distribution-by-sector">CPC score distribution by sector<a class="anchor" aria-label="anchor" href="#cpc-score-distribution-by-sector"></a>
 </h2>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cpc_classified</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">cpc_faixa</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">sector</span>, <span class="va">cpc_faixa</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -113,17 +126,18 @@ institutions. The exact column name and coding may vary by year – check
 <span>    fill  <span class="op">=</span> <span class="st">"Sector"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../reference/figures/vignette-cpc-distribution.png"></p>
 </div>
 <div class="section level2">
 <h2 id="average-cpc-by-sector-and-knowledge-area">Average CPC by sector and knowledge area<a class="anchor" aria-label="anchor" href="#average-cpc-by-sector-and-knowledge-area"></a>
 </h2>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cpc_classified</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">cpc_continuo</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">area_avaliacao</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">cpc_continuo</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">area_de_avaliacao</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
 <span>    mean_cpc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">cpc_continuo</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>    n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    .by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">sector</span>, <span class="va">area_avaliacao</span><span class="op">)</span></span>
+<span>    .by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">sector</span>, <span class="va">area_de_avaliacao</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">n</span> <span class="op">&gt;=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span></span>
@@ -132,7 +146,7 @@ institutions. The exact column name and coding may vary by year – check
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>gap <span class="op">=</span> <span class="va">mean_cpc_Public</span> <span class="op">-</span> <span class="va">mean_cpc_Private</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">gap</span><span class="op">)</span>, n <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html" class="external-link">reorder</a></span><span class="op">(</span><span class="va">area_avaliacao</span>, <span class="va">gap</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">gap</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html" class="external-link">reorder</a></span><span class="op">(</span><span class="va">area_de_avaliacao</span>, <span class="va">gap</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">gap</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">gap</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span></span>
@@ -145,7 +159,9 @@ institutions. The exact column name and coding may vary by year – check
 <span>    y     <span class="op">=</span> <span class="st">"CPC difference (public - private)"</span>,</span>
 <span>    fill  <span class="op">=</span> <span class="cn">NULL</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../reference/figures/vignette-cpc-gap-area.png"></p>
 </div>
 <div class="section level2">
 <h2 id="combining-with-igc-for-institutional-view">Combining with IGC for institutional view<a class="anchor" aria-label="anchor" href="#combining-with-igc-for-institutional-view"></a>
@@ -153,7 +169,7 @@ institutions. The exact column name and coding may vary by year – check
 <p>IGC (Indice Geral de Cursos) provides an institution-level quality
 score. Combining CPC and IGC gives a course-level and institution-level
 perspective.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">igc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_igc.html">get_igc</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2023</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">igc</span> <span class="op">|&gt;</span></span>
@@ -177,6 +193,7 @@ perspective.</p>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../reference/figures/vignette-cpc-igc-boxplot.png"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

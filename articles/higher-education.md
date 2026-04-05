@@ -236,7 +236,7 @@ igc |>
   filter(!is.na(igc_continuo)) |>
   arrange(desc(igc_continuo)) |>
   head(20) |>
-  ggplot(aes(x = reorder(sigla_ies, igc_continuo), y = igc_continuo)) +
+  ggplot(aes(x = reorder(sigla_da_ies, igc_continuo), y = igc_continuo)) +
   geom_col(fill = "darkblue") +
   coord_flip() +
   labs(
@@ -324,19 +324,19 @@ igc <- get_igc(2023)
 igc_summary <- 
   igc |>
   filter(!is.na(igc_faixa)) |>
-  select(codigo_ies, sigla_ies, igc_continuo, igc_faixa)
+  select(codigo_da_ies, sigla_da_ies, igc_continuo, igc_faixa)
 
 cpc_summary <- 
   cpc |>
   filter(!is.na(cpc_continuo)) |>
-  group_by(codigo_ies) |>
+  group_by(codigo_da_ies) |>
   summarise(
     n_courses = n(),
     mean_cpc  = mean(cpc_continuo, na.rm = TRUE),
     .groups   = "drop"
   )
 
-combined <- inner_join(igc_summary, cpc_summary, by = "codigo_ies")
+combined <- inner_join(igc_summary, cpc_summary, by = "codigo_da_ies")
 
 ggplot(combined, aes(x = mean_cpc, y = igc_continuo, size = n_courses)) +
   geom_point(alpha = 0.4, color = "steelblue") +
