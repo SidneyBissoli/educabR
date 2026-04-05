@@ -25,6 +25,7 @@ between public and private higher education institutions in Brazil.
 ```{r setup}
 library(educabR)
 library(dplyr)
+library(tidyr)
 library(ggplot2)
 ```
 
