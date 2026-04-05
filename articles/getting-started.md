@@ -7,13 +7,14 @@ can download and process data from 14 datasets:
 **Basic Education:**  
 - **IDEB** - Basic Education Development Index  
 - **ENEM** - National High School Exam  
-- **School Census** - **SAEB** - Basic Education Assessment System  
+- **School Census**  
+- **SAEB** - Basic Education Assessment System  
 - **ENCCEJA** - Youth and Adult Education Certification Exam  
 - **ENEM by School** - ENEM results aggregated by school (2005-2015)
 
 **Higher Education:**  
-- **Higher Education Census** - **ENADE** - National Student Performance
-Exam  
+- **Higher Education Census**  
+- **ENADE** - National Student Performance Exam  
 - **IDD** - Value-Added Indicator  
 - **CPC** - Preliminary Course Concept  
 - **IGC** - General Courses Index
@@ -48,6 +49,7 @@ remotes::install_github("SidneyBissoli/educabR")
 library(educabR)
 library(dplyr)
 library(ggplot2)
+library(kableExtra)
 ```
 
 ## Configuring Cache
@@ -79,40 +81,45 @@ combining test performance (SAEB) with grade promotion rates.
 ``` r
 # See available combinations
 list_ideb_available()
-#> # A tibble: 24 x 3
-#>     year level     stage
-#>    <int> <chr>     <chr>
-#>  1  2017 escola    anos_iniciais
-#>  2  2017 escola    anos_finais
-#>  3  2017 escola    ensino_medio
-#>  4  2017 municipio anos_iniciais
-#>  ...
 ```
+
+| Level                                    | Stage         | Metric    |
+|:-----------------------------------------|:--------------|:----------|
+| brasil                                   | anos_finais   | aprovacao |
+| brasil                                   | anos_finais   | indicador |
+| brasil                                   | anos_finais   | meta      |
+| brasil                                   | anos_finais   | nota      |
+| brasil                                   | anos_iniciais | aprovacao |
+| brasil                                   | anos_iniciais | indicador |
+| brasil                                   | anos_iniciais | meta      |
+| brasil                                   | anos_iniciais | nota      |
+| brasil                                   | ensino_medio  | aprovacao |
+| brasil                                   | ensino_medio  | indicador |
+|  Showing 10 of 60 available combinations |               |           |
 
 ### Downloading IDEB data
 
 ``` r
 # IDEB by school - Early elementary (1st-5th grade)
 ideb_schools <- get_ideb(
-  year  = 2021,
-  level = "escola",
-  stage = "anos_iniciais"
+  level  = "escola",
+  stage  = "anos_iniciais",
+  metric = "indicador",
+  year   = 2021
 )
 
-# IDEB by municipality - High school
+# IDEB by municipality - High school (1st-4th grade)
 ideb_municipalities <- get_ideb(
-  year  = 2023,
-  level = "municipio",
-  stage = "ensino_medio"
+  level  = "municipio",
+  stage  = "ensino_medio",
+  metric = "indicador",
+  year   = 2023
 )
 
-# Filter by state (faster)
-ideb_sp <- get_ideb(
-  year  = 2021,
-  level = "escola",
-  stage = "anos_iniciais",
-  uf    = "SP"
-)
+# Filter by state after downloading
+ideb_sp <-
+  ideb_schools |>
+  dplyr::filter(uf_sigla == "SP")
 ```
 
 ### Data structure
@@ -120,67 +127,68 @@ ideb_sp <- get_ideb(
 ``` r
 # View structure
 glimpse(ideb_schools)
-#> Rows: 63,529
-#> Columns: 17
-#> $ sg_uf                   <chr> "RO", "RO", "RO", ...
-#> $ co_municipio            <dbl> 1100015, 1100015, ...
-#> $ no_municipio            <chr> "Alta Floresta D'Oeste", ...
-#> $ id_escola               <dbl> 11000023, 11000040, ...
-#> $ no_escola               <chr> "EEEE ABNAEL MACHADO DE LIMA", ...
-#> $ rede                    <chr> "Estadual", "Municipal", ...
-#> $ vl_aprovacao_2021_si_4  <dbl> 93.3, 98.5, 100, ...
-#> $ vl_indicador_rend_2021  <dbl> 0.92, 0.98, 1.00, ...
-#> $ vl_nota_matematica_2021 <dbl> 5.2, 5.8, 6.1, ...
-#> $ vl_nota_portugues_2021  <dbl> 5.4, 5.9, 6.0, ...
-#> $ vl_nota_media_2021      <dbl> 5.3, 5.85, 6.05, ...
-#> $ vl_observado_2021       <dbl> 4.9, 5.7, 6.1, ...
+#> Rows: 194,715
+#> Columns: 9
+#> $ uf_sigla         <chr> "RO", "RO", "RO", ...
+#> $ municipio_codigo <chr> "1100015", "1100015", ...
+#> $ municipio_nome   <chr> "Alta Floresta D'Oeste", ...
+#> $ escola_id        <chr> "11024372", "11024666", ...
+#> $ escola_nome      <chr> "EMEIEF ANA NERY", "EMEIEF BOA ESPERANCA", ...
+#> $ rede             <chr> "Municipal", "Municipal", ...
+#> $ ano              <int> 2021, 2021, ...
+#> $ indicador        <chr> "IDEB", "IDEB", ...
+#> $ valor            <dbl> NA, NA, 5.9, 4.1, ...
 ```
 
 ### Example analysis: Average IDEB by state
 
 ``` r
-# Calculate average IDEB by state
-ideb_by_state <- 
+# Calculate average IDEB by state (observed indicator only)
+ideb_by_state <-
   ideb_schools |>
-  filter(!is.na(vl_observado_2021)) |>
-  group_by(sg_uf) |>
+  filter(indicador == "IDEB", !is.na(valor)) |>
+  group_by(uf_sigla) |>
   summarise(
     n_schools   = n(),
-    mean_ideb   = mean(vl_observado_2021, na.rm = TRUE),
-    median_ideb = median(vl_observado_2021, na.rm = TRUE)
+    mean_ideb   = mean(valor, na.rm = TRUE),
+    median_ideb = median(valor, na.rm = TRUE)
   ) |>
   arrange(desc(mean_ideb))
 
 # Plot
-ggplot(ideb_by_state, aes(x = reorder(sg_uf, mean_ideb), y = mean_ideb)) +
+ggplot(ideb_by_state, aes(x = reorder(uf_sigla, mean_ideb), y = mean_ideb)) +
   geom_col(fill = "steelblue") +
   coord_flip() +
   labs(
     title = "Average IDEB by State - Early Elementary (2021)",
     x     = "State",
     y     = "Average IDEB"
-    ) +
+  ) +
   theme_minimal()
 ```
+
+![](../reference/figures/vignette-gs-ideb-by-state.png)
 
 ### IDEB historical series
 
 ``` r
-# Download historical series
-ideb_history <- get_ideb_series(
-  years = c(2017, 2019, 2021, 2023),
-  level = "municipio",
-  stage = "anos_iniciais"
+# Download historical series (get_ideb() already returns long format)
+ideb_history <- get_ideb(
+  level  = "municipio",
+  stage  = "anos_iniciais",
+  metric = "indicador",
+  year   = c(2017, 2019, 2021, 2023)
 )
 
 # National trend
-trend <- 
+trend <-
   ideb_history |>
-  group_by(ano_ideb) |>
-  summarise(mean_ideb = mean(vl_observado, na.rm = TRUE))
+  filter(indicador == "IDEB") |>
+  group_by(ano) |>
+  summarise(mean_ideb = mean(valor, na.rm = TRUE))
 
-ggplot(trend, aes(x = ano_ideb, y = mean_ideb)) +
-  geom_line(color = "darkgreen", size = 1.2) +
+ggplot(trend, aes(x = ano, y = mean_ideb)) +
+  geom_line(color = "darkgreen", linewidth = 1.2) +
   geom_point(color = "darkgreen", size = 3) +
   labs(
     title = "IDEB Trend - Early Elementary",
@@ -189,6 +197,8 @@ ggplot(trend, aes(x = ano_ideb, y = mean_ideb)) +
   ) +
   theme_minimal()
 ```
+
+![](../reference/figures/vignette-gs-ideb-trend.png)
 
 ## ENEM - National High School Exam
 
@@ -354,11 +364,13 @@ infra <-
   )
 
 print(infra)
-#> # A tibble: 1 x 5
-#>   pct_internet pct_library pct_computer_lab pct_sports_court pct_accessibility
-#>          <dbl>       <dbl>            <dbl>            <dbl>             <dbl>
-#> 1         78.3        42.1             35.2             48.7              32.1
 ```
+
+| Internet | Library | Computer Lab | Sports Court | Accessibility |
+|:--------:|:-------:|:------------:|:------------:|:-------------:|
+|   78.3   |  42.1   |     35.2     |     48.7     |     32.1      |
+
+Infrastructure availability in public schools (%)
 
 ## Best practices
 
@@ -379,11 +391,12 @@ test_data <- get_enem(2023, n_max = 1000)
 # full_data <- get_enem(2023)
 ```
 
-### 3. Filter by state when possible
+### 3. Filter by state after downloading
 
 ``` r
-# Faster than downloading everything and filtering afterwards
-data_sp <- get_ideb(2021, level = "escola", stage = "anos_iniciais", uf = "SP")
+# Download once, then filter
+ideb <- get_ideb(level = "escola", stage = "anos_iniciais", metric = "indicador", year = 2021)
+ideb_sp <- ideb |> dplyr::filter(uf_sigla == "SP")
 ```
 
 ### 4. Monitor memory usage
