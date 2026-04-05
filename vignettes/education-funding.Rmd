@@ -11,8 +11,12 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment  = "#>",
-  eval     = FALSE
+  eval     = FALSE,
+  message  = FALSE,
+  warning  = FALSE
 )
+suppressPackageStartupMessages(library(systemfonts))
+suppressPackageStartupMessages(library(textshaping))
 ```
 
 This vignette covers FUNDEB (Fundo de Manutencao e Desenvolvimento da Educacao
