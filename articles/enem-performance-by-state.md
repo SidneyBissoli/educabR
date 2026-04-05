@@ -46,7 +46,7 @@ top_states <-
 
 scores_by_state |>
   filter(sg_uf_prova %in% top_states) |>
-  ggplot(aes(x = year, y = mean_math, color = sg_uf_prova)) +
+  ggplot(aes(x = factor(year), y = mean_math, color = sg_uf_prova, group = sg_uf_prova)) +
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
   labs(
@@ -58,18 +58,20 @@ scores_by_state |>
   theme_minimal()
 ```
 
+![](../reference/figures/vignette-enem-math-top5.png)
+
 ## Score gap between regions
 
 ``` r
 region_map <- c(
-  AC = "North", AP = "North", AM = "North", PA = "North",
-  RO = "North", RR = "North", TO = "North",
+  AC = "North",     AP = "North",     AM = "North",     PA = "North",
+  RO = "North",     RR = "North",     TO = "North",
   AL = "Northeast", BA = "Northeast", CE = "Northeast",
   MA = "Northeast", PB = "Northeast", PE = "Northeast",
   PI = "Northeast", RN = "Northeast", SE = "Northeast",
-  DF = "Midwest", GO = "Midwest", MT = "Midwest", MS = "Midwest",
+  DF = "Midwest",   GO = "Midwest",   MT = "Midwest",   MS = "Midwest",
   ES = "Southeast", MG = "Southeast", RJ = "Southeast", SP = "Southeast",
-  PR = "South", RS = "South", SC = "South"
+  PR = "South",     RS = "South",     SC = "South"
 )
 
 enem |>
@@ -79,7 +81,7 @@ enem |>
     mean_math = mean(nu_nota_mt, na.rm = TRUE),
     .by = c(region, year)
   ) |>
-  ggplot(aes(x = year, y = mean_math, color = region)) +
+  ggplot(aes(x = factor(year), y = mean_math, color = region, group = region)) +
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
   labs(
@@ -90,6 +92,8 @@ enem |>
   ) +
   theme_minimal()
 ```
+
+![](../reference/figures/vignette-enem-math-by-region.png)
 
 ## All five scores compared
 
@@ -105,7 +109,7 @@ enem |>
     .by = year
   ) |>
   pivot_longer(-year, names_to = "subject", values_to = "mean_score") |>
-  ggplot(aes(x = year, y = mean_score, color = subject)) +
+  ggplot(aes(x = factor(year), y = mean_score, color = subject, group = subject)) +
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
   labs(
@@ -116,3 +120,5 @@ enem |>
   ) +
   theme_minimal()
 ```
+
+![](../reference/figures/vignette-enem-scores-by-subject.png)

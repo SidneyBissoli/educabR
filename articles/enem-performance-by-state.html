@@ -103,7 +103,7 @@ ENEM scores across Brazilian states over time.</p>
 <span></span>
 <span><span class="va">scores_by_state</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">sg_uf_prova</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">top_states</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">year</span>, y <span class="op">=</span> <span class="va">mean_math</span>, color <span class="op">=</span> <span class="va">sg_uf_prova</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">year</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">mean_math</span>, color <span class="op">=</span> <span class="va">sg_uf_prova</span>, group <span class="op">=</span> <span class="va">sg_uf_prova</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
@@ -113,20 +113,21 @@ ENEM scores across Brazilian states over time.</p>
 <span>    color <span class="op">=</span> <span class="st">"State"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../reference/figures/vignette-enem-math-top5.png"></p>
 </div>
 <div class="section level2">
 <h2 id="score-gap-between-regions">Score gap between regions<a class="anchor" aria-label="anchor" href="#score-gap-between-regions"></a>
 </h2>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">region_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>  AC <span class="op">=</span> <span class="st">"North"</span>, AP <span class="op">=</span> <span class="st">"North"</span>, AM <span class="op">=</span> <span class="st">"North"</span>, PA <span class="op">=</span> <span class="st">"North"</span>,</span>
-<span>  RO <span class="op">=</span> <span class="st">"North"</span>, RR <span class="op">=</span> <span class="st">"North"</span>, TO <span class="op">=</span> <span class="st">"North"</span>,</span>
+<span>  AC <span class="op">=</span> <span class="st">"North"</span>,     AP <span class="op">=</span> <span class="st">"North"</span>,     AM <span class="op">=</span> <span class="st">"North"</span>,     PA <span class="op">=</span> <span class="st">"North"</span>,</span>
+<span>  RO <span class="op">=</span> <span class="st">"North"</span>,     RR <span class="op">=</span> <span class="st">"North"</span>,     TO <span class="op">=</span> <span class="st">"North"</span>,</span>
 <span>  AL <span class="op">=</span> <span class="st">"Northeast"</span>, BA <span class="op">=</span> <span class="st">"Northeast"</span>, CE <span class="op">=</span> <span class="st">"Northeast"</span>,</span>
 <span>  MA <span class="op">=</span> <span class="st">"Northeast"</span>, PB <span class="op">=</span> <span class="st">"Northeast"</span>, PE <span class="op">=</span> <span class="st">"Northeast"</span>,</span>
 <span>  PI <span class="op">=</span> <span class="st">"Northeast"</span>, RN <span class="op">=</span> <span class="st">"Northeast"</span>, SE <span class="op">=</span> <span class="st">"Northeast"</span>,</span>
-<span>  DF <span class="op">=</span> <span class="st">"Midwest"</span>, GO <span class="op">=</span> <span class="st">"Midwest"</span>, MT <span class="op">=</span> <span class="st">"Midwest"</span>, MS <span class="op">=</span> <span class="st">"Midwest"</span>,</span>
+<span>  DF <span class="op">=</span> <span class="st">"Midwest"</span>,   GO <span class="op">=</span> <span class="st">"Midwest"</span>,   MT <span class="op">=</span> <span class="st">"Midwest"</span>,   MS <span class="op">=</span> <span class="st">"Midwest"</span>,</span>
 <span>  ES <span class="op">=</span> <span class="st">"Southeast"</span>, MG <span class="op">=</span> <span class="st">"Southeast"</span>, RJ <span class="op">=</span> <span class="st">"Southeast"</span>, SP <span class="op">=</span> <span class="st">"Southeast"</span>,</span>
-<span>  PR <span class="op">=</span> <span class="st">"South"</span>, RS <span class="op">=</span> <span class="st">"South"</span>, SC <span class="op">=</span> <span class="st">"South"</span></span>
+<span>  PR <span class="op">=</span> <span class="st">"South"</span>,     RS <span class="op">=</span> <span class="st">"South"</span>,     SC <span class="op">=</span> <span class="st">"South"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">enem</span> <span class="op">|&gt;</span></span>
@@ -136,7 +137,7 @@ ENEM scores across Brazilian states over time.</p>
 <span>    mean_math <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">nu_nota_mt</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>    .by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">region</span>, <span class="va">year</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">year</span>, y <span class="op">=</span> <span class="va">mean_math</span>, color <span class="op">=</span> <span class="va">region</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">year</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">mean_math</span>, color <span class="op">=</span> <span class="va">region</span>, group <span class="op">=</span> <span class="va">region</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
@@ -146,6 +147,7 @@ ENEM scores across Brazilian states over time.</p>
 <span>    color <span class="op">=</span> <span class="st">"Region"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../reference/figures/vignette-enem-math-by-region.png"></p>
 </div>
 <div class="section level2">
 <h2 id="all-five-scores-compared">All five scores compared<a class="anchor" aria-label="anchor" href="#all-five-scores-compared"></a>
@@ -162,7 +164,7 @@ ENEM scores across Brazilian states over time.</p>
 <span>    .by <span class="op">=</span> <span class="va">year</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="op">-</span><span class="va">year</span>, names_to <span class="op">=</span> <span class="st">"subject"</span>, values_to <span class="op">=</span> <span class="st">"mean_score"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">year</span>, y <span class="op">=</span> <span class="va">mean_score</span>, color <span class="op">=</span> <span class="va">subject</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">year</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">mean_score</span>, color <span class="op">=</span> <span class="va">subject</span>, group <span class="op">=</span> <span class="va">subject</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
@@ -172,6 +174,7 @@ ENEM scores across Brazilian states over time.</p>
 <span>    color <span class="op">=</span> <span class="st">"Subject"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../reference/figures/vignette-enem-scores-by-subject.png"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
