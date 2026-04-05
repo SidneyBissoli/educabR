@@ -35,21 +35,20 @@ ENEM microdata files are large (1-3 GB each), so we use `n_max` to work
 with samples. For a full analysis, remove the `n_max` parameter.
 
 ```{r download}
+# WARNING: each year downloads ~600 MB from INEP. This may take several minutes.
 years <- c(2019, 2021, 2022, 2023)
 
-enem_list <- lapply(years, function(y) {
-  df <- get_enem(year = y, n_max = 50000)
-  df$year <- y
-  df
-})
-
-enem <- bind_rows(enem_list)
+enem <-
+  years |>
+  purrr::map(\(y) get_enem(year = y, n_max = 50000) |> mutate(year = y)) |>
+  bind_rows()
 ```
 
 ## Average math score by state and year
 
 ```{r math-by-state}
-scores_by_state <- enem |>
+scores_by_state <-
+  enem |>
   filter(!is.na(nu_nota_mt), !is.na(sg_uf_prova)) |>
   summarise(
     mean_math = mean(nu_nota_mt, na.rm = TRUE),
@@ -58,7 +57,8 @@ scores_by_state <- enem |>
   )
 
 # Top 5 states in the most recent year
-top_states <- scores_by_state |>
+top_states <-
+  scores_by_state |>
   filter(year == max(year)) |>
   slice_max(mean_math, n = 5) |>
   pull(sg_uf_prova)
