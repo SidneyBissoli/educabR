@@ -6,12 +6,12 @@ articles:
   cpc-public-vs-private: cpc-public-vs-private.html
   education-funding: education-funding.html
   enem-performance-by-state: enem-performance-by-state.html
-  enrollment-by-race: enrollment-by-race.html
   getting-started: getting-started.html
   higher-education: higher-education.html
   ideb-improvement-by-municipality: ideb-improvement-by-municipality.html
   mapping-education-with-geobr: mapping-education-with-geobr.html
-last_built: 2026-04-05T18:20Z
+  school-infrastructure: school-infrastructure.html
+last_built: 2026-04-05T19:48Z
 urls:
   reference: https://sidneybissoli.github.io/educabR/reference
   article: https://sidneybissoli.github.io/educabR/articles

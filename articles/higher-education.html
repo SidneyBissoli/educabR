@@ -161,7 +161,7 @@ institutions, courses, student enrollment, and faculty.</p>
 <span>    title <span class="op">=</span> <span class="st">"Higher Education Institutions by Type (2023)"</span>,</span>
 <span>    x     <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>    y     <span class="op">=</span> <span class="st">"Number of Institutions"</span></span>
-<span>    <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
@@ -202,7 +202,7 @@ where different course areas are evaluated each year.</p>
 <span>    title <span class="op">=</span> <span class="st">"ENADE 2023 - General Score Distribution"</span>,</span>
 <span>    x     <span class="op">=</span> <span class="st">"General Score"</span>,</span>
 <span>    y     <span class="op">=</span> <span class="st">"Count"</span></span>
-<span>    <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
@@ -279,7 +279,7 @@ considered unsatisfactory.</p>
 <span>    title <span class="op">=</span> <span class="st">"CPC 2023 - Course Quality Distribution"</span>,</span>
 <span>    x     <span class="op">=</span> <span class="st">"CPC Score (1-5)"</span>,</span>
 <span>    y     <span class="op">=</span> <span class="st">"Number of Courses"</span></span>
-<span>    <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
@@ -327,7 +327,7 @@ Note: IGC 2007 comes as a 7z archive containing an Excel file.</p>
 <span>    title <span class="op">=</span> <span class="st">"Top 20 Institutions by IGC (2023)"</span>,</span>
 <span>    x     <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>    y     <span class="op">=</span> <span class="st">"IGC (Continuous)"</span></span>
-<span>    <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
@@ -409,7 +409,7 @@ Open Data Portal via CKAN API.</p>
 <span>    title <span class="op">=</span> <span class="st">"Graduate Programs by Knowledge Area (2023)"</span>,</span>
 <span>    x     <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>    y     <span class="op">=</span> <span class="st">"Number of Programs"</span></span>
-<span>    <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
@@ -440,7 +440,7 @@ how to combine them for a comprehensive view.</p>
 <span>    n_courses <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    mean_cpc  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">cpc_continuo</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>    .groups   <span class="op">=</span> <span class="st">"drop"</span></span>
-<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">combined</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join</a></span><span class="op">(</span><span class="va">igc_summary</span>, <span class="va">cpc_summary</span>, by <span class="op">=</span> <span class="st">"codigo_ies"</span><span class="op">)</span></span>
 <span></span>
@@ -451,7 +451,7 @@ how to combine them for a comprehensive view.</p>
 <span>    x     <span class="op">=</span> <span class="st">"Average CPC (Continuous)"</span>,</span>
 <span>    y     <span class="op">=</span> <span class="st">"IGC (Continuous)"</span>,</span>
 <span>    size  <span class="op">=</span> <span class="st">"Courses Evaluated"</span></span>
-<span>    <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

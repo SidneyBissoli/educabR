@@ -80,7 +80,7 @@ ggplot(ies_summary, aes(x = reorder(admin_type, n), y = n)) +
     title = "Higher Education Institutions by Type (2023)",
     x     = NULL,
     y     = "Number of Institutions"
-    ) +
+  ) +
   theme_minimal()
 ```
 
@@ -120,7 +120,7 @@ enade |>
     title = "ENADE 2023 - General Score Distribution",
     x     = "General Score",
     y     = "Count"
-    ) +
+  ) +
   theme_minimal()
 ```
 
@@ -196,7 +196,7 @@ cpc |>
     title = "CPC 2023 - Course Quality Distribution",
     x     = "CPC Score (1-5)",
     y     = "Number of Courses"
-    ) +
+  ) +
   theme_minimal()
 ```
 
@@ -243,7 +243,7 @@ igc |>
     title = "Top 20 Institutions by IGC (2023)",
     x     = NULL,
     y     = "IGC (Continuous)"
-    ) +
+  ) +
   theme_minimal()
 ```
 
@@ -302,7 +302,7 @@ programas |>
     title = "Graduate Programs by Knowledge Area (2023)",
     x     = NULL,
     y     = "Number of Programs"
-    ) +
+  ) +
   theme_minimal()
 ```
 
@@ -334,7 +334,7 @@ cpc_summary <-
     n_courses = n(),
     mean_cpc  = mean(cpc_continuo, na.rm = TRUE),
     .groups   = "drop"
-    )
+  )
 
 combined <- inner_join(igc_summary, cpc_summary, by = "codigo_ies")
 
@@ -345,6 +345,6 @@ ggplot(combined, aes(x = mean_cpc, y = igc_continuo, size = n_courses)) +
     x     = "Average CPC (Continuous)",
     y     = "IGC (Continuous)",
     size  = "Courses Evaluated"
-    ) +
+  ) +
   theme_minimal()
 ```

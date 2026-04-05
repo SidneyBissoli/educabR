@@ -76,7 +76,7 @@ saeb_sample |>
     title = "SAEB 2023 - Mathematics Proficiency Distribution",
     x     = "Mathematics Score",
     y     = "Count"
-    ) +
+  ) +
   theme_minimal()
 ```
 
@@ -129,7 +129,7 @@ ggplot(participants_by_state, aes(
     title = "ENCCEJA 2023 - Top 10 States by Participation",
     x     = "State",
     y     = "Number of Participants"
-    ) +
+  ) +
   theme_minimal()
 ```
 
@@ -191,6 +191,6 @@ ggplot(trend, aes(x = nu_ano, y = mean_score, color = admin_type)) +
     x     = "Year",
     y     = "Average Total Score",
     color = "School Type"
-    ) +
+  ) +
   theme_minimal()
 ```

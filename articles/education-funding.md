@@ -93,7 +93,7 @@ ggplot(monthly, aes(x = mes, y = total / 1e6, fill = fonte)) +
     x     = "Month",
     y     = "Total (millions R$)",
     fill  = "Source"
-    ) +
+  ) +
   theme_minimal() +
   theme(legend.position = "bottom")
 ```
@@ -118,7 +118,7 @@ ggplot(by_state, aes(x = reorder(uf, total), y = total / 1e9)) +
     title = "Top 10 States by FUNDEB Transfers (2023)",
     x     = NULL,
     y     = "Total (billions R$)"
-    ) +
+  ) +
   theme_minimal()
 ```
 
@@ -189,7 +189,7 @@ ggplot(by_type, aes(x = reorder(descricao_tipo_educacao, total), y = total / 1e3
     title = "FUNDEB Enrollment by Education Type - SP (2023)",
     x     = NULL,
     y     = "Enrollments (thousands)"
-    ) +
+  ) +
   theme_minimal()
 ```
 
@@ -211,7 +211,7 @@ ggplot(by_location, aes(x = uf, y = total / 1e3, fill = descricao_tipo_localizac
     x     = "State",
     y     = "Enrollments (thousands)",
     fill  = "Location"
-    ) +
+  ) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
@@ -251,6 +251,6 @@ ggplot(funding, aes(x = reorder(uf, per_student), y = per_student)) +
     title = "FUNDEB Per-Student Funding by State (2023)",
     x     = NULL,
     y     = "R$ per Student"
-    ) +
+  ) +
   theme_minimal()
 ```

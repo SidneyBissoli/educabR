@@ -17,14 +17,16 @@ The simplest map uses state-level data. We download IDEB scores and join
 them with state geometries from geobr.
 
 ``` r
-ideb_uf <- get_ideb(level = "estado", stage = "anos_iniciais", metric = "indicador", year = 2023)
+ideb_uf <-
+  get_ideb(level = "estado", stage = "anos_iniciais", metric = "indicador", year = 2023) |>
+  filter(rede == "Total", indicador == "IDEB")
 
 states <- read_state(year = 2020, showProgress = FALSE)
 
 states |>
   left_join(ideb_uf, by = c("abbrev_state" = "uf_sigla")) |>
   ggplot() +
-  geom_sf(aes(fill = valor), color = "white", size = .2) +
+  geom_sf(aes(fill = valor), color = "white", linewidth = .2) +
   scale_fill_distiller(palette = "YlGn", direction = 1, name = "IDEB") +
   labs(title = "IDEB 2023 — Early elementary by state") +
   theme_void()
@@ -54,6 +56,7 @@ municipalities <- read_municipality(year = 2020, showProgress = FALSE)
 
 ``` r
 municipalities |>
+  mutate(code_muni = as.character(code_muni)) |>
   left_join(ideb_muni, by = c("code_muni" = "municipio_codigo")) |>
   ggplot() +
   geom_sf(aes(fill = valor), color = NA) +
@@ -75,9 +78,10 @@ ideb_mg <-
 munis_mg <- read_municipality(code_muni = "MG", year = 2020, showProgress = FALSE)
 
 munis_mg |>
+  mutate(code_muni = as.character(code_muni)) |>
   left_join(ideb_mg, by = c("code_muni" = "municipio_codigo")) |>
   ggplot() +
-  geom_sf(aes(fill = valor), color = "grey90", size = .1) +
+  geom_sf(aes(fill = valor), color = "grey90", linewidth = .1) +
   scale_fill_distiller(palette = "YlGn", direction = 1, name = "IDEB") +
   labs(title = "IDEB 2023 — Early elementary in Minas Gerais") +
   theme_void()
@@ -89,17 +93,19 @@ Side-by-side maps make it easy to visualize regional progress. We
 download two editions and use facets.
 
 ``` r
-ideb_time <- get_ideb(
-  level  = "estado",
-  stage  = "anos_iniciais",
-  metric = "indicador",
-  year   = c(2017, 2023)
-)
+ideb_time <-
+  get_ideb(
+    level  = "estado",
+    stage  = "anos_iniciais",
+    metric = "indicador",
+    year   = c(2017, 2023)
+  ) |>
+  filter(rede == "Total", indicador == "IDEB")
 
 states |>
   left_join(ideb_time, by = c("abbrev_state" = "uf_sigla")) |>
   ggplot() +
-  geom_sf(aes(fill = valor), color = "white", size = .2) +
+  geom_sf(aes(fill = valor), color = "white", linewidth = .2) +
   scale_fill_distiller(palette = "YlGn", direction = 1, name = "IDEB") +
   facet_wrap(~ano) +
   labs(title = "IDEB evolution — Early elementary (2017 vs 2023)") +
