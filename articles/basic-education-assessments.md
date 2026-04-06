@@ -80,6 +80,8 @@ saeb_sample |>
   theme_minimal()
 ```
 
+![](../reference/figures/vignette-basic-saeb-math.png)
+
 ------------------------------------------------------------------------
 
 ## ENCCEJA - Youth and Adult Education Certification
@@ -130,8 +132,11 @@ ggplot(participants_by_state, aes(
     x     = "State",
     y     = "Number of Participants"
   ) +
-  theme_minimal()
+  theme_minimal() +
+  scale_y_continuous(label = scales::number_format(big.mark = ".", decimal.mark = ","))
 ```
+
+![](../reference/figures/vignette-basic-encceja-states.png)
 
 ------------------------------------------------------------------------
 
@@ -166,12 +171,18 @@ glimpse(enem_escola_sample)
 enem_escola <- get_enem_escola()
 
 # Average scores over time (public vs private)
-trend <- 
+trend <-
   enem_escola |>
-  filter(!is.na(nu_media_tot)) |>
+  mutate(
+    media_geral = rowMeans(
+      across(c(nu_media_cn, nu_media_ch, nu_media_lp, nu_media_mt, nu_media_red)),
+      na.rm = FALSE
+    )
+  ) |>
+  filter(!is.na(media_geral)) |>
   group_by(nu_ano, tp_dependencia_adm_escola) |>
   summarise(
-    mean_score = mean(nu_media_tot, na.rm = TRUE),
+    mean_score = mean(media_geral, na.rm = TRUE),
     .groups    = "drop"
   ) |>
   mutate(
@@ -187,10 +198,12 @@ ggplot(trend, aes(x = nu_ano, y = mean_score, color = admin_type)) +
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
   labs(
-    title = "ENEM Average Score by School Type (2005-2015)",
+    title = "ENEM Average Score by School Type (2009-2015)",
     x     = "Year",
     y     = "Average Total Score",
     color = "School Type"
   ) +
   theme_minimal()
 ```
+
+![](../reference/figures/vignette-basic-enem-escola.png)
