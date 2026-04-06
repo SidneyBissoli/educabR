@@ -32,6 +32,8 @@ states |>
   theme_void()
 ```
 
+![](../reference/figures/vignette-geobr-state-map.png)
+
 ## IDEB by municipality
 
 Municipality-level maps reveal within-state inequality that state
@@ -49,7 +51,7 @@ ideb_muni <- get_ideb(
 # Keep only public schools and the IDEB indicator
 ideb_muni <-
   ideb_muni |>
-  filter(rede == "Pública", indicador == "IDEB")
+  filter(grepl("blica", rede), indicador == "IDEB")
 
 municipalities <- read_municipality(year = 2020, showProgress = FALSE)
 ```
@@ -64,6 +66,8 @@ municipalities |>
   labs(title = "IDEB 2023 — Early elementary by municipality (public schools)") +
   theme_void()
 ```
+
+![](../reference/figures/vignette-geobr-muni-map.png)
 
 ## Zooming into a single state
 
@@ -87,6 +91,8 @@ munis_mg |>
   theme_void()
 ```
 
+![](../reference/figures/vignette-geobr-mg-map.png)
+
 ## Comparing IDEB editions over time
 
 Side-by-side maps make it easy to visualize regional progress. We
@@ -107,10 +113,17 @@ states |>
   ggplot() +
   geom_sf(aes(fill = valor), color = "white", linewidth = .2) +
   scale_fill_distiller(palette = "YlGn", direction = 1, name = "IDEB") +
-  facet_wrap(~ano) +
+  facet_wrap(~ano, strip.position = "bottom") +
   labs(title = "IDEB evolution — Early elementary (2017 vs 2023)") +
-  theme_void()
+  theme_void() +
+  theme(
+    legend.position = "bottom",
+    plot.title = element_text(hjust = 0.5),
+    strip.text = element_text(size = 11, margin = margin(t = 5))
+  )
 ```
+
+![](../reference/figures/vignette-geobr-temporal.png)
 
 ## Next steps
 
