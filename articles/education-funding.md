@@ -81,22 +81,27 @@ glimpse(dist)
 dist <- get_fundeb_distribution(2023, uf = "SP")
 
 # Total monthly transfers by funding source
-monthly <- 
+monthly <-
   dist |>
-  group_by(fonte, mes) |>
+  mutate(mes = as.integer(format(as.Date(mes_ano), "%m"))) |>
+  group_by(origem, mes) |>
   summarise(total = sum(valor, na.rm = TRUE), .groups = "drop")
 
-ggplot(monthly, aes(x = mes, y = total / 1e6, fill = fonte)) +
+ggplot(monthly, aes(x = factor(mes), y = total / 1e6, fill = origem)) +
   geom_col() +
   labs(
-    title = "FUNDEB Transfers to Sao Paulo by Source (2023)",
+    title = "FUNDEB Transfers to Sao Paulo by source (2023)",
     x     = "Month",
     y     = "Total (millions R$)",
     fill  = "Source"
   ) +
   theme_minimal() +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom") +
+  scale_y_continuous(labels = scales::number_format(big.mark = ".", decimal.mark = ",")) +
+  guides(fill = guide_legend(nrow = 1))
 ```
+
+![](../reference/figures/vignette-funding-monthly.png)
 
 ### Example analysis: Comparing states
 
@@ -122,6 +127,8 @@ ggplot(by_state, aes(x = reorder(uf, total), y = total / 1e9)) +
   theme_minimal()
 ```
 
+![](../reference/figures/vignette-funding-by-state.png)
+
 ------------------------------------------------------------------------
 
 ## FUNDEB Enrollment
@@ -133,20 +140,20 @@ network, and location.
 ### Downloading enrollment data
 
 ``` r
-# All enrollment data for 2023
-mat_2023 <- get_fundeb_enrollment(year = 2023)
+# All enrollment data for 2018
+mat_2018 <- get_fundeb_enrollment(year = 2018)
 
 # Filter by state (applied at the API level for efficiency)
-mat_sp <- get_fundeb_enrollment(year = 2023, uf = "SP")
+mat_sp <- get_fundeb_enrollment(year = 2018, uf = "SP")
 
 # Limited rows for exploration
-mat_sample <- get_fundeb_enrollment(year = 2023, n_max = 5000)
+mat_sample <- get_fundeb_enrollment(year = 2018, n_max = 5000)
 ```
 
 ### Available years
 
-Data is available from 2007 to 2026. Data is fetched from the FNDE OData
-API with automatic pagination.
+Data is available for 2017-2018. Data is fetched from the FNDE OData API
+with automatic pagination.
 
 ### Data structure
 
@@ -166,14 +173,14 @@ The enrollment data contains these columns:
 | `qtd_matricula`                | Number of enrollments       |
 
 ``` r
-mat <- get_fundeb_enrollment(2023, uf = "RJ")
+mat <- get_fundeb_enrollment(2018, uf = "RJ")
 glimpse(mat)
 ```
 
 ### Example analysis: Enrollment by education type
 
 ``` r
-mat <- get_fundeb_enrollment(2023, uf = "SP")
+mat <- get_fundeb_enrollment(2018, uf = "SP")
 
 # Total enrollment by education type
 by_type <- 
@@ -183,38 +190,53 @@ by_type <-
   arrange(desc(total))
 
 ggplot(by_type, aes(x = reorder(descricao_tipo_educacao, total), y = total / 1e3)) +
-  geom_col(fill = "coral") +
+  geom_col(fill = "coral", width = .5) +
   coord_flip() +
   labs(
-    title = "FUNDEB Enrollment by Education Type - SP (2023)",
+    title = "FUNDEB Enrollment by Education Type - SP (2018)",
     x     = NULL,
     y     = "Enrollments (thousands)"
   ) +
-  theme_minimal()
+  theme_minimal() +
+  scale_y_continuous(labels = scales::number_format(big.mark = ".", decimal.mark = ","))
 ```
+
+![](../reference/figures/vignette-funding-enrollment-type.png)
 
 ### Example analysis: Urban vs rural enrollment
 
 ``` r
-mat <- get_fundeb_enrollment(2023)
+mat <- get_fundeb_enrollment(2018)
 
 # Compare urban vs rural
-by_location <- 
+by_location <-
   mat |>
-  group_by(uf, descricao_tipo_localizacao) |>
+  mutate(
+    location = case_when(
+      descricao_tipo_localizacao == "URBANA"     ~ "Urban",
+      descricao_tipo_localizacao == "RURAL"      ~ "Rural",
+      descricao_tipo_localizacao == "QUILOMBOLA" ~ "Quilombola",
+      grepl("GENA", descricao_tipo_localizacao)  ~ "Indigenous",
+      .default = descricao_tipo_localizacao
+    )
+  ) |>
+  group_by(uf, location) |>
   summarise(total = sum(qtd_matricula, na.rm = TRUE), .groups = "drop")
 
-ggplot(by_location, aes(x = uf, y = total / 1e3, fill = descricao_tipo_localizacao)) +
+ggplot(by_location, aes(x = uf, y = total / 1e3, fill = location)) +
   geom_col(position = "dodge") +
   labs(
-    title = "FUNDEB Enrollment: Urban vs Rural by State (2023)",
+    title = "FUNDEB Enrollment: Urban vs Rural by State (2018)",
     x     = "State",
     y     = "Enrollments (thousands)",
     fill  = "Location"
   ) +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_y_continuous(labels = scales::number_format(big.mark = ".", decimal.mark = ","))
 ```
+
+![](../reference/figures/vignette-funding-urban-rural.png)
 
 ------------------------------------------------------------------------
 
@@ -225,14 +247,14 @@ states.
 
 ``` r
 # Total transfers by state
-dist <- get_fundeb_distribution(2023)
+dist <- get_fundeb_distribution(2018)
 transfers <- 
   dist |>
   group_by(uf) |>
   summarise(total_transfer = sum(valor, na.rm = TRUE), .groups = "drop")
 
 # Total enrollment by state
-mat <- get_fundeb_enrollment(2023)
+mat <- get_fundeb_enrollment(2018)
 enrollment <- 
   mat |>
   group_by(uf) |>
@@ -248,9 +270,12 @@ ggplot(funding, aes(x = reorder(uf, per_student), y = per_student)) +
   geom_col(fill = "steelblue") +
   coord_flip() +
   labs(
-    title = "FUNDEB Per-Student Funding by State (2023)",
+    title = "FUNDEB Per-Student Funding by State (2018)",
     x     = NULL,
     y     = "R$ per Student"
   ) +
-  theme_minimal()
+  theme_minimal() +
+  scale_y_continuous(labels = scales::number_format(big.mark = ".", decimal.mark = ","))
 ```
+
+![](../reference/figures/vignette-funding-per-student.png)
