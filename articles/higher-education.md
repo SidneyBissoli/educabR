@@ -81,8 +81,11 @@ ggplot(ies_summary, aes(x = reorder(admin_type, n), y = n)) +
     x     = NULL,
     y     = "Number of Institutions"
   ) +
-  theme_minimal()
+  theme_minimal() +
+  scale_y_continuous(label = scales::number_format(big.mark = ".", decimal.mark = ","))
 ```
+
+![](../reference/figures/vignette-higher-ies-type.png)
 
 ------------------------------------------------------------------------
 
@@ -106,22 +109,11 @@ enade_sample <- get_enade(year = 2023, n_max = 5000)
 
 Data is available from 2004 to 2024.
 
-### Example analysis: Score distribution
+### Data structure
 
 ``` r
-enade <- get_enade(2023, n_max = 20000)
-
-# Score distribution
-enade |>
-  filter(!is.na(nt_ger)) |>
-  ggplot(aes(x = nt_ger)) +
-  geom_histogram(bins = 40, fill = "darkgreen", alpha = 0.7) +
-  labs(
-    title = "ENADE 2023 - General Score Distribution",
-    x     = "General Score",
-    y     = "Count"
-  ) +
-  theme_minimal()
+enade <- get_enade(2023, n_max = 5000)
+glimpse(enade)
 ```
 
 ------------------------------------------------------------------------
@@ -197,8 +189,11 @@ cpc |>
     x     = "CPC Score (1-5)",
     y     = "Number of Courses"
   ) +
-  theme_minimal()
+  theme_minimal() +
+  scale_y_continuous(label = scales::number_format(big.mark = ".", decimal.mark = ","))
 ```
+
+![](../reference/figures/vignette-higher-cpc-dist.png)
 
 ------------------------------------------------------------------------
 
@@ -234,6 +229,7 @@ igc <- get_igc(2023)
 # Top institutions by continuous IGC
 igc |>
   filter(!is.na(igc_continuo)) |>
+  filter(!is.na(sigla_da_ies)) |>
   arrange(desc(igc_continuo)) |>
   head(20) |>
   ggplot(aes(x = reorder(sigla_da_ies, igc_continuo), y = igc_continuo)) +
@@ -246,6 +242,8 @@ igc |>
   ) +
   theme_minimal()
 ```
+
+![](../reference/figures/vignette-higher-igc-top20.png)
 
 ------------------------------------------------------------------------
 
@@ -306,6 +304,8 @@ programas |>
   theme_minimal()
 ```
 
+![](../reference/figures/vignette-higher-capes-area.png)
+
 ------------------------------------------------------------------------
 
 ## Combining quality indicators
@@ -348,3 +348,5 @@ ggplot(combined, aes(x = mean_cpc, y = igc_continuo, size = n_courses)) +
   ) +
   theme_minimal()
 ```
+
+![](../reference/figures/vignette-higher-igc-vs-cpc.png)
