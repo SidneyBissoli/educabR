@@ -116,6 +116,26 @@ enade <- get_enade(2023, n_max = 5000)
 glimpse(enade)
 ```
 
+### Example analysis: Score distribution
+
+``` r
+enade <- get_enade(2023)
+
+enade |>
+  filter(!is.na(nt_ger)) |>
+  ggplot(aes(x = nt_ger)) +
+  geom_histogram(binwidth = 5, fill = "darkorange", color = "white") +
+  labs(
+    title = "ENADE 2023 - General Score Distribution",
+    x     = "General Score (nt_ger)",
+    y     = "Number of Students"
+  ) +
+  theme_minimal() +
+  scale_y_continuous(label = scales::number_format(big.mark = ".", decimal.mark = ","))
+```
+
+![](../reference/figures/vignette-higher-enade-scores.png)
+
 ------------------------------------------------------------------------
 
 ## IDD - Value-Added Indicator
