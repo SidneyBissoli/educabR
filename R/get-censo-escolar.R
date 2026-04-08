@@ -89,11 +89,14 @@ get_censo_escolar <- function(year,
     cli::cli_alert_info("reading school data...")
   }
 
+  # detect delimiter from file header (older years use "|" instead of ";")
+  delim <- detect_censo_delimiter(data_file)
+
   # when filtering by UF, read all rows first, then filter and apply n_max
   read_max <- if (!is.null(uf)) Inf else n_max
 
   # read the file
-  df <- read_inep_file(data_file, delim = ";", n_max = read_max)
+  df <- read_inep_file(data_file, delim = delim, n_max = read_max)
 
   # standardize column names
   df <- standardize_names(df)
@@ -104,11 +107,18 @@ get_censo_escolar <- function(year,
   # validate data structure
   validate_data(df, "censo_escolar", year)
 
+
   # filter by UF if requested
-  if (!is.null(uf) && "co_uf" %in% names(df)) {
-    uf_code <- as.character(uf_to_code(uf))
-    df <- df |>
-      dplyr::filter(.data$co_uf == uf_code)
+  if (!is.null(uf)) {
+    if ("co_uf" %in% names(df)) {
+      uf_code <- as.character(uf_to_code(uf))
+      df <- df |>
+        dplyr::filter(.data$co_uf == uf_code)
+    } else if ("sigla" %in% names(df)) {
+      # older years (pre-2007) use sigla instead of co_uf
+      df <- df |>
+        dplyr::filter(.data$sigla == toupper(uf))
+    }
   }
 
   # apply n_max after UF filter
@@ -123,6 +133,25 @@ get_censo_escolar <- function(year,
   }
 
   df
+}
+
+#' Detect delimiter from Censo Escolar CSV header
+#'
+#' @description
+#' Internal function to detect the delimiter used in a Censo Escolar file.
+#' Older years (pre-2007) use pipe (`|`) while newer years use semicolon (`;`).
+#'
+#' @param file Path to the CSV file.
+#'
+#' @return A single character: the detected delimiter.
+#'
+#' @keywords internal
+detect_censo_delimiter <- function(file) {
+  header <- readLines(file, n = 1, encoding = "latin1")
+  pipes <- lengths(regmatches(header, gregexpr("\\|", header)))
+  semicolons <- lengths(regmatches(header, gregexpr(";", header)))
+
+  if (pipes > semicolons) "|" else ";"
 }
 
 #' Find the Censo Escolar data file

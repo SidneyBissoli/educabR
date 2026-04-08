@@ -310,7 +310,7 @@ validate_fundeb_enrollment <- function(data, year) {
 
 # censo_escolar: check for UF column
 validate_censo_escolar <- function(data, year) {
-  if (!"co_uf" %in% names(data)) {
+  if (!"co_uf" %in% names(data) && !"sigla" %in% names(data)) {
     cli::cli_warn(
       c(
         "column {.val co_uf} not found in School Census {.val {year}} data",
