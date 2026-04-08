@@ -140,10 +140,13 @@ get_censo_escolar <- function(year,
 find_censo_file <- function(exdir, year) {
   # look for the main microdados file
   # pattern: microdados_ed_basica_{year}.csv
+  # older years (pre-2007) use CENSOESC_{year}.csv
   patterns <- c(
     str_c("microdados_ed_basica_", year),
     "microdados_ed_basica",
-    "microdados"
+    "microdados",
+    str_c("censoesc_", year),
+    "censoesc"
   )
 
   for (pattern in patterns) {
