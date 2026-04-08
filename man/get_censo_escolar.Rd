@@ -14,7 +14,7 @@ get_censo_escolar(
 )
 }
 \arguments{
-\item{year}{The year of the census (1995-2024).}
+\item{year}{The year of the census (1995-2025).}
 
 \item{file}{Optional. Name (or partial name) of a specific CSV file to load.
 By default, loads the main school data file. Use \code{\link[=list_censo_files]{list_censo_files()}} to
