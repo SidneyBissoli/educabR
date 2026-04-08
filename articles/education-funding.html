@@ -362,7 +362,7 @@ API with automatic pagination.</p>
 <span>      <span class="va">descricao_tipo_localizacao</span> <span class="op">==</span> <span class="st">"URBANA"</span>     <span class="op">~</span> <span class="st">"Urban"</span>,</span>
 <span>      <span class="va">descricao_tipo_localizacao</span> <span class="op">==</span> <span class="st">"RURAL"</span>      <span class="op">~</span> <span class="st">"Rural"</span>,</span>
 <span>      <span class="va">descricao_tipo_localizacao</span> <span class="op">==</span> <span class="st">"QUILOMBOLA"</span> <span class="op">~</span> <span class="st">"Quilombola"</span>,</span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"GENA"</span>, <span class="va">descricao_tipo_localizacao</span><span class="op">)</span>  <span class="op">~</span> <span class="st">"Indigenous"</span>,</span>
+<span>      <span class="va">descricao_tipo_localizacao</span> <span class="op">==</span> <span class="st">"IND\u00cdGENA"</span> <span class="op">~</span> <span class="st">"Indigenous"</span>,</span>
 <span>      .default <span class="op">=</span> <span class="va">descricao_tipo_localizacao</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
