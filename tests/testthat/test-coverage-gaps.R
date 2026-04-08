@@ -696,7 +696,7 @@ test_that("get_fundeb_enrollment full pipeline fetches from API when not cached"
   expect_equal(nrow(result), 2)
 
   # Check that it was cached
-  file_path <- educabR:::cache_path("fundeb", "fundeb_enrollment_2018.csv")
+  file_path <- educabR:::cache_path("fundeb_enrollment", "fundeb_enrollment_2018.csv")
   expect_true(file.exists(file_path))
 })
 

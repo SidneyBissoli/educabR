@@ -558,7 +558,7 @@ test_that("get_fundeb_enrollment reads cached CSV correctly", {
 
   # Write mock CSV to cache location
   filename <- "fundeb_enrollment_2018.csv"
-  file_path <- educabR:::cache_path("fundeb", filename)
+  file_path <- educabR:::cache_path("fundeb_enrollment", filename)
   dir.create(dirname(file_path), recursive = TRUE, showWarnings = FALSE)
   writeLines(mock_csv_content, file_path)
   withr::defer(unlink(file_path))
@@ -583,7 +583,7 @@ test_that("get_fundeb_enrollment filters by UF on cached data", {
   )
 
   filename <- "fundeb_enrollment_2018.csv"
-  file_path <- educabR:::cache_path("fundeb", filename)
+  file_path <- educabR:::cache_path("fundeb_enrollment", filename)
   dir.create(dirname(file_path), recursive = TRUE, showWarnings = FALSE)
   writeLines(mock_csv_content, file_path)
   withr::defer(unlink(file_path))
@@ -603,7 +603,7 @@ test_that("get_fundeb_enrollment respects n_max on cached data", {
   )
 
   filename <- "fundeb_enrollment_2018.csv"
-  file_path <- educabR:::cache_path("fundeb", filename)
+  file_path <- educabR:::cache_path("fundeb_enrollment", filename)
   dir.create(dirname(file_path), recursive = TRUE, showWarnings = FALSE)
   writeLines(paste(lines, collapse = "\n"), file_path)
   withr::defer(unlink(file_path))
@@ -633,7 +633,7 @@ test_that("get_fundeb_enrollment fetches from API when not cached", {
 
   # Ensure no cached file exists
   filename <- "fundeb_enrollment_2018.csv"
-  file_path <- educabR:::cache_path("fundeb", filename)
+  file_path <- educabR:::cache_path("fundeb_enrollment", filename)
   if (file.exists(file_path)) unlink(file_path)
   withr::defer(if (file.exists(file_path)) unlink(file_path))
 
@@ -669,7 +669,7 @@ test_that("get_fundeb_enrollment caches result when keep_file=TRUE", {
   )
 
   filename <- "fundeb_enrollment_2018.csv"
-  file_path <- educabR:::cache_path("fundeb", filename)
+  file_path <- educabR:::cache_path("fundeb_enrollment", filename)
   if (file.exists(file_path)) unlink(file_path)
   withr::defer(if (file.exists(file_path)) unlink(file_path))
 
