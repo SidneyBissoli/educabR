@@ -15,7 +15,7 @@ test_that("validate_year rejects invalid censo_escolar years", {
   )
 
   expect_error(
-    validate_year(2025, "censo_escolar"),
+    validate_year(2026, "censo_escolar"),
     "not available"
   )
 })
@@ -24,9 +24,9 @@ test_that("fallback_years returns expected censo_escolar years", {
   years <- fallback_years("censo_escolar")
 
   expect_true(1995 %in% years)
-  expect_true(2024 %in% years)
+  expect_true(2025 %in% years)
   expect_false(1994 %in% years)
-  expect_equal(length(years), 30)
+  expect_equal(length(years), 31)
 })
 
 # --- get_censo_escolar: argument validation ---
@@ -38,7 +38,7 @@ test_that("get_censo_escolar rejects invalid year", {
   )
 
   expect_error(
-    get_censo_escolar(2025),
+    get_censo_escolar(2026),
     "not available"
   )
 })
@@ -59,6 +59,57 @@ test_that("build_inep_url returns valid censo_escolar URL for boundary years", {
 
   url_2024 <- build_inep_url("censo_escolar", 2024)
   expect_true(grepl("microdados_censo_escolar_2024", url_2024))
+})
+
+# --- find_censo_file ---
+
+test_that("find_censo_file finds microdados_ed_basica pattern (2007-2024)", {
+  tmpdir <- withr::local_tempdir()
+  dir.create(file.path(tmpdir, "dados"), recursive = TRUE)
+  file.create(file.path(tmpdir, "dados/microdados_ed_basica_2023.csv"))
+  file.create(file.path(tmpdir, "dados/suplemento_cursos_tecnicos_2023.csv"))
+
+  result <- educabR:::find_censo_file(tmpdir, 2023)
+  expect_true(grepl("microdados_ed_basica_2023", result))
+  expect_false(grepl("suplemento", result))
+})
+
+test_that("find_censo_file finds CENSOESC pattern (1995-2006)", {
+  tmpdir <- withr::local_tempdir()
+  dir.create(file.path(tmpdir, "DADOS"), recursive = TRUE)
+  file.create(file.path(tmpdir, "DADOS/CENSOESC_2000.CSV"))
+  file.create(file.path(tmpdir, "DADOS/INDICESC_2000.CSV"))
+
+  result <- educabR:::find_censo_file(tmpdir, 2000)
+  expect_true(grepl("CENSOESC_2000", result))
+})
+
+test_that("find_censo_file finds Tabela_Escola pattern (2025+)", {
+  tmpdir <- withr::local_tempdir()
+  dir.create(file.path(tmpdir, "dados"), recursive = TRUE)
+  file.create(file.path(tmpdir, "dados/Tabela_Escola_2025.csv"))
+  file.create(file.path(tmpdir, "dados/Tabela_Docente_2025.csv"))
+  file.create(file.path(tmpdir, "dados/Tabela_Matricula_2025.csv"))
+  file.create(file.path(tmpdir, "dados/Tabela_Turma_2025.csv"))
+  file.create(file.path(tmpdir, "dados/Tabela_Gestor_Escolar_2025.csv"))
+  file.create(file.path(tmpdir, "dados/Tabela_Curso_Tecnico_2025.csv"))
+
+  result <- educabR:::find_censo_file(tmpdir, 2025)
+  expect_true(grepl("Tabela_Escola_2025", result))
+})
+
+test_that("find_censo_file_by_name finds specific files in 2025 structure", {
+  tmpdir <- withr::local_tempdir()
+  dir.create(file.path(tmpdir, "dados"), recursive = TRUE)
+  file.create(file.path(tmpdir, "dados/Tabela_Escola_2025.csv"))
+  file.create(file.path(tmpdir, "dados/Tabela_Docente_2025.csv"))
+  file.create(file.path(tmpdir, "dados/Tabela_Matricula_2025.csv"))
+
+  result <- educabR:::find_censo_file_by_name(tmpdir, "Docente", 2025)
+  expect_true(grepl("Docente", result))
+
+  result2 <- educabR:::find_censo_file_by_name(tmpdir, "Matricula", 2025)
+  expect_true(grepl("Matricula", result2))
 })
 
 # --- list_censo_files ---

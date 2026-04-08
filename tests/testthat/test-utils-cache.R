@@ -327,8 +327,8 @@ test_that("is_cached returns FALSE when dataset dir does not exist", {
 
 test_that("fallback_years returns correct count for censo_escolar", {
   result <- fallback_years("censo_escolar")
-  expect_equal(result, 1995:2024)
-  expect_length(result, 30)
+  expect_equal(result, 1995:2025)
+  expect_length(result, 31)
 })
 
 test_that("fallback_years returns correct counts for all datasets", {

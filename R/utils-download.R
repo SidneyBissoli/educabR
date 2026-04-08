@@ -356,7 +356,7 @@ build_inep_url <- function(dataset, year, ...) {
 fallback_years <- function(dataset) {
   switch(
     dataset,
-    "censo_escolar" = 1995:2024,
+    "censo_escolar" = 1995:2025,
     "enem" = 1998:2024,
     "saeb" = c(2011L, 2013L, 2015L, 2017L, 2019L, 2021L, 2023L),
     "censo_superior" = 2009:2024,

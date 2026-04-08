@@ -8,7 +8,7 @@
 #' (Censo Escolar), conducted annually by INEP. Returns school-level data
 #' with information about infrastructure, location, and administrative details.
 #'
-#' @param year The year of the census (1995-2024).
+#' @param year The year of the census (1995-2025).
 #' @param file Optional. Name (or partial name) of a specific CSV file to load.
 #'   By default, loads the main school data file. Use [list_censo_files()] to
 #'   see available files for a given year. Older years (1995-2006) include
@@ -228,15 +228,19 @@ find_censo_file_by_name <- function(exdir, file, year) {
 #'
 #' @keywords internal
 find_censo_file <- function(exdir, year) {
+
   # look for the main microdados file
-  # pattern: microdados_ed_basica_{year}.csv
-  # older years (pre-2007) use CENSOESC_{year}.csv
+  # 2007-2024: microdados_ed_basica_{year}.csv
+  # 1995-2006: CENSOESC_{year}.CSV
+  # 2025+: Tabela_Escola_{year}.csv (data split into multiple tables)
   patterns <- c(
     str_c("microdados_ed_basica_", year),
     "microdados_ed_basica",
     "microdados",
     str_c("censoesc_", year),
-    "censoesc"
+    "censoesc",
+    str_c("tabela_escola_", year),
+    "tabela_escola"
   )
 
   for (pattern in patterns) {
