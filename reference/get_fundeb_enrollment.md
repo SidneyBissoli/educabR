@@ -25,8 +25,8 @@ get_fundeb_enrollment(
 - uf:
 
   Optional. A UF code (e.g., `"SP"`, `"RJ"`) to filter by state. The
-  filter is applied at the API level for efficiency. Default is `NULL`
-  (all states).
+  complete dataset is always cached first, then filtered locally.
+  Default is `NULL` (all states).
 
 - n_max:
 

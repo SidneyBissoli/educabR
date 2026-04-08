@@ -255,7 +255,7 @@ network, and location.</p>
 <code class="sourceCode R"><span><span class="co"># All enrollment data for 2018</span></span>
 <span><span class="va">mat_2018</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_fundeb_enrollment.html">get_fundeb_enrollment</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2018</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Filter by state (applied at the API level for efficiency)</span></span>
+<span><span class="co"># Filter by state (filtered locally from cached complete dataset)</span></span>
 <span><span class="va">mat_sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_fundeb_enrollment.html">get_fundeb_enrollment</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2018</span>, uf <span class="op">=</span> <span class="st">"SP"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Limited rows for exploration</span></span>
