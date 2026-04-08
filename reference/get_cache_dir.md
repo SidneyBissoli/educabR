@@ -23,5 +23,5 @@ Other cache functions:
 
 ``` r
 get_cache_dir()
-#> [1] "/tmp/RtmpFU2jIR/educabR_cache"
+#> [1] "/tmp/RtmplrBv5P/educabR_cache"
 ```
