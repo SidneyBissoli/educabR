@@ -66,8 +66,13 @@ with information about infrastructure, location, and administrative details.</p>
 <dt id="arg-file">file<a class="anchor" aria-label="anchor" href="#arg-file"></a></dt>
 <dd><p>Optional. Name (or partial name) of a specific CSV file to load.
 By default, loads the main school data file. Use <code><a href="list_censo_files.html">list_censo_files()</a></code> to
-see available files for a given year. Older years (1995-2006) include
-multiple files (e.g. <code>"EDUCPROF"</code>, <code>"DADOSCURSO"</code>).</p></dd>
+see available files for a given year.</p><ul><li><p><strong>1995-2006</strong>: Multiple legacy files (e.g. <code>"EDUCPROF"</code>, <code>"DADOSCURSO"</code>).</p></li>
+<li><p><strong>2007-2024</strong>: Single file with all data (escola, matrícula, docente, turma).</p></li>
+<li><p><strong>2025+</strong>: Data split into separate tables. Use <code>file</code> to select:
+<code>"Escola"</code> (default), <code>"Matricula"</code>, <code>"Docente"</code>, <code>"Turma"</code>,
+<code>"Gestor"</code>, <code>"Curso_Tecnico"</code>. Non-escola tables lack <code>CO_UF</code>,
+so the <code>uf</code> filter does not apply to them.</p></li>
+</ul></dd>
 
 
 <dt id="arg-uf">uf<a class="anchor" aria-label="anchor" href="#arg-uf"></a></dt>
@@ -133,6 +138,13 @@ desired file name to the <code>file</code> parameter.</p></li>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># load a specific file from an older year</span></span></span>
 <span class="r-in"><span><span class="va">cursos</span> <span class="op">&lt;-</span> <span class="fu">get_censo_escolar</span><span class="op">(</span><span class="fl">1995</span>, file <span class="op">=</span> <span class="st">"DADOSCURSO"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># 2025: data is split into separate tables</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="list_censo_files.html">list_censo_files</a></span><span class="op">(</span><span class="fl">2025</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">escolas_2025</span> <span class="op">&lt;-</span> <span class="fu">get_censo_escolar</span><span class="op">(</span><span class="fl">2025</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">matriculas_2025</span> <span class="op">&lt;-</span> <span class="fu">get_censo_escolar</span><span class="op">(</span><span class="fl">2025</span>, file <span class="op">=</span> <span class="st">"Matricula"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">docentes_2025</span> <span class="op">&lt;-</span> <span class="fu">get_censo_escolar</span><span class="op">(</span><span class="fl">2025</span>, file <span class="op">=</span> <span class="st">"Docente"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">turmas_2025</span> <span class="op">&lt;-</span> <span class="fu">get_censo_escolar</span><span class="op">(</span><span class="fl">2025</span>, file <span class="op">=</span> <span class="st">"Turma"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
