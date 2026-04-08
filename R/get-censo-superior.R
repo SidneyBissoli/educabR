@@ -121,8 +121,11 @@ get_censo_superior <- function(year,
   # detect delimiter
   delim <- detect_delim(data_file)
 
+  # when filtering by UF, read all rows first, then filter and apply n_max
+  read_max <- if (!is.null(uf)) Inf else n_max
+
   # read the file
-  df <- read_inep_file(data_file, delim = delim, n_max = n_max)
+  df <- read_inep_file(data_file, delim = delim, n_max = read_max)
 
   # standardize column names
   df <- standardize_names(df)
@@ -138,6 +141,11 @@ get_censo_superior <- function(year,
     uf_code <- as.character(uf_to_code(uf))
     df <- df |>
       dplyr::filter(.data$co_uf_ies == uf_code)
+  }
+
+  # apply n_max after UF filter
+  if (!is.null(uf) && is.finite(n_max) && nrow(df) > n_max) {
+    df <- df[seq_len(n_max), ]
   }
 
   if (!quiet) {
