@@ -74,6 +74,31 @@ test_that("validate_data passes for valid ENADE structure", {
   expect_silent(validate_data(good_data, "enade", 2023))
 })
 
+# --- find_enade_files ---
+
+test_that("find_enade_files returns all split files sorted numerically", {
+  tmpdir <- withr::local_tempdir()
+  dir.create(file.path(tmpdir, "2.DADOS"), recursive = TRUE)
+  for (i in c(1, 2, 3, 10, 11)) {
+    file.create(file.path(tmpdir, "2.DADOS",
+                          paste0("microdados2023_arq", i, ".txt")))
+  }
+
+  result <- educabR:::find_enade_files(tmpdir, 2023)
+  expect_length(result, 5)
+  # verify numeric sort (arq1, arq2, arq3, arq10, arq11)
+  nums <- as.integer(stringr::str_extract(basename(result), "(?<=arq)\\d+"))
+  expect_equal(nums, c(1, 2, 3, 10, 11))
+})
+
+test_that("find_enade_files errors when no files found", {
+  tmpdir <- withr::local_tempdir()
+  expect_error(
+    educabR:::find_enade_files(tmpdir, 2023),
+    "no ENADE data file"
+  )
+})
+
 # --- get_enade: argument validation ---
 
 test_that("get_enade rejects invalid year", {

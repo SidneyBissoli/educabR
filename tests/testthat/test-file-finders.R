@@ -108,64 +108,82 @@ test_that("find_enem_file errors when no matching files found", {
 # find_enade_file
 # ============================================================================
 
-test_that("find_enade_file finds microdados_enade_YYYY pattern", {
-  tmp <- withr::local_tempdir()
-  create_mock_file(tmp, "DADOS/microdados_enade_2023.csv")
-
-  result <- educabR:::find_enade_file(tmp, 2023)
-  expect_true(grepl("microdados_enade_2023\\.csv$", result))
-})
-
-test_that("find_enade_file finds microdadosYYYY pattern", {
-  tmp <- withr::local_tempdir()
-  create_mock_file(tmp, "DADOS/microdados2021.txt")
-
-  result <- educabR:::find_enade_file(tmp, 2021)
-  expect_true(grepl("microdados2021\\.txt$", result))
-})
-
-test_that("find_enade_file falls back to generic microdados_enade pattern", {
-  tmp <- withr::local_tempdir()
-  create_mock_file(tmp, "DADOS/microdados_enade.csv")
-
-  result <- educabR:::find_enade_file(tmp, 2019)
-  expect_true(grepl("microdados_enade\\.csv$", result))
-})
-
-test_that("find_enade_file falls back to generic microdados pattern", {
-  tmp <- withr::local_tempdir()
-  create_mock_file(tmp, "DADOS/microdados.txt")
-
-  result <- educabR:::find_enade_file(tmp, 2018)
-  expect_true(grepl("microdados\\.txt$", result))
-})
-
-test_that("find_enade_file prefers more specific pattern", {
+test_that("find_enade_files finds split arqN pattern", {
   tmp <- withr::local_tempdir()
   create_mock_file(
     tmp,
-    "DADOS/microdados_enade_2023.csv",
-    "DADOS/microdados.csv"
+    "DADOS/microdados2023_arq1.txt",
+    "DADOS/microdados2023_arq2.txt",
+    "DADOS/microdados2023_arq10.txt"
   )
 
-  result <- educabR:::find_enade_file(tmp, 2023)
-  expect_true(grepl("microdados_enade_2023\\.csv$", result))
+  result <- educabR:::find_enade_files(tmp, 2023)
+  expect_length(result, 3)
+  # verify numeric sort order
+  nums <- as.integer(stringr::str_extract(basename(result), "(?<=arq)\\d+"))
+  expect_equal(nums, c(1, 2, 10))
 })
 
-test_that("find_enade_file supports txt extension", {
+test_that("find_enade_files finds microdados_enade_YYYY pattern", {
+  tmp <- withr::local_tempdir()
+  create_mock_file(tmp, "DADOS/microdados_enade_2023.csv")
+
+  result <- educabR:::find_enade_files(tmp, 2023)
+  expect_true(grepl("microdados_enade_2023\\.csv$", result[1]))
+})
+
+test_that("find_enade_files finds microdadosYYYY pattern", {
+  tmp <- withr::local_tempdir()
+  create_mock_file(tmp, "DADOS/microdados2021.txt")
+
+  result <- educabR:::find_enade_files(tmp, 2021)
+  expect_true(grepl("microdados2021\\.txt$", result[1]))
+})
+
+test_that("find_enade_files falls back to generic microdados_enade pattern", {
+  tmp <- withr::local_tempdir()
+  create_mock_file(tmp, "DADOS/microdados_enade.csv")
+
+  result <- educabR:::find_enade_files(tmp, 2019)
+  expect_true(grepl("microdados_enade\\.csv$", result[1]))
+})
+
+test_that("find_enade_files falls back to generic microdados pattern", {
+  tmp <- withr::local_tempdir()
+  create_mock_file(tmp, "DADOS/microdados.txt")
+
+  result <- educabR:::find_enade_files(tmp, 2018)
+  expect_true(grepl("microdados\\.txt$", result[1]))
+})
+
+test_that("find_enade_files prefers split arq pattern over single file", {
+  tmp <- withr::local_tempdir()
+  create_mock_file(
+    tmp,
+    "DADOS/microdados2023_arq1.txt",
+    "DADOS/microdados2023_arq2.txt",
+    "DADOS/microdados_enade_2023.csv"
+  )
+
+  result <- educabR:::find_enade_files(tmp, 2023)
+  # should find the arq files (first pattern match)
+  expect_true(all(grepl("arq", basename(result))))
+})
+
+test_that("find_enade_files supports txt extension", {
   tmp <- withr::local_tempdir()
   create_mock_file(tmp, "DADOS/microdados_enade_2017.TXT")
 
-  result <- educabR:::find_enade_file(tmp, 2017)
-  expect_true(grepl("microdados_enade_2017\\.TXT$", result))
+  result <- educabR:::find_enade_files(tmp, 2017)
+  expect_true(grepl("microdados_enade_2017\\.TXT$", result[1]))
 })
 
-test_that("find_enade_file errors when no matching files found", {
+test_that("find_enade_files errors when no matching files found", {
   tmp <- withr::local_tempdir()
   create_mock_file(tmp, "DADOS/something_else.xlsx")
 
   expect_error(
-    educabR:::find_enade_file(tmp, 2023),
+    educabR:::find_enade_files(tmp, 2023),
     "no ENADE data file found"
   )
 })

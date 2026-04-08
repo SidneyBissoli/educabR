@@ -113,11 +113,13 @@ get_enade <- function(year,
     unlink(archive_path)
   }
 
-  # find the data file
-  data_file <- find_enade_file(exdir, year)
+  # find data files (all split parts)
+  data_files <- find_enade_files(exdir, year)
 
   if (!quiet) {
-    cli::cli_alert_info("reading ENADE data...")
+    cli::cli_alert_info(
+      "reading ENADE data ({.val {length(data_files)}} file(s))..."
+    )
     if (is.infinite(n_max)) {
       cli::cli_alert_warning(
         "reading full file. use {.arg n_max} to limit rows if needed."
@@ -125,14 +127,29 @@ get_enade <- function(year,
     }
   }
 
-  # detect delimiter
-  delim <- detect_delim(data_file)
-
-  # read the file
-  df <- read_inep_file(data_file, delim = delim, n_max = n_max)
-
-  # standardize column names
+  # read first file (contains key columns)
+  delim <- detect_delim(data_files[1])
+  df <- read_inep_file(data_files[1], delim = delim, n_max = n_max)
   df <- standardize_names(df)
+
+  # read and join remaining split files (suppress per-file messages)
+  if (length(data_files) > 1) {
+    key_cols <- names(df)
+
+    for (f in data_files[-1]) {
+      delim_f <- detect_delim(f)
+      part <- suppressMessages(
+        read_inep_file(f, delim = delim_f, n_max = n_max)
+      )
+      part <- standardize_names(part)
+
+      # drop key columns that are duplicated across files
+      new_cols <- setdiff(names(part), key_cols)
+      if (length(new_cols) > 0) {
+        df <- dplyr::bind_cols(df, part[, new_cols, drop = FALSE])
+      }
+    }
+  }
 
   # replace dash placeholders with NA
   df <- clean_dash_values(df)
@@ -149,20 +166,23 @@ get_enade <- function(year,
   df
 }
 
-#' Find the ENADE data file
+#' Find ENADE data files
 #'
 #' @description
-#' Internal function to locate the ENADE data file within the extracted
-#' directory.
+#' Internal function to locate all ENADE data files within the extracted
+#' directory. INEP distributes ENADE microdata split across multiple files
+#' (`arq1.txt`, `arq2.txt`, ...) that share key columns (`NU_ANO`,
+#' `CO_CURSO`) and contain different variable groups.
 #'
 #' @param exdir The extraction directory.
 #' @param year The year.
 #'
-#' @return The path to the data file.
+#' @return A character vector of file paths, sorted by split number.
 #'
 #' @keywords internal
-find_enade_file <- function(exdir, year) {
+find_enade_files <- function(exdir, year) {
   patterns <- c(
+    str_c("microdados", year, "_arq"),
     str_c("microdados_enade_", year),
     str_c("microdados", year),
     "microdados_enade",
@@ -179,7 +199,12 @@ find_enade_file <- function(exdir, year) {
     )
 
     if (length(files) > 0) {
-      return(files[1])
+      # sort split files numerically (arq1, arq2, ..., arq10, arq11, ...)
+      nums <- as.integer(str_extract(basename(files), "(?<=arq)\\d+"))
+      if (!all(is.na(nums))) {
+        files <- files[order(nums)]
+      }
+      return(files)
     }
   }
 
