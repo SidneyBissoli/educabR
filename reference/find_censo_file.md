@@ -1,4 +1,4 @@
-# Find the Censo Escolar data file
+# Find the Censo Escolar main data file
 
 Internal function to locate the main data file within the extracted
 census directory.

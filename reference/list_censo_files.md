@@ -1,6 +1,10 @@
 # List available Censo Escolar files
 
-Lists the data files available in a downloaded School Census.
+Lists the data files available in a downloaded School Census. Use this
+to discover which files are available for a given year, then pass the
+desired file name to
+[`get_censo_escolar()`](https://sidneybissoli.github.io/educabR/reference/get_censo_escolar.md)'s
+`file` parameter.
 
 ## Usage
 
@@ -27,6 +31,14 @@ Other School Census functions:
 
 ``` r
 if (FALSE) { # \dontrun{
-list_censo_files(2023)
+# first download the data
+get_censo_escolar(1995)
+
+# then see what files are available
+list_censo_files(1995)
+# [1] "CENSOESC_1995.CSV" "DADOS_DESP_1995.CSV" "DADOSCURSO_1995.CSV"
+
+# load a specific file
+cursos <- get_censo_escolar(1995, file = "DADOSCURSO")
 } # }
 ```
