@@ -236,8 +236,8 @@ fundeb_enrollment_col_names <- c(
 #'
 #' @param year The year of the data (2007-2026).
 #' @param uf Optional. A UF code (e.g., `"SP"`, `"RJ"`) to filter by state.
-#'   The filter is applied at the API level for efficiency. Default is `NULL`
-#'   (all states).
+#'   The complete dataset is always cached first, then filtered locally.
+#'   Default is `NULL` (all states).
 #' @param n_max Maximum number of rows to read. Default is `Inf` (all rows).
 #' @param keep_file Logical. If `TRUE`, caches the API result as a local CSV
 #'   file. Default is `TRUE`.
