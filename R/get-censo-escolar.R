@@ -11,8 +11,14 @@
 #' @param year The year of the census (1995-2025).
 #' @param file Optional. Name (or partial name) of a specific CSV file to load.
 #'   By default, loads the main school data file. Use [list_censo_files()] to
-#'   see available files for a given year. Older years (1995-2006) include
-#'   multiple files (e.g. `"EDUCPROF"`, `"DADOSCURSO"`).
+#'   see available files for a given year.
+#'
+#'   - **1995-2006**: Multiple legacy files (e.g. `"EDUCPROF"`, `"DADOSCURSO"`).
+#'   - **2007-2024**: Single file with all data (escola, matrícula, docente, turma).
+#'   - **2025+**: Data split into separate tables. Use `file` to select:
+#'     `"Escola"` (default), `"Matricula"`, `"Docente"`, `"Turma"`,
+#'     `"Gestor"`, `"Curso_Tecnico"`. Non-escola tables lack `CO_UF`,
+#'     so the `uf` filter does not apply to them.
 #' @param uf Optional. Filter by state (UF code or abbreviation).
 #' @param n_max Maximum number of rows to read. Default is `Inf` (all rows).
 #' @param keep_zip Logical. If `TRUE`, keeps the downloaded ZIP file in cache.
@@ -58,6 +64,13 @@
 #'
 #' # load a specific file from an older year
 #' cursos <- get_censo_escolar(1995, file = "DADOSCURSO")
+#'
+#' # 2025: data is split into separate tables
+#' list_censo_files(2025)
+#' escolas_2025 <- get_censo_escolar(2025)
+#' matriculas_2025 <- get_censo_escolar(2025, file = "Matricula")
+#' docentes_2025 <- get_censo_escolar(2025, file = "Docente")
+#' turmas_2025 <- get_censo_escolar(2025, file = "Turma")
 #' }
 get_censo_escolar <- function(year,
                               file = NULL,

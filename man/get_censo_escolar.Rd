@@ -18,8 +18,15 @@ get_censo_escolar(
 
 \item{file}{Optional. Name (or partial name) of a specific CSV file to load.
 By default, loads the main school data file. Use \code{\link[=list_censo_files]{list_censo_files()}} to
-see available files for a given year. Older years (1995-2006) include
-multiple files (e.g. \code{"EDUCPROF"}, \code{"DADOSCURSO"}).}
+see available files for a given year.
+\itemize{
+\item \strong{1995-2006}: Multiple legacy files (e.g. \code{"EDUCPROF"}, \code{"DADOSCURSO"}).
+\item \strong{2007-2024}: Single file with all data (escola, matrícula, docente, turma).
+\item \strong{2025+}: Data split into separate tables. Use \code{file} to select:
+\code{"Escola"} (default), \code{"Matricula"}, \code{"Docente"}, \code{"Turma"},
+\code{"Gestor"}, \code{"Curso_Tecnico"}. Non-escola tables lack \code{CO_UF},
+so the \code{uf} filter does not apply to them.
+}}
 
 \item{uf}{Optional. Filter by state (UF code or abbreviation).}
 
@@ -75,6 +82,13 @@ list_censo_files(1995)
 
 # load a specific file from an older year
 cursos <- get_censo_escolar(1995, file = "DADOSCURSO")
+
+# 2025: data is split into separate tables
+list_censo_files(2025)
+escolas_2025 <- get_censo_escolar(2025)
+matriculas_2025 <- get_censo_escolar(2025, file = "Matricula")
+docentes_2025 <- get_censo_escolar(2025, file = "Docente")
+turmas_2025 <- get_censo_escolar(2025, file = "Turma")
 }
 }
 \seealso{
