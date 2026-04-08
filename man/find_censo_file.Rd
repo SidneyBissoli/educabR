@@ -2,7 +2,7 @@
 % Please edit documentation in R/get-censo-escolar.R
 \name{find_censo_file}
 \alias{find_censo_file}
-\title{Find the Censo Escolar data file}
+\title{Find the Censo Escolar main data file}
 \usage{
 find_censo_file(exdir, year)
 }

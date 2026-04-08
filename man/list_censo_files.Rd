@@ -14,10 +14,21 @@ A character vector of file names found.
 }
 \description{
 Lists the data files available in a downloaded School Census.
+Use this to discover which files are available for a given year,
+then pass the desired file name to \code{\link[=get_censo_escolar]{get_censo_escolar()}}'s \code{file}
+parameter.
 }
 \examples{
 \dontrun{
-list_censo_files(2023)
+# first download the data
+get_censo_escolar(1995)
+
+# then see what files are available
+list_censo_files(1995)
+# [1] "CENSOESC_1995.CSV" "DADOS_DESP_1995.CSV" "DADOSCURSO_1995.CSV"
+
+# load a specific file
+cursos <- get_censo_escolar(1995, file = "DADOSCURSO")
 }
 }
 \seealso{
