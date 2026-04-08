@@ -38,6 +38,7 @@ Imports:
     purrr,
     readr,
     rlang,
+    stringi,
     stringr,
     tidyr,
     tools

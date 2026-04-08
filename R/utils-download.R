@@ -751,7 +751,7 @@ read_inep_file <- function(file,
   }
 
   # read with readr
-  readr::read_delim(
+  df <- readr::read_delim(
     file,
     delim = delim,
     locale = readr::locale(encoding = encoding),
@@ -760,4 +760,15 @@ read_inep_file <- function(file,
     col_types = col_spec,
     progress = TRUE
   )
+
+  # normalize character columns to UTF-8 NFC so that string comparisons
+  # with literals like "Pública" work correctly on Windows
+  chr_cols <- vapply(df, is.character, logical(1))
+  if (any(chr_cols)) {
+    df[chr_cols] <- lapply(df[chr_cols], function(x) {
+      stringi::stri_trans_nfc(enc2utf8(x))
+    })
+  }
+
+  df
 }

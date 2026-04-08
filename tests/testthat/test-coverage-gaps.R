@@ -918,6 +918,20 @@ test_that("read_inep_file auto-detects encoding", {
   expect_s3_class(result, "tbl_df")
 })
 
+test_that("read_inep_file normalizes character columns to UTF-8 NFC", {
+  temp_file <- withr::local_tempfile(fileext = ".csv")
+  # Write a file with accented characters in UTF-8
+  writeLines(c("rede;valor", "P\u00fablica;100", "Estadual;200"), temp_file,
+             useBytes = FALSE)
+
+  result <- educabR:::read_inep_file(temp_file, delim = ";")
+
+  # The accented string should match a literal comparison
+  expect_true("P\u00fablica" %in% result$rede)
+  # All character columns should be valid UTF-8 NFC
+  expect_equal(Encoding(result$rede[1]), "UTF-8")
+})
+
 test_that("read_inep_file respects n_max", {
   temp_file <- withr::local_tempfile(fileext = ".csv")
   writeLines(c("col1;col2", "a;1", "b;2", "c;3", "d;4"), temp_file)

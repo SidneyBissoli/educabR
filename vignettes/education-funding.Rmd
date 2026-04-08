@@ -235,7 +235,7 @@ by_location <-
       descricao_tipo_localizacao == "URBANA"     ~ "Urban",
       descricao_tipo_localizacao == "RURAL"      ~ "Rural",
       descricao_tipo_localizacao == "QUILOMBOLA" ~ "Quilombola",
-      grepl("GENA", descricao_tipo_localizacao)  ~ "Indigenous",
+      descricao_tipo_localizacao == "IND\u00cdGENA" ~ "Indigenous",
       .default = descricao_tipo_localizacao
     )
   ) |>
