@@ -61,6 +61,11 @@ test_that("build_inep_url returns valid censo_escolar URL for boundary years", {
   expect_true(grepl("microdados_censo_escolar_2024", url_2024))
 })
 
+test_that("build_inep_url handles 2025 trailing underscore", {
+  url_2025 <- build_inep_url("censo_escolar", 2025)
+  expect_true(grepl("microdados_censo_escolar_2025_\\.zip$", url_2025))
+})
+
 # --- find_censo_file ---
 
 test_that("find_censo_file finds microdados_ed_basica pattern (2007-2024)", {

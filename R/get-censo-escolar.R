@@ -70,7 +70,7 @@ get_censo_escolar <- function(year,
 
   # build url and file paths
   url <- build_inep_url("censo_escolar", year)
-  zip_filename <- str_c("microdados_censo_escolar_", year, ".zip")
+  zip_filename <- basename(url)
   zip_path <- cache_path("censo_escolar", zip_filename)
 
   # download if not cached

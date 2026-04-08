@@ -307,9 +307,13 @@ build_inep_url <- function(dataset, year, ...) {
 
   url <- switch(
     dataset,
-    "censo_escolar" = str_c(
-      base, "/dados_abertos/microdados_censo_escolar_", year, ".zip"
-    ),
+    "censo_escolar" = {
+      # 2025: INEP added trailing underscore to filename
+      suffix <- if (year == 2025) "_" else ""
+      str_c(
+        base, "/dados_abertos/microdados_censo_escolar_", year, suffix, ".zip"
+      )
+    },
     "enem" = str_c(
       base, "/microdados/microdados_enem_", year, ".zip"
     ),
