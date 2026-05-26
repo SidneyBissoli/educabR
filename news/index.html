@@ -35,6 +35,11 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="educabr-development-version">educabR (development version)<a class="anchor" aria-label="anchor" href="#educabr-development-version"></a></h2>
 <div class="section level3">
+<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<ul><li>
+<code><a href="../reference/download_inep_file.html">download_inep_file()</a></code> timeout is now configurable via <code>options(educabR.download_timeout = N)</code> (seconds; default 600). Raise it when downloading large microdata (e.g. ENEM <code>participantes</code> at ~1.6 GB) over a slow link (issue <a href="https://github.com/SidneyBissoli/educabR/issues/7" class="external-link">#7</a>).</li>
+</ul></div>
+<div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <ul><li>
 <code><a href="../reference/read_excel_safe.html">read_excel_safe()</a></code> (used by <code><a href="../reference/get_cpc.html">get_cpc()</a></code> and <code><a href="../reference/get_igc.html">get_igc()</a></code>) now passes INEP’s missing-value tokens (<code>""</code>, <code>"-"</code>, <code>"ND"</code>, en/em dashes) to <code>readxl::read_excel(na = ...)</code> so those cells are loaded as <code>NA</code> instead of character strings cleaned up post-hoc (issue <a href="https://github.com/SidneyBissoli/educabR/issues/4" class="external-link">#4</a>). Previously, a column whose first rows were all <code>"-"</code> could be inferred as <code>logical</code> and later numeric values silently dropped. <code><a href="../reference/clean_dash_values.html">clean_dash_values()</a></code> remains as a safety net but is now largely redundant for CPC/IGC.</li>

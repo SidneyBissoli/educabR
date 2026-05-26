@@ -2,6 +2,15 @@
 
 ## educabR (development version)
 
+### New features
+
+- [`download_inep_file()`](https://sidneybissoli.github.io/educabR/reference/download_inep_file.md)
+  timeout is now configurable via
+  `options(educabR.download_timeout = N)` (seconds; default 600). Raise
+  it when downloading large microdata (e.g. ENEM `participantes` at ~1.6
+  GB) over a slow link (issue
+  [\#7](https://github.com/SidneyBissoli/educabR/issues/7)).
+
 ### Bug fixes
 
 - [`read_excel_safe()`](https://sidneybissoli.github.io/educabR/reference/read_excel_safe.md)

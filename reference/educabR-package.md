@@ -117,6 +117,19 @@ to configure a persistent cache directory. See
 [`get_cache_dir()`](https://sidneybissoli.github.io/educabR/reference/get_cache_dir.md)
 to check the current cache location.
 
+## Package options
+
+- `educabR.cache_dir`: path to the cache directory. Set via
+  [`set_cache_dir()`](https://sidneybissoli.github.io/educabR/reference/set_cache_dir.md)
+  or directly with [`options()`](https://rdrr.io/r/base/options.html).
+  Defaults to `file.path(tempdir(), "educabR_cache")`.
+
+- `educabR.download_timeout`: HTTP timeout in seconds for
+  [`download_inep_file()`](https://sidneybissoli.github.io/educabR/reference/download_inep_file.md).
+  Defaults to `600` (10 minutes). Raise it for large microdata (e.g.
+  ENEM `participantes` is ~1.6 GB) on slow connections:
+  `options(educabR.download_timeout = 1800)`.
+
 ## Data source
 
 Most data is downloaded from INEP's official portal:

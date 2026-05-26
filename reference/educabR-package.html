@@ -123,6 +123,19 @@ Use <code><a href="set_cache_dir.html">set_cache_dir()</a></code> to configure a
 See <code><a href="get_cache_dir.html">get_cache_dir()</a></code> to check the current cache location.</p>
     </div>
     <div class="section level2">
+    <h2 id="package-options">Package options<a class="anchor" aria-label="anchor" href="#package-options"></a></h2>
+
+
+
+<ul><li><p><code>educabR.cache_dir</code>: path to the cache directory. Set via
+<code><a href="set_cache_dir.html">set_cache_dir()</a></code> or directly with <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>. Defaults to
+<code>file.path(tempdir(), "educabR_cache")</code>.</p></li>
+<li><p><code>educabR.download_timeout</code>: HTTP timeout in seconds for
+<code><a href="download_inep_file.html">download_inep_file()</a></code>. Defaults to <code>600</code> (10 minutes). Raise it for
+large microdata (e.g. ENEM <code>participantes</code> is ~1.6 GB) on slow
+connections: <code>options(educabR.download_timeout = 1800)</code>.</p></li>
+</ul></div>
+    <div class="section level2">
     <h2 id="data-source">Data source<a class="anchor" aria-label="anchor" href="#data-source"></a></h2>
 
 
