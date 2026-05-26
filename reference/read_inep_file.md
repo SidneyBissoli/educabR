@@ -5,7 +5,7 @@ Internal function to read INEP data files with appropriate settings.
 ## Usage
 
 ``` r
-read_inep_file(file, delim = ";", encoding = NULL, n_max = Inf)
+read_inep_file(file, delim = ";", encoding = NULL, n_max = Inf, quiet = FALSE)
 ```
 
 ## Arguments
@@ -25,6 +25,10 @@ read_inep_file(file, delim = ";", encoding = NULL, n_max = Inf)
 - n_max:
 
   Maximum number of rows to read.
+
+- quiet:
+
+  Logical. If `TRUE`, suppresses the large-file advisory.
 
 ## Value
 

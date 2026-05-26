@@ -38,6 +38,8 @@
 <h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
 <ul><li>
 <code><a href="../reference/download_inep_file.html">download_inep_file()</a></code> timeout is now configurable via <code>options(educabR.download_timeout = N)</code> (seconds; default 600). Raise it when downloading large microdata (e.g. ENEM <code>participantes</code> at ~1.6 GB) over a slow link (issue <a href="https://github.com/SidneyBissoli/educabR/issues/7" class="external-link">#7</a>).</li>
+<li>
+<code><a href="../reference/read_inep_file.html">read_inep_file()</a></code> now warns before reading files larger than 500 MB entirely into memory, suggesting <code>n_max</code> or UF filters to reduce memory pressure. Suppressible with <code>quiet = TRUE</code>; all <code>get_*()</code> callers propagate their <code>quiet</code> argument (issue <a href="https://github.com/SidneyBissoli/educabR/issues/5" class="external-link">#5</a>).</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>

@@ -53,9 +53,10 @@ Key internal modules: - `R/utils-cache.R` — Local cache system
 [`set_cache_dir()`](https://sidneybissoli.github.io/educabR/reference/set_cache_dir.md),
 [`clear_cache()`](https://sidneybissoli.github.io/educabR/reference/clear_cache.md),
 [`list_cache()`](https://sidneybissoli.github.io/educabR/reference/list_cache.md) -
-`R/utils-download.R` — HTTP downloads with retry (3 attempts, 600s
-timeout), archive extraction (ZIP/7z/RAR), URL construction, dynamic
-year discovery via HEAD requests - `R/utils-validation.R` — Per-dataset
+`R/utils-download.R` — HTTP downloads with retry (3 attempts; timeout
+default 600s, configurable via `options(educabR.download_timeout = N)`),
+archive extraction (ZIP/7z/RAR), URL construction, dynamic year
+discovery via HEAD requests - `R/utils-validation.R` — Per-dataset
 validators checking column counts, expected names, non-empty results -
 `R/zzz.R` — Package init, reads `educabR.cache_dir` option
 
@@ -80,11 +81,14 @@ fallback for encoding issues, 7-Zip path hunting in Program Files. Check
 ### Repo layout (non-obvious directories)
 
 - `archive/` — historical audit notes (`auditoria-pos-issue1.md`,
-  `bugs-pendentes.md`). Read-only context for past fixes; check before
-  re-investigating closed audit threads.
-- `guides/` — committed INEP guide PDFs (`guides_2007.pdf`,
-  `guides_2025.pdf`). Distinct from the local-only `dictionaries/`
-  folder.
+  `bugs-pendentes.md`). Local-only (gitignored), so unavailable on a
+  fresh clone; when present, it’s read-only context for past fixes —
+  check before re-investigating closed audit threads.
+- `guides/` — local-only (gitignored) INEP guide PDFs
+  (`guides_2007.pdf`, `guides_2025.pdf`).
+- `dictionaries/censo-escolar/dictionary_<year>.pdf` — local-only INEP
+  per-year column dictionaries; consult when adding or fixing
+  year-specific column handling.
 - `inst/bench/` — IDEB memory benchmark utility. Use this when changing
   [`read_ideb_excel()`](https://sidneybissoli.github.io/educabR/reference/read_ideb_excel.md)
   to verify column-projection savings don’t regress.
@@ -154,10 +158,11 @@ intentionally gone.
 - Portuguese accents are preserved in data values but column names use
   ASCII
 - Roxygen2 generates `man/` and `NAMESPACE` — never edit those by hand
-- `docs/`, `data/`, `lib/`, and `dictionaries/` are local-only (not
-  committed). `dictionaries/censo-escolar/dictionary_<year>.pdf` holds
-  INEP’s per-year column dictionaries — consult these when adding or
-  fixing year-specific column handling.
+- `docs/`, `data/`, `lib/`, `dictionaries/`, `guides/`, `archive/`, and
+  `tests/testthat/dados/` are all gitignored (local-only). The per-year
+  INEP column dictionaries under
+  `dictionaries/censo-escolar/dictionary_<year>.pdf` are the source of
+  truth when adding or fixing year-specific column handling.
 - Vignettes use `eval=FALSE` (no network during build). Vignettes in
   `vignettes/*.Rmd` are the canonical end-to-end usage examples per
   dataset; consult them before inventing new API patterns.

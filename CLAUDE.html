@@ -64,7 +64,7 @@
 <div class="section level3">
 <h3 id="data-pipeline-pattern-every-get_-function">Data pipeline pattern (every <code>get_*()</code> function)<a class="anchor" aria-label="anchor" href="#data-pipeline-pattern-every-get_-function"></a></h3>
 <pre><code>validate parameters → check cache → download if needed → extract archive → read file → standardize column names → transform → validate output → return tibble</code></pre>
-<p>Key internal modules: - <code>R/utils-cache.R</code> — Local cache system (<code>tempdir()/educabR_cache</code> or user-configured). Functions: <code>cache_path()</code>, <code>is_cached()</code>, <code><a href="reference/get_cache_dir.html">get_cache_dir()</a></code>, <code><a href="reference/set_cache_dir.html">set_cache_dir()</a></code>, <code><a href="reference/clear_cache.html">clear_cache()</a></code>, <code><a href="reference/list_cache.html">list_cache()</a></code> - <code>R/utils-download.R</code> — HTTP downloads with retry (3 attempts, 600s timeout), archive extraction (ZIP/7z/RAR), URL construction, dynamic year discovery via HEAD requests - <code>R/utils-validation.R</code> — Per-dataset validators checking column counts, expected names, non-empty results - <code>R/zzz.R</code> — Package init, reads <code>educabR.cache_dir</code> option</p>
+<p>Key internal modules: - <code>R/utils-cache.R</code> — Local cache system (<code>tempdir()/educabR_cache</code> or user-configured). Functions: <code>cache_path()</code>, <code>is_cached()</code>, <code><a href="reference/get_cache_dir.html">get_cache_dir()</a></code>, <code><a href="reference/set_cache_dir.html">set_cache_dir()</a></code>, <code><a href="reference/clear_cache.html">clear_cache()</a></code>, <code><a href="reference/list_cache.html">list_cache()</a></code> - <code>R/utils-download.R</code> — HTTP downloads with retry (3 attempts; timeout default 600s, configurable via <code>options(educabR.download_timeout = N)</code>), archive extraction (ZIP/7z/RAR), URL construction, dynamic year discovery via HEAD requests - <code>R/utils-validation.R</code> — Per-dataset validators checking column counts, expected names, non-empty results - <code>R/zzz.R</code> — Package init, reads <code>educabR.cache_dir</code> option</p>
 </div>
 <div class="section level3">
 <h3 id="data-source-variations">Data source variations<a class="anchor" aria-label="anchor" href="#data-source-variations"></a></h3>
@@ -77,9 +77,11 @@
 <div class="section level3">
 <h3 id="repo-layout-non-obvious-directories">Repo layout (non-obvious directories)<a class="anchor" aria-label="anchor" href="#repo-layout-non-obvious-directories"></a></h3>
 <ul><li>
-<code>archive/</code> — historical audit notes (<code>auditoria-pos-issue1.md</code>, <code>bugs-pendentes.md</code>). Read-only context for past fixes; check before re-investigating closed audit threads.</li>
+<code>archive/</code> — historical audit notes (<code>auditoria-pos-issue1.md</code>, <code>bugs-pendentes.md</code>). Local-only (gitignored), so unavailable on a fresh clone; when present, it’s read-only context for past fixes — check before re-investigating closed audit threads.</li>
 <li>
-<code>guides/</code> — committed INEP guide PDFs (<code>guides_2007.pdf</code>, <code>guides_2025.pdf</code>). Distinct from the local-only <code>dictionaries/</code> folder.</li>
+<code>guides/</code> — local-only (gitignored) INEP guide PDFs (<code>guides_2007.pdf</code>, <code>guides_2025.pdf</code>).</li>
+<li>
+<code>dictionaries/censo-escolar/dictionary_&lt;year&gt;.pdf</code> — local-only INEP per-year column dictionaries; consult when adding or fixing year-specific column handling.</li>
 <li>
 <code>inst/bench/</code> — IDEB memory benchmark utility. Use this when changing <code><a href="reference/read_ideb_excel.html">read_ideb_excel()</a></code> to verify column-projection savings don’t regress.</li>
 </ul></div>
@@ -119,7 +121,7 @@
 <li>Portuguese accents are preserved in data values but column names use ASCII</li>
 <li>Roxygen2 generates <code>man/</code> and <code>NAMESPACE</code> — never edit those by hand</li>
 <li>
-<code>docs/</code>, <code>data/</code>, <code>lib/</code>, and <code>dictionaries/</code> are local-only (not committed). <code>dictionaries/censo-escolar/dictionary_&lt;year&gt;.pdf</code> holds INEP’s per-year column dictionaries — consult these when adding or fixing year-specific column handling.</li>
+<code>docs/</code>, <code>data/</code>, <code>lib/</code>, <code>dictionaries/</code>, <code>guides/</code>, <code>archive/</code>, and <code>tests/testthat/dados/</code> are all gitignored (local-only). The per-year INEP column dictionaries under <code>dictionaries/censo-escolar/dictionary_&lt;year&gt;.pdf</code> are the source of truth when adding or fixing year-specific column handling.</li>
 <li>Vignettes use <code>eval=FALSE</code> (no network during build). Vignettes in <code>vignettes/*.Rmd</code> are the canonical end-to-end usage examples per dataset; consult them before inventing new API patterns.</li>
 <li>The <code>cli</code> package is used for all user-facing messages (not <code><a href="https://rdrr.io/r/base/message.html" class="external-link">message()</a></code> or <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code>)</li>
 <li>Deprecations use <code><a href="https://lifecycle.r-lib.org/reference/deprecate_soft.html" class="external-link">lifecycle::deprecate_warn()</a></code> / <code>deprecate_soft()</code>, not bare <code><a href="https://rdrr.io/r/base/Deprecated.html" class="external-link">.Deprecated()</a></code> or <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning()</a></code>. Match the existing pattern in <code>R/get-ideb.R</code>.</li>
