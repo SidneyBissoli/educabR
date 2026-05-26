@@ -178,6 +178,68 @@ test_that("build_inep_url errors for unknown dataset", {
   expect_error(build_inep_url("invalid_dataset", 2023), "unknown dataset")
 })
 
+# --- download_inep_file timeout (issue #7) -----------------------------------
+
+# captures the seconds argument passed to httr2::req_timeout by mocking the
+# whole httr2 pipeline. req_perform is mocked to throw so download_inep_file
+# aborts before touching the disk — we only care about the option flowing
+# through to req_timeout. download_inep_file calls req_timeout twice (once
+# inside get_remote_file_size for the HEAD probe, once for the main GET);
+# we record both and assert on the GET-side value, which is always the last.
+test_that("download_inep_file uses default 600s timeout when option unset", {
+  withr::local_options(educabR.download_timeout = NULL)
+  captured <- c()
+
+  testthat::local_mocked_bindings(
+    request    = function(url) structure(list(url = url), class = "httr2_request"),
+    req_method = function(req, ...) req,
+    req_timeout = function(req, seconds, ...) {
+      captured <<- c(captured, seconds)
+      req
+    },
+    req_retry   = function(req, ...) req,
+    req_perform = function(req) stop("mocked"),
+    .package = "httr2"
+  )
+
+  tmp <- tempfile(fileext = ".zip")
+  withr::defer(unlink(tmp))
+
+  expect_error(
+    educabR:::download_inep_file("http://example.com/x.zip", tmp, quiet = TRUE),
+    "download failed"
+  )
+
+  expect_equal(captured[length(captured)], 600)
+})
+
+test_that("download_inep_file respects educabR.download_timeout option (issue #7)", {
+  withr::local_options(educabR.download_timeout = 1234)
+  captured <- c()
+
+  testthat::local_mocked_bindings(
+    request    = function(url) structure(list(url = url), class = "httr2_request"),
+    req_method = function(req, ...) req,
+    req_timeout = function(req, seconds, ...) {
+      captured <<- c(captured, seconds)
+      req
+    },
+    req_retry   = function(req, ...) req,
+    req_perform = function(req) stop("mocked"),
+    .package = "httr2"
+  )
+
+  tmp <- tempfile(fileext = ".zip")
+  withr::defer(unlink(tmp))
+
+  expect_error(
+    educabR:::download_inep_file("http://example.com/x.zip", tmp, quiet = TRUE),
+    "download failed"
+  )
+
+  expect_equal(captured[length(captured)], 1234)
+})
+
 # --- verify_download_integrity (issue #3) ------------------------------------
 
 # helper: write a minimal valid ZIP-shaped blob (magic + padding)

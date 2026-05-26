@@ -128,11 +128,16 @@ download_inep_file <- function(url, destfile, quiet = FALSE) {
     }
   }
 
+  # timeout is configurable via options(educabR.download_timeout = N) — large
+  # microdata files (e.g. ENEM ~1.6 GB) can exceed the 600s default on slow
+  # connections
+  timeout <- getOption("educabR.download_timeout", default = 600)
+
   # use httr2 for better error handling
   tryCatch(
     {
       req <- httr2::request(url) |>
-        httr2::req_timeout(seconds = 600) |>
+        httr2::req_timeout(seconds = timeout) |>
         httr2::req_retry(max_tries = 3, backoff = ~ 5)
 
       resp <- httr2::req_perform(req)
