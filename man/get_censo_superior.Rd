@@ -88,7 +88,7 @@ docentes <- get_censo_superior(2023, type = "docentes")
 }
 }
 \seealso{
-Other Higher Education Census functions: 
-\code{\link{list_censo_superior_files}()}
+Other Higher Education Census functions:
+\code{\link[=list_censo_superior_files]{list_censo_superior_files()}}
 }
 \concept{Higher Education Census functions}

@@ -77,9 +77,9 @@ resultados <- get_enem(2024, type = "resultados", n_max = 1000)
 }
 }
 \seealso{
-Other ENEM functions: 
-\code{\link{enem_summary}()},
-\code{\link{get_enem_escola}()},
-\code{\link{get_enem_itens}()}
+Other ENEM functions:
+\code{\link[=enem_summary]{enem_summary()}},
+\code{\link[=get_enem_escola]{get_enem_escola()}},
+\code{\link[=get_enem_itens]{get_enem_itens()}}
 }
 \concept{ENEM functions}

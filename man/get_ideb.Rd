@@ -98,8 +98,8 @@ regioes <- get_ideb("regiao", "anos_finais", "indicador")
 }
 }
 \seealso{
-Other IDEB functions: 
-\code{\link{get_ideb_series}()},
-\code{\link{list_ideb_available}()}
+Other IDEB functions:
+\code{\link[=get_ideb_series]{get_ideb_series()}},
+\code{\link[=list_ideb_available]{list_ideb_available()}}
 }
 \concept{IDEB functions}

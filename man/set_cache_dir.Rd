@@ -27,9 +27,9 @@ set_cache_dir(file.path(tempdir(), "educabR_cache"))
 }
 }
 \seealso{
-Other cache functions: 
-\code{\link{clear_cache}()},
-\code{\link{get_cache_dir}()},
-\code{\link{list_cache}()}
+Other cache functions:
+\code{\link[=clear_cache]{clear_cache()}},
+\code{\link[=get_cache_dir]{get_cache_dir()}},
+\code{\link[=list_cache]{list_cache()}}
 }
 \concept{cache functions}

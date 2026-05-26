@@ -32,7 +32,7 @@ cursos <- get_censo_escolar(1995, file = "DADOSCURSO")
 }
 }
 \seealso{
-Other School Census functions: 
-\code{\link{get_censo_escolar}()}
+Other School Census functions:
+\code{\link[=get_censo_escolar]{get_censo_escolar()}}
 }
 \concept{School Census functions}

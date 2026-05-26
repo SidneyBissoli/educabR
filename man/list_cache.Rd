@@ -21,9 +21,9 @@ list_cache()
 }
 }
 \seealso{
-Other cache functions: 
-\code{\link{clear_cache}()},
-\code{\link{get_cache_dir}()},
-\code{\link{set_cache_dir}()}
+Other cache functions:
+\code{\link[=clear_cache]{clear_cache()}},
+\code{\link[=get_cache_dir]{get_cache_dir()}},
+\code{\link[=set_cache_dir]{set_cache_dir()}}
 }
 \concept{cache functions}
