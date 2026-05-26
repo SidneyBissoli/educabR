@@ -92,7 +92,7 @@ old wide-format / positional-arg behavior is intentionally gone.
 
 ## Important Conventions
 
-- `get_*()` functions download **one year per call** — never merge years internally. Users compose multi-year datasets with `purrr::map_dfr()` or similar. Do not add `year` vector support or implicit multi-year concatenation.
+- `get_*()` functions download **one year per call** — never merge years internally. Users compose multi-year datasets with `purrr::map_dfr()` or similar. Do not add `year` vector support or implicit multi-year concatenation. `validate_year()` in `R/utils-validation.R` is the enforcement point and rejects year vectors with a clear error.
 - All `get_*()` functions return data in **long (tidy) format** with standardized lowercase/underscore column names
 - Portuguese accents are preserved in data values but column names use ASCII
 - Roxygen2 generates `man/` and `NAMESPACE` — never edit those by hand
