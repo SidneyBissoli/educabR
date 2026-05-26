@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What is educabR
 
-An R package for downloading and processing Brazilian public education data from INEP, FNDE, STN, and CAPES. NAMESPACE exports 25 functions: 14 dataset `get_*()` functions plus discovery helpers (`available_years()`, `list_ideb_available()`, `list_censo_files()`, `list_censo_superior_files()`), summarizers (`enem_summary()`, `get_enem_itens()`), and cache controls. All text output (column names, CLI messages) is in Portuguese.
+An R package for downloading and processing Brazilian public education data from INEP, FNDE, STN, and CAPES. NAMESPACE exports the `get_*()` dataset family plus discovery helpers (`available_years()`, `list_ideb_available()`, `list_censo_files()`, `list_censo_superior_files()`), summarizers (`enem_summary()`, `get_enem_itens()`), and cache controls. All text output (column names, CLI messages) is in Portuguese.
 
 ## Common Commands
 
@@ -69,6 +69,7 @@ ZIP extraction has Windows-specific paths: PowerShell `Expand-Archive` fallback 
 - Tests use `withr::local_tempdir()` for isolation and `withr::local_options()` for scoped settings
 - No live downloads in tests — functions are tested against structure/logic, not network calls
 - CI runs on macOS, Windows, Ubuntu (R release, devel, oldrel-1)
+- CI workflows under `.github/workflows/`: `R-CMD-check.yaml`, `test-coverage.yaml`, `rhub.yaml`, `pkgdown.yaml`
 
 ## Open audit findings
 
@@ -97,5 +98,7 @@ old wide-format / positional-arg behavior is intentionally gone.
 - Portuguese accents are preserved in data values but column names use ASCII
 - Roxygen2 generates `man/` and `NAMESPACE` — never edit those by hand
 - `docs/`, `data/`, `lib/`, and `dictionaries/` are local-only (not committed). `dictionaries/censo-escolar/dictionary_<year>.pdf` holds INEP's per-year column dictionaries — consult these when adding or fixing year-specific column handling.
-- Vignettes use `eval=FALSE` (no network during build)
+- Vignettes use `eval=FALSE` (no network during build). Vignettes in `vignettes/*.Rmd` are the canonical end-to-end usage examples per dataset; consult them before inventing new API patterns.
 - The `cli` package is used for all user-facing messages (not `message()` or `cat()`)
+- Deprecations use `lifecycle::deprecate_warn()` / `deprecate_soft()`, not bare `.Deprecated()` or `warning()`. Match the existing pattern in `R/get-ideb.R`.
+- `README.md` (English) and `README.pt-br.md` (Portuguese) are both user-facing — keep them in sync when changing examples or feature lists.
