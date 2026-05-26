@@ -1,6 +1,35 @@
 # Changelog
 
-## educabR (development version)
+## educabR 1.0.0
+
+### Breaking changes
+
+- **[`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)
+  has a new signature**: `get_ideb(level, stage, metric, year, quiet)`.
+  The old positional usage `get_ideb(year, level, stage)` still works
+  with a deprecation warning, but the `year` parameter now filters IDEB
+  editions instead of selecting which file to download.
+- [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)
+  now returns data in tidy long format instead of wide format. Output
+  columns depend on the `metric` parameter (`"indicador"`,
+  `"aprovacao"`, `"nota"`, `"meta"`).
+- [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)
+  now supports 5 geographic levels: `"escola"`, `"municipio"`,
+  `"estado"`, `"regiao"`, and `"brasil"` (previously only escola and
+  municipio).
+- [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)
+  always downloads the most recent IDEB file available, which contains
+  the full historical series. The `year` parameter filters editions.
+- [`get_ideb_series()`](https://sidneybissoli.github.io/educabR/reference/get_ideb_series.md)
+  is deprecated. Use `get_ideb(level, stage, metric)` instead.
+- [`list_ideb_available()`](https://sidneybissoli.github.io/educabR/reference/list_ideb_available.md)
+  now returns `level`, `stage`, and `metric` columns (previously
+  returned `year`, `level`, `stage`).
+- The `uf` parameter has been removed from
+  [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md).
+  Filter the result with
+  [`dplyr::filter()`](https://dplyr.tidyverse.org/reference/filter.html)
+  instead.
 
 ### New features
 
@@ -19,6 +48,17 @@
 
 ### Bug fixes
 
+- [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)
+  no longer consumes several GB of RAM for school-level reads (issue
+  [\#1](https://github.com/SidneyBissoli/educabR/issues/1)). The xlsx is
+  now read with column projection: only the `vl_*` columns matching the
+  requested `metric` (and `year`, when given) are parsed; the others are
+  skipped at the readxl C++ layer. INEP’s NA tokens (`""`, `"-"`,
+  `"ND"`) are also passed to `read_excel(na = ...)` so the missing-value
+  strings never get allocated as R character vectors. For
+  `level = "escola", stage = "anos_iniciais", metric = "indicador"`,
+  this cuts the in-memory result from ~133 MB to ~37 MB (4 years) or ~19
+  MB (1 year), with proportional drops in peak memory during reshape.
 - Character columns from Excel readers
   ([`read_ideb_excel()`](https://sidneybissoli.github.io/educabR/reference/read_ideb_excel.md),
   [`read_excel_safe()`](https://sidneybissoli.github.io/educabR/reference/read_excel_safe.md))
@@ -53,11 +93,6 @@
 
 ### Internal
 
-- `R CMD check` warnings cleared: em-dashes in `cli_abort()` message
-  strings in `R/utils-download.R` are now written with `—` Unicode
-  escapes (R requires ASCII-only in code strings; comments are exempt),
-  and `man/read_ideb_excel.Rd` has been regenerated to match the
-  function signature added in v1.0.0 (`metric`, `year`).
 - [`download_inep_file()`](https://sidneybissoli.github.io/educabR/reference/download_inep_file.md)
   now verifies downloaded files before caching them (issue
   [\#3](https://github.com/SidneyBissoli/educabR/issues/3)). Three
@@ -84,51 +119,19 @@
   (R \< 4.2).
   [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)
   is unaffected — it intentionally accepts year vectors.
-
-## educabR 1.0.0
-
-### Bug fixes
-
-- [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)
-  no longer consumes several GB of RAM for school-level reads (issue
-  [\#1](https://github.com/SidneyBissoli/educabR/issues/1)). The xlsx is
-  now read with column projection: only the `vl_*` columns matching the
-  requested `metric` (and `year`, when given) are parsed; the others are
-  skipped at the readxl C++ layer. INEP’s NA tokens (`""`, `"-"`,
-  `"ND"`) are also passed to `read_excel(na = ...)` so the missing-value
-  strings never get allocated as R character vectors. For
-  `level = "escola", stage = "anos_iniciais", metric = "indicador"`,
-  this cuts the in-memory result from ~133 MB to ~37 MB (4 years) or ~19
-  MB (1 year), with proportional drops in peak memory during reshape.
-
-### Breaking changes
-
-- **[`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)
-  has a new signature**: `get_ideb(level, stage, metric, year, quiet)`.
-  The old positional usage `get_ideb(year, level, stage)` still works
-  with a deprecation warning, but the `year` parameter now filters IDEB
-  editions instead of selecting which file to download.
-- [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)
-  now returns data in tidy long format instead of wide format. Output
-  columns depend on the `metric` parameter (`"indicador"`,
-  `"aprovacao"`, `"nota"`, `"meta"`).
-- [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)
-  now supports 5 geographic levels: `"escola"`, `"municipio"`,
-  `"estado"`, `"regiao"`, and `"brasil"` (previously only escola and
-  municipio).
-- [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)
-  always downloads the most recent IDEB file available, which contains
-  the full historical series. The `year` parameter filters editions.
-- [`get_ideb_series()`](https://sidneybissoli.github.io/educabR/reference/get_ideb_series.md)
-  is deprecated. Use `get_ideb(level, stage, metric)` instead.
-- [`list_ideb_available()`](https://sidneybissoli.github.io/educabR/reference/list_ideb_available.md)
-  now returns `level`, `stage`, and `metric` columns (previously
-  returned `year`, `level`, `stage`).
-- The `uf` parameter has been removed from
-  [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md).
-  Filter the result with
-  [`dplyr::filter()`](https://dplyr.tidyverse.org/reference/filter.html)
-  instead.
+- [`extract_zip()`](https://sidneybissoli.github.io/educabR/reference/extract_zip.md)
+  cleaned up: removed dead `if (TRUE)` branch and an unreachable
+  `cli_abort()`; the muffle on extraction warnings was tightened from
+  the broad `erro|error` pattern to the two specific messages that
+  motivated it (issue
+  [\#6](https://github.com/SidneyBissoli/educabR/issues/6)).
+- `RoxygenNote` bumped to 8.0.0 and `man/*.Rd` regenerated;
+  `systemfonts` and `textshaping` declared in `Suggests:` to silence the
+  cosmetic `R CMD check` NOTE about packages pulled transitively by
+  `pkgdown`.
+- `R CMD check` warnings cleared: em-dashes in `cli_abort()` message
+  strings in `R/utils-download.R` are now written with Unicode escapes
+  (R requires ASCII-only in code strings; comments are exempt).
 
 ## educabR 0.9.0
 
