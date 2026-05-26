@@ -74,6 +74,15 @@
 <h3 id="platform-specific-code">Platform-specific code<a class="anchor" aria-label="anchor" href="#platform-specific-code"></a></h3>
 <p>ZIP extraction has Windows-specific paths: PowerShell <code>Expand-Archive</code> fallback for encoding issues, 7-Zip path hunting in Program Files. Check <code>.Platform$OS.type</code> when modifying extraction logic.</p>
 </div>
+<div class="section level3">
+<h3 id="repo-layout-non-obvious-directories">Repo layout (non-obvious directories)<a class="anchor" aria-label="anchor" href="#repo-layout-non-obvious-directories"></a></h3>
+<ul><li>
+<code>archive/</code> — historical audit notes (<code>auditoria-pos-issue1.md</code>, <code>bugs-pendentes.md</code>). Read-only context for past fixes; check before re-investigating closed audit threads.</li>
+<li>
+<code>guides/</code> — committed INEP guide PDFs (<code>guides_2007.pdf</code>, <code>guides_2025.pdf</code>). Distinct from the local-only <code>dictionaries/</code> folder.</li>
+<li>
+<code>inst/bench/</code> — IDEB memory benchmark utility. Use this when changing <code><a href="reference/read_ideb_excel.html">read_ideb_excel()</a></code> to verify column-projection savings don’t regress.</li>
+</ul></div>
 </div>
 <div class="section level2">
 <h2 id="testing">Testing<a class="anchor" aria-label="anchor" href="#testing"></a></h2>
@@ -89,7 +98,17 @@
 <div class="section level2">
 <h2 id="open-audit-findings">Open audit findings<a class="anchor" aria-label="anchor" href="#open-audit-findings"></a></h2>
 <p>Before changing the read or download pipeline (<code>read_inep_file</code>, <code>read_excel_safe</code>, <code>read_ideb_excel</code>, <code>download_inep_file</code>, <code>validate_year</code>, <code>extract_zip</code>), run <code>gh issue list --label audit</code> — each open audit issue carries a diagnosis with <a href="file:line" class="uri">file:line</a> evidence, a proposed fix snippet, and tests to add. Don’t redo that analysis from scratch.</p>
+<p><code><a href="reference/get_ideb.html">get_ideb()</a></code> was rewritten in v1.0.0 (new signature, tidy long output, column-projection memory savings; <code><a href="reference/get_ideb_series.html">get_ideb_series()</a></code> deprecated). Read NEWS.md before touching <code><a href="reference/read_ideb_excel.html">read_ideb_excel()</a></code> or the IDEB pipeline — the old wide-format / positional-arg behavior is intentionally gone.</p>
 </div>
+<div class="section level2">
+<h2 id="release-artifacts">Release artifacts<a class="anchor" aria-label="anchor" href="#release-artifacts"></a></h2>
+<ul><li>
+<code>NEWS.md</code> — update for any user-visible change (new function, signature change, bug fix users would notice). One bullet under the next version heading.</li>
+<li>
+<code>cran-comments.md</code>, <code>CRAN-SUBMISSION</code> — CRAN submission metadata; touched only during a release cycle, not regular dev.</li>
+<li>
+<code>CITATION.cff</code> — citation metadata; bump version/date here when releasing.</li>
+</ul></div>
 <div class="section level2">
 <h2 id="important-conventions">Important Conventions<a class="anchor" aria-label="anchor" href="#important-conventions"></a></h2>
 <ul><li>
