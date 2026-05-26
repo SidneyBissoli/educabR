@@ -6,6 +6,7 @@ Brazil. educabR provides two functions to access FUNDEB data: resource
 distribution and enrollment counts.
 
 ``` r
+
 library(educabR)
 library(dplyr)
 library(ggplot2)
@@ -16,10 +17,10 @@ library(ggplot2)
 FUNDEB redistributes tax revenues to fund basic education across states
 and municipalities. The data is split into two components:
 
-| Function                                                                                                    | Source                  | Description                                                |
-|-------------------------------------------------------------------------------------------------------------|-------------------------|------------------------------------------------------------|
+| Function | Source | Description |
+|----|----|----|
 | [`get_fundeb_distribution()`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_distribution.md) | STN (National Treasury) | Monthly transfers by state/municipality and funding source |
-| [`get_fundeb_enrollment()`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_enrollment.md)     | FNDE (OData API)        | Enrollment counts used for funding calculation             |
+| [`get_fundeb_enrollment()`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_enrollment.md) | FNDE (OData API) | Enrollment counts used for funding calculation |
 
 ------------------------------------------------------------------------
 
@@ -48,6 +49,7 @@ FUNDEB aggregates revenue from multiple tax sources:
 ### Downloading distribution data
 
 ``` r
+
 # All distribution data for 2023
 dist_2023 <- get_fundeb_distribution(year = 2023)
 
@@ -71,6 +73,7 @@ Data is available from 2007 to 2026.
 ### Data structure
 
 ``` r
+
 dist <- get_fundeb_distribution(2023, uf = "SP")
 glimpse(dist)
 ```
@@ -78,6 +81,7 @@ glimpse(dist)
 ### Example analysis: Monthly transfers by source
 
 ``` r
+
 dist <- get_fundeb_distribution(2023, uf = "SP")
 
 # Total monthly transfers by funding source
@@ -106,6 +110,7 @@ ggplot(monthly, aes(x = factor(mes), y = total / 1e6, fill = origem)) +
 ### Example analysis: Comparing states
 
 ``` r
+
 dist <- get_fundeb_distribution(2023)
 
 # Total annual transfers by state
@@ -140,6 +145,7 @@ network, and location.
 ### Downloading enrollment data
 
 ``` r
+
 # All enrollment data for 2018
 mat_2018 <- get_fundeb_enrollment(year = 2018)
 
@@ -173,6 +179,7 @@ The enrollment data contains these columns:
 | `qtd_matricula`                | Number of enrollments       |
 
 ``` r
+
 mat <- get_fundeb_enrollment(2018, uf = "RJ")
 glimpse(mat)
 ```
@@ -180,6 +187,7 @@ glimpse(mat)
 ### Example analysis: Enrollment by education type
 
 ``` r
+
 mat <- get_fundeb_enrollment(2018, uf = "SP")
 
 # Total enrollment by education type
@@ -206,6 +214,7 @@ ggplot(by_type, aes(x = reorder(descricao_tipo_educacao, total), y = total / 1e3
 ### Example analysis: Urban vs rural enrollment
 
 ``` r
+
 mat <- get_fundeb_enrollment(2018)
 
 # Compare urban vs rural
@@ -246,6 +255,7 @@ You can combine both datasets to analyze per-student funding across
 states.
 
 ``` r
+
 # Total transfers by state
 dist <- get_fundeb_distribution(2018)
 transfers <- 

@@ -12,7 +12,7 @@ Source:
 
 Bissoli S (2025). *educabR: Download and Process Brazilian Education
 Data from INEP*.
-[doi:10.5281/zenodo.19410201](https://doi.org/10.5281/zenodo.19410201),
+[doi:10.5281/zenodo.19410201](https://doi.org/10.5281/zenodo.19410201).
 R package version 0.9.0, <https://github.com/SidneyBissoli/educabR>.
 
     @Manual{,

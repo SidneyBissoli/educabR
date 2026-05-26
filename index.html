@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Download and Process Brazilian Education Data from INEP • educabR</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Download and Process Brazilian Education Data from INEP">
 <meta name="description" content="Download and process public education data from INEP (Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira). Provides functions to access microdata from the School Census (Censo Escolar), ENEM (Exame Nacional do Ensino Médio), SAEB (Sistema de Avaliação da Educação Básica), Higher Education Census (Censo da Educação Superior), ENADE (Exame Nacional de Desempenho dos Estudantes), ENCCEJA (Exame Nacional para Certificação de Competências de Jovens e Adultos), IDD (Indicador de Diferença entre os Desempenhos Observado e Esperado), CPC (Conceito Preliminar de Curso), IGC (Índice Geral de Cursos), CAPES graduate education data, FUNDEB (Fundo de Manutencao e Desenvolvimento da Educacao Basica), IDEB (Índice de Desenvolvimento da Educação Básica), and other educational datasets. Returns data in tidy format ready for analysis. Data source: INEP Open Data Portal &lt;https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos&gt;.">
@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">educabR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -118,42 +118,42 @@
 <col width="27%">
 <col width="47%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>Dataset</th>
 <th>Function</th>
 <th>Available Years</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>IDEB - Basic Education Development Index</td>
 <td>
 <code><a href="reference/get_ideb.html">get_ideb()</a></code>, <code><a href="reference/get_ideb_series.html">get_ideb_series()</a></code>
 </td>
 <td>2017, 2019, 2021, 2023</td>
 </tr>
-<tr class="even">
+<tr>
 <td>ENEM - National High School Exam</td>
 <td>
 <code><a href="reference/get_enem.html">get_enem()</a></code>, <code><a href="reference/get_enem_itens.html">get_enem_itens()</a></code>
 </td>
 <td>1998-2024</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>School Census</td>
 <td><code><a href="reference/get_censo_escolar.html">get_censo_escolar()</a></code></td>
 <td>1995-2024</td>
 </tr>
-<tr class="even">
+<tr>
 <td>SAEB - Basic Education Assessment System</td>
 <td><code><a href="reference/get_saeb.html">get_saeb()</a></code></td>
 <td>2011-2023 (biennial)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>ENCCEJA - Youth and Adult Certification Exam</td>
 <td><code><a href="reference/get_encceja.html">get_encceja()</a></code></td>
 <td>2014-2024</td>
 </tr>
-<tr class="even">
+<tr>
 <td>ENEM by School (discontinued)</td>
 <td><code><a href="reference/get_enem_escola.html">get_enem_escola()</a></code></td>
 <td>2005-2015</td>
@@ -170,33 +170,33 @@
 <col width="27%">
 <col width="47%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>Dataset</th>
 <th>Function</th>
 <th>Available Years</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Higher Education Census</td>
 <td><code><a href="reference/get_censo_superior.html">get_censo_superior()</a></code></td>
 <td>2009-2024</td>
 </tr>
-<tr class="even">
+<tr>
 <td>ENADE - National Student Performance Exam</td>
 <td><code><a href="reference/get_enade.html">get_enade()</a></code></td>
 <td>2004-2024</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>IDD - Value-Added Indicator</td>
 <td><code><a href="reference/get_idd.html">get_idd()</a></code></td>
 <td>2014-2023</td>
 </tr>
-<tr class="even">
+<tr>
 <td>CPC - Preliminary Course Concept</td>
 <td><code><a href="reference/get_cpc.html">get_cpc()</a></code></td>
 <td>2007-2023</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>IGC - General Courses Index</td>
 <td><code><a href="reference/get_igc.html">get_igc()</a></code></td>
 <td>2007-2023</td>
@@ -213,12 +213,12 @@
 <col width="27%">
 <col width="47%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>Dataset</th>
 <th>Function</th>
 <th>Available Years</th>
 </tr></thead>
-<tbody><tr class="odd">
+<tbody><tr>
 <td>CAPES - Graduate programs, students, faculty</td>
 <td><code><a href="reference/get_capes.html">get_capes()</a></code></td>
 <td>2013-2024</td>
@@ -234,18 +234,18 @@
 <col width="27%">
 <col width="47%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>Dataset</th>
 <th>Function</th>
 <th>Available Years</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>FUNDEB - Resource distribution</td>
 <td><code><a href="reference/get_fundeb_distribution.html">get_fundeb_distribution()</a></code></td>
 <td>2007-2026</td>
 </tr>
-<tr class="even">
+<tr>
 <td>FUNDEB - Enrollment counts</td>
 <td><code><a href="reference/get_fundeb_enrollment.html">get_fundeb_enrollment()</a></code></td>
 <td>2007-2026</td>

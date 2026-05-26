@@ -5,6 +5,7 @@ This vignette shows how to combine educabR with
 education indicators across Brazilian municipalities and states.
 
 ``` r
+
 library(educabR)
 library(geobr)
 library(dplyr)
@@ -17,6 +18,7 @@ The simplest map uses state-level data. We download IDEB scores and join
 them with state geometries from geobr.
 
 ``` r
+
 ideb_uf <-
   get_ideb(level = "estado", stage = "anos_iniciais", metric = "indicador", year = 2023) |>
   filter(rede == "Total", indicador == "IDEB")
@@ -41,6 +43,7 @@ averages hide. The `municipio_codigo` column in educabR uses the 7-digit
 IBGE code, which matches `code_muni` in geobr.
 
 ``` r
+
 ideb_muni <- get_ideb(
   level  = "municipio",
   stage  = "anos_iniciais",
@@ -57,6 +60,7 @@ municipalities <- read_municipality(year = 2020, showProgress = FALSE)
 ```
 
 ``` r
+
 municipalities |>
   mutate(code_muni = as.character(code_muni)) |>
   left_join(ideb_muni, by = c("code_muni" = "municipio_codigo")) |>
@@ -75,6 +79,7 @@ For a closer look, filter both datasets to a single state. Here we map
 IDEB across municipalities in Minas Gerais.
 
 ``` r
+
 ideb_mg <-
   ideb_muni |>
   filter(uf_sigla == "MG")
@@ -99,6 +104,7 @@ Side-by-side maps make it easy to visualize regional progress. We
 download two editions and use facets.
 
 ``` r
+
 ideb_time <-
   get_ideb(
     level  = "estado",

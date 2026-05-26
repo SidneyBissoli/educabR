@@ -40,12 +40,14 @@ datasets, see:
 ## Installation
 
 ``` r
+
 # Install from GitHub (development version)
 # install.packages("remotes")
 remotes::install_github("SidneyBissoli/educabR")
 ```
 
 ``` r
+
 library(educabR)
 library(dplyr)
 library(ggplot2)
@@ -58,6 +60,7 @@ educabR caches downloaded files to avoid repeated downloads. By default,
 it uses a temporary directory. To persist data across sessions:
 
 ``` r
+
 # Check current cache directory
 get_cache_dir()
 
@@ -79,6 +82,7 @@ combining test performance (SAEB) with grade promotion rates.
 ### Available years and levels
 
 ``` r
+
 # See available combinations
 list_ideb_available()
 ```
@@ -100,6 +104,7 @@ list_ideb_available()
 ### Downloading IDEB data
 
 ``` r
+
 # IDEB by school - Early elementary (1st-5th grade)
 ideb_schools <- get_ideb(
   level  = "escola",
@@ -125,6 +130,7 @@ ideb_sp <-
 ### Data structure
 
 ``` r
+
 # View structure
 glimpse(ideb_schools)
 #> Rows: 194,715
@@ -143,6 +149,7 @@ glimpse(ideb_schools)
 ### Example analysis: Average IDEB by state
 
 ``` r
+
 # Calculate average IDEB by state (observed indicator only)
 ideb_by_state <-
   ideb_schools |>
@@ -172,6 +179,7 @@ ggplot(ideb_by_state, aes(x = reorder(uf_sigla, mean_ideb), y = mean_ideb)) +
 ### IDEB historical series
 
 ``` r
+
 # Download historical series (get_ideb() already returns long format)
 ideb_history <- get_ideb(
   level  = "municipio",
@@ -212,6 +220,7 @@ The microdata includes demographics, socioeconomic data, and scores.
 ### Downloading ENEM data
 
 ``` r
+
 # WARNING: Large files (1-3 GB)!
 # Use n_max for initial exploration
 
@@ -225,6 +234,7 @@ enem_sample <- get_enem(2023, n_max = 10000)
 ### Data structure
 
 ``` r
+
 glimpse(enem_sample)
 #> Rows: 10,000
 #> Columns: 76
@@ -246,44 +256,47 @@ glimpse(enem_sample)
 ### Performance analysis
 
 ``` r
+
 # Summary statistics for scores
 enem_summary(enem_sample)
 ```
 
-| Variable                                         |     n | n_valid | Mean |    SD | Min | Q25 | Median | Q75 | Max |
-|:-------------------------------------------------|------:|--------:|-----:|------:|----:|----:|-------:|----:|----:|
-| nu_nota_cn                                       | 10000 |    7281 |  492 |  79.8 |   0 | 440 |    489 | 541 | 817 |
-| nu_nota_ch                                       | 10000 |    7562 |  529 |  81.7 |   0 | 480 |    535 | 584 | 823 |
-| nu_nota_lc                                       | 10000 |    7562 |  520 |  70.4 |   0 | 476 |    524 | 568 | 731 |
-| nu_nota_mt                                       | 10000 |    7281 |  520 | 121.0 |   0 | 426 |    507 | 608 | 945 |
-| nu_nota_comp1                                    | 10000 |    7562 |  126 |  32.1 |   0 | 120 |    120 | 160 | 200 |
-| nu_nota_comp2                                    | 10000 |    7562 |  147 |  48.4 |   0 | 120 |    160 | 200 | 200 |
-| nu_nota_comp3                                    | 10000 |    7562 |  124 |  41.0 |   0 | 100 |    120 | 160 | 200 |
-| nu_nota_comp4                                    | 10000 |    7562 |  136 |  41.2 |   0 | 120 |    120 | 160 | 200 |
-| nu_nota_comp5                                    | 10000 |    7562 |  117 |  60.0 |   0 |  80 |    120 | 160 | 200 |
-| nu_nota_redacao                                  | 10000 |    7562 |  649 | 201.0 |   0 | 520 |    640 | 820 | 980 |
-|  Based on a random sample of 10,000 observations |       |         |      |       |     |     |        |     |     |
+| Variable | n | n_valid | Mean | SD | Min | Q25 | Median | Q75 | Max |
+|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| nu_nota_cn | 10000 | 7281 | 492 | 79.8 | 0 | 440 | 489 | 541 | 817 |
+| nu_nota_ch | 10000 | 7562 | 529 | 81.7 | 0 | 480 | 535 | 584 | 823 |
+| nu_nota_lc | 10000 | 7562 | 520 | 70.4 | 0 | 476 | 524 | 568 | 731 |
+| nu_nota_mt | 10000 | 7281 | 520 | 121.0 | 0 | 426 | 507 | 608 | 945 |
+| nu_nota_comp1 | 10000 | 7562 | 126 | 32.1 | 0 | 120 | 120 | 160 | 200 |
+| nu_nota_comp2 | 10000 | 7562 | 147 | 48.4 | 0 | 120 | 160 | 200 | 200 |
+| nu_nota_comp3 | 10000 | 7562 | 124 | 41.0 | 0 | 100 | 120 | 160 | 200 |
+| nu_nota_comp4 | 10000 | 7562 | 136 | 41.2 | 0 | 120 | 120 | 160 | 200 |
+| nu_nota_comp5 | 10000 | 7562 | 117 | 60.0 | 0 | 80 | 120 | 160 | 200 |
+| nu_nota_redacao | 10000 | 7562 | 649 | 201.0 | 0 | 520 | 640 | 820 | 980 |
+|  Based on a random sample of 10,000 observations |  |  |  |  |  |  |  |  |  |
 
 ``` r
+
 # Summary by sex
 enem_summary(enem_sample, by = "tp_sexo")
 ```
 
-|          Sex           | Variable      |    n | n_valid | Mean |    SD | Min | Q25 | Median | Q75 | Max |
-|:----------------------:|:--------------|-----:|--------:|-----:|------:|----:|----:|-------:|----:|----:|
-|           F            | nu_nota_cn    | 7042 |    5130 |  485 |  76.5 |   0 | 435 |    481 | 532 | 817 |
-|           M            | nu_nota_cn    | 2958 |    2151 |  507 |  85.1 |   0 | 455 |    508 | 560 | 804 |
-|           F            | nu_nota_ch    | 7042 |    5328 |  527 |  78.6 |   0 | 480 |    532 | 579 | 784 |
-|           M            | nu_nota_ch    | 2958 |    2234 |  535 |  88.2 |   0 | 483 |    542 | 596 | 823 |
-|           F            | nu_nota_lc    | 7042 |    5328 |  520 |  68.2 |   0 | 476 |    523 | 566 | 731 |
-|           M            | nu_nota_lc    | 2958 |    2234 |  522 |  75.5 |   0 | 478 |    527 | 574 | 729 |
-|           F            | nu_nota_mt    | 7042 |    5130 |  509 | 116.0 |   0 | 420 |    494 | 589 | 944 |
-|           M            | nu_nota_mt    | 2958 |    2151 |  547 | 129.0 |   0 | 447 |    540 | 643 | 945 |
-|           F            | nu_nota_comp1 | 7042 |    5328 |  128 |  30.8 |   0 | 120 |    120 | 160 | 200 |
-|           M            | nu_nota_comp1 | 2958 |    2234 |  121 |  34.6 |   0 | 100 |    120 | 140 | 200 |
-|  Showing 10 of 20 rows |               |      |         |      |       |     |     |        |     |     |
+| Sex | Variable | n | n_valid | Mean | SD | Min | Q25 | Median | Q75 | Max |
+|:--:|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| F | nu_nota_cn | 7042 | 5130 | 485 | 76.5 | 0 | 435 | 481 | 532 | 817 |
+| M | nu_nota_cn | 2958 | 2151 | 507 | 85.1 | 0 | 455 | 508 | 560 | 804 |
+| F | nu_nota_ch | 7042 | 5328 | 527 | 78.6 | 0 | 480 | 532 | 579 | 784 |
+| M | nu_nota_ch | 2958 | 2234 | 535 | 88.2 | 0 | 483 | 542 | 596 | 823 |
+| F | nu_nota_lc | 7042 | 5328 | 520 | 68.2 | 0 | 476 | 523 | 566 | 731 |
+| M | nu_nota_lc | 2958 | 2234 | 522 | 75.5 | 0 | 478 | 527 | 574 | 729 |
+| F | nu_nota_mt | 7042 | 5130 | 509 | 116.0 | 0 | 420 | 494 | 589 | 944 |
+| M | nu_nota_mt | 2958 | 2151 | 547 | 129.0 | 0 | 447 | 540 | 643 | 945 |
+| F | nu_nota_comp1 | 7042 | 5328 | 128 | 30.8 | 0 | 120 | 120 | 160 | 200 |
+| M | nu_nota_comp1 | 2958 | 2234 | 121 | 34.6 | 0 | 100 | 120 | 140 | 200 |
+|  Showing 10 of 20 rows |  |  |  |  |  |  |  |  |  |  |
 
 ``` r
+
 # Average scores by race/ethnicity
 scores_by_race <- 
   enem_sample |>
@@ -319,6 +332,7 @@ scores_by_race <-
 ### Item response data
 
 ``` r
+
 # Data about exam questions
 items <- get_enem_itens(2023)
 
@@ -347,6 +361,7 @@ education, covering all public and private schools.
 ### Downloading Census data
 
 ``` r
+
 # School data
 schools_2023 <- get_censo_escolar(2023)
 
@@ -360,6 +375,7 @@ schools_sample <- get_censo_escolar(2023, n_max = 1000)
 ### Data structure
 
 ``` r
+
 # The census contains over 400 variables per school!
 glimpse(schools_2023)
 #> Rows: 217,625
@@ -380,6 +396,7 @@ glimpse(schools_2023)
 ### Analysis: Schools by administrative type
 
 ``` r
+
 # Count by administrative type
 schools_by_type <- 
   schools_2023 |>
@@ -417,6 +434,7 @@ ggplot(schools_by_type, aes(x = reorder(admin_type, n), y = n, fill = admin_type
 ### Analysis: School infrastructure
 
 ``` r
+
 # Check infrastructure availability in public schools
 infra <- 
   schools_2023 |>
@@ -436,13 +454,16 @@ print(infra)
 |:--------:|:-------:|:------------:|:------------:|:-----:|
 |   88.5   |  31.2   |     29.3     |      36      | 53.5  |
 
-Infrastructure availability in public schools (%)
+Infrastructure availability in public schools (%) {.table .table
+.table-striped .table-hover .table-condensed
+style="width: auto !important; margin-left: auto; margin-right: auto;"}
 
 ## Best practices
 
 ### 1. Set a permanent cache
 
 ``` r
+
 # At the start of each project
 set_cache_dir("~/educabR_data")
 ```
@@ -450,6 +471,7 @@ set_cache_dir("~/educabR_data")
 ### 2. Use samples for exploration
 
 ``` r
+
 # Explore with a small sample first
 test_data <- get_enem(2023, n_max = 1000)
 
@@ -460,6 +482,7 @@ test_data <- get_enem(2023, n_max = 1000)
 ### 3. Filter by state after downloading
 
 ``` r
+
 # Download once, then filter
 ideb <- get_ideb(level = "escola", stage = "anos_iniciais", metric = "indicador", year = 2021)
 ideb_sp <- ideb |> dplyr::filter(uf_sigla == "SP")
@@ -468,6 +491,7 @@ ideb_sp <- ideb |> dplyr::filter(uf_sigla == "SP")
 ### 4. Monitor memory usage
 
 ``` r
+
 # Large files can consume a lot of RAM
 # Use n_max or filter data after loading
 data <- get_censo_escolar(2023)

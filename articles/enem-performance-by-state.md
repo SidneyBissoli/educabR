@@ -4,6 +4,7 @@ This vignette shows how to use educabR to analyze the evolution of ENEM
 scores across Brazilian states over time.
 
 ``` r
+
 library(educabR)
 library(dplyr)
 library(tidyr)
@@ -16,6 +17,7 @@ ENEM microdata files are large (1-3 GB each), so we use `n_max` to work
 with samples. For a full analysis, remove the `n_max` parameter.
 
 ``` r
+
 # WARNING: each year downloads ~600 MB from INEP. This may take several minutes.
 years <- c(2019, 2021, 2022, 2023)
 
@@ -28,6 +30,7 @@ enem <-
 ## Average math score by state and year
 
 ``` r
+
 scores_by_state <-
   enem |>
   filter(!is.na(nu_nota_mt), !is.na(sg_uf_prova)) |>
@@ -63,6 +66,7 @@ scores_by_state |>
 ## Score gap between regions
 
 ``` r
+
 region_map <- c(
   AC = "North",     AP = "North",     AM = "North",     PA = "North",
   RO = "North",     RR = "North",     TO = "North",
@@ -98,6 +102,7 @@ enem |>
 ## All five scores compared
 
 ``` r
+
 enem |>
   filter(!is.na(sg_uf_prova)) |>
   summarise(

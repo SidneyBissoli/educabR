@@ -6,6 +6,7 @@ courses, student performance, and quality indicators across Brazilian
 higher education.
 
 ``` r
+
 library(educabR)
 library(dplyr)
 library(ggplot2)
@@ -29,6 +30,7 @@ courses, student enrollment, and faculty.
 ### Downloading data
 
 ``` r
+
 # Institution data
 ies_2023 <- get_censo_superior(year = 2023, type = "ies")
 
@@ -50,6 +52,7 @@ Data is available from 2009 to 2024.
 ### Exploring ZIP contents
 
 ``` r
+
 # See what files are inside the downloaded ZIP
 list_censo_superior_files(2023)
 ```
@@ -57,6 +60,7 @@ list_censo_superior_files(2023)
 ### Example analysis: Institutions by administrative type
 
 ``` r
+
 ies <- get_censo_superior(2023, type = "ies")
 
 ies_summary <- 
@@ -98,6 +102,7 @@ where different course areas are evaluated each year.
 ### Downloading ENADE data
 
 ``` r
+
 # Download ENADE microdata
 enade_2023 <- get_enade(year = 2023)
 
@@ -112,6 +117,7 @@ Data is available from 2004 to 2024.
 ### Data structure
 
 ``` r
+
 enade <- get_enade(2023, n_max = 5000)
 glimpse(enade)
 ```
@@ -119,6 +125,7 @@ glimpse(enade)
 ### Example analysis: Score distribution
 
 ``` r
+
 enade <- get_enade(2023)
 
 enade |>
@@ -148,6 +155,7 @@ scores.
 ### Downloading IDD data
 
 ``` r
+
 # Download IDD data
 idd_2023 <- get_idd(year = 2023)
 
@@ -163,6 +171,7 @@ COVID).
 ### Example analysis: Value-added by institution type
 
 ``` r
+
 idd <- get_idd(2023)
 
 glimpse(idd)
@@ -182,6 +191,7 @@ considered unsatisfactory.
 ### Downloading CPC data
 
 ``` r
+
 # Download CPC data (Excel format, requires readxl)
 cpc_2023 <- get_cpc(year = 2023)
 
@@ -196,6 +206,7 @@ Data is available for 2007-2019 and 2021-2023 (no 2020 edition).
 ### Example analysis: Course quality distribution
 
 ``` r
+
 cpc <- get_cpc(2023)
 
 # Distribution of CPC scores
@@ -229,6 +240,7 @@ each institution.
 ### Downloading IGC data
 
 ``` r
+
 # Download IGC data (Excel format, requires readxl)
 igc_2023 <- get_igc(year = 2023)
 
@@ -244,6 +256,7 @@ IGC 2007 comes as a 7z archive containing an Excel file.
 ### Example analysis: Institution quality
 
 ``` r
+
 igc <- get_igc(2023)
 
 # Top institutions by continuous IGC
@@ -286,6 +299,7 @@ masters and doctoral programs).
 ### Downloading CAPES data
 
 ``` r
+
 # Graduate programs
 programas_2023 <- get_capes(year = 2023, type = "programas")
 
@@ -304,6 +318,7 @@ Open Data Portal via CKAN API.
 ### Example analysis: Graduate programs by knowledge area
 
 ``` r
+
 programas <- get_capes(2023, type = "programas")
 
 # Count programs by broad knowledge area
@@ -334,6 +349,7 @@ CPC, IGC, IDD, and ENADE are closely related. Here is an example of how
 to combine them for a comprehensive view.
 
 ``` r
+
 # Load CPC and IGC for the same year
 cpc <- get_cpc(2023)
 igc <- get_igc(2023)

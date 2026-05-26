@@ -2,6 +2,20 @@
 
 ## educabR 1.0.0
 
+### Bug fixes
+
+- [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)
+  no longer consumes several GB of RAM for school-level reads (issue
+  [\#1](https://github.com/SidneyBissoli/educabR/issues/1)). The xlsx is
+  now read with column projection: only the `vl_*` columns matching the
+  requested `metric` (and `year`, when given) are parsed; the others are
+  skipped at the readxl C++ layer. INEP’s NA tokens (`""`, `"-"`,
+  `"ND"`) are also passed to `read_excel(na = ...)` so the missing-value
+  strings never get allocated as R character vectors. For
+  `level = "escola", stage = "anos_iniciais", metric = "indicador"`,
+  this cuts the in-memory result from ~133 MB to ~37 MB (4 years) or ~19
+  MB (1 year), with proportional drops in peak memory during reshape.
+
 ### Breaking changes
 
 - **[`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)

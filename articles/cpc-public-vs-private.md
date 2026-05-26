@@ -4,6 +4,7 @@ This vignette shows how to use educabR to compare course quality (CPC)
 between public and private higher education institutions in Brazil.
 
 ``` r
+
 library(educabR)
 library(dplyr)
 library(tidyr)
@@ -17,6 +18,7 @@ undergraduate courses, ranging from 1 (lowest) to 5 (highest). Courses
 scoring 1 or 2 are flagged for on-site evaluation.
 
 ``` r
+
 cpc <- get_cpc(year = 2023)
 glimpse(cpc)
 ```
@@ -42,6 +44,7 @@ column name and coding may vary by year – check `names(cpc)` after
 downloading.
 
 ``` r
+
 cpc_classified <-
   cpc |>
   mutate(
@@ -58,6 +61,7 @@ cpc_classified <-
 ## CPC score distribution by sector
 
 ``` r
+
 cpc_classified |>
   filter(!is.na(cpc_faixa)) |>
   count(sector, cpc_faixa) |>
@@ -78,6 +82,7 @@ cpc_classified |>
 ## Average CPC by sector and knowledge area
 
 ``` r
+
 cpc_classified |>
   filter(!is.na(cpc_continuo), !is.na(area_de_avaliacao)) |>
   summarise(
@@ -118,6 +123,7 @@ score. Combining CPC and IGC gives a course-level and institution-level
 perspective.
 
 ``` r
+
 igc <- get_igc(year = 2023)
 
 igc |>

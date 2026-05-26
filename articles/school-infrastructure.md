@@ -6,6 +6,7 @@ libraries, science labs, sports courts, and accessibility features – and
 how they vary by region, administrative type, and location.
 
 ``` r
+
 library(educabR)
 library(dplyr)
 library(tidyr)
@@ -18,6 +19,7 @@ The School Census contains one row per school (~217,000 schools in 2023)
 with over 400 variables covering infrastructure, staffing, and programs.
 
 ``` r
+
 # Download all schools for 2023
 escolas <- get_censo_escolar(year = 2023)
 
@@ -36,6 +38,7 @@ infrastructure item. Let us compute the percentage of schools that have
 each resource nationwide.
 
 ``` r
+
 indicators <- c(
   "in_internet",
   "in_banda_larga",
@@ -78,6 +81,7 @@ resource levels. The `tp_dependencia` column encodes the administrative
 type.
 
 ``` r
+
 admin_labels <- c(
   "1" = "Federal",
   "2" = "State",
@@ -118,6 +122,7 @@ Northern and Northeastern states typically have fewer resources than the
 South and Southeast. Grouping by region reveals the gap.
 
 ``` r
+
 region_labels <- c(
   "Norte"        = "North",
   "Nordeste"     = "Northeast",
@@ -159,6 +164,7 @@ schools. The infrastructure gap between them is one of the starkest in
 Brazilian education.
 
 ``` r
+
 infra_location <-
   escolas |>
   mutate(
@@ -198,6 +204,7 @@ The School Census tracks specific accessibility features. The
 at all.
 
 ``` r
+
 access_cols <- c(
   "in_acessibilidade_rampas",
   "in_acessibilidade_corrimao",
@@ -239,6 +246,7 @@ A per-state view highlights which states are lagging behind in digital
 connectivity.
 
 ``` r
+
 internet_uf <-
   escolas |>
   group_by(sg_uf) |>

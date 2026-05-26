@@ -6,6 +6,7 @@ available via
 [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md).
 
 ``` r
+
 library(educabR)
 library(dplyr)
 library(tidyr)
@@ -20,6 +21,7 @@ with `year = c(2005, 2023)` gives us the two endpoints we need for
 comparison.
 
 ``` r
+
 ideb <- get_ideb(
   level  = "municipio",
   stage  = "anos_iniciais",
@@ -45,6 +47,7 @@ We filter to the IDEB indicator for municipal schools, pivot to wide
 format to get one column per year, then compute the change.
 
 ``` r
+
 ideb_change <-
   ideb |>
   filter(indicador == "IDEB") |>
@@ -61,6 +64,7 @@ ideb_change <-
 ## Top 20 municipalities by absolute improvement
 
 ``` r
+
 ideb_change |>
   slice_max(change, n = 20) |>
   ggplot(aes(
@@ -83,6 +87,7 @@ ideb_change |>
 ## Distribution of improvement by state
 
 ``` r
+
 ideb_change |>
   ggplot(aes(x = reorder(uf_sigla, change, FUN = median), y = change)) +
   geom_boxplot(fill = "#2a9d8f", alpha = 0.6, outlier.size = 0.5) +
@@ -101,6 +106,7 @@ ideb_change |>
 ## IDEB trajectory for selected municipalities
 
 ``` r
+
 # Pick the top 5 improvers
 top5 <-
   ideb_change |>
@@ -139,6 +145,7 @@ ideb_full |>
 ## Municipalities that declined
 
 ``` r
+
 ideb_change |>
   filter(change < 0) |>
   slice_min(change, n = 15) |>

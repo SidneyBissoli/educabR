@@ -5,6 +5,7 @@ in educabR. For IDEB, ENEM, and the School Census, see
 [`vignette("getting-started")`](https://sidneybissoli.github.io/educabR/articles/getting-started.md).
 
 ``` r
+
 library(educabR)
 library(dplyr)
 library(ggplot2)
@@ -31,6 +32,7 @@ SAEB microdata includes four perspectives:
 ### Downloading SAEB data
 
 ``` r
+
 # Student performance data
 saeb_students <- get_saeb(year = 2023, type = "aluno")
 
@@ -47,6 +49,7 @@ SAEB is conducted every two years: 2011, 2013, 2015, 2017, 2019, 2021,
 2023.
 
 ``` r
+
 # 2021 data is split by education level
 saeb_fund <- get_saeb(
   year  = 2021,
@@ -64,6 +67,7 @@ saeb_infantil <- get_saeb(
 ### Example analysis: Score distribution
 
 ``` r
+
 # Explore student scores
 saeb_sample <- get_saeb(2023, type = "aluno", n_max = 10000)
 
@@ -94,6 +98,7 @@ Mathematics, Portuguese, and Social Sciences.
 ### Downloading ENCCEJA data
 
 ``` r
+
 # Download ENCCEJA microdata
 encceja_2023 <- get_encceja(year = 2023)
 
@@ -106,6 +111,7 @@ encceja_sample <- get_encceja(year = 2023, n_max = 5000)
 ENCCEJA data is available from 2014 to 2024.
 
 ``` r
+
 # Explore the data structure
 glimpse(encceja_sample)
 ```
@@ -113,6 +119,7 @@ glimpse(encceja_sample)
 ### Example analysis: Participation by state
 
 ``` r
+
 encceja_2023 <- get_encceja(2023, n_max = 50000)
 
 # Count participants by state
@@ -152,6 +159,7 @@ Unlike other datasets, this function has no `year` parameter — it
 downloads the entire 2005-2015 dataset at once.
 
 ``` r
+
 # Download all ENEM by School data (2005-2015)
 enem_escola <- get_enem_escola()
 
@@ -162,12 +170,14 @@ enem_escola_sample <- get_enem_escola(n_max = 5000)
 ### Data structure
 
 ``` r
+
 glimpse(enem_escola_sample)
 ```
 
 ### Example analysis: School performance trends
 
 ``` r
+
 enem_escola <- get_enem_escola()
 
 # Average scores over time (public vs private)

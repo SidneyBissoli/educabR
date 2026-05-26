@@ -26,6 +26,7 @@ financiamento via FUNDEB.
 Mapa do IDEB por estado em poucas linhas:
 
 ``` r
+
 # instalar pacote "pacman" se não estiver instalado
 if (!require("pacman")) install.packages("pacman")
 
@@ -69,12 +70,14 @@ states |>
 Instale do CRAN:
 
 ``` r
+
 install.packages("educabR")
 ```
 
 Ou instale a versão de desenvolvimento do GitHub:
 
 ``` r
+
 # install.packages("remotes")
 remotes::install_github("SidneyBissoli/educabR")
 ```
@@ -83,43 +86,44 @@ remotes::install_github("SidneyBissoli/educabR")
 
 ### Educação Básica
 
-| Dataset                                                      | Função                                                                                                                                                                     | Anos disponíveis       |
-|--------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------|
-| IDEB - Índice de Desenvolvimento da Educação Básica          | [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md), [`get_ideb_series()`](https://sidneybissoli.github.io/educabR/reference/get_ideb_series.md) | 2017, 2019, 2021, 2023 |
-| ENEM - Exame Nacional do Ensino Médio                        | [`get_enem()`](https://sidneybissoli.github.io/educabR/reference/get_enem.md), [`get_enem_itens()`](https://sidneybissoli.github.io/educabR/reference/get_enem_itens.md)   | 1998-2024              |
-| Censo Escolar                                                | [`get_censo_escolar()`](https://sidneybissoli.github.io/educabR/reference/get_censo_escolar.md)                                                                            | 1995-2024              |
-| SAEB - Sistema de Avaliação da Educação Básica               | [`get_saeb()`](https://sidneybissoli.github.io/educabR/reference/get_saeb.md)                                                                                              | 2011-2023 (bienal)     |
-| ENCCEJA - Exame Nacional de Certificação de Jovens e Adultos | [`get_encceja()`](https://sidneybissoli.github.io/educabR/reference/get_encceja.md)                                                                                        | 2014-2024              |
-| ENEM por Escola (descontinuado)                              | [`get_enem_escola()`](https://sidneybissoli.github.io/educabR/reference/get_enem_escola.md)                                                                                | 2005-2015              |
+| Dataset | Função | Anos disponíveis |
+|----|----|----|
+| IDEB - Índice de Desenvolvimento da Educação Básica | [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md), [`get_ideb_series()`](https://sidneybissoli.github.io/educabR/reference/get_ideb_series.md) | 2017, 2019, 2021, 2023 |
+| ENEM - Exame Nacional do Ensino Médio | [`get_enem()`](https://sidneybissoli.github.io/educabR/reference/get_enem.md), [`get_enem_itens()`](https://sidneybissoli.github.io/educabR/reference/get_enem_itens.md) | 1998-2024 |
+| Censo Escolar | [`get_censo_escolar()`](https://sidneybissoli.github.io/educabR/reference/get_censo_escolar.md) | 1995-2024 |
+| SAEB - Sistema de Avaliação da Educação Básica | [`get_saeb()`](https://sidneybissoli.github.io/educabR/reference/get_saeb.md) | 2011-2023 (bienal) |
+| ENCCEJA - Exame Nacional de Certificação de Jovens e Adultos | [`get_encceja()`](https://sidneybissoli.github.io/educabR/reference/get_encceja.md) | 2014-2024 |
+| ENEM por Escola (descontinuado) | [`get_enem_escola()`](https://sidneybissoli.github.io/educabR/reference/get_enem_escola.md) | 2005-2015 |
 
 ### Educação Superior
 
-| Dataset                                             | Função                                                                                            | Anos disponíveis |
-|-----------------------------------------------------|---------------------------------------------------------------------------------------------------|------------------|
-| Censo da Educação Superior                          | [`get_censo_superior()`](https://sidneybissoli.github.io/educabR/reference/get_censo_superior.md) | 2009-2024        |
-| ENADE - Exame Nacional de Desempenho dos Estudantes | [`get_enade()`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)                   | 2004-2024        |
-| IDD - Indicador de Diferença entre os Desempenhos   | [`get_idd()`](https://sidneybissoli.github.io/educabR/reference/get_idd.md)                       | 2014-2023        |
-| CPC - Conceito Preliminar de Curso                  | [`get_cpc()`](https://sidneybissoli.github.io/educabR/reference/get_cpc.md)                       | 2007-2023        |
-| IGC - Índice Geral de Cursos                        | [`get_igc()`](https://sidneybissoli.github.io/educabR/reference/get_igc.md)                       | 2007-2023        |
+| Dataset | Função | Anos disponíveis |
+|----|----|----|
+| Censo da Educação Superior | [`get_censo_superior()`](https://sidneybissoli.github.io/educabR/reference/get_censo_superior.md) | 2009-2024 |
+| ENADE - Exame Nacional de Desempenho dos Estudantes | [`get_enade()`](https://sidneybissoli.github.io/educabR/reference/get_enade.md) | 2004-2024 |
+| IDD - Indicador de Diferença entre os Desempenhos | [`get_idd()`](https://sidneybissoli.github.io/educabR/reference/get_idd.md) | 2014-2023 |
+| CPC - Conceito Preliminar de Curso | [`get_cpc()`](https://sidneybissoli.github.io/educabR/reference/get_cpc.md) | 2007-2023 |
+| IGC - Índice Geral de Cursos | [`get_igc()`](https://sidneybissoli.github.io/educabR/reference/get_igc.md) | 2007-2023 |
 
 ### Pós-Graduação
 
-| Dataset                                | Função                                                                          | Anos disponíveis |
-|----------------------------------------|---------------------------------------------------------------------------------|------------------|
-| CAPES - Programas, discentes, docentes | [`get_capes()`](https://sidneybissoli.github.io/educabR/reference/get_capes.md) | 2013-2024        |
+| Dataset | Função | Anos disponíveis |
+|----|----|----|
+| CAPES - Programas, discentes, docentes | [`get_capes()`](https://sidneybissoli.github.io/educabR/reference/get_capes.md) | 2013-2024 |
 
 ### Financiamento da Educação
 
-| Dataset                           | Função                                                                                                      | Anos disponíveis |
-|-----------------------------------|-------------------------------------------------------------------------------------------------------------|------------------|
-| FUNDEB - Distribuição de recursos | [`get_fundeb_distribution()`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_distribution.md) | 2007-2026        |
-| FUNDEB - Matrículas               | [`get_fundeb_enrollment()`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_enrollment.md)     | 2007-2026        |
+| Dataset | Função | Anos disponíveis |
+|----|----|----|
+| FUNDEB - Distribuição de recursos | [`get_fundeb_distribution()`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_distribution.md) | 2007-2026 |
+| FUNDEB - Matrículas | [`get_fundeb_enrollment()`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_enrollment.md) | 2007-2026 |
 
 ## Exemplos
 
 ### IDEB
 
 ``` r
+
 library(educabR)
 
 # Baixar IDEB 2021 - Anos Iniciais - Escolas
@@ -140,6 +144,7 @@ ideb_serie <- get_ideb_series(
 ### ENEM
 
 ``` r
+
 # Baixar amostra para exploração
 enem <- get_enem(year = 2023, n_max = 10000)
 
@@ -180,6 +185,7 @@ enem_summary(enem, by = "tp_sexo")
 ### Censo Escolar
 
 ``` r
+
 # Baixar Censo Escolar 2023 - filtrar por estado
 censo_sp <- get_censo_escolar(year = 2023, uf = "SP")
 ```
@@ -187,6 +193,7 @@ censo_sp <- get_censo_escolar(year = 2023, uf = "SP")
 ### Educação Superior
 
 ``` r
+
 # Censo da Educação Superior - instituições
 ies <- get_censo_superior(2023, type = "ies")
 
@@ -200,6 +207,7 @@ programas <- get_capes(2023, type = "programas")
 ### FUNDEB
 
 ``` r
+
 # Distribuição de recursos por estado
 dist <- get_fundeb_distribution(2023, uf = "SP")
 
@@ -212,6 +220,7 @@ mat <- get_fundeb_enrollment(2023, uf = "SP")
 O pacote usa cache local para evitar downloads repetidos:
 
 ``` r
+
 # Definir diretório de cache permanente
 set_cache_dir("~/educabR_data")
 
