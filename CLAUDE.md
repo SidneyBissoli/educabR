@@ -55,6 +55,12 @@ Not all datasets follow the same pattern:
 
 ZIP extraction has Windows-specific paths: PowerShell `Expand-Archive` fallback for encoding issues, 7-Zip path hunting in Program Files. Check `.Platform$OS.type` when modifying extraction logic.
 
+### Repo layout (non-obvious directories)
+
+- `archive/` — historical audit notes (`auditoria-pos-issue1.md`, `bugs-pendentes.md`). Read-only context for past fixes; check before re-investigating closed audit threads.
+- `guides/` — committed INEP guide PDFs (`guides_2007.pdf`, `guides_2025.pdf`). Distinct from the local-only `dictionaries/` folder.
+- `inst/bench/` — IDEB memory benchmark utility. Use this when changing `read_ideb_excel()` to verify column-projection savings don't regress.
+
 ## Testing
 
 - Framework: testthat edition 3, with snapshot tests in `tests/testthat/_snaps/`
@@ -72,6 +78,17 @@ Before changing the read or download pipeline (`read_inep_file`,
 each open audit issue carries a diagnosis with file:line evidence, a
 proposed fix snippet, and tests to add. Don't redo that analysis from
 scratch.
+
+`get_ideb()` was rewritten in v1.0.0 (new signature, tidy long output,
+column-projection memory savings; `get_ideb_series()` deprecated). Read
+NEWS.md before touching `read_ideb_excel()` or the IDEB pipeline — the
+old wide-format / positional-arg behavior is intentionally gone.
+
+## Release artifacts
+
+- `NEWS.md` — update for any user-visible change (new function, signature change, bug fix users would notice). One bullet under the next version heading.
+- `cran-comments.md`, `CRAN-SUBMISSION` — CRAN submission metadata; touched only during a release cycle, not regular dev.
+- `CITATION.cff` — citation metadata; bump version/date here when releasing.
 
 ## Important Conventions
 
