@@ -38,7 +38,7 @@ validate parameters → check cache → download if needed → extract archive �
 
 Key internal modules:
 - `R/utils-cache.R` — Local cache system (`tempdir()/educabR_cache` or user-configured). Functions: `cache_path()`, `is_cached()`, `get_cache_dir()`, `set_cache_dir()`, `clear_cache()`, `list_cache()`
-- `R/utils-download.R` — HTTP downloads with retry (3 attempts, 600s timeout), archive extraction (ZIP/7z/RAR), URL construction, dynamic year discovery via HEAD requests
+- `R/utils-download.R` — HTTP downloads with retry (3 attempts; timeout default 600s, configurable via `options(educabR.download_timeout = N)`), archive extraction (ZIP/7z/RAR), URL construction, dynamic year discovery via HEAD requests
 - `R/utils-validation.R` — Per-dataset validators checking column counts, expected names, non-empty results
 - `R/zzz.R` — Package init, reads `educabR.cache_dir` option
 
