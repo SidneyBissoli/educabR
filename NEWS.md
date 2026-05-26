@@ -1,3 +1,17 @@
+# educabR (development version)
+
+## Bug fixes
+
+* `validate_year()` now rejects vectors and non-numeric input with a clear
+  error pointing at `purrr::map_dfr()` for multi-year composition
+  (issue #2). Previously, passing `c(2017, 2019)` to any of the 13
+  affected getters (`get_cpc`, `get_idd`, `get_igc`, `get_capes`,
+  `get_saeb`, `get_enem`, `get_enem_itens`, `get_enade`, `get_encceja`,
+  `get_fundeb_distribution`, `get_fundeb_enrollment`, `get_censo_escolar`,
+  `get_censo_superior`) hit either a cryptic `length > 1` error (R ≥ 4.2)
+  or silently used only the first element (R < 4.2). `get_ideb()` is
+  unaffected — it intentionally accepts year vectors.
+
 # educabR 1.0.0
 
 ## Bug fixes

@@ -610,6 +610,17 @@ available_years <- function(dataset) {
 #'
 #' @keywords internal
 validate_year <- function(year, dataset) {
+  if (length(year) != 1L || !is.numeric(year)) {
+    cli::cli_abort(
+      c(
+        "{.arg year} must be a single number",
+        "x" = "got {.cls {class(year)}} of length {length(year)}",
+        "i" = "this function downloads one year per call",
+        "i" = "to combine years, use {.code purrr::map_dfr(years, \\(y) get_xxx(y))}"
+      )
+    )
+  }
+
   available <- available_years(dataset)
 
   if (!year %in% available) {

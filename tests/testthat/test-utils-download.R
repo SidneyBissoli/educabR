@@ -217,6 +217,23 @@ test_that("validate_year returns year invisibly on success", {
   expect_equal(result, 2023)
 })
 
+test_that("validate_year rejects year vectors (issue #2)", {
+  expect_error(
+    validate_year(c(2017, 2019), "cpc"),
+    "single number"
+  )
+  expect_error(
+    validate_year(c(2017, 2018, 2019), "censo_escolar"),
+    "single number"
+  )
+})
+
+test_that("validate_year rejects non-numeric year (issue #2)", {
+  expect_error(validate_year("2017", "cpc"), "single number")
+  expect_error(validate_year(NULL, "cpc"), "single number")
+  expect_error(validate_year(NA, "cpc"), "single number")
+})
+
 # --- available_years ---------------------------------------------------------
 
 test_that("fallback_years returns correct years for all datasets", {
