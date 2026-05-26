@@ -115,7 +115,7 @@ get_enem <- function(year,
   }
 
   # read the file
-  df <- read_inep_file(data_file, delim = ";", n_max = n_max)
+  df <- read_inep_file(data_file, delim = ";", n_max = n_max, quiet = quiet)
 
   # standardize column names
   df <- standardize_names(df)
@@ -266,7 +266,7 @@ get_enem_itens <- function(year, n_max = Inf, keep_zip = TRUE, quiet = FALSE) {
   }
 
   # read the file
-  df <- read_inep_file(files[1], delim = ";", n_max = n_max)
+  df <- read_inep_file(files[1], delim = ";", n_max = n_max, quiet = quiet)
 
   # standardize column names
   df <- standardize_names(df)

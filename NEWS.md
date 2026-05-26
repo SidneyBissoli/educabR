@@ -6,6 +6,10 @@
   `options(educabR.download_timeout = N)` (seconds; default 600). Raise it
   when downloading large microdata (e.g. ENEM `participantes` at ~1.6 GB)
   over a slow link (issue #7).
+* `read_inep_file()` now warns before reading files larger than 500 MB
+  entirely into memory, suggesting `n_max` or UF filters to reduce memory
+  pressure. Suppressible with `quiet = TRUE`; all `get_*()` callers
+  propagate their `quiet` argument (issue #5).
 
 ## Bug fixes
 

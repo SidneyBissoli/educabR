@@ -115,7 +115,7 @@ get_capes <- function(year,
 
   # detect delimiter and read
   delim <- detect_delim(file_path)
-  df <- read_inep_file(file_path, delim = delim, n_max = n_max)
+  df <- read_inep_file(file_path, delim = delim, n_max = n_max, quiet = quiet)
 
   # standardize column names
   df <- standardize_names(df)

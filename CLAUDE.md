@@ -38,7 +38,7 @@ validate parameters → check cache → download if needed → extract archive �
 
 Key internal modules:
 - `R/utils-cache.R` — Local cache system (`tempdir()/educabR_cache` or user-configured). Functions: `cache_path()`, `is_cached()`, `get_cache_dir()`, `set_cache_dir()`, `clear_cache()`, `list_cache()`
-- `R/utils-download.R` — HTTP downloads with retry (3 attempts, 600s timeout), archive extraction (ZIP/7z/RAR), URL construction, dynamic year discovery via HEAD requests
+- `R/utils-download.R` — HTTP downloads with retry (3 attempts; timeout default 600s, configurable via `options(educabR.download_timeout = N)`), archive extraction (ZIP/7z/RAR), URL construction, dynamic year discovery via HEAD requests
 - `R/utils-validation.R` — Per-dataset validators checking column counts, expected names, non-empty results
 - `R/zzz.R` — Package init, reads `educabR.cache_dir` option
 
@@ -57,8 +57,9 @@ ZIP extraction has Windows-specific paths: PowerShell `Expand-Archive` fallback 
 
 ### Repo layout (non-obvious directories)
 
-- `archive/` — historical audit notes (`auditoria-pos-issue1.md`, `bugs-pendentes.md`). Read-only context for past fixes; check before re-investigating closed audit threads.
-- `guides/` — committed INEP guide PDFs (`guides_2007.pdf`, `guides_2025.pdf`). Distinct from the local-only `dictionaries/` folder.
+- `archive/` — historical audit notes (`auditoria-pos-issue1.md`, `bugs-pendentes.md`). Local-only (gitignored), so unavailable on a fresh clone; when present, it's read-only context for past fixes — check before re-investigating closed audit threads.
+- `guides/` — local-only (gitignored) INEP guide PDFs (`guides_2007.pdf`, `guides_2025.pdf`).
+- `dictionaries/censo-escolar/dictionary_<year>.pdf` — local-only INEP per-year column dictionaries; consult when adding or fixing year-specific column handling.
 - `inst/bench/` — IDEB memory benchmark utility. Use this when changing `read_ideb_excel()` to verify column-projection savings don't regress.
 
 ## Testing
@@ -97,7 +98,7 @@ old wide-format / positional-arg behavior is intentionally gone.
 - All `get_*()` functions return data in **long (tidy) format** with standardized lowercase/underscore column names
 - Portuguese accents are preserved in data values but column names use ASCII
 - Roxygen2 generates `man/` and `NAMESPACE` — never edit those by hand
-- `docs/`, `data/`, `lib/`, and `dictionaries/` are local-only (not committed). `dictionaries/censo-escolar/dictionary_<year>.pdf` holds INEP's per-year column dictionaries — consult these when adding or fixing year-specific column handling.
+- `docs/`, `data/`, `lib/`, `dictionaries/`, `guides/`, `archive/`, and `tests/testthat/dados/` are all gitignored (local-only). The per-year INEP column dictionaries under `dictionaries/censo-escolar/dictionary_<year>.pdf` are the source of truth when adding or fixing year-specific column handling.
 - Vignettes use `eval=FALSE` (no network during build). Vignettes in `vignettes/*.Rmd` are the canonical end-to-end usage examples per dataset; consult them before inventing new API patterns.
 - The `cli` package is used for all user-facing messages (not `message()` or `cat()`)
 - Deprecations use `lifecycle::deprecate_warn()` / `deprecate_soft()`, not bare `.Deprecated()` or `warning()`. Match the existing pattern in `R/get-ideb.R`.
