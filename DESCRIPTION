@@ -49,7 +49,9 @@ Suggests:
     knitr,
     readxl,
     rmarkdown,
+    systemfonts,
     testthat (>= 3.0.0),
+    textshaping,
     tibble,
     withr
 Config/testthat/edition: 3
