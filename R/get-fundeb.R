@@ -317,7 +317,7 @@ get_fundeb_enrollment <- function(year,
     }
 
     delim <- detect_delim(file_path)
-    df <- read_inep_file(file_path, delim = delim)
+    df <- read_inep_file(file_path, delim = delim, quiet = quiet)
     df <- rename_fundeb_enrollment(df)
 
     # filter by UF locally on cached data

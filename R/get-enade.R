@@ -129,7 +129,7 @@ get_enade <- function(year,
 
   # read first file (contains key columns)
   delim <- detect_delim(data_files[1])
-  df <- read_inep_file(data_files[1], delim = delim, n_max = n_max)
+  df <- read_inep_file(data_files[1], delim = delim, n_max = n_max, quiet = quiet)
   df <- standardize_names(df)
 
   # read and join remaining split files (suppress per-file messages)
@@ -139,7 +139,7 @@ get_enade <- function(year,
     for (f in data_files[-1]) {
       delim_f <- detect_delim(f)
       part <- suppressMessages(
-        read_inep_file(f, delim = delim_f, n_max = n_max)
+        read_inep_file(f, delim = delim_f, n_max = n_max, quiet = TRUE)
       )
       part <- standardize_names(part)
 

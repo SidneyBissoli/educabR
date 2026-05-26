@@ -807,6 +807,7 @@ detect_encoding <- function(file) {
 #' @param delim The delimiter character.
 #' @param encoding The file encoding.
 #' @param n_max Maximum number of rows to read.
+#' @param quiet Logical. If `TRUE`, suppresses the large-file advisory.
 #'
 #' @return A tibble with the data.
 #'
@@ -814,7 +815,8 @@ detect_encoding <- function(file) {
 read_inep_file <- function(file,
                            delim = ";",
                            encoding = NULL,
-                           n_max = Inf) {
+                           n_max = Inf,
+                           quiet = FALSE) {
   # detect encoding if not specified
   if (is.null(encoding)) {
     encoding <- detect_encoding(file)
@@ -840,6 +842,16 @@ read_inep_file <- function(file,
     for (name in col_names[is_code]) {
       col_spec$cols[[name]] <- readr::col_character()
     }
+  }
+
+  # advise when reading a large file in full (issue #5) — recent Censo
+  # Escolar microdata reaches ~50M rows and silently exhausts memory
+  if (!quiet && is.infinite(n_max) && file.size(file) > 500 * 1024^2) {
+    size_gb <- round(file.size(file) / 1024^3, 1)
+    cli::cli_alert_warning(c(
+      "lendo arquivo grande ({size_gb} GB) inteiramente em memoria",
+      "i" = "considere {.arg n_max} ou filtros por UF para reduzir"
+    ))
   }
 
   # read with readr

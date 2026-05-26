@@ -4,7 +4,7 @@
 \alias{read_inep_file}
 \title{Read INEP data file}
 \usage{
-read_inep_file(file, delim = ";", encoding = NULL, n_max = Inf)
+read_inep_file(file, delim = ";", encoding = NULL, n_max = Inf, quiet = FALSE)
 }
 \arguments{
 \item{file}{Path to the data file.}
@@ -14,6 +14,8 @@ read_inep_file(file, delim = ";", encoding = NULL, n_max = Inf)
 \item{encoding}{The file encoding.}
 
 \item{n_max}{Maximum number of rows to read.}
+
+\item{quiet}{Logical. If \code{TRUE}, suppresses the large-file advisory.}
 }
 \value{
 A tibble with the data.

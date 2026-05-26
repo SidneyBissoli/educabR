@@ -87,7 +87,7 @@ get_enem_escola <- function(n_max = Inf,
   delim <- detect_delim(data_file)
 
   # read the file
-  df <- read_inep_file(data_file, delim = delim, n_max = n_max)
+  df <- read_inep_file(data_file, delim = delim, n_max = n_max, quiet = quiet)
 
   # standardize column names
   df <- standardize_names(df)

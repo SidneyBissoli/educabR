@@ -58,6 +58,58 @@ test_that("detect_encoding detects Latin1 file", {
   expect_equal(educabR:::detect_encoding(f), "latin1")
 })
 
+# --- read_inep_file large-file advisory (issue #5) ---------------------------
+
+# mocks base::file.size to claim the (real, tiny) CSV is > 500 MB on disk,
+# so we can exercise the advisory branch without writing huge fixtures
+test_that("read_inep_file warns when reading a large file in full (issue #5)", {
+  f <- tempfile(fileext = ".csv")
+  withr::defer(unlink(f))
+  writeLines("a;b\n1;2\n3;4", f)
+
+  testthat::local_mocked_bindings(
+    file.size = function(...) 600 * 1024^2,
+    .package = "base"
+  )
+
+  expect_message(
+    educabR:::read_inep_file(f, delim = ";"),
+    "lendo arquivo grande"
+  )
+})
+
+test_that("read_inep_file stays silent when n_max caps the read (issue #5)", {
+  f <- tempfile(fileext = ".csv")
+  withr::defer(unlink(f))
+  writeLines("a;b\n1;2\n3;4", f)
+
+  testthat::local_mocked_bindings(
+    file.size = function(...) 600 * 1024^2,
+    .package = "base"
+  )
+
+  msgs <- testthat::capture_messages(
+    educabR:::read_inep_file(f, delim = ";", n_max = 1000)
+  )
+  expect_false(any(grepl("lendo arquivo grande", msgs)))
+})
+
+test_that("read_inep_file respects quiet = TRUE on the large-file advisory (issue #5)", {
+  f <- tempfile(fileext = ".csv")
+  withr::defer(unlink(f))
+  writeLines("a;b\n1;2\n3;4", f)
+
+  testthat::local_mocked_bindings(
+    file.size = function(...) 600 * 1024^2,
+    .package = "base"
+  )
+
+  msgs <- testthat::capture_messages(
+    educabR:::read_inep_file(f, delim = ";", quiet = TRUE)
+  )
+  expect_false(any(grepl("lendo arquivo grande", msgs)))
+})
+
 # --- find_data_files ---------------------------------------------------------
 
 test_that("find_data_files finds CSV files in directory", {

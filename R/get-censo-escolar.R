@@ -128,7 +128,7 @@ get_censo_escolar <- function(year,
   read_max <- if (!is.null(uf)) Inf else n_max
 
   # read the file
-  df <- read_inep_file(data_file, delim = delim, n_max = read_max)
+  df <- read_inep_file(data_file, delim = delim, n_max = read_max, quiet = quiet)
 
   # standardize column names
   df <- standardize_names(df)
