@@ -194,7 +194,13 @@ extract_zip <- function(zipfile, exdir, quiet = FALSE) {
       files <- withCallingHandlers(
         utils::unzip(zipfile, exdir = exdir),
         warning = function(w) {
-          if (grepl("erro|error", conditionMessage(w), ignore.case = TRUE)) {
+          # mute only the specific warnings utils::unzip emits when it
+          # fails to decode non-ASCII filenames in INEP archives — the
+          # fallback below still triggers via length(files) == 0, so
+          # silencing here only suppresses log noise, not recovery.
+          msg <- conditionMessage(w)
+          if (grepl("error -?\\d+ in extracting", msg, ignore.case = TRUE) ||
+              grepl("Falha na convers", msg, ignore.case = TRUE)) {
             invokeRestart("muffleWarning")
           }
         }
@@ -212,63 +218,51 @@ extract_zip <- function(zipfile, exdir, quiet = FALSE) {
     },
     error = function(e) {
       # encoding errors or empty extraction — try alternative method
-      if (TRUE) {
-        if (!quiet) {
-          cli::cli_alert_warning(
-            "standard extraction failed due to encoding, trying alternative method..."
-          )
-        }
-
-        # try using system unzip command (Windows has tar that can handle zip)
-        result <- tryCatch(
-          {
-            # use PowerShell Expand-Archive on Windows
-            if (.Platform$OS.type == "windows") {
-              cmd <- sprintf(
-                'powershell -Command "Expand-Archive -Path \'%s\' -DestinationPath \'%s\' -Force"',
-                normalizePath(zipfile, winslash = "/"),
-                normalizePath(exdir, winslash = "/", mustWork = FALSE)
-              )
-              system(cmd, intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
-            } else {
-              # on unix, use unzip command
-              system2("unzip", args = c("-o", "-q", shQuote(zipfile), "-d", shQuote(exdir)))
-            }
-
-            # list extracted files
-            files <- list.files(exdir, recursive = TRUE, full.names = TRUE)
-
-            if (length(files) > 0) {
-              if (!quiet) {
-                cli::cli_alert_success("extracted {.val {length(files)}} file(s)")
-              }
-              return(files)
-            } else {
-              stop("no files extracted")
-            }
-          },
-          error = function(e2) {
-            cli::cli_abort(
-              c(
-                "extraction failed with both methods",
-                "x" = "file: {.path {zipfile}}",
-                "i" = "original error: {conditionMessage(e)}",
-                "i" = "alternative error: {conditionMessage(e2)}"
-              )
-            )
-          }
+      if (!quiet) {
+        cli::cli_alert_warning(
+          "standard extraction failed due to encoding, trying alternative method..."
         )
-
-        return(result)
       }
 
-      # not an encoding error, report original error
-      cli::cli_abort(
-        c(
-          "extraction failed",
-          "x" = "file: {.path {zipfile}}",
-          "i" = "error: {conditionMessage(e)}"
-        )
+      # try using system unzip command (Windows has tar that can handle zip)
+      tryCatch(
+        {
+          # use PowerShell Expand-Archive on Windows
+          if (.Platform$OS.type == "windows") {
+            cmd <- sprintf(
+              'powershell -Command "Expand-Archive -Path \'%s\' -DestinationPath \'%s\' -Force"',
+              normalizePath(zipfile, winslash = "/"),
+              normalizePath(exdir, winslash = "/", mustWork = FALSE)
+            )
+            system(cmd, intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
+          } else {
+            # on unix, use unzip command
+            system2("unzip", args = c("-o", "-q", shQuote(zipfile), "-d", shQuote(exdir)))
+          }
+
+          # list extracted files
+          files <- list.files(exdir, recursive = TRUE, full.names = TRUE)
+
+          if (length(files) == 0) {
+            stop("no files extracted")
+          }
+
+          if (!quiet) {
+            cli::cli_alert_success("extracted {.val {length(files)}} file(s)")
+          }
+
+          files
+        },
+        error = function(e2) {
+          cli::cli_abort(
+            c(
+              "extraction failed with both methods",
+              "x" = "file: {.path {zipfile}}",
+              "i" = "original error: {conditionMessage(e)}",
+              "i" = "alternative error: {conditionMessage(e2)}"
+            )
+          )
+        }
       )
     }
   )
