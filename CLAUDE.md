@@ -144,6 +144,9 @@ intentionally gone.
   [`purrr::map_dfr()`](https://purrr.tidyverse.org/reference/map_dfr.html)
   or similar. Do not add `year` vector support or implicit multi-year
   concatenation.
+  [`validate_year()`](https://sidneybissoli.github.io/educabR/reference/validate_year.md)
+  in `R/utils-validation.R` is the enforcement point and rejects year
+  vectors with a clear error.
 - All `get_*()` functions return data in **long (tidy) format** with
   standardized lowercase/underscore column names
 - Portuguese accents are preserved in data values but column names use

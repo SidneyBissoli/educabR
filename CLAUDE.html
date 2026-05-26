@@ -112,7 +112,7 @@
 <div class="section level2">
 <h2 id="important-conventions">Important Conventions<a class="anchor" aria-label="anchor" href="#important-conventions"></a></h2>
 <ul><li>
-<code>get_*()</code> functions download <strong>one year per call</strong> — never merge years internally. Users compose multi-year datasets with <code><a href="https://purrr.tidyverse.org/reference/map_dfr.html" class="external-link">purrr::map_dfr()</a></code> or similar. Do not add <code>year</code> vector support or implicit multi-year concatenation.</li>
+<code>get_*()</code> functions download <strong>one year per call</strong> — never merge years internally. Users compose multi-year datasets with <code><a href="https://purrr.tidyverse.org/reference/map_dfr.html" class="external-link">purrr::map_dfr()</a></code> or similar. Do not add <code>year</code> vector support or implicit multi-year concatenation. <code><a href="reference/validate_year.html">validate_year()</a></code> in <code>R/utils-validation.R</code> is the enforcement point and rejects year vectors with a clear error.</li>
 <li>All <code>get_*()</code> functions return data in <strong>long (tidy) format</strong> with standardized lowercase/underscore column names</li>
 <li>Portuguese accents are preserved in data values but column names use ASCII</li>
 <li>Roxygen2 generates <code>man/</code> and <code>NAMESPACE</code> — never edit those by hand</li>
