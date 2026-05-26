@@ -78,7 +78,7 @@ mat_sample <- get_fundeb_enrollment(2023, n_max = 1000)
 }
 }
 \seealso{
-Other FUNDEB functions: 
-\code{\link{get_fundeb_distribution}()}
+Other FUNDEB functions:
+\code{\link[=get_fundeb_distribution]{get_fundeb_distribution()}}
 }
 \concept{FUNDEB functions}

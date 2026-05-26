@@ -95,7 +95,7 @@ sp <- get_fundeb_distribution(2023, uf = "SP")
 }
 }
 \seealso{
-Other FUNDEB functions: 
-\code{\link{get_fundeb_enrollment}()}
+Other FUNDEB functions:
+\code{\link[=get_fundeb_enrollment]{get_fundeb_enrollment()}}
 }
 \concept{FUNDEB functions}

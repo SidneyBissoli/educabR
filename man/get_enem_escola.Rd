@@ -56,9 +56,9 @@ enem_escola_sample <- get_enem_escola(n_max = 1000)
 }
 }
 \seealso{
-Other ENEM functions: 
-\code{\link{enem_summary}()},
-\code{\link{get_enem}()},
-\code{\link{get_enem_itens}()}
+Other ENEM functions:
+\code{\link[=enem_summary]{enem_summary()}},
+\code{\link[=get_enem]{get_enem()}},
+\code{\link[=get_enem_itens]{get_enem_itens()}}
 }
 \concept{ENEM functions}

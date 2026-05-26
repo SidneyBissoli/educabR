@@ -92,7 +92,7 @@ turmas_2025 <- get_censo_escolar(2025, file = "Turma")
 }
 }
 \seealso{
-Other School Census functions: 
-\code{\link{list_censo_files}()}
+Other School Census functions:
+\code{\link[=list_censo_files]{list_censo_files()}}
 }
 \concept{School Census functions}

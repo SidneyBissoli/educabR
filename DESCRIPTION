@@ -25,7 +25,7 @@ Description: Download and process public education data from INEP (Instituto
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
+RoxygenNote: 8.0.0
 URL: https://github.com/SidneyBissoli/educabR, https://sidneybissoli.github.io/educabR/
 BugReports: https://github.com/SidneyBissoli/educabR/issues
 Depends: 

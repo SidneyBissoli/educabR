@@ -104,7 +104,6 @@ See \code{\link[=get_cache_dir]{get_cache_dir()}} to check the current cache loc
 
 \section{Package options}{
 
-
 \itemize{
 \item \code{educabR.cache_dir}: path to the cache directory. Set via
 \code{\link[=set_cache_dir]{set_cache_dir()}} or directly with \code{options()}. Defaults to
@@ -137,6 +136,11 @@ Useful links:
 }
 \author{
 \strong{Maintainer}: Sidney da Silva Pereira Bissoli \email{sbissoli76@gmail.com} (\href{https://orcid.org/0009-0001-0442-3700}{ORCID})
+
+Authors:
+\itemize{
+  \item Sidney da Silva Pereira Bissoli \email{sbissoli76@gmail.com} (\href{https://orcid.org/0009-0001-0442-3700}{ORCID})
+}
 
 }
 \keyword{internal}

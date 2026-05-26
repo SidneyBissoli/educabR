@@ -8,7 +8,7 @@ An R package for downloading and processing Brazilian public education data from
 
 ## Common Commands
 
-```bash
+```sh
 # Check package (full R CMD check)
 Rscript -e "devtools::check()"
 
@@ -17,6 +17,9 @@ Rscript -e "devtools::test()"
 
 # Run a single test file
 Rscript -e "devtools::test(filter = 'utils-cache')"
+
+# Compute test coverage (matches the test-coverage.yaml CI workflow)
+Rscript -e "covr::package_coverage()"
 
 # Regenerate documentation (roxygen2 → man/ + NAMESPACE)
 Rscript -e "devtools::document()"
@@ -41,6 +44,18 @@ Key internal modules:
 - `R/utils-download.R` — HTTP downloads with retry (3 attempts; timeout default 600s, configurable via `options(educabR.download_timeout = N)`), post-download verification (size vs `Content-Length`, HTML-masquerade detection, ZIP magic bytes — corrupt files are deleted, not cached), archive extraction (ZIP/7z/RAR), URL construction, dynamic year discovery via HEAD requests
 - `R/utils-validation.R` — Per-dataset validators checking column counts, expected names, non-empty results
 - `R/zzz.R` — Package init, reads `educabR.cache_dir` option
+- `R/educabR-package.R` — Package-level roxygen block (`@keywords internal`, `_PACKAGE` sentinel). Don't regenerate or delete this when running `devtools::document()` — it's the source of `man/educabR-package.Rd`.
+
+### Adding a new `get_*()` dataset
+
+When wiring up a new dataset getter, touch every layer — partial wiring causes silent test gaps and broken docs:
+
+1. New `R/get-<dataset>.R` following the pipeline pattern above (validate → cache → download → extract → read → standardize → validate → return). Reuse `download_inep_file()` / `read_inep_file()` / `extract_zip()` from `R/utils-download.R` rather than reimplementing.
+2. Add a per-dataset validator in `R/utils-validation.R` and call it before returning.
+3. Roxygen `@export` on the user-facing function, then `Rscript -e "devtools::document()"` to regenerate `man/` and `NAMESPACE`.
+4. New `tests/testthat/test-<dataset>.R` — structure/logic only, no live network (the `EDUCABR_SKIP_DISCOVERY=true` env var is already set in `setup.R`).
+5. Add a usage example in the relevant `vignettes/*.Rmd` (`eval=FALSE`) if the dataset is user-facing.
+6. Bullet under the next-version heading in `NEWS.md`, and add the function/years row to **both** `README.md` and `README.pt-br.md` tables.
 
 ### Data source variations
 

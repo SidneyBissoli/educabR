@@ -22,7 +22,7 @@ list_censo_superior_files(2023)
 }
 }
 \seealso{
-Other Higher Education Census functions: 
-\code{\link{get_censo_superior}()}
+Other Higher Education Census functions:
+\code{\link[=get_censo_superior]{get_censo_superior()}}
 }
 \concept{Higher Education Census functions}

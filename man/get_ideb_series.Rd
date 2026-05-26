@@ -40,8 +40,8 @@ ideb <- get_ideb("municipio", "anos_iniciais", "indicador")
 }
 }
 \seealso{
-Other IDEB functions: 
-\code{\link{get_ideb}()},
-\code{\link{list_ideb_available}()}
+Other IDEB functions:
+\code{\link[=get_ideb]{get_ideb()}},
+\code{\link[=list_ideb_available]{list_ideb_available()}}
 }
 \concept{IDEB functions}

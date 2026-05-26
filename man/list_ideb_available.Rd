@@ -16,8 +16,8 @@ Lists the IDEB data combinations available for download.
 list_ideb_available()
 }
 \seealso{
-Other IDEB functions: 
-\code{\link{get_ideb}()},
-\code{\link{get_ideb_series}()}
+Other IDEB functions:
+\code{\link[=get_ideb]{get_ideb()}},
+\code{\link[=get_ideb_series]{get_ideb_series()}}
 }
 \concept{IDEB functions}

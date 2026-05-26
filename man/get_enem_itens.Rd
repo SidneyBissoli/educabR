@@ -29,9 +29,9 @@ itens <- get_enem_itens(2023)
 }
 }
 \seealso{
-Other ENEM functions: 
-\code{\link{enem_summary}()},
-\code{\link{get_enem}()},
-\code{\link{get_enem_escola}()}
+Other ENEM functions:
+\code{\link[=enem_summary]{enem_summary()}},
+\code{\link[=get_enem]{get_enem()}},
+\code{\link[=get_enem_escola]{get_enem_escola()}}
 }
 \concept{ENEM functions}
