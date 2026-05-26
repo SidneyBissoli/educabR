@@ -24,3 +24,11 @@
 ^CITATION\.cff$
 ^\.positai$
 ^CLAUDE\.md$
+^data$
+^dictionaries$
+^guides$
+^archive$
+^tests/testthat/dados$
+^prompt-proxima-sessao\.md$
+^coverage_report\.html$
+^cov_output\.txt$
