@@ -1,73 +1,4 @@
-# educabR (development version)
-
-## New features
-
-* `download_inep_file()` timeout is now configurable via
-  `options(educabR.download_timeout = N)` (seconds; default 600). Raise it
-  when downloading large microdata (e.g. ENEM `participantes` at ~1.6 GB)
-  over a slow link (issue #7).
-* `read_inep_file()` now warns before reading files larger than 500 MB
-  entirely into memory, suggesting `n_max` or UF filters to reduce memory
-  pressure. Suppressible with `quiet = TRUE`; all `get_*()` callers
-  propagate their `quiet` argument (issue #5).
-
-## Bug fixes
-
-* Character columns from Excel readers (`read_ideb_excel()`,
-  `read_excel_safe()`) and the FUNDEB enrollment OData fetcher
-  (`fetch_fundeb_enrollment()`) are now normalized to UTF-8 NFC, matching
-  the behavior already in `read_inep_file()`. Previously, equality
-  comparisons against literals such as `filter(rede == "Pública")` could
-  silently return zero rows on Windows because the source-file encoding
-  produced non-canonical strings. The shared helper `normalize_utf8_nfc()`
-  is now applied at every read entrypoint so all four code paths agree.
-  Affects `get_ideb()`, `get_cpc()`, `get_igc()`, `get_fundeb_enrollment()`.
-* `read_excel_safe()` (used by `get_cpc()` and `get_igc()`) now passes INEP's
-  missing-value tokens (`""`, `"-"`, `"ND"`, en/em dashes) to
-  `readxl::read_excel(na = ...)` so those cells are loaded as `NA` instead of
-  character strings cleaned up post-hoc (issue #4). Previously, a column
-  whose first rows were all `"-"` could be inferred as `logical` and later
-  numeric values silently dropped. `clean_dash_values()` remains as a safety
-  net but is now largely redundant for CPC/IGC.
-
-## Internal
-
-* `R CMD check` warnings cleared: em-dashes in `cli_abort()` message strings
-  in `R/utils-download.R` are now written with `—` Unicode escapes (R
-  requires ASCII-only in code strings; comments are exempt), and
-  `man/read_ideb_excel.Rd` has been regenerated to match the function
-  signature added in v1.0.0 (`metric`, `year`).
-* `download_inep_file()` now verifies downloaded files before caching them
-  (issue #3). Three checks run after the bytes hit disk: file size against
-  the server's `Content-Length` (1% tolerance, catches truncated downloads),
-  HTML-masquerade detection on the first 64 bytes (catches INEP maintenance
-  pages served with HTTP 200), and ZIP magic-bytes (`PK\x03\x04`) for `.zip`
-  destinations (catches proxy corruption). On any failure the corrupt file
-  is deleted and the user gets a clear error telling them to retry, instead
-  of a cryptic `readxl` / `readr` failure on the next call.
-* `validate_year()` now rejects vectors and non-numeric input with a clear
-  error pointing at `purrr::map_dfr()` for multi-year composition
-  (issue #2). Previously, passing `c(2017, 2019)` to any of the 13
-  affected getters (`get_cpc`, `get_idd`, `get_igc`, `get_capes`,
-  `get_saeb`, `get_enem`, `get_enem_itens`, `get_enade`, `get_encceja`,
-  `get_fundeb_distribution`, `get_fundeb_enrollment`, `get_censo_escolar`,
-  `get_censo_superior`) hit either a cryptic `length > 1` error (R ≥ 4.2)
-  or silently used only the first element (R < 4.2). `get_ideb()` is
-  unaffected — it intentionally accepts year vectors.
-
 # educabR 1.0.0
-
-## Bug fixes
-
-* `get_ideb()` no longer consumes several GB of RAM for school-level reads
-  (issue #1). The xlsx is now read with column projection: only the `vl_*`
-  columns matching the requested `metric` (and `year`, when given) are
-  parsed; the others are skipped at the readxl C++ layer. INEP's NA tokens
-  (`""`, `"-"`, `"ND"`) are also passed to `read_excel(na = ...)` so the
-  missing-value strings never get allocated as R character vectors.
-  For `level = "escola", stage = "anos_iniciais", metric = "indicador"`,
-  this cuts the in-memory result from ~133 MB to ~37 MB (4 years) or
-  ~19 MB (1 year), with proportional drops in peak memory during reshape.
 
 ## Breaking changes
 
@@ -87,6 +18,75 @@
   (previously returned `year`, `level`, `stage`).
 * The `uf` parameter has been removed from `get_ideb()`. Filter the result
   with `dplyr::filter()` instead.
+
+## New features
+
+* `download_inep_file()` timeout is now configurable via
+  `options(educabR.download_timeout = N)` (seconds; default 600). Raise it
+  when downloading large microdata (e.g. ENEM `participantes` at ~1.6 GB)
+  over a slow link (issue #7).
+* `read_inep_file()` now warns before reading files larger than 500 MB
+  entirely into memory, suggesting `n_max` or UF filters to reduce memory
+  pressure. Suppressible with `quiet = TRUE`; all `get_*()` callers
+  propagate their `quiet` argument (issue #5).
+
+## Bug fixes
+
+* `get_ideb()` no longer consumes several GB of RAM for school-level reads
+  (issue #1). The xlsx is now read with column projection: only the `vl_*`
+  columns matching the requested `metric` (and `year`, when given) are
+  parsed; the others are skipped at the readxl C++ layer. INEP's NA tokens
+  (`""`, `"-"`, `"ND"`) are also passed to `read_excel(na = ...)` so the
+  missing-value strings never get allocated as R character vectors.
+  For `level = "escola", stage = "anos_iniciais", metric = "indicador"`,
+  this cuts the in-memory result from ~133 MB to ~37 MB (4 years) or
+  ~19 MB (1 year), with proportional drops in peak memory during reshape.
+* Character columns from Excel readers (`read_ideb_excel()`,
+  `read_excel_safe()`) and the FUNDEB enrollment OData fetcher
+  (`fetch_fundeb_enrollment()`) are now normalized to UTF-8 NFC, matching
+  the behavior already in `read_inep_file()`. Previously, equality
+  comparisons against literals such as `filter(rede == "Pública")` could
+  silently return zero rows on Windows because the source-file encoding
+  produced non-canonical strings. The shared helper `normalize_utf8_nfc()`
+  is now applied at every read entrypoint so all four code paths agree.
+  Affects `get_ideb()`, `get_cpc()`, `get_igc()`, `get_fundeb_enrollment()`.
+* `read_excel_safe()` (used by `get_cpc()` and `get_igc()`) now passes INEP's
+  missing-value tokens (`""`, `"-"`, `"ND"`, en/em dashes) to
+  `readxl::read_excel(na = ...)` so those cells are loaded as `NA` instead of
+  character strings cleaned up post-hoc (issue #4). Previously, a column
+  whose first rows were all `"-"` could be inferred as `logical` and later
+  numeric values silently dropped. `clean_dash_values()` remains as a safety
+  net but is now largely redundant for CPC/IGC.
+
+## Internal
+
+* `download_inep_file()` now verifies downloaded files before caching them
+  (issue #3). Three checks run after the bytes hit disk: file size against
+  the server's `Content-Length` (1% tolerance, catches truncated downloads),
+  HTML-masquerade detection on the first 64 bytes (catches INEP maintenance
+  pages served with HTTP 200), and ZIP magic-bytes (`PK\x03\x04`) for `.zip`
+  destinations (catches proxy corruption). On any failure the corrupt file
+  is deleted and the user gets a clear error telling them to retry, instead
+  of a cryptic `readxl` / `readr` failure on the next call.
+* `validate_year()` now rejects vectors and non-numeric input with a clear
+  error pointing at `purrr::map_dfr()` for multi-year composition
+  (issue #2). Previously, passing `c(2017, 2019)` to any of the 13
+  affected getters (`get_cpc`, `get_idd`, `get_igc`, `get_capes`,
+  `get_saeb`, `get_enem`, `get_enem_itens`, `get_enade`, `get_encceja`,
+  `get_fundeb_distribution`, `get_fundeb_enrollment`, `get_censo_escolar`,
+  `get_censo_superior`) hit either a cryptic `length > 1` error (R ≥ 4.2)
+  or silently used only the first element (R < 4.2). `get_ideb()` is
+  unaffected — it intentionally accepts year vectors.
+* `extract_zip()` cleaned up: removed dead `if (TRUE)` branch and an
+  unreachable `cli_abort()`; the muffle on extraction warnings was
+  tightened from the broad `erro|error` pattern to the two specific
+  messages that motivated it (issue #6).
+* `RoxygenNote` bumped to 8.0.0 and `man/*.Rd` regenerated; `systemfonts`
+  and `textshaping` declared in `Suggests:` to silence the cosmetic
+  `R CMD check` NOTE about packages pulled transitively by `pkgdown`.
+* `R CMD check` warnings cleared: em-dashes in `cli_abort()` message strings
+  in `R/utils-download.R` are now written with Unicode escapes (R requires
+  ASCII-only in code strings; comments are exempt).
 
 # educabR 0.9.0
 
