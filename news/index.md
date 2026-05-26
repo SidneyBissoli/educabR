@@ -4,6 +4,27 @@
 
 ### Bug fixes
 
+- [`read_excel_safe()`](https://sidneybissoli.github.io/educabR/reference/read_excel_safe.md)
+  (used by
+  [`get_cpc()`](https://sidneybissoli.github.io/educabR/reference/get_cpc.md)
+  and
+  [`get_igc()`](https://sidneybissoli.github.io/educabR/reference/get_igc.md))
+  now passes INEP’s missing-value tokens (`""`, `"-"`, `"ND"`, en/em
+  dashes) to `readxl::read_excel(na = ...)` so those cells are loaded as
+  `NA` instead of character strings cleaned up post-hoc (issue
+  [\#4](https://github.com/SidneyBissoli/educabR/issues/4)). Previously,
+  a column whose first rows were all `"-"` could be inferred as
+  `logical` and later numeric values silently dropped.
+  [`clean_dash_values()`](https://sidneybissoli.github.io/educabR/reference/clean_dash_values.md)
+  remains as a safety net but is now largely redundant for CPC/IGC.
+
+### Internal
+
+- `R CMD check` warnings cleared: em-dashes in `cli_abort()` message
+  strings in `R/utils-download.R` are now written with `—` Unicode
+  escapes (R requires ASCII-only in code strings; comments are exempt),
+  and `man/read_ideb_excel.Rd` has been regenerated to match the
+  function signature added in v1.0.0 (`metric`, `year`).
 - [`download_inep_file()`](https://sidneybissoli.github.io/educabR/reference/download_inep_file.md)
   now verifies downloaded files before caching them (issue
   [\#3](https://github.com/SidneyBissoli/educabR/issues/3)). Three
