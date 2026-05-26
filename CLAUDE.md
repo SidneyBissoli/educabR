@@ -38,7 +38,7 @@ validate parameters → check cache → download if needed → extract archive �
 
 Key internal modules:
 - `R/utils-cache.R` — Local cache system (`tempdir()/educabR_cache` or user-configured). Functions: `cache_path()`, `is_cached()`, `get_cache_dir()`, `set_cache_dir()`, `clear_cache()`, `list_cache()`
-- `R/utils-download.R` — HTTP downloads with retry (3 attempts; timeout default 600s, configurable via `options(educabR.download_timeout = N)`), archive extraction (ZIP/7z/RAR), URL construction, dynamic year discovery via HEAD requests
+- `R/utils-download.R` — HTTP downloads with retry (3 attempts; timeout default 600s, configurable via `options(educabR.download_timeout = N)`), post-download verification (size vs `Content-Length`, HTML-masquerade detection, ZIP magic bytes — corrupt files are deleted, not cached), archive extraction (ZIP/7z/RAR), URL construction, dynamic year discovery via HEAD requests
 - `R/utils-validation.R` — Per-dataset validators checking column counts, expected names, non-empty results
 - `R/zzz.R` — Package init, reads `educabR.cache_dir` option
 
@@ -94,7 +94,7 @@ old wide-format / positional-arg behavior is intentionally gone.
 
 ## Important Conventions
 
-- `get_*()` functions download **one year per call** — never merge years internally. Users compose multi-year datasets with `purrr::map_dfr()` or similar. Do not add `year` vector support or implicit multi-year concatenation. `validate_year()` in `R/utils-validation.R` is the enforcement point and rejects year vectors with a clear error.
+- `get_*()` functions download **one year per call** — never merge years internally. Users compose multi-year datasets with `purrr::map_dfr()` or similar. Do not add `year` vector support or implicit multi-year concatenation. `validate_year()` in `R/utils-validation.R` is the enforcement point and rejects year vectors with a clear error. **Exception:** `get_ideb()` accepts year vectors by design — a single INEP Excel file covers all editions, so filtering is in-memory rather than a multi-download. It bypasses `validate_year()` intentionally; don't "fix" it.
 - All `get_*()` functions return data in **long (tidy) format** with standardized lowercase/underscore column names
 - Portuguese accents are preserved in data values but column names use ASCII
 - Roxygen2 generates `man/` and `NAMESPACE` — never edit those by hand
