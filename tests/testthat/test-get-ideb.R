@@ -129,6 +129,82 @@ test_that("read_ideb_excel errors when readxl not available", {
   )
 })
 
+# --- ideb_keep_cols: column projection (issue #1) ---
+
+test_that("ideb_keep_cols always keeps id columns regardless of metric", {
+  cols <- c("SG_UF", "CO_MUNICIPIO", "NO_MUNICIPIO", "REDE",
+            "VL_OBSERVADO_2017", "VL_OBSERVADO_2019")
+  keep <- educabR:::ideb_keep_cols(cols, metric = "indicador")
+  expect_true(all(keep[1:4]))
+})
+
+test_that("ideb_keep_cols filters vl_* columns by metric=indicador", {
+  cols <- c("SG_UF", "REDE",
+            "VL_OBSERVADO_2019", "VL_INDICADOR_REND_2019", "VL_NOTA_MEDIA_2019",
+            "VL_APROVACAO_2019_1", "VL_NOTA_MATEMATICA_2019", "VL_PROJECAO_2019")
+  keep <- educabR:::ideb_keep_cols(cols, metric = "indicador")
+  expect_equal(
+    cols[keep],
+    c("SG_UF", "REDE",
+      "VL_OBSERVADO_2019", "VL_INDICADOR_REND_2019", "VL_NOTA_MEDIA_2019")
+  )
+})
+
+test_that("ideb_keep_cols filters vl_* columns by metric=aprovacao", {
+  cols <- c("SG_UF",
+            "VL_APROVACAO_2019_1", "VL_APROVACAO_2019_SI_4",
+            "VL_OBSERVADO_2019", "VL_NOTA_MEDIA_2019")
+  keep <- educabR:::ideb_keep_cols(cols, metric = "aprovacao")
+  expect_equal(cols[keep],
+               c("SG_UF", "VL_APROVACAO_2019_1", "VL_APROVACAO_2019_SI_4"))
+})
+
+test_that("ideb_keep_cols filters vl_* columns by metric=nota", {
+  cols <- c("SG_UF",
+            "VL_NOTA_MATEMATICA_2019", "VL_NOTA_PORTUGUES_2019",
+            "VL_NOTA_MEDIA_2019",  # this is "indicador", not "nota"
+            "VL_OBSERVADO_2019")
+  keep <- educabR:::ideb_keep_cols(cols, metric = "nota")
+  expect_equal(cols[keep],
+               c("SG_UF", "VL_NOTA_MATEMATICA_2019", "VL_NOTA_PORTUGUES_2019"))
+})
+
+test_that("ideb_keep_cols filters vl_* columns by metric=meta", {
+  cols <- c("SG_UF",
+            "VL_PROJECAO_2019", "VL_PROJECAO_2021",
+            "VL_OBSERVADO_2019")
+  keep <- educabR:::ideb_keep_cols(cols, metric = "meta")
+  expect_equal(cols[keep],
+               c("SG_UF", "VL_PROJECAO_2019", "VL_PROJECAO_2021"))
+})
+
+test_that("ideb_keep_cols further restricts by year when given", {
+  cols <- c("SG_UF",
+            "VL_OBSERVADO_2017", "VL_OBSERVADO_2019",
+            "VL_OBSERVADO_2021", "VL_OBSERVADO_2023")
+  keep <- educabR:::ideb_keep_cols(cols, metric = "indicador",
+                                   year = c(2019, 2023))
+  expect_equal(cols[keep],
+               c("SG_UF", "VL_OBSERVADO_2019", "VL_OBSERVADO_2023"))
+})
+
+test_that("ideb_keep_cols year filter applies to aprovacao suffix columns", {
+  cols <- c("SG_UF",
+            "VL_APROVACAO_2017_1", "VL_APROVACAO_2019_SI_4",
+            "VL_APROVACAO_2021_3")
+  keep <- educabR:::ideb_keep_cols(cols, metric = "aprovacao",
+                                   year = c(2019))
+  expect_equal(cols[keep], c("SG_UF", "VL_APROVACAO_2019_SI_4"))
+})
+
+test_that("ideb_keep_cols handles accented and mixed-case headers", {
+  # mirrors what INEP can publish: accented id columns
+  cols <- c("Sigla da UF", "Código do Município",
+            "VL_OBSERVADO_2023")
+  keep <- educabR:::ideb_keep_cols(cols, metric = "indicador")
+  expect_true(all(keep))  # all id + matching vl_
+})
+
 # --- build_ideb_url ---
 
 test_that("build_ideb_url builds correct URLs for escola/municipio", {

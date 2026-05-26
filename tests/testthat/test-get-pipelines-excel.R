@@ -24,7 +24,7 @@ test_that("get_ideb full pipeline works", {
       file.create(destfile)
       destfile
     },
-    read_ideb_excel = function(file, sheet = NULL) mock_data,
+    read_ideb_excel = function(file, sheet = NULL, metric = NULL, year = NULL) mock_data,
     .package = "educabR"
   )
 
@@ -61,7 +61,7 @@ test_that("get_ideb year filter returns only matching years", {
       file.create(destfile)
       destfile
     },
-    read_ideb_excel = function(file, sheet = NULL) mock_data,
+    read_ideb_excel = function(file, sheet = NULL, metric = NULL, year = NULL) mock_data,
     .package = "educabR"
   )
 
@@ -110,7 +110,7 @@ test_that("get_ideb uses cached file when it already exists", {
       download_called <<- TRUE
       destfile
     },
-    read_ideb_excel = function(file, sheet = NULL) mock_data,
+    read_ideb_excel = function(file, sheet = NULL, metric = NULL, year = NULL) mock_data,
     .package = "educabR"
   )
 
@@ -137,7 +137,7 @@ test_that("get_ideb_series delegates to get_ideb with deprecation warning", {
       file.create(destfile)
       destfile
     },
-    read_ideb_excel = function(file, sheet = NULL) mock_data,
+    read_ideb_excel = function(file, sheet = NULL, metric = NULL, year = NULL) mock_data,
     .package = "educabR"
   )
 
@@ -968,7 +968,7 @@ test_that("get_ideb_series emits deprecation warning", {
       file.create(destfile)
       destfile
     },
-    read_ideb_excel = function(file, sheet = NULL) mock_data,
+    read_ideb_excel = function(file, sheet = NULL, metric = NULL, year = NULL) mock_data,
     .package = "educabR"
   )
 

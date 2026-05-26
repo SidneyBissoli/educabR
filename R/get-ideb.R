@@ -132,8 +132,8 @@ get_ideb <- function(level,
   # determine sheet for brasil/regiao_uf
   sheet <- get_ideb_sheet(file_level, stage)
 
-  # read the xlsx file
-  df <- read_ideb_excel(xlsx_path, sheet = sheet)
+  # read the xlsx file (projects columns by metric/year to limit memory)
+  df <- read_ideb_excel(xlsx_path, sheet = sheet, metric = metric, year = year)
 
   # standardize column names
   df <- standardize_names(df)
@@ -577,15 +577,26 @@ clean_ideb_values <- function(df) {
 #' Read IDEB Excel file
 #'
 #' @description
-#' Internal function to read IDEB Excel files.
+#' Internal function to read IDEB Excel files. When `metric` is provided,
+#' performs a two-pass read: the header is parsed first to identify which
+#' `vl_*` columns belong to the requested metric (and optionally the requested
+#' `year`s), then the file is re-read with `col_types = "skip"` on the
+#' irrelevant columns. This drastically reduces peak memory for school-level
+#' files, which can otherwise balloon to several GB when read in full.
 #'
 #' @param file Path to the Excel file.
 #' @param sheet Sheet name to read (NULL for first sheet).
+#' @param metric Optional. If provided, restricts the read to the `vl_*`
+#'   columns matching this metric. When `NULL`, the whole sheet is read
+#'   (legacy behavior).
+#' @param year Optional. Integer vector. When provided alongside `metric`,
+#'   further restricts the read to `vl_*` columns whose embedded year is in
+#'   this set.
 #'
 #' @return A tibble with the data.
 #'
 #' @keywords internal
-read_ideb_excel <- function(file, sheet = NULL) {
+read_ideb_excel <- function(file, sheet = NULL, metric = NULL, year = NULL) {
   if (!requireNamespace("readxl", quietly = TRUE)) {
     cli::cli_abort(
       c(
@@ -595,10 +606,98 @@ read_ideb_excel <- function(file, sheet = NULL) {
     )
   }
 
-  # IDEB Excel files have 9 header rows before the actual column names
-  df <- readxl::read_excel(file, sheet = sheet, skip = 9, col_types = "text")
+  # IDEB Excel files have 9 header rows before the actual column names.
+  # NA tokens used by INEP across vl_* cells.
+  na_tokens <- c("", "-", "ND")
 
-  df
+  # legacy / safety path: no metric → read full sheet
+  if (is.null(metric)) {
+    return(readxl::read_excel(
+      file, sheet = sheet, skip = 9,
+      col_types = "text", na = na_tokens
+    ))
+  }
+
+  # pass 1: read header only to learn column names
+  header <- readxl::read_excel(
+    file, sheet = sheet, skip = 9, n_max = 0, col_types = "text"
+  )
+  keep <- ideb_keep_cols(names(header), metric = metric, year = year)
+
+  # safety: if patterns matched nothing, fall back to reading everything
+  if (!any(keep & ideb_is_vl(names(header)))) {
+    return(readxl::read_excel(
+      file, sheet = sheet, skip = 9,
+      col_types = "text", na = na_tokens
+    ))
+  }
+
+  col_types <- ifelse(keep, "text", "skip")
+
+  # pass 2: read only the columns we need
+  readxl::read_excel(
+    file, sheet = sheet, skip = 9,
+    col_types = col_types, na = na_tokens
+  )
+}
+
+#' Decide which IDEB columns to keep for a given metric/year
+#'
+#' @description
+#' Internal helper for [read_ideb_excel()]. Keeps all non-`vl_*` columns
+#' (id columns) and the subset of `vl_*` columns that match the requested
+#' metric (and year, if given). Matching is done against a standardized
+#' lowercase/ASCII form of the names so it works against the raw INEP
+#' headers regardless of accents or casing.
+#'
+#' @param col_names Character vector of raw column names from the xlsx header.
+#' @param metric One of `"indicador"`, `"aprovacao"`, `"nota"`, `"meta"`.
+#' @param year Optional integer vector of IDEB editions.
+#'
+#' @return Logical vector of the same length as `col_names`.
+#'
+#' @keywords internal
+ideb_keep_cols <- function(col_names, metric, year = NULL) {
+  std <- ideb_std_names(col_names)
+  is_vl <- ideb_is_vl(std, already_std = TRUE)
+
+  # all id columns (non vl_*) are always kept
+  keep <- !is_vl
+
+  metric_pattern <- switch(
+    metric,
+    "indicador" = "^vl_(indicador_rend_|nota_media_|observado_)",
+    "aprovacao" = "^vl_aprovacao_",
+    "nota"      = "^vl_nota_(matematica_|portugues_)",
+    "meta"      = "^vl_projecao_"
+  )
+
+  vl_match <- grepl(metric_pattern, std)
+
+  if (!is.null(year)) {
+    col_year <- suppressWarnings(as.integer(str_extract(std, "[0-9]{4}")))
+    vl_match <- vl_match & !is.na(col_year) & col_year %in% year
+  }
+
+  keep | vl_match
+}
+
+# internal: mirrors standardize_names() purely for header matching.
+# kept here (rather than calling standardize_names) so this file does not
+# depend on the censo-escolar module load order.
+ideb_std_names <- function(x) {
+  x |>
+    str_to_lower() |>
+    iconv(from = "UTF-8", to = "ASCII//TRANSLIT") |>
+    str_replace_all("[^a-z0-9]", "_") |>
+    str_replace_all("_+", "_") |>
+    str_remove("^_") |>
+    str_remove("_$")
+}
+
+ideb_is_vl <- function(x, already_std = FALSE) {
+  if (!already_std) x <- ideb_std_names(x)
+  grepl("^vl_", x)
 }
 
 #' Get IDEB historical series
