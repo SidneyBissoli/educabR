@@ -792,6 +792,35 @@ detect_encoding <- function(file) {
   }
 }
 
+#' Normalize character columns to UTF-8 NFC
+#'
+#' @description
+#' Ensures every character column in a data frame is valid UTF-8 in
+#' canonical NFC form. Without this step, equality comparisons against
+#' string literals fail silently on Windows when the source file's
+#' encoding produces decomposed (NFD) or otherwise non-canonical strings
+#' (e.g. `filter(rede == "Pública")` returns 0 rows even though
+#' `"Pública"` is in the data). Applied at every read entrypoint —
+#' [read_inep_file()], [read_ideb_excel()], [read_excel_safe()], and the
+#' FUNDEB OData fetcher — so downstream user code can compare with
+#' literals safely on any platform.
+#'
+#' @param df A data frame.
+#'
+#' @return The data frame with character columns normalized; non-character
+#'   columns are returned unchanged.
+#'
+#' @keywords internal
+normalize_utf8_nfc <- function(df) {
+  chr_cols <- vapply(df, is.character, logical(1))
+  if (any(chr_cols)) {
+    df[chr_cols] <- lapply(df[chr_cols], function(x) {
+      stringi::stri_trans_nfc(enc2utf8(x))
+    })
+  }
+  df
+}
+
 #' Read INEP data file
 #'
 #' @description
@@ -859,14 +888,5 @@ read_inep_file <- function(file,
     progress = TRUE
   )
 
-  # normalize character columns to UTF-8 NFC so that string comparisons
-  # with literals like "Pública" work correctly on Windows
-  chr_cols <- vapply(df, is.character, logical(1))
-  if (any(chr_cols)) {
-    df[chr_cols] <- lapply(df[chr_cols], function(x) {
-      stringi::stri_trans_nfc(enc2utf8(x))
-    })
-  }
-
-  df
+  normalize_utf8_nfc(df)
 }

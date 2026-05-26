@@ -13,6 +13,15 @@
 
 ## Bug fixes
 
+* Character columns from Excel readers (`read_ideb_excel()`,
+  `read_excel_safe()`) and the FUNDEB enrollment OData fetcher
+  (`fetch_fundeb_enrollment()`) are now normalized to UTF-8 NFC, matching
+  the behavior already in `read_inep_file()`. Previously, equality
+  comparisons against literals such as `filter(rede == "Pública")` could
+  silently return zero rows on Windows because the source-file encoding
+  produced non-canonical strings. The shared helper `normalize_utf8_nfc()`
+  is now applied at every read entrypoint so all four code paths agree.
+  Affects `get_ideb()`, `get_cpc()`, `get_igc()`, `get_fundeb_enrollment()`.
 * `read_excel_safe()` (used by `get_cpc()` and `get_igc()`) now passes INEP's
   missing-value tokens (`""`, `"-"`, `"ND"`, en/em dashes) to
   `readxl::read_excel(na = ...)` so those cells are loaded as `NA` instead of
