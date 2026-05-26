@@ -41,7 +41,7 @@
 </div>
 <div class="section level2">
 <h2 id="common-commands">Common Commands<a class="anchor" aria-label="anchor" href="#common-commands"></a></h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># Check package (full R CMD check)</span></span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># Check package (full R CMD check)</span></span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">"devtools::check()"</span></span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co"># Run all tests</span></span>
@@ -50,22 +50,35 @@
 <span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co"># Run a single test file</span></span>
 <span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">"devtools::test(filter = 'utils-cache')"</span></span>
 <span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="co"># Regenerate documentation (roxygen2 → man/ + NAMESPACE)</span></span>
-<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">"devtools::document()"</span></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="co"># Compute test coverage (matches the test-coverage.yaml CI workflow)</span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">"covr::package_coverage()"</span></span>
 <span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="co"># Load package for interactive testing</span></span>
-<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">"devtools::load_all()"</span></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="co"># Regenerate documentation (roxygen2 → man/ + NAMESPACE)</span></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">"devtools::document()"</span></span>
 <span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="co"># Build pkgdown site</span></span>
-<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">"pkgdown::build_site()"</span></span></code></pre></div>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="co"># Load package for interactive testing</span></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">"devtools::load_all()"</span></span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a><span class="co"># Build pkgdown site</span></span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">"pkgdown::build_site()"</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="architecture">Architecture<a class="anchor" aria-label="anchor" href="#architecture"></a></h2>
 <div class="section level3">
 <h3 id="data-pipeline-pattern-every-get_-function">Data pipeline pattern (every <code>get_*()</code> function)<a class="anchor" aria-label="anchor" href="#data-pipeline-pattern-every-get_-function"></a></h3>
 <pre><code>validate parameters → check cache → download if needed → extract archive → read file → standardize column names → transform → validate output → return tibble</code></pre>
-<p>Key internal modules: - <code>R/utils-cache.R</code> — Local cache system (<code>tempdir()/educabR_cache</code> or user-configured). Functions: <code>cache_path()</code>, <code>is_cached()</code>, <code><a href="reference/get_cache_dir.html">get_cache_dir()</a></code>, <code><a href="reference/set_cache_dir.html">set_cache_dir()</a></code>, <code><a href="reference/clear_cache.html">clear_cache()</a></code>, <code><a href="reference/list_cache.html">list_cache()</a></code> - <code>R/utils-download.R</code> — HTTP downloads with retry (3 attempts; timeout default 600s, configurable via <code>options(educabR.download_timeout = N)</code>), post-download verification (size vs <code>Content-Length</code>, HTML-masquerade detection, ZIP magic bytes — corrupt files are deleted, not cached), archive extraction (ZIP/7z/RAR), URL construction, dynamic year discovery via HEAD requests - <code>R/utils-validation.R</code> — Per-dataset validators checking column counts, expected names, non-empty results - <code>R/zzz.R</code> — Package init, reads <code>educabR.cache_dir</code> option</p>
+<p>Key internal modules: - <code>R/utils-cache.R</code> — Local cache system (<code>tempdir()/educabR_cache</code> or user-configured). Functions: <code>cache_path()</code>, <code>is_cached()</code>, <code><a href="reference/get_cache_dir.html">get_cache_dir()</a></code>, <code><a href="reference/set_cache_dir.html">set_cache_dir()</a></code>, <code><a href="reference/clear_cache.html">clear_cache()</a></code>, <code><a href="reference/list_cache.html">list_cache()</a></code> - <code>R/utils-download.R</code> — HTTP downloads with retry (3 attempts; timeout default 600s, configurable via <code>options(educabR.download_timeout = N)</code>), post-download verification (size vs <code>Content-Length</code>, HTML-masquerade detection, ZIP magic bytes — corrupt files are deleted, not cached), archive extraction (ZIP/7z/RAR), URL construction, dynamic year discovery via HEAD requests - <code>R/utils-validation.R</code> — Per-dataset validators checking column counts, expected names, non-empty results - <code>R/zzz.R</code> — Package init, reads <code>educabR.cache_dir</code> option - <code>R/educabR-package.R</code> — Package-level roxygen block (<code>@keywords internal</code>, <code>_PACKAGE</code> sentinel). Don’t regenerate or delete this when running <code>devtools::document()</code> — it’s the source of <code>man/educabR-package.Rd</code>.</p>
 </div>
+<div class="section level3">
+<h3 id="adding-a-new-get_-dataset">Adding a new <code>get_*()</code> dataset<a class="anchor" aria-label="anchor" href="#adding-a-new-get_-dataset"></a></h3>
+<p>When wiring up a new dataset getter, touch every layer — partial wiring causes silent test gaps and broken docs:</p>
+<ol style="list-style-type: decimal"><li>New <code>R/get-&lt;dataset&gt;.R</code> following the pipeline pattern above (validate → cache → download → extract → read → standardize → validate → return). Reuse <code><a href="reference/download_inep_file.html">download_inep_file()</a></code> / <code><a href="reference/read_inep_file.html">read_inep_file()</a></code> / <code><a href="reference/extract_zip.html">extract_zip()</a></code> from <code>R/utils-download.R</code> rather than reimplementing.</li>
+<li>Add a per-dataset validator in <code>R/utils-validation.R</code> and call it before returning.</li>
+<li>Roxygen <code>@export</code> on the user-facing function, then <code>Rscript -e "devtools::document()"</code> to regenerate <code>man/</code> and <code>NAMESPACE</code>.</li>
+<li>New <code>tests/testthat/test-&lt;dataset&gt;.R</code> — structure/logic only, no live network (the <code>EDUCABR_SKIP_DISCOVERY=true</code> env var is already set in <code>setup.R</code>).</li>
+<li>Add a usage example in the relevant <code>vignettes/*.Rmd</code> (<code>eval=FALSE</code>) if the dataset is user-facing.</li>
+<li>Bullet under the next-version heading in <code>NEWS.md</code>, and add the function/years row to <strong>both</strong> <code>README.md</code> and <code>README.pt-br.md</code> tables.</li>
+</ol></div>
 <div class="section level3">
 <h3 id="data-source-variations">Data source variations<a class="anchor" aria-label="anchor" href="#data-source-variations"></a></h3>
 <p>Not all datasets follow the same pattern: - <strong>CSV-in-ZIP</strong> (most): ENEM, SAEB, Censo Escolar, Censo Superior, ENADE, ENCCEJA - <strong>Excel</strong> (IDEB, FUNDEB distribution, some CAPES): Use <code>readxl</code>, multi-sheet logic - <strong>OData API</strong> (FUNDEB enrollment): <code>httr2</code> JSON requests to FNDE API - <strong>ENEM 2024+</strong>: Split into “participantes” (demographics) and “resultados” (scores) — two separate files - <strong>Censo Escolar 2025</strong>: Split-table layout (one table per entity) — different from prior years. See <code>R/get-censo-escolar.R</code> before assuming the legacy single-table structure.</p>
