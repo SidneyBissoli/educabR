@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What is educabR
 
-An R package (v0.9.0) for downloading and processing Brazilian public education data from INEP, FNDE, STN, and CAPES. Provides 14+ `get_*()` functions that fetch, cache, extract, and return tidy data frames. All text output (column names, CLI messages) is in Portuguese.
+An R package for downloading and processing Brazilian public education data from INEP, FNDE, STN, and CAPES. NAMESPACE exports 25 functions: 14 dataset `get_*()` functions plus discovery helpers (`available_years()`, `list_ideb_available()`, `list_censo_files()`, `list_censo_superior_files()`), summarizers (`enem_summary()`, `get_enem_itens()`), and cache controls. All text output (column names, CLI messages) is in Portuguese.
+
+Version note: NEWS.md may be ahead of DESCRIPTION during release prep (e.g. v1.0.0 IDEB API redesign is in NEWS while DESCRIPTION still reads 0.9.0). Check both before assuming the current API.
 
 ## Common Commands
 
@@ -49,6 +51,7 @@ Not all datasets follow the same pattern:
 - **Excel** (IDEB, FUNDEB distribution, some CAPES): Use `readxl`, multi-sheet logic
 - **OData API** (FUNDEB enrollment): `httr2` JSON requests to FNDE API
 - **ENEM 2024+**: Split into "participantes" (demographics) and "resultados" (scores) — two separate files
+- **Censo Escolar 2025**: Split-table layout (one table per entity) — different from prior years. See `R/get-censo-escolar.R` before assuming the legacy single-table structure.
 
 ### Platform-specific code
 
@@ -58,16 +61,17 @@ ZIP extraction has Windows-specific paths: PowerShell `Expand-Archive` fallback 
 
 - Framework: testthat edition 3, with snapshot tests in `tests/testthat/_snaps/`
 - `tests/testthat/setup.R` sets `EDUCABR_SKIP_DISCOVERY=true` to prevent HTTP requests during tests
+- Same env var is useful during interactive dev: `Sys.setenv(EDUCABR_SKIP_DISCOVERY="true")` skips the HEAD-request year discovery on every `available_years()` / `get_*()` call
 - Tests use `withr::local_tempdir()` for isolation and `withr::local_options()` for scoped settings
 - No live downloads in tests — functions are tested against structure/logic, not network calls
 - CI runs on macOS, Windows, Ubuntu (R release, devel, oldrel-1)
 
 ## Important Conventions
 
+- `get_*()` functions download **one year per call** — never merge years internally. Users compose multi-year datasets with `purrr::map_dfr()` or similar. Do not add `year` vector support or implicit multi-year concatenation.
 - All `get_*()` functions return data in **long (tidy) format** with standardized lowercase/underscore column names
 - Portuguese accents are preserved in data values but column names use ASCII
 - Roxygen2 generates `man/` and `NAMESPACE` — never edit those by hand
-- `docs/` folder is for the pkgdown site, local-only (not committed)
-- `data/` and `lib/` are local development artifacts (not committed)
-- Vignette examples use `eval=FALSE` to avoid network calls during build
+- `docs/`, `data/`, `lib/`, and `dictionaries/` are local-only (not committed). `dictionaries/censo-escolar/dictionary_<year>.pdf` holds INEP's per-year column dictionaries — consult these when adding or fixing year-specific column handling.
+- Vignettes use `eval=FALSE` (no network during build)
 - The `cli` package is used for all user-facing messages (not `message()` or `cat()`)
