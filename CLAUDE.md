@@ -64,6 +64,15 @@ ZIP extraction has Windows-specific paths: PowerShell `Expand-Archive` fallback 
 - No live downloads in tests — functions are tested against structure/logic, not network calls
 - CI runs on macOS, Windows, Ubuntu (R release, devel, oldrel-1)
 
+## Open audit findings
+
+Before changing the read or download pipeline (`read_inep_file`,
+`read_excel_safe`, `read_ideb_excel`, `download_inep_file`,
+`validate_year`, `extract_zip`), run `gh issue list --label audit` —
+each open audit issue carries a diagnosis with file:line evidence, a
+proposed fix snippet, and tests to add. Don't redo that analysis from
+scratch.
+
 ## Important Conventions
 
 - `get_*()` functions download **one year per call** — never merge years internally. Users compose multi-year datasets with `purrr::map_dfr()` or similar. Do not add `year` vector support or implicit multi-year concatenation.
