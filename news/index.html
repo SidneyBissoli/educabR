@@ -33,6 +33,14 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="development version" id="educabr-development-version">educabR (development version)<a class="anchor" aria-label="anchor" href="#educabr-development-version"></a></h2>
+<div class="section level3">
+<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<ul><li>
+<code><a href="../reference/validate_year.html">validate_year()</a></code> now rejects vectors and non-numeric input with a clear error pointing at <code><a href="https://purrr.tidyverse.org/reference/map_dfr.html" class="external-link">purrr::map_dfr()</a></code> for multi-year composition (issue <a href="https://github.com/SidneyBissoli/educabR/issues/2" class="external-link">#2</a>). Previously, passing <code>c(2017, 2019)</code> to any of the 13 affected getters (<code>get_cpc</code>, <code>get_idd</code>, <code>get_igc</code>, <code>get_capes</code>, <code>get_saeb</code>, <code>get_enem</code>, <code>get_enem_itens</code>, <code>get_enade</code>, <code>get_encceja</code>, <code>get_fundeb_distribution</code>, <code>get_fundeb_enrollment</code>, <code>get_censo_escolar</code>, <code>get_censo_superior</code>) hit either a cryptic <code>length &gt; 1</code> error (R ≥ 4.2) or silently used only the first element (R &lt; 4.2). <code><a href="../reference/get_ideb.html">get_ideb()</a></code> is unaffected — it intentionally accepts year vectors.</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.0" id="educabr-100">educabR 1.0.0<a class="anchor" aria-label="anchor" href="#educabr-100"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-1-0-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-0-0"></a></h3>
