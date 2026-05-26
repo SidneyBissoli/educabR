@@ -612,10 +612,10 @@ read_ideb_excel <- function(file, sheet = NULL, metric = NULL, year = NULL) {
 
   # legacy / safety path: no metric → read full sheet
   if (is.null(metric)) {
-    return(readxl::read_excel(
+    return(normalize_utf8_nfc(readxl::read_excel(
       file, sheet = sheet, skip = 9,
       col_types = "text", na = na_tokens
-    ))
+    )))
   }
 
   # pass 1: read header only to learn column names
@@ -626,19 +626,19 @@ read_ideb_excel <- function(file, sheet = NULL, metric = NULL, year = NULL) {
 
   # safety: if patterns matched nothing, fall back to reading everything
   if (!any(keep & ideb_is_vl(names(header)))) {
-    return(readxl::read_excel(
+    return(normalize_utf8_nfc(readxl::read_excel(
       file, sheet = sheet, skip = 9,
       col_types = "text", na = na_tokens
-    ))
+    )))
   }
 
   col_types <- ifelse(keep, "text", "skip")
 
   # pass 2: read only the columns we need
-  readxl::read_excel(
+  normalize_utf8_nfc(readxl::read_excel(
     file, sheet = sheet, skip = 9,
     col_types = col_types, na = na_tokens
-  )
+  ))
 }
 
 #' Decide which IDEB columns to keep for a given metric/year

@@ -181,7 +181,7 @@ read_excel_safe <- function(file, n_max = Inf) {
     df[[col]] <- as.character(df[[col]])
   }
 
-  df
+  normalize_utf8_nfc(df)
 }
 
 #' Convert faixa columns to numeric

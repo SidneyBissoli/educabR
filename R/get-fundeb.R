@@ -351,6 +351,9 @@ get_fundeb_enrollment <- function(year,
   df <- fetch_fundeb_enrollment(year, uf = NULL, n_max = Inf, quiet = quiet)
   df <- rename_fundeb_enrollment(df)
 
+  # normalize before caching so 1st-call and cached-read paths agree on encoding
+  df <- normalize_utf8_nfc(df)
+
   # cache the complete dataset
   if (keep_file) {
     dir.create(dirname(file_path), recursive = TRUE, showWarnings = FALSE)

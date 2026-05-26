@@ -899,3 +899,60 @@ test_that("list_ideb_available returns expected structure", {
   expect_true(all(c("level", "stage", "metric") %in% names(result)))
   expect_true(nrow(result) > 0)
 })
+
+# --- normalize_utf8_nfc ------------------------------------------------------
+
+test_that("normalize_utf8_nfc canonicalizes decomposed strings so == works", {
+  # NFD form: P + u + COMBINING ACUTE ACCENT (U+0301) + blica
+  nfd <- "Pública"
+  # NFC form: P + LATIN SMALL LETTER U WITH ACUTE (U+00FA) + blica
+  nfc <- "Pública"
+
+  # sanity: visually identical, byte-different - direct == fails
+  expect_false(nfd == nfc)
+  expect_false(identical(nfd, nfc))
+
+  df <- data.frame(
+    rede = c(nfd, "Federal"),
+    valor = c(5.1, 6.2),
+    stringsAsFactors = FALSE
+  )
+  out <- educabR:::normalize_utf8_nfc(df)
+
+  # after normalization the NFD form becomes the NFC form
+  expect_true(out$rede[1] == nfc)
+  expect_true(nfc %in% out$rede)
+  expect_identical(out$rede[1], nfc)
+})
+
+test_that("normalize_utf8_nfc leaves non-character columns untouched", {
+  df <- data.frame(
+    a = 1:3,
+    b = c(TRUE, FALSE, NA),
+    c = c("á", "é", "í"),
+    stringsAsFactors = FALSE
+  )
+  out <- educabR:::normalize_utf8_nfc(df)
+
+  expect_identical(out$a, df$a)
+  expect_identical(out$b, df$b)
+  expect_true(is.character(out$c))
+})
+
+test_that("normalize_utf8_nfc handles data frames with no character columns", {
+  df <- data.frame(a = 1:3, b = 4:6)
+  out <- educabR:::normalize_utf8_nfc(df)
+  expect_identical(out, df)
+})
+
+test_that("normalize_utf8_nfc preserves NA values in character columns", {
+  df <- data.frame(
+    rede = c("Pública", NA_character_, "Federal"),
+    stringsAsFactors = FALSE
+  )
+  out <- educabR:::normalize_utf8_nfc(df)
+
+  expect_true(is.na(out$rede[2]))
+  expect_equal(out$rede[1], "Pública")
+  expect_equal(out$rede[3], "Federal")
+})

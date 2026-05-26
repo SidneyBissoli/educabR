@@ -398,3 +398,101 @@ test_that("get_ideb_series emits deprecation warning", {
     "deprecated"
   )
 })
+
+# --- read_ideb_excel: normalization at all 3 branches ------------------------
+
+test_that("read_ideb_excel normalizes char cols in legacy path (metric = NULL)", {
+  skip_if_not_installed("readxl")
+
+  nfd <- "Pública"
+  nfc <- "Pública"
+
+  local_mocked_bindings(
+    read_excel = function(...) {
+      data.frame(
+        id_uf = "SP",
+        rede = c(nfd, "Federal"),
+        vl_observado_2023 = c("5.0", "6.1"),
+        stringsAsFactors = FALSE
+      )
+    },
+    .package = "readxl"
+  )
+
+  out <- educabR:::read_ideb_excel("dummy.xlsx")
+
+  expect_true(out$rede[1] == nfc)
+  expect_true(nfc %in% out$rede)
+})
+
+test_that("read_ideb_excel normalizes char cols in safety-fallback path", {
+  skip_if_not_installed("readxl")
+
+  nfd <- "Pública"
+  nfc <- "Pública"
+  call_n <- 0
+
+  local_mocked_bindings(
+    read_excel = function(...) {
+      call_n <<- call_n + 1
+      args <- list(...)
+      # pass 1: header only (n_max = 0) — return only id columns so
+      # ideb_keep_cols returns nothing matching the requested metric and
+      # the function falls into the safety branch.
+      if (!is.null(args$n_max) && args$n_max == 0) {
+        data.frame(id_uf = character(), rede = character(),
+                   stringsAsFactors = FALSE)
+      } else {
+        data.frame(
+          id_uf = "SP",
+          rede = c(nfd, "Federal"),
+          stringsAsFactors = FALSE
+        )
+      }
+    },
+    .package = "readxl"
+  )
+
+  out <- educabR:::read_ideb_excel("dummy.xlsx", metric = "indicador")
+
+  expect_true(out$rede[1] == nfc)
+  expect_true(nfc %in% out$rede)
+})
+
+test_that("read_ideb_excel normalizes char cols in optimized read path", {
+  skip_if_not_installed("readxl")
+
+  nfd <- "Pública"
+  nfc <- "Pública"
+
+  local_mocked_bindings(
+    read_excel = function(...) {
+      args <- list(...)
+      # pass 1: header only — return id cols plus an indicador column so
+      # ideb_keep_cols matches and the optimized branch is taken
+      if (!is.null(args$n_max) && args$n_max == 0) {
+        data.frame(
+          id_uf = character(),
+          rede = character(),
+          vl_observado_2023 = character(),
+          stringsAsFactors = FALSE
+        )
+      } else {
+        # pass 2: real data with NFD-form accents to verify normalization
+        data.frame(
+          id_uf = "SP",
+          rede = c(nfd, "Federal"),
+          vl_observado_2023 = c("5.0", "6.1"),
+          stringsAsFactors = FALSE
+        )
+      }
+    },
+    .package = "readxl"
+  )
+
+  out <- educabR:::read_ideb_excel("dummy.xlsx", metric = "indicador",
+                                   year = 2023)
+
+  expect_true(out$rede[1] == nfc)
+  expect_true(nfc %in% out$rede)
+})
