@@ -4,6 +4,17 @@
 
 ### Bug fixes
 
+- [`download_inep_file()`](https://sidneybissoli.github.io/educabR/reference/download_inep_file.md)
+  now verifies downloaded files before caching them (issue
+  [\#3](https://github.com/SidneyBissoli/educabR/issues/3)). Three
+  checks run after the bytes hit disk: file size against the server’s
+  `Content-Length` (1% tolerance, catches truncated downloads),
+  HTML-masquerade detection on the first 64 bytes (catches INEP
+  maintenance pages served with HTTP 200), and ZIP magic-bytes
+  (`PK\x03\x04`) for `.zip` destinations (catches proxy corruption). On
+  any failure the corrupt file is deleted and the user gets a clear
+  error telling them to retry, instead of a cryptic `readxl` / `readr`
+  failure on the next call.
 - [`validate_year()`](https://sidneybissoli.github.io/educabR/reference/validate_year.md)
   now rejects vectors and non-numeric input with a clear error pointing
   at
