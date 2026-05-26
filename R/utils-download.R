@@ -23,6 +23,76 @@ get_remote_file_size <- function(url) {
   )
 }
 
+# verify a downloaded file is structurally plausible
+# unlinks destfile and aborts on detected corruption so a bad blob
+# is never silently cached
+verify_download_integrity <- function(destfile,
+                                      expected_size = NULL,
+                                      url = NULL) {
+  if (!file.exists(destfile)) {
+    cli::cli_abort("download missing: {.path {destfile}}")
+  }
+
+  actual_size <- file.size(destfile)
+
+  if (is.na(actual_size) || actual_size == 0) {
+    unlink(destfile)
+    cli::cli_abort(c(
+      "downloaded file is empty",
+      "i" = "retry the download — the cached file has been deleted"
+    ))
+  }
+
+  # size check (catches truncation when Content-Length is known)
+  if (!is.null(expected_size) && expected_size > 0) {
+    diff_pct <- abs(actual_size - expected_size) / expected_size
+    if (diff_pct > 0.01) {
+      unlink(destfile)
+      cli::cli_abort(c(
+        "downloaded file looks truncated",
+        "x" = "expected {.val {expected_size}} bytes, got {.val {actual_size}}",
+        "i" = "retry the download — the cached file has been deleted"
+      ))
+    }
+  }
+
+  # read first 64 bytes for content sniffing
+  first_bytes <- readBin(destfile, "raw", n = 64)
+
+  # HTML masquerade check (server returned an error page with HTTP 200)
+  # binary files commonly have NUL bytes in their headers; HTML does not.
+  # useBytes = TRUE keeps grepl from trying to interpret arbitrary binary
+  # payloads as the system locale and emitting translation warnings
+  if (!any(first_bytes == as.raw(0))) {
+    first_text <- rawToChar(first_bytes)
+    if (grepl("^\\s*<(!doctype|html)", first_text,
+              ignore.case = TRUE, useBytes = TRUE)) {
+      unlink(destfile)
+      cli::cli_abort(c(
+        "downloaded file is HTML, not data",
+        "x" = "server may be in maintenance or returned an error page",
+        "i" = if (!is.null(url)) "url: {.url {url}}" else "",
+        "i" = "retry the download — the cached file has been deleted"
+      ))
+    }
+  }
+
+  # ZIP magic-bytes check (only for files we expect to be ZIP)
+  if (tolower(tools::file_ext(destfile)) == "zip") {
+    zip_magic <- as.raw(c(0x50, 0x4B, 0x03, 0x04))
+    if (length(first_bytes) < 4L || !identical(first_bytes[1:4], zip_magic)) {
+      unlink(destfile)
+      cli::cli_abort(c(
+        "downloaded file is not a valid ZIP archive",
+        "x" = "missing ZIP magic bytes (PK\\x03\\x04)",
+        "i" = "retry the download — the cached file has been deleted"
+      ))
+    }
+  }
+
+  invisible(destfile)
+}
+
 #' Download a file from INEP
 #'
 #' @description
@@ -40,9 +110,11 @@ download_inep_file <- function(url, destfile, quiet = FALSE) {
   # create directory if needed
   dir.create(dirname(destfile), recursive = TRUE, showWarnings = FALSE)
 
-  # check file size before downloading
+  # query expected size once — reused for the progress message and for the
+  # post-download integrity check
+  file_size <- get_remote_file_size(url)
+
   if (!quiet) {
-    file_size <- get_remote_file_size(url)
     if (!is.null(file_size)) {
       size_mb <- round(file_size / 1024^2, 1)
       if (size_mb >= 1000) {
@@ -67,13 +139,6 @@ download_inep_file <- function(url, destfile, quiet = FALSE) {
 
       # write to file
       writeBin(httr2::resp_body_raw(resp), destfile)
-
-      if (!quiet) {
-        size_mb <- round(file.size(destfile) / 1024^2, 2)
-        cli::cli_alert_success("downloaded {.val {size_mb}} MB")
-      }
-
-      destfile
     },
     error = function(e) {
       cli::cli_abort(
@@ -85,6 +150,17 @@ download_inep_file <- function(url, destfile, quiet = FALSE) {
       )
     }
   )
+
+  # verify integrity before declaring success; aborts here surface to the
+  # user directly instead of being wrapped as "download failed"
+  verify_download_integrity(destfile, expected_size = file_size, url = url)
+
+  if (!quiet) {
+    size_mb <- round(file.size(destfile) / 1024^2, 2)
+    cli::cli_alert_success("downloaded {.val {size_mb}} MB")
+  }
+
+  destfile
 }
 
 #' Extract a ZIP file

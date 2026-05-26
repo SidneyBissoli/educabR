@@ -178,6 +178,120 @@ test_that("build_inep_url errors for unknown dataset", {
   expect_error(build_inep_url("invalid_dataset", 2023), "unknown dataset")
 })
 
+# --- verify_download_integrity (issue #3) ------------------------------------
+
+# helper: write a minimal valid ZIP-shaped blob (magic + padding)
+write_fake_zip <- function(path, payload_bytes = 100L) {
+  writeBin(
+    c(as.raw(c(0x50, 0x4B, 0x03, 0x04)), as.raw(rep(1L, payload_bytes))),
+    path
+  )
+}
+
+test_that("verify_download_integrity passes a valid ZIP with matching size", {
+  f <- tempfile(fileext = ".zip")
+  withr::defer(unlink(f))
+  write_fake_zip(f)
+
+  expect_silent(
+    educabR:::verify_download_integrity(f, expected_size = file.size(f))
+  )
+  expect_true(file.exists(f))
+})
+
+test_that("verify_download_integrity tolerates size diff under 1%", {
+  f <- tempfile(fileext = ".zip")
+  withr::defer(unlink(f))
+  write_fake_zip(f, payload_bytes = 10000L)
+
+  # claim a size 0.5% larger — within tolerance
+  expect_silent(
+    educabR:::verify_download_integrity(f, expected_size = file.size(f) * 1.005)
+  )
+})
+
+test_that("verify_download_integrity rejects truncated file and unlinks it", {
+  f <- tempfile(fileext = ".zip")
+  withr::defer(unlink(f))
+  write_fake_zip(f)
+
+  # pretend the remote claims 10x our actual size — truncation
+  expect_error(
+    educabR:::verify_download_integrity(f, expected_size = file.size(f) * 10),
+    "truncated"
+  )
+  expect_false(file.exists(f))
+})
+
+test_that("verify_download_integrity rejects HTML masquerading as data", {
+  f <- tempfile(fileext = ".zip")
+  withr::defer(unlink(f))
+  writeBin(charToRaw("<!DOCTYPE html><html>maintenance</html>"), f)
+
+  expect_error(
+    educabR:::verify_download_integrity(f),
+    "HTML"
+  )
+  expect_false(file.exists(f))
+})
+
+test_that("verify_download_integrity rejects HTML with leading whitespace", {
+  f <- tempfile(fileext = ".zip")
+  withr::defer(unlink(f))
+  writeBin(charToRaw("  \n<html><body>error</body></html>"), f)
+
+  expect_error(
+    educabR:::verify_download_integrity(f),
+    "HTML"
+  )
+  expect_false(file.exists(f))
+})
+
+test_that("verify_download_integrity rejects .zip missing magic bytes", {
+  f <- tempfile(fileext = ".zip")
+  withr::defer(unlink(f))
+  # not HTML, not a valid zip
+  writeBin(as.raw(c(0xDE, 0xAD, 0xBE, 0xEF, 0x01, 0x02, 0x03)), f)
+
+  expect_error(
+    educabR:::verify_download_integrity(f),
+    "ZIP"
+  )
+  expect_false(file.exists(f))
+})
+
+test_that("verify_download_integrity rejects empty file", {
+  f <- tempfile(fileext = ".zip")
+  withr::defer(unlink(f))
+  file.create(f)
+
+  expect_error(
+    educabR:::verify_download_integrity(f),
+    "empty"
+  )
+  expect_false(file.exists(f))
+})
+
+test_that("verify_download_integrity skips ZIP magic check for non-zip extensions", {
+  f <- tempfile(fileext = ".xlsx")
+  withr::defer(unlink(f))
+  # arbitrary binary content with NUL byte — not HTML, not a .zip path
+  writeBin(as.raw(c(0xDE, 0xAD, 0x00, 0xBE, 0xEF)), f)
+
+  expect_silent(educabR:::verify_download_integrity(f))
+  expect_true(file.exists(f))
+})
+
+test_that("verify_download_integrity skips size check when expected_size is NULL", {
+  f <- tempfile(fileext = ".zip")
+  withr::defer(unlink(f))
+  write_fake_zip(f)
+
+  expect_silent(
+    educabR:::verify_download_integrity(f, expected_size = NULL)
+  )
+})
+
 # --- validate_year -----------------------------------------------------------
 
 test_that("validate_year accepts valid years for all datasets", {

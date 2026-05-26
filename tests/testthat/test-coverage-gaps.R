@@ -710,6 +710,9 @@ test_that("download_inep_file creates directory and downloads file", {
 
   local_mocked_bindings(
     get_remote_file_size = function(...) 5242880,
+    # bypass post-download integrity check — mocked body is much smaller
+    # than the mocked Content-Length on purpose for the messaging path
+    verify_download_integrity = function(destfile, ...) invisible(destfile),
     .package = "educabR"
   )
 
@@ -781,6 +784,9 @@ test_that("download_inep_file reports GB for large files", {
 
   local_mocked_bindings(
     get_remote_file_size = function(...) 2 * 1024^3,
+    # bypass post-download integrity check — we're verifying the GB
+    # progress message, not the size-match logic
+    verify_download_integrity = function(destfile, ...) invisible(destfile),
     .package = "educabR"
   )
 

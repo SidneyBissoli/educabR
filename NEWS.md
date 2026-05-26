@@ -2,6 +2,14 @@
 
 ## Bug fixes
 
+* `download_inep_file()` now verifies downloaded files before caching them
+  (issue #3). Three checks run after the bytes hit disk: file size against
+  the server's `Content-Length` (1% tolerance, catches truncated downloads),
+  HTML-masquerade detection on the first 64 bytes (catches INEP maintenance
+  pages served with HTTP 200), and ZIP magic-bytes (`PK\x03\x04`) for `.zip`
+  destinations (catches proxy corruption). On any failure the corrupt file
+  is deleted and the user gets a clear error telling them to retry, instead
+  of a cryptic `readxl` / `readr` failure on the next call.
 * `validate_year()` now rejects vectors and non-numeric input with a clear
   error pointing at `purrr::map_dfr()` for multi-year composition
   (issue #2). Previously, passing `c(2017, 2019)` to any of the 13
