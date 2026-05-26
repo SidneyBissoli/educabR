@@ -37,5 +37,15 @@ tests/testthat/_snaps/
 data-raw/*.csv
 data-raw/*.zip
 
+# Archive
+archive/
+
+# Dictionaries
+dictionaries/
+
+# Guides
+guides/
+
 # Claude Code
 .claude/
+.positai

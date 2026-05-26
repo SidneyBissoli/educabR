@@ -22,3 +22,5 @@
 ^coverage_report\.html$
 ^lib$
 ^CITATION\.cff$
+^\.positai$
+^CLAUDE\.md$
