@@ -19,6 +19,24 @@
 
 ### Bug fixes
 
+- Character columns from Excel readers
+  ([`read_ideb_excel()`](https://sidneybissoli.github.io/educabR/reference/read_ideb_excel.md),
+  [`read_excel_safe()`](https://sidneybissoli.github.io/educabR/reference/read_excel_safe.md))
+  and the FUNDEB enrollment OData fetcher
+  ([`fetch_fundeb_enrollment()`](https://sidneybissoli.github.io/educabR/reference/fetch_fundeb_enrollment.md))
+  are now normalized to UTF-8 NFC, matching the behavior already in
+  [`read_inep_file()`](https://sidneybissoli.github.io/educabR/reference/read_inep_file.md).
+  Previously, equality comparisons against literals such as
+  `filter(rede == "Pública")` could silently return zero rows on Windows
+  because the source-file encoding produced non-canonical strings. The
+  shared helper
+  [`normalize_utf8_nfc()`](https://sidneybissoli.github.io/educabR/reference/normalize_utf8_nfc.md)
+  is now applied at every read entrypoint so all four code paths agree.
+  Affects
+  [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md),
+  [`get_cpc()`](https://sidneybissoli.github.io/educabR/reference/get_cpc.md),
+  [`get_igc()`](https://sidneybissoli.github.io/educabR/reference/get_igc.md),
+  [`get_fundeb_enrollment()`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_enrollment.md).
 - [`read_excel_safe()`](https://sidneybissoli.github.io/educabR/reference/read_excel_safe.md)
   (used by
   [`get_cpc()`](https://sidneybissoli.github.io/educabR/reference/get_cpc.md)
