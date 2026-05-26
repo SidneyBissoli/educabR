@@ -55,6 +55,8 @@ Key internal modules: - `R/utils-cache.R` — Local cache system
 [`list_cache()`](https://sidneybissoli.github.io/educabR/reference/list_cache.md) -
 `R/utils-download.R` — HTTP downloads with retry (3 attempts; timeout
 default 600s, configurable via `options(educabR.download_timeout = N)`),
+post-download verification (size vs `Content-Length`, HTML-masquerade
+detection, ZIP magic bytes — corrupt files are deleted, not cached),
 archive extraction (ZIP/7z/RAR), URL construction, dynamic year
 discovery via HEAD requests - `R/utils-validation.R` — Per-dataset
 validators checking column counts, expected names, non-empty results -
@@ -152,7 +154,13 @@ intentionally gone.
   concatenation.
   [`validate_year()`](https://sidneybissoli.github.io/educabR/reference/validate_year.md)
   in `R/utils-validation.R` is the enforcement point and rejects year
-  vectors with a clear error.
+  vectors with a clear error. **Exception:**
+  [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)
+  accepts year vectors by design — a single INEP Excel file covers all
+  editions, so filtering is in-memory rather than a multi-download. It
+  bypasses
+  [`validate_year()`](https://sidneybissoli.github.io/educabR/reference/validate_year.md)
+  intentionally; don’t “fix” it.
 - All `get_*()` functions return data in **long (tidy) format** with
   standardized lowercase/underscore column names
 - Portuguese accents are preserved in data values but column names use
