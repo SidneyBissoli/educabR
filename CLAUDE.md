@@ -6,8 +6,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 An R package for downloading and processing Brazilian public education data from INEP, FNDE, STN, and CAPES. NAMESPACE exports 25 functions: 14 dataset `get_*()` functions plus discovery helpers (`available_years()`, `list_ideb_available()`, `list_censo_files()`, `list_censo_superior_files()`), summarizers (`enem_summary()`, `get_enem_itens()`), and cache controls. All text output (column names, CLI messages) is in Portuguese.
 
-Version note: NEWS.md may be ahead of DESCRIPTION during release prep (e.g. v1.0.0 IDEB API redesign is in NEWS while DESCRIPTION still reads 0.9.0). Check both before assuming the current API.
-
 ## Common Commands
 
 ```bash
