@@ -161,7 +161,7 @@ read_excel_safe <- function(file, n_max = Inf) {
         file,
         n_max = n_max_arg,
         .name_repair = "minimal",
-        na = c("", "-", "ND", "–", "—")
+        na = c("", "-", "ND", "\u2013", "\u2014")
       )
     },
     error = function(e) {

@@ -174,8 +174,8 @@ test_that("read_excel_safe passes INEP NA tokens to readxl::read_excel (issue #4
 
   expect_true("na" %in% names(captured))
   expect_true(all(c("", "-", "ND") %in% captured$na))
-  expect_true("–" %in% captured$na)
-  expect_true("—" %in% captured$na)
+  expect_true("\u2013" %in% captured$na)
+  expect_true("\u2014" %in% captured$na)
 })
 
 # --- clean_dash_values ---

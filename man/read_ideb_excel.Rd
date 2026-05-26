@@ -4,17 +4,30 @@
 \alias{read_ideb_excel}
 \title{Read IDEB Excel file}
 \usage{
-read_ideb_excel(file, sheet = NULL)
+read_ideb_excel(file, sheet = NULL, metric = NULL, year = NULL)
 }
 \arguments{
 \item{file}{Path to the Excel file.}
 
 \item{sheet}{Sheet name to read (NULL for first sheet).}
+
+\item{metric}{Optional. If provided, restricts the read to the \verb{vl_*}
+columns matching this metric. When \code{NULL}, the whole sheet is read
+(legacy behavior).}
+
+\item{year}{Optional. Integer vector. When provided alongside \code{metric},
+further restricts the read to \verb{vl_*} columns whose embedded year is in
+this set.}
 }
 \value{
 A tibble with the data.
 }
 \description{
-Internal function to read IDEB Excel files.
+Internal function to read IDEB Excel files. When \code{metric} is provided,
+performs a two-pass read: the header is parsed first to identify which
+\verb{vl_*} columns belong to the requested metric (and optionally the requested
+\code{year}s), then the file is re-read with \code{col_types = "skip"} on the
+irrelevant columns. This drastically reduces peak memory for school-level
+files, which can otherwise balloon to several GB when read in full.
 }
 \keyword{internal}

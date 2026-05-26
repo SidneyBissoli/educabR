@@ -9,6 +9,14 @@
   whose first rows were all `"-"` could be inferred as `logical` and later
   numeric values silently dropped. `clean_dash_values()` remains as a safety
   net but is now largely redundant for CPC/IGC.
+
+## Internal
+
+* `R CMD check` warnings cleared: em-dashes in `cli_abort()` message strings
+  in `R/utils-download.R` are now written with `—` Unicode escapes (R
+  requires ASCII-only in code strings; comments are exempt), and
+  `man/read_ideb_excel.Rd` has been regenerated to match the function
+  signature added in v1.0.0 (`metric`, `year`).
 * `download_inep_file()` now verifies downloaded files before caching them
   (issue #3). Three checks run after the bytes hit disk: file size against
   the server's `Content-Length` (1% tolerance, catches truncated downloads),
