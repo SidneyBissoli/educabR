@@ -39,7 +39,7 @@ verify_download_integrity <- function(destfile,
     unlink(destfile)
     cli::cli_abort(c(
       "downloaded file is empty",
-      "i" = "retry the download — the cached file has been deleted"
+      "i" = "retry the download \u2014 the cached file has been deleted"
     ))
   }
 
@@ -51,7 +51,7 @@ verify_download_integrity <- function(destfile,
       cli::cli_abort(c(
         "downloaded file looks truncated",
         "x" = "expected {.val {expected_size}} bytes, got {.val {actual_size}}",
-        "i" = "retry the download — the cached file has been deleted"
+        "i" = "retry the download \u2014 the cached file has been deleted"
       ))
     }
   }
@@ -72,7 +72,7 @@ verify_download_integrity <- function(destfile,
         "downloaded file is HTML, not data",
         "x" = "server may be in maintenance or returned an error page",
         "i" = if (!is.null(url)) "url: {.url {url}}" else "",
-        "i" = "retry the download — the cached file has been deleted"
+        "i" = "retry the download \u2014 the cached file has been deleted"
       ))
     }
   }
@@ -85,7 +85,7 @@ verify_download_integrity <- function(destfile,
       cli::cli_abort(c(
         "downloaded file is not a valid ZIP archive",
         "x" = "missing ZIP magic bytes (PK\\x03\\x04)",
-        "i" = "retry the download — the cached file has been deleted"
+        "i" = "retry the download \u2014 the cached file has been deleted"
       ))
     }
   }

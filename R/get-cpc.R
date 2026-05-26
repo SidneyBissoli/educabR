@@ -157,7 +157,12 @@ read_excel_safe <- function(file, n_max = Inf) {
 
   df <- tryCatch(
     {
-      readxl::read_excel(file, n_max = n_max_arg, .name_repair = "minimal")
+      readxl::read_excel(
+        file,
+        n_max = n_max_arg,
+        .name_repair = "minimal",
+        na = c("", "-", "ND", "\u2013", "\u2014")
+      )
     },
     error = function(e) {
       cli::cli_abort(

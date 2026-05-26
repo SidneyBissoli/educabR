@@ -158,6 +158,26 @@ test_that("read_excel_safe errors when readxl not available", {
   )
 })
 
+test_that("read_excel_safe passes INEP NA tokens to readxl::read_excel (issue #4)", {
+  skip_if_not_installed("readxl")
+
+  captured <- list()
+  local_mocked_bindings(
+    read_excel = function(...) {
+      captured <<- list(...)
+      data.frame(co_curso = 1L, valor = NA_real_)
+    },
+    .package = "readxl"
+  )
+
+  educabR:::read_excel_safe("dummy.xlsx")
+
+  expect_true("na" %in% names(captured))
+  expect_true(all(c("", "-", "ND") %in% captured$na))
+  expect_true("\u2013" %in% captured$na)
+  expect_true("\u2014" %in% captured$na)
+})
+
 # --- clean_dash_values ---
 
 test_that("clean_dash_values replaces hyphen in character columns with NA", {
