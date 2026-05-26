@@ -1,5 +1,12 @@
 # educabR (development version)
 
+## New features
+
+* `download_inep_file()` timeout is now configurable via
+  `options(educabR.download_timeout = N)` (seconds; default 600). Raise it
+  when downloading large microdata (e.g. ENEM `participantes` at ~1.6 GB)
+  over a slow link (issue #7).
+
 ## Bug fixes
 
 * `read_excel_safe()` (used by `get_cpc()` and `get_igc()`) now passes INEP's
