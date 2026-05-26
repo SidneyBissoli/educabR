@@ -2,6 +2,13 @@
 
 ## Bug fixes
 
+* `read_excel_safe()` (used by `get_cpc()` and `get_igc()`) now passes INEP's
+  missing-value tokens (`""`, `"-"`, `"ND"`, en/em dashes) to
+  `readxl::read_excel(na = ...)` so those cells are loaded as `NA` instead of
+  character strings cleaned up post-hoc (issue #4). Previously, a column
+  whose first rows were all `"-"` could be inferred as `logical` and later
+  numeric values silently dropped. `clean_dash_values()` remains as a safety
+  net but is now largely redundant for CPC/IGC.
 * `download_inep_file()` now verifies downloaded files before caching them
   (issue #3). Three checks run after the bytes hit disk: file size against
   the server's `Content-Length` (1% tolerance, catches truncated downloads),
