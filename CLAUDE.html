@@ -37,7 +37,7 @@
 <p>This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.</p>
 <div class="section level2">
 <h2 id="what-is-educabr">What is educabR<a class="anchor" aria-label="anchor" href="#what-is-educabr"></a></h2>
-<p>An R package for downloading and processing Brazilian public education data from INEP, FNDE, STN, and CAPES. NAMESPACE exports 25 functions: 14 dataset <code>get_*()</code> functions plus discovery helpers (<code><a href="reference/available_years.html">available_years()</a></code>, <code><a href="reference/list_ideb_available.html">list_ideb_available()</a></code>, <code><a href="reference/list_censo_files.html">list_censo_files()</a></code>, <code><a href="reference/list_censo_superior_files.html">list_censo_superior_files()</a></code>), summarizers (<code><a href="reference/enem_summary.html">enem_summary()</a></code>, <code><a href="reference/get_enem_itens.html">get_enem_itens()</a></code>), and cache controls. All text output (column names, CLI messages) is in Portuguese.</p>
+<p>An R package for downloading and processing Brazilian public education data from INEP, FNDE, STN, and CAPES. NAMESPACE exports the <code>get_*()</code> dataset family plus discovery helpers (<code><a href="reference/available_years.html">available_years()</a></code>, <code><a href="reference/list_ideb_available.html">list_ideb_available()</a></code>, <code><a href="reference/list_censo_files.html">list_censo_files()</a></code>, <code><a href="reference/list_censo_superior_files.html">list_censo_superior_files()</a></code>), summarizers (<code><a href="reference/enem_summary.html">enem_summary()</a></code>, <code><a href="reference/get_enem_itens.html">get_enem_itens()</a></code>), and cache controls. All text output (column names, CLI messages) is in Portuguese.</p>
 </div>
 <div class="section level2">
 <h2 id="common-commands">Common Commands<a class="anchor" aria-label="anchor" href="#common-commands"></a></h2>
@@ -94,6 +94,8 @@
 <li>Tests use <code><a href="https://withr.r-lib.org/reference/with_tempfile.html" class="external-link">withr::local_tempdir()</a></code> for isolation and <code><a href="https://withr.r-lib.org/reference/with_options.html" class="external-link">withr::local_options()</a></code> for scoped settings</li>
 <li>No live downloads in tests — functions are tested against structure/logic, not network calls</li>
 <li>CI runs on macOS, Windows, Ubuntu (R release, devel, oldrel-1)</li>
+<li>CI workflows under <code>.github/workflows/</code>: <code>R-CMD-check.yaml</code>, <code>test-coverage.yaml</code>, <code>rhub.yaml</code>, <code>pkgdown.yaml</code>
+</li>
 </ul></div>
 <div class="section level2">
 <h2 id="open-audit-findings">Open audit findings<a class="anchor" aria-label="anchor" href="#open-audit-findings"></a></h2>
@@ -118,8 +120,11 @@
 <li>Roxygen2 generates <code>man/</code> and <code>NAMESPACE</code> — never edit those by hand</li>
 <li>
 <code>docs/</code>, <code>data/</code>, <code>lib/</code>, and <code>dictionaries/</code> are local-only (not committed). <code>dictionaries/censo-escolar/dictionary_&lt;year&gt;.pdf</code> holds INEP’s per-year column dictionaries — consult these when adding or fixing year-specific column handling.</li>
-<li>Vignettes use <code>eval=FALSE</code> (no network during build)</li>
+<li>Vignettes use <code>eval=FALSE</code> (no network during build). Vignettes in <code>vignettes/*.Rmd</code> are the canonical end-to-end usage examples per dataset; consult them before inventing new API patterns.</li>
 <li>The <code>cli</code> package is used for all user-facing messages (not <code><a href="https://rdrr.io/r/base/message.html" class="external-link">message()</a></code> or <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code>)</li>
+<li>Deprecations use <code><a href="https://lifecycle.r-lib.org/reference/deprecate_soft.html" class="external-link">lifecycle::deprecate_warn()</a></code> / <code>deprecate_soft()</code>, not bare <code><a href="https://rdrr.io/r/base/Deprecated.html" class="external-link">.Deprecated()</a></code> or <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning()</a></code>. Match the existing pattern in <code>R/get-ideb.R</code>.</li>
+<li>
+<code>README.md</code> (English) and <code>README.pt-br.md</code> (Portuguese) are both user-facing — keep them in sync when changing examples or feature lists.</li>
 </ul></div>
 </div>
 

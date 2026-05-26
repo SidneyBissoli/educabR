@@ -6,8 +6,8 @@ with code in this repository.
 ## What is educabR
 
 An R package for downloading and processing Brazilian public education
-data from INEP, FNDE, STN, and CAPES. NAMESPACE exports 25 functions: 14
-dataset `get_*()` functions plus discovery helpers
+data from INEP, FNDE, STN, and CAPES. NAMESPACE exports the `get_*()`
+dataset family plus discovery helpers
 ([`available_years()`](https://sidneybissoli.github.io/educabR/reference/available_years.md),
 [`list_ideb_available()`](https://sidneybissoli.github.io/educabR/reference/list_ideb_available.md),
 [`list_censo_files()`](https://sidneybissoli.github.io/educabR/reference/list_censo_files.md),
@@ -108,6 +108,8 @@ fallback for encoding issues, 7-Zip path hunting in Program Files. Check
 - No live downloads in tests — functions are tested against
   structure/logic, not network calls
 - CI runs on macOS, Windows, Ubuntu (R release, devel, oldrel-1)
+- CI workflows under `.github/workflows/`: `R-CMD-check.yaml`,
+  `test-coverage.yaml`, `rhub.yaml`, `pkgdown.yaml`
 
 ## Open audit findings
 
@@ -156,7 +158,18 @@ intentionally gone.
   committed). `dictionaries/censo-escolar/dictionary_<year>.pdf` holds
   INEP’s per-year column dictionaries — consult these when adding or
   fixing year-specific column handling.
-- Vignettes use `eval=FALSE` (no network during build)
+- Vignettes use `eval=FALSE` (no network during build). Vignettes in
+  `vignettes/*.Rmd` are the canonical end-to-end usage examples per
+  dataset; consult them before inventing new API patterns.
 - The `cli` package is used for all user-facing messages (not
   [`message()`](https://rdrr.io/r/base/message.html) or
   [`cat()`](https://rdrr.io/r/base/cat.html))
+- Deprecations use
+  [`lifecycle::deprecate_warn()`](https://lifecycle.r-lib.org/reference/deprecate_soft.html)
+  / `deprecate_soft()`, not bare
+  [`.Deprecated()`](https://rdrr.io/r/base/Deprecated.html) or
+  [`warning()`](https://rdrr.io/r/base/warning.html). Match the existing
+  pattern in `R/get-ideb.R`.
+- `README.md` (English) and `README.pt-br.md` (Portuguese) are both
+  user-facing — keep them in sync when changing examples or feature
+  lists.
