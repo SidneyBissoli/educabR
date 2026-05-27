@@ -61,8 +61,8 @@ When wiring up a new dataset getter, touch every layer — partial wiring causes
 
 Not all datasets follow the same pattern:
 - **CSV-in-ZIP** (most): ENEM, SAEB, Censo Escolar, Censo Superior, ENADE, ENCCEJA
-- **Excel** (IDEB, FUNDEB distribution, some CAPES): Use `readxl`, multi-sheet logic
-- **OData API** (FUNDEB enrollment): `httr2` JSON requests to FNDE API
+- **Excel** (IDEB, `get_fundeb_distribution()`, some CAPES, CPC, IGC, IDD): Use `readxl`, multi-sheet logic; routed through `read_excel_safe()` / `read_ideb_excel()`
+- **OData API** (`get_fundeb_enrollment()`): `httr2` JSON requests to FNDE API
 - **ENEM 2024+**: Split into "participantes" (demographics) and "resultados" (scores) — two separate files
 - **Censo Escolar 2025**: Split-table layout (one table per entity) — different from prior years. See `R/get-censo-escolar.R` before assuming the legacy single-table structure.
 
@@ -97,9 +97,11 @@ proposed fix snippet, and tests to add. Don't redo that analysis from
 scratch.
 
 `get_ideb()` was rewritten in v1.0.0 (new signature, tidy long output,
-column-projection memory savings; `get_ideb_series()` deprecated). Read
-NEWS.md before touching `read_ideb_excel()` or the IDEB pipeline — the
-old wide-format / positional-arg behavior is intentionally gone.
+column-projection memory savings; `get_ideb_series()` is soft-deprecated
+via `lifecycle::deprecate_soft()` but still exported — don't remove the
+export without a `defunct` cycle). Read NEWS.md before touching
+`read_ideb_excel()` or the IDEB pipeline — the old wide-format /
+positional-arg behavior is intentionally gone.
 
 ## Release artifacts
 
