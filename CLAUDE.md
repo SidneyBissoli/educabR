@@ -101,13 +101,19 @@ causes silent test gaps and broken docs:
 
 Not all datasets follow the same pattern: - **CSV-in-ZIP** (most): ENEM,
 SAEB, Censo Escolar, Censo Superior, ENADE, ENCCEJA - **Excel** (IDEB,
-FUNDEB distribution, some CAPES): Use `readxl`, multi-sheet logic -
-**OData API** (FUNDEB enrollment): `httr2` JSON requests to FNDE API -
-**ENEM 2024+**: Split into “participantes” (demographics) and
-“resultados” (scores) — two separate files - **Censo Escolar 2025**:
-Split-table layout (one table per entity) — different from prior years.
-See `R/get-censo-escolar.R` before assuming the legacy single-table
-structure.
+[`get_fundeb_distribution()`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_distribution.md),
+some CAPES, CPC, IGC, IDD): Use `readxl`, multi-sheet logic; routed
+through
+[`read_excel_safe()`](https://sidneybissoli.github.io/educabR/reference/read_excel_safe.md)
+/
+[`read_ideb_excel()`](https://sidneybissoli.github.io/educabR/reference/read_ideb_excel.md) -
+**OData API**
+([`get_fundeb_enrollment()`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_enrollment.md)):
+`httr2` JSON requests to FNDE API - **ENEM 2024+**: Split into
+“participantes” (demographics) and “resultados” (scores) — two separate
+files - **Censo Escolar 2025**: Split-table layout (one table per
+entity) — different from prior years. See `R/get-censo-escolar.R` before
+assuming the legacy single-table structure.
 
 ### Platform-specific code
 
@@ -165,7 +171,10 @@ scratch.
 was rewritten in v1.0.0 (new signature, tidy long output,
 column-projection memory savings;
 [`get_ideb_series()`](https://sidneybissoli.github.io/educabR/reference/get_ideb_series.md)
-deprecated). Read NEWS.md before touching
+is soft-deprecated via
+[`lifecycle::deprecate_soft()`](https://lifecycle.r-lib.org/reference/deprecate_soft.html)
+but still exported — don’t remove the export without a `defunct` cycle).
+Read NEWS.md before touching
 [`read_ideb_excel()`](https://sidneybissoli.github.io/educabR/reference/read_ideb_excel.md)
 or the IDEB pipeline — the old wide-format / positional-arg behavior is
 intentionally gone.
