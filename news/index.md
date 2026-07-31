@@ -2,6 +2,8 @@
 
 ## educabR 1.0.0
 
+CRAN release: 2026-05-27
+
 ### Breaking changes
 
 - **[`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)
