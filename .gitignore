@@ -49,3 +49,7 @@ guides/
 # Claude Code
 .claude/
 .positai
+
+# artefatos renderizados (inclui coverage_report.html e lib/ de relatorios)
+*.html
+lib/
