@@ -53,3 +53,9 @@ guides/
 # artefatos renderizados (inclui coverage_report.html e lib/ de relatorios)
 *.html
 lib/
+
+# microdados baixados (censo escolar etc.) - regeneraveis, nunca versionar
+data/
+
+# residuo de execucao de testes (arquivos vazios criados fora do tmpdir)
+tests/testthat/dados/
