@@ -52,7 +52,8 @@ get_ideb(level, stage, metric, year = NULL, quiet = FALSE)
 - year:
 
   Optional. Integer vector of IDEB editions to filter (e.g.,
-  `c(2019, 2021, 2023)`). `NULL` returns all available editions.
+  `c(2021, 2023, 2025)`). `NULL` returns all available editions. Note:
+  official targets (`metric = "meta"`) are only defined through 2021.
 
 - quiet:
 
@@ -98,7 +99,7 @@ The index ranges from 0 to 10. Brazil's national goal is to reach 6.0 by
 2022 (the level of developed countries in PISA).
 
 The function always downloads the most recent IDEB file available from
-INEP, which contains the full historical series (2005-2023).
+INEP, which contains the full historical series (2005-2025).
 
 ## Data source
 
@@ -118,8 +119,8 @@ if (FALSE) { # \dontrun{
 # school-level IDEB indicators for early elementary
 ideb <- get_ideb("escola", "anos_iniciais", "indicador")
 
-# municipality-level approval rates, only 2021 and 2023
-aprov <- get_ideb("municipio", "anos_finais", "aprovacao", year = c(2021, 2023))
+# municipality-level approval rates, only 2023 and 2025
+aprov <- get_ideb("municipio", "anos_finais", "aprovacao", year = c(2023, 2025))
 
 # national IDEB targets
 metas <- get_ideb("brasil", "ensino_medio", "meta")

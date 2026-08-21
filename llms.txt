@@ -80,7 +80,7 @@ remotes::install_github("SidneyBissoli/educabR")
 
 | Dataset | Function | Available Years |
 |----|----|----|
-| IDEB - Basic Education Development Index | [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md), [`get_ideb_series()`](https://sidneybissoli.github.io/educabR/reference/get_ideb_series.md) | 2017, 2019, 2021, 2023 |
+| IDEB - Basic Education Development Index | [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md), [`get_ideb_series()`](https://sidneybissoli.github.io/educabR/reference/get_ideb_series.md) | 2017, 2019, 2021, 2023, 2025 |
 | ENEM - National High School Exam | [`get_enem()`](https://sidneybissoli.github.io/educabR/reference/get_enem.md), [`get_enem_itens()`](https://sidneybissoli.github.io/educabR/reference/get_enem_itens.md) | 1998-2024 |
 | School Census | [`get_censo_escolar()`](https://sidneybissoli.github.io/educabR/reference/get_censo_escolar.md) | 1995-2024 |
 | SAEB - Basic Education Assessment System | [`get_saeb()`](https://sidneybissoli.github.io/educabR/reference/get_saeb.md) | 2011-2023 (biennial) |
