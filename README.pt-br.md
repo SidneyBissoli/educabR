@@ -248,9 +248,8 @@ clear_cache()
 ## Agradecimentos
 
 Um pacote R anterior com o mesmo nome, focado na importação de dados do
-IDEB, foi desenvolvido de forma independente por [Rodrigo
-Borges](https://github.com/rodrigoesborges/educabR). Este pacote é uma
-implementação independente e os dois não têm relação entre si.
+IDEB, foi desenvolvido por [Rodrigo
+Borges](https://github.com/rodrigoesborges/educabR).
 
 ## Licença
 

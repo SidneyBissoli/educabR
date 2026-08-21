@@ -240,9 +240,8 @@ clear_cache()
 ## Acknowledgements
 
 An earlier R package with the same name, focused on importing IDEB data,
-was developed independently by [Rodrigo
-Borges](https://github.com/rodrigoesborges/educabR). This package is an
-independent implementation and the two are unrelated.
+was developed by [Rodrigo
+Borges](https://github.com/rodrigoesborges/educabR).
 
 ## License
 
