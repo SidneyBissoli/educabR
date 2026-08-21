@@ -445,7 +445,7 @@ fallback_years <- function(dataset) {
     "cpc" = c(2007L:2019L, 2021L:2023L),
     "igc" = c(2007L:2019L, 2021L:2023L),
     "capes" = 2013:2024,
-    "ideb" = c(2017L, 2019L, 2021L, 2023L),
+    "ideb" = c(2017L, 2019L, 2021L, 2023L, 2025L),
     "fundeb" = as.integer(names(fundeb_recursos_ids)),
     "fundeb_enrollment" = 2017:2018
   )

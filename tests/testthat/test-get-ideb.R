@@ -224,6 +224,112 @@ test_that("build_ideb_url builds correct URLs for brasil/regiao_uf", {
   expect_match(url, "divulgacao_regioes_ufs_ideb_2023\\.xlsx$")
 })
 
+test_that("build_ideb_url uses zip extension for 2025+", {
+  url <- educabR:::build_ideb_url("escola", "anos_iniciais", 2025)
+  expect_match(url, "divulgacao_anos_iniciais_escolas_2025\\.zip$")
+
+  url <- educabR:::build_ideb_url("brasil", "anos_iniciais", 2025)
+  expect_match(url, "divulgacao_brasil_ideb_2025\\.zip$")
+
+  url <- educabR:::build_ideb_url("regiao_uf", "ensino_medio", 2025)
+  expect_match(url, "divulgacao_regioes_ufs_ideb_2025\\.zip$")
+})
+
+test_that("fallback_years for ideb includes the 2025 edition", {
+  expect_true(2025L %in% educabR:::fallback_years("ideb"))
+})
+
+# --- fetch_ideb_file ---
+
+test_that("fetch_ideb_file downloads xlsx URLs directly", {
+  tmp <- withr::local_tempdir()
+  local_mocked_bindings(
+    download_inep_file = function(url, destfile, quiet = FALSE) {
+      writeLines("xlsx-payload", destfile)
+      destfile
+    },
+    .package = "educabR"
+  )
+
+  xlsx_path <- file.path(tmp, "divulgacao_brasil_ideb_2023.xlsx")
+  educabR:::fetch_ideb_file(
+    "https://example.com/divulgacao_brasil_ideb_2023.xlsx",
+    xlsx_path,
+    quiet = TRUE
+  )
+  expect_true(file.exists(xlsx_path))
+})
+
+test_that("fetch_ideb_file extracts the xlsx from a 2025-style zip", {
+  tmp <- withr::local_tempdir()
+
+  # build a zip mirroring INEP's 2025 layout: folder with xlsx + ods + md5
+  payload_dir <- file.path(tmp, "payload", "divulgacao_brasil_ideb_2025")
+  dir.create(payload_dir, recursive = TRUE)
+  writeLines("xlsx-payload", file.path(payload_dir, "divulgacao_brasil_ideb_2025.xlsx"))
+  writeLines("ods-payload", file.path(payload_dir, "divulgacao_brasil_ideb_2025.ods"))
+  writeLines("md5", file.path(payload_dir, "md5_divulgacao_brasil_ideb_2025.txt"))
+  zip_src <- file.path(tmp, "src.zip")
+  withr::with_dir(
+    file.path(tmp, "payload"),
+    utils::zip(zip_src, "divulgacao_brasil_ideb_2025", flags = "-rq")
+  )
+
+  local_mocked_bindings(
+    download_inep_file = function(url, destfile, quiet = FALSE) {
+      file.copy(zip_src, destfile, overwrite = TRUE)
+      destfile
+    },
+    .package = "educabR"
+  )
+
+  cache_dir <- file.path(tmp, "cache")
+  dir.create(cache_dir)
+  xlsx_path <- file.path(cache_dir, "divulgacao_brasil_ideb_2025.xlsx")
+  educabR:::fetch_ideb_file(
+    "https://example.com/divulgacao_brasil_ideb_2025.zip",
+    xlsx_path,
+    quiet = TRUE
+  )
+
+  expect_true(file.exists(xlsx_path))
+  expect_equal(readLines(xlsx_path), "xlsx-payload")
+  # zip and extraction dir are cleaned up
+  expect_false(file.exists(file.path(cache_dir, "divulgacao_brasil_ideb_2025.zip")))
+  expect_false(dir.exists(file.path(cache_dir, "divulgacao_brasil_ideb_2025_extract")))
+})
+
+test_that("fetch_ideb_file errors when the zip has no xlsx inside", {
+  tmp <- withr::local_tempdir()
+
+  payload_dir <- file.path(tmp, "payload", "divulgacao_brasil_ideb_2025")
+  dir.create(payload_dir, recursive = TRUE)
+  writeLines("md5", file.path(payload_dir, "md5.txt"))
+  zip_src <- file.path(tmp, "src.zip")
+  withr::with_dir(
+    file.path(tmp, "payload"),
+    utils::zip(zip_src, "divulgacao_brasil_ideb_2025", flags = "-rq")
+  )
+
+  local_mocked_bindings(
+    download_inep_file = function(url, destfile, quiet = FALSE) {
+      file.copy(zip_src, destfile, overwrite = TRUE)
+      destfile
+    },
+    .package = "educabR"
+  )
+
+  xlsx_path <- file.path(tmp, "divulgacao_brasil_ideb_2025.xlsx")
+  expect_error(
+    educabR:::fetch_ideb_file(
+      "https://example.com/divulgacao_brasil_ideb_2025.zip",
+      xlsx_path,
+      quiet = TRUE
+    ),
+    "no xlsx found"
+  )
+})
+
 # --- get_ideb_sheet ---
 
 test_that("get_ideb_sheet returns NULL for escola/municipio", {
@@ -372,13 +478,14 @@ test_that("list_ideb_available contains all valid metrics", {
 test_that("available_years returns expected IDEB years", {
   years <- available_years("ideb")
 
-  expect_equal(years, c(2017L, 2019L, 2021L, 2023L))
-  expect_equal(length(years), 4)
+  expect_equal(years, c(2017L, 2019L, 2021L, 2023L, 2025L))
+  expect_equal(length(years), 5)
 })
 
 test_that("validate_year accepts valid IDEB years", {
   expect_silent(validate_year(2017, "ideb"))
   expect_silent(validate_year(2023, "ideb"))
+  expect_silent(validate_year(2025, "ideb"))
 })
 
 test_that("validate_year rejects invalid IDEB years", {

@@ -509,7 +509,7 @@ test_that("available_years returns correct years for capes", {
 
 test_that("available_years returns correct years for ideb", {
   yrs <- available_years("ideb")
-  expect_equal(yrs, c(2017L, 2019L, 2021L, 2023L))
+  expect_equal(yrs, c(2017L, 2019L, 2021L, 2023L, 2025L))
 })
 
 test_that("available_years returns correct years for fundeb", {

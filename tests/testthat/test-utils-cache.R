@@ -362,8 +362,8 @@ test_that("available_years returns correct count for capes", {
 
 test_that("available_years returns correct count for ideb", {
   result <- available_years("ideb")
-  expect_equal(result, c(2017L, 2019L, 2021L, 2023L))
-  expect_length(result, 4)
+  expect_equal(result, c(2017L, 2019L, 2021L, 2023L, 2025L))
+  expect_length(result, 5)
 })
 
 test_that("available_years returns correct count for fundeb", {

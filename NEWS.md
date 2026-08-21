@@ -1,6 +1,18 @@
 # educabR (development version)
 
+## New features
+
+* `get_ideb()` now supports the IDEB 2025 edition (released 2026-08-05). INEP
+  changed the packaging for 2025: spreadsheets now come inside a `.zip`
+  archive, which the pipeline downloads and extracts transparently. The
+  cached file remains the inner `.xlsx`, so existing cache handling is
+  unchanged.
+
 ## Bug fixes
+
+* `get_ideb()` now raises a clear error when the `year` filter matches no
+  IDEB edition (listing the editions actually present in the file), instead
+  of the misleading "file may be corrupted" message.
 
 * Dynamic year discovery no longer removes known years from
   `available_years()` when a verification request fails transiently — a
