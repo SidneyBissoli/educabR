@@ -467,48 +467,44 @@ candidate_year_range <- function(dataset) {
   )
 }
 
+# HEAD-check a URL; FALSE on any error or status >= 400
+inep_head_ok <- function(url) {
+  tryCatch(
+    {
+      req <- httr2::request(url) |>
+        httr2::req_method("HEAD") |>
+        httr2::req_timeout(seconds = 5) |>
+        httr2::req_error(is_error = function(resp) FALSE)
+      resp <- httr2::req_perform(req)
+      httr2::resp_status(resp) < 400
+    },
+    error = function(e) FALSE
+  )
+}
+
 # discover available years via HEAD requests to INEP URLs
-# only checks last 3 known years + new candidates (fast)
+# only probes candidates beyond the known list; known years are never
+# removed — a transient HEAD failure must not hide a valid year (#17)
 discover_inep_years <- function(dataset) {
   candidates <- candidate_year_range(dataset)
   if (is.null(candidates)) return(NULL)
 
   known <- fallback_years(dataset)
-  max_known <- max(known)
+  new_candidates <- sort(candidates[candidates > max(known)])
 
-  # only check: last 3 known years (re-verify) + new candidates beyond known
-  to_check <- sort(unique(c(
-    intersect(candidates, seq(max_known - 2L, max_known)),
-    candidates[candidates > max_known]
-  )))
+  if (length(new_candidates) == 0) return(known)
 
-  if (length(to_check) == 0) return(known)
-
-  check_results <- vapply(to_check, function(year) {
+  check_results <- vapply(new_candidates, function(year) {
     url <- tryCatch(
       build_inep_url(dataset, year),
       error = function(e) NA_character_
     )
     if (is.na(url)) return(FALSE)
 
-    tryCatch(
-      {
-        req <- httr2::request(url) |>
-          httr2::req_method("HEAD") |>
-          httr2::req_timeout(seconds = 5) |>
-          httr2::req_error(is_error = function(resp) FALSE)
-        resp <- httr2::req_perform(req)
-        httr2::resp_status(resp) < 400
-      },
-      error = function(e) FALSE
-    )
+    inep_head_ok(url)
   }, logical(1))
 
-  confirmed <- to_check[check_results]
-  not_confirmed <- to_check[!check_results]
-
-  # known years (removing failed re-verifications) + newly confirmed
-  sort(unique(c(setdiff(known, not_confirmed), confirmed)))
+  sort(unique(c(known, new_candidates[check_results])))
 }
 
 # discover available years for FUNDEB enrollment via OData API
@@ -542,52 +538,34 @@ discover_fundeb_enrollment_years <- function() {
 }
 
 # discover available years for ENADE (inconsistent URLs, needs map + pattern tries)
+# only probes candidates beyond the known list; known years are never
+# removed — a transient HEAD failure must not hide a valid year (#17)
 discover_enade_years <- function() {
   current_year <- as.integer(format(Sys.Date(), "%Y"))
   known_years <- sort(as.integer(names(enade_urls)))
   max_known <- max(known_years)
 
-  # recheck last 3 known years + try new candidates
-  to_recheck <- utils::tail(sort(known_years), 3)
+  if (max_known >= current_year) return(known_years)
+
   new_candidates <- setdiff((max_known + 1L):current_year, 2020L)
-  all_to_check <- sort(unique(c(to_recheck, new_candidates)))
 
   base <- inep_base_url()
 
-  check_results <- vapply(all_to_check, function(year) {
-    # for years in the map, use the known URL
-    # for new years, try multiple patterns
-    if (as.character(year) %in% names(enade_urls)) {
-      urls <- unname(enade_urls[as.character(year)])
-    } else {
-      urls <- c(
-        str_c(base, "/microdados/microdados_enade_", year, ".zip"),
-        str_c(base, "/microdados/microdados_enade_", year, "_LGPD.zip"),
-        str_c(base, "/microdados/microdados_enade_", year, "_LGPD.rar")
-      )
-    }
+  check_results <- vapply(new_candidates, function(year) {
+    # new years aren't in the URL map, try multiple patterns
+    urls <- c(
+      str_c(base, "/microdados/microdados_enade_", year, ".zip"),
+      str_c(base, "/microdados/microdados_enade_", year, "_LGPD.zip"),
+      str_c(base, "/microdados/microdados_enade_", year, "_LGPD.rar")
+    )
 
     for (url in urls) {
-      ok <- tryCatch(
-        {
-          req <- httr2::request(url) |>
-            httr2::req_method("HEAD") |>
-            httr2::req_timeout(seconds = 5) |>
-            httr2::req_error(is_error = function(resp) FALSE)
-          resp <- httr2::req_perform(req)
-          httr2::resp_status(resp) < 400
-        },
-        error = function(e) FALSE
-      )
-      if (ok) return(TRUE)
+      if (inep_head_ok(url)) return(TRUE)
     }
     FALSE
   }, logical(1))
 
-  confirmed <- all_to_check[check_results]
-  not_confirmed <- all_to_check[!check_results]
-
-  sort(unique(c(setdiff(known_years, not_confirmed), confirmed)))
+  sort(unique(c(known_years, new_candidates[check_results])))
 }
 
 # main discovery dispatcher

@@ -1,3 +1,13 @@
+# educabR (development version)
+
+## Bug fixes
+
+* Dynamic year discovery no longer removes known years from
+  `available_years()` when a verification request fails transiently — a
+  network hiccup could make a valid year (e.g. 2022 for the Censo Escolar)
+  unavailable for the whole session (#17). Discovery now only *adds* newly
+  published years to the known list.
+
 # educabR 1.0.0
 
 ## Breaking changes
