@@ -230,6 +230,10 @@ clear_cache()
 - [Financiamento da educação](https://sidneybissoli.github.io/educabR/articles/education-funding.html)
 - [Mapas de indicadores educacionais com geobr](https://sidneybissoli.github.io/educabR/articles/mapping-education-with-geobr.html)
 
+## Agradecimentos
+
+Um pacote R anterior com o mesmo nome, focado na importação de dados do IDEB, foi desenvolvido de forma independente por [Rodrigo Borges](https://github.com/rodrigoesborges/educabR). Este pacote é uma implementação independente e os dois não têm relação entre si.
+
 ## Licença
 
 MIT
