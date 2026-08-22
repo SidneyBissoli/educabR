@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">educabR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,14 +33,14 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="educabr-development-version">educabR (development version)<a class="anchor" aria-label="anchor" href="#educabr-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.1.0" id="educabr-110">educabR 1.1.0<a class="anchor" aria-label="anchor" href="#educabr-110"></a></h2>
 <div class="section level3">
-<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="new-features-1-1-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-1-0"></a></h3>
 <ul><li><p><code><a href="../reference/get_ideb.html">get_ideb()</a></code> now supports the IDEB 2025 edition (released 2026-08-05). INEP changed the packaging for 2025: spreadsheets now come inside a <code>.zip</code> archive, which the pipeline downloads and extracts transparently. The cached file remains the inner <code>.xlsx</code>, so existing cache handling is unchanged.</p></li>
 <li><p><code><a href="../reference/get_ideb.html">get_ideb()</a></code> gains <code>stage = "ensino_medio_integrado"</code>, covering the “Ensino médio mais educação profissional técnica integrada” spreadsheets first published with IDEB 2025 — high school IDEB <em>including</em> students of integrated technical-professional education (EPT integrada), which the traditional high school cut excludes for historical comparability. INEP publishes this cut only for <code>level = "brasil"</code> (editions 2019-2025) and <code>level = "estado"</code> (2017-2025), state networks only, with no official targets (<code>metric = "meta"</code> is rejected with a clear error). <code><a href="../reference/list_ideb_available.html">list_ideb_available()</a></code> now lists these combinations.</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<h3 id="bug-fixes-1-1-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-1-0"></a></h3>
 <ul><li><p><code><a href="../reference/get_ideb.html">get_ideb()</a></code> now raises a clear error when the <code>year</code> filter matches no IDEB edition (listing the editions actually present in the file), instead of the misleading “file may be corrupted” message.</p></li>
 <li><p>Dynamic year discovery no longer removes known years from <code><a href="../reference/available_years.html">available_years()</a></code> when a verification request fails transiently — a network hiccup could make a valid year (e.g. 2022 for the Censo Escolar) unavailable for the whole session (<a href="https://github.com/SidneyBissoli/educabR/issues/17" class="external-link">#17</a>). Discovery now only <em>adds</em> newly published years to the known list.</p></li>
 </ul></div>

@@ -1,6 +1,6 @@
 # Changelog
 
-## educabR (development version)
+## educabR 1.1.0
 
 ### New features
 
