@@ -121,18 +121,26 @@ remotes::install_github("SidneyBissoli/educabR")
 ```r
 library(educabR)
 
-# Baixar IDEB 2021 - Anos Iniciais - Escolas
+# Indicadores do IDEB por escola - anos iniciais (todas as edições, formato longo)
 ideb <- get_ideb(
-  year  = 2021,
-  stage = "anos_iniciais",
-  level = "escola"
+  level  = "escola",
+  stage  = "anos_iniciais",
+  metric = "indicador"
 )
 
-# Série histórica
-ideb_serie <- get_ideb_series(
-  years = c(2017, 2019, 2021, 2023),
-  level = "municipio",
-  stage = "anos_iniciais"
+# Taxas de aprovação por município, filtradas às edições 2021 e 2023
+aprov <- get_ideb(
+  level  = "municipio",
+  stage  = "anos_finais",
+  metric = "aprovacao",
+  year   = c(2021, 2023)
+)
+
+# IDEB estadual incluindo estudantes da EPT integrada (recorte publicado a partir do IDEB 2025)
+emi <- get_ideb(
+  level  = "estado",
+  stage  = "ensino_medio_integrado",
+  metric = "indicador"
 )
 ```
 

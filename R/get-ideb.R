@@ -18,11 +18,16 @@
 #'   - `"anos_iniciais"`: Early elementary (1st-5th grade)
 #'   - `"anos_finais"`: Late elementary (6th-9th grade)
 #'   - `"ensino_medio"`: High school
+#'   - `"ensino_medio_integrado"`: High school *including* students of
+#'     technical-professional education integrated to high school (EPT
+#'     integrada), a cut first published with IDEB 2025. Only available for
+#'     `level = "brasil"` or `"estado"`, and has no `metric = "meta"`.
 #' @param metric The type of data to return. **Required.**
 #'   - `"indicador"`: IDEB components (rendimento, nota padronizada, ideb)
 #'   - `"aprovacao"`: Approval rates by school year
 #'   - `"nota"`: SAEB scores by subject (math/portuguese)
-#'   - `"meta"`: IDEB targets/projections
+#'   - `"meta"`: IDEB targets/projections (not published for
+#'     `stage = "ensino_medio_integrado"`)
 #' @param year Optional. Integer vector of IDEB editions to filter
 #'   (e.g., `c(2021, 2023, 2025)`). `NULL` returns all available editions.
 #'   Note: official targets (`metric = "meta"`) are only defined through 2021.
@@ -55,6 +60,15 @@
 #' The function always downloads the most recent IDEB file available from
 #' INEP, which contains the full historical series (2005-2025).
 #'
+#' `stage = "ensino_medio_integrado"` reads the "Ensino médio mais
+#' educação profissional técnica integrada" spreadsheets first
+#' published with IDEB 2025. Unlike the traditional high school IDEB — which
+#' excludes students of integrated technical-professional education (EPT
+#' integrada) from the SAEB performance component to preserve historical
+#' comparability — this cut includes them. INEP publishes it only at the
+#' national and state levels (state networks only), covering editions
+#' 2017-2025 for states and 2019-2025 for Brazil, with no official targets.
+#'
 #' @section Data source:
 #' Official IDEB portal: \url{https://www.gov.br/inep/pt-br/areas-de-atuacao/pesquisas-estatisticas-e-indicadores/ideb}
 #'
@@ -77,6 +91,9 @@
 #'
 #' # region-level IDEB indicators
 #' regioes <- get_ideb("regiao", "anos_finais", "indicador")
+#'
+#' # state-level IDEB including EPT integrada students (2025+ cut)
+#' emi <- get_ideb("estado", "ensino_medio_integrado", "indicador")
 #' }
 get_ideb <- function(level,
                      stage,
@@ -103,8 +120,31 @@ get_ideb <- function(level,
 
   # validate arguments
   level <- match.arg(level, c("escola", "municipio", "estado", "regiao", "brasil"))
-  stage <- match.arg(stage, c("anos_iniciais", "anos_finais", "ensino_medio"))
+  stage <- match.arg(
+    stage,
+    c("anos_iniciais", "anos_finais", "ensino_medio", "ensino_medio_integrado")
+  )
   metric <- match.arg(metric, c("indicador", "aprovacao", "nota", "meta"))
+
+  # ensino_medio_integrado: INEP only publishes brasil/UF files, no targets
+  if (stage == "ensino_medio_integrado") {
+    if (!level %in% c("brasil", "estado")) {
+      cli::cli_abort(
+        c(
+          "stage {.val ensino_medio_integrado} is only available for level {.val brasil} or {.val estado}",
+          "i" = "INEP publishes this cut only at the national and state levels"
+        )
+      )
+    }
+    if (metric == "meta") {
+      cli::cli_abort(
+        c(
+          "metric {.val meta} is not available for stage {.val ensino_medio_integrado}",
+          "i" = "INEP does not publish targets for this cut; use {.val indicador}, {.val aprovacao} or {.val nota}"
+        )
+      )
+    }
+  }
 
   # estado and regiao share the same file
   file_level <- if (level %in% c("estado", "regiao")) "regiao_uf" else level
@@ -222,6 +262,16 @@ get_ideb <- function(level,
 build_ideb_url <- function(level, stage, year) {
   base_url <- "https://download.inep.gov.br/ideb/resultados"
 
+  # ensino medio integrado: dedicated brasil/ufs files, always a direct xlsx
+  # (unlike the other 2025+ files, these are not zipped)
+  if (stage == "ensino_medio_integrado") {
+    level_url <- if (level == "brasil") "brasil" else "ufs"
+    filename <- str_c(
+      "divulgacao_", level_url, "_Ensino_Medio_integrado_ideb_", year, ".xlsx"
+    )
+    return(str_c(base_url, "/", filename))
+  }
+
   # map level names to url format
   level_url <- switch(
     level,
@@ -308,6 +358,12 @@ fetch_ideb_file <- function(url, xlsx_path, quiet = FALSE) {
 get_ideb_sheet <- function(level, stage) {
   if (level %in% c("escola", "municipio")) {
     return(NULL)
+  }
+
+  if (stage == "ensino_medio_integrado") {
+    return(
+      if (level == "brasil") "Brasil (EM_integrado)" else "UF (EM_integrado)"
+    )
   }
 
   if (level == "brasil") {
@@ -846,10 +902,19 @@ list_ideb_available <- function() {
   stages <- c("anos_iniciais", "anos_finais", "ensino_medio")
   metrics <- c("indicador", "aprovacao", "nota", "meta")
 
-  tidyr::expand_grid(
+  base <- tidyr::expand_grid(
     level = levels,
     stage = stages,
     metric = metrics
-  ) |>
+  )
+
+  # ensino medio integrado (2025+): only brasil/estado, no published targets
+  emi <- tidyr::expand_grid(
+    level = c("brasil", "estado"),
+    stage = "ensino_medio_integrado",
+    metric = c("indicador", "aprovacao", "nota")
+  )
+
+  dplyr::bind_rows(base, emi) |>
     dplyr::arrange(.data$level, .data$stage, .data$metric)
 }

@@ -36,6 +36,28 @@ test_that("get_ideb accepts new levels (brasil, regiao_uf)", {
   )
 })
 
+# --- ensino_medio_integrado restrictions ---
+
+test_that("get_ideb rejects ensino_medio_integrado for unsupported levels", {
+  for (bad_level in c("escola", "municipio", "regiao")) {
+    expect_error(
+      get_ideb(bad_level, "ensino_medio_integrado", "indicador"),
+      "brasil.*estado"
+    )
+  }
+})
+
+test_that("get_ideb rejects metric meta for ensino_medio_integrado", {
+  expect_error(
+    get_ideb("brasil", "ensino_medio_integrado", "meta"),
+    "meta"
+  )
+  expect_error(
+    get_ideb("estado", "ensino_medio_integrado", "meta"),
+    "meta"
+  )
+})
+
 # --- backward compatibility ---
 
 test_that("get_ideb detects old positional usage (numeric first arg)", {
@@ -235,6 +257,15 @@ test_that("build_ideb_url uses zip extension for 2025+", {
   expect_match(url, "divulgacao_regioes_ufs_ideb_2025\\.zip$")
 })
 
+test_that("build_ideb_url builds direct xlsx URLs for ensino_medio_integrado", {
+  url <- educabR:::build_ideb_url("brasil", "ensino_medio_integrado", 2025)
+  expect_match(url, "divulgacao_brasil_Ensino_Medio_integrado_ideb_2025\\.xlsx$")
+
+  # estado maps to file_level "regiao_uf", which becomes "ufs" for this cut
+  url <- educabR:::build_ideb_url("regiao_uf", "ensino_medio_integrado", 2025)
+  expect_match(url, "divulgacao_ufs_Ensino_Medio_integrado_ideb_2025\\.xlsx$")
+})
+
 test_that("fallback_years for ideb includes the 2025 edition", {
   expect_true(2025L %in% educabR:::fallback_years("ideb"))
 })
@@ -360,6 +391,17 @@ test_that("get_ideb_sheet returns correct sheet names for regiao_uf", {
   )
 })
 
+test_that("get_ideb_sheet returns correct sheet names for ensino_medio_integrado", {
+  expect_equal(
+    educabR:::get_ideb_sheet("brasil", "ensino_medio_integrado"),
+    "Brasil (EM_integrado)"
+  )
+  expect_equal(
+    educabR:::get_ideb_sheet("regiao_uf", "ensino_medio_integrado"),
+    "UF (EM_integrado)"
+  )
+})
+
 # --- reshape_ideb ---
 
 test_that("reshape_ideb returns correct format for metric = indicador", {
@@ -405,6 +447,29 @@ test_that("reshape_ideb returns correct format for metric = aprovacao", {
   expect_true("1\u00ba ao 5\u00ba ano" %in% result$ano_escolar)
 })
 
+test_that("reshape_ideb maps series for stage = ensino_medio_integrado", {
+  df <- data.frame(
+    uf_nome = "Acre",
+    rede = "Estadual",
+    vl_aprovacao_2025_si_4 = 0.89,
+    vl_aprovacao_2025_1 = 0.83,
+    vl_aprovacao_2025_2 = 0.90,
+    vl_aprovacao_2025_3 = 0.96,
+    vl_aprovacao_2025_4 = 0.95,
+    stringsAsFactors = FALSE
+  )
+
+  result <- educabR:::reshape_ideb(df, "estado", "aprovacao", "ensino_medio_integrado")
+
+  expect_s3_class(result, "tbl_df")
+  expect_true(all(c("ano", "serie", "taxa_aprovacao") %in% names(result)))
+  expect_setequal(
+    result$serie,
+    c("Total", "1\u00aa", "2\u00aa", "3\u00aa", "4\u00aa")
+  )
+  expect_true(all(result$ano == 2025))
+})
+
 test_that("reshape_ideb returns correct format for metric = nota", {
   df <- data.frame(
     sg_uf = c("SP", "RJ"),
@@ -445,8 +510,9 @@ test_that("list_ideb_available returns correct number of rows", {
   result <- list_ideb_available()
 
   expect_s3_class(result, "tbl_df")
-  # 5 levels x 3 stages x 4 metrics = 60
-  expect_equal(nrow(result), 60)
+  # 5 levels x 3 stages x 4 metrics = 60, plus ensino_medio_integrado:
+  # 2 levels (brasil, estado) x 3 metrics (no meta) = 6
+  expect_equal(nrow(result), 66)
 })
 
 test_that("list_ideb_available has correct column names", {
@@ -464,7 +530,20 @@ test_that("list_ideb_available contains all valid levels", {
 test_that("list_ideb_available contains all valid stages", {
   result <- list_ideb_available()
 
-  expect_true(all(c("anos_iniciais", "anos_finais", "ensino_medio") %in% result$stage))
+  expect_true(all(
+    c("anos_iniciais", "anos_finais", "ensino_medio",
+      "ensino_medio_integrado") %in% result$stage
+  ))
+})
+
+test_that("list_ideb_available restricts ensino_medio_integrado combos", {
+  result <- list_ideb_available()
+  emi <- result[result$stage == "ensino_medio_integrado", ]
+
+  expect_equal(sort(unique(emi$level)), c("brasil", "estado"))
+  expect_equal(sort(unique(emi$metric)), c("aprovacao", "indicador", "nota"))
+  expect_false("meta" %in% emi$metric)
+  expect_equal(nrow(emi), 6)
 })
 
 test_that("list_ideb_available contains all valid metrics", {

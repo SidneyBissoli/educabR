@@ -21,6 +21,10 @@ get_ideb(level, stage, metric, year = NULL, quiet = FALSE)
 \item \code{"anos_iniciais"}: Early elementary (1st-5th grade)
 \item \code{"anos_finais"}: Late elementary (6th-9th grade)
 \item \code{"ensino_medio"}: High school
+\item \code{"ensino_medio_integrado"}: High school \emph{including} students of
+technical-professional education integrated to high school (EPT
+integrada), a cut first published with IDEB 2025. Only available for
+\code{level = "brasil"} or \code{"estado"}, and has no \code{metric = "meta"}.
 }}
 
 \item{metric}{The type of data to return. \strong{Required.}
@@ -28,7 +32,8 @@ get_ideb(level, stage, metric, year = NULL, quiet = FALSE)
 \item \code{"indicador"}: IDEB components (rendimento, nota padronizada, ideb)
 \item \code{"aprovacao"}: Approval rates by school year
 \item \code{"nota"}: SAEB scores by subject (math/portuguese)
-\item \code{"meta"}: IDEB targets/projections
+\item \code{"meta"}: IDEB targets/projections (not published for
+\code{stage = "ensino_medio_integrado"})
 }}
 
 \item{year}{Optional. Integer vector of IDEB editions to filter
@@ -74,6 +79,15 @@ by 2022 (the level of developed countries in PISA).
 
 The function always downloads the most recent IDEB file available from
 INEP, which contains the full historical series (2005-2025).
+
+\code{stage = "ensino_medio_integrado"} reads the "Ensino médio mais
+educação profissional técnica integrada" spreadsheets first
+published with IDEB 2025. Unlike the traditional high school IDEB — which
+excludes students of integrated technical-professional education (EPT
+integrada) from the SAEB performance component to preserve historical
+comparability — this cut includes them. INEP publishes it only at the
+national and state levels (state networks only), covering editions
+2017-2025 for states and 2019-2025 for Brazil, with no official targets.
 }
 \section{Data source}{
 
@@ -96,6 +110,9 @@ notas <- get_ideb("estado", "anos_iniciais", "nota")
 
 # region-level IDEB indicators
 regioes <- get_ideb("regiao", "anos_finais", "indicador")
+
+# state-level IDEB including EPT integrada students (2025+ cut)
+emi <- get_ideb("estado", "ensino_medio_integrado", "indicador")
 }
 }
 \seealso{
