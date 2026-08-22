@@ -259,7 +259,7 @@ indicador
 </tbody>
 <tfoot><tr>
 <td style="padding: 0; " colspan="100%">
-<sup></sup> Showing 10 of 60 available combinations
+<sup></sup> Showing 10 of 66 available combinations
 </td>
 </tr></tfoot>
 </table>
@@ -282,6 +282,14 @@ indicador
 <span>  stage  <span class="op">=</span> <span class="st">"ensino_medio"</span>,</span>
 <span>  metric <span class="op">=</span> <span class="st">"indicador"</span>,</span>
 <span>  year   <span class="op">=</span> <span class="fl">2023</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># IDEB by state - High school including EPT integrada students</span></span>
+<span><span class="co"># (cut first published with IDEB 2025; brasil/estado levels only, no "meta")</span></span>
+<span><span class="va">ideb_emi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_ideb.html">get_ideb</a></span><span class="op">(</span></span>
+<span>  level  <span class="op">=</span> <span class="st">"estado"</span>,</span>
+<span>  stage  <span class="op">=</span> <span class="st">"ensino_medio_integrado"</span>,</span>
+<span>  metric <span class="op">=</span> <span class="st">"indicador"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Filter by state after downloading</span></span>

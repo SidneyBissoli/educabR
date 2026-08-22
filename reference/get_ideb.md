@@ -37,6 +37,11 @@ get_ideb(level, stage, metric, year = NULL, quiet = FALSE)
 
   - `"ensino_medio"`: High school
 
+  - `"ensino_medio_integrado"`: High school *including* students of
+    technical-professional education integrated to high school (EPT
+    integrada), a cut first published with IDEB 2025. Only available for
+    `level = "brasil"` or `"estado"`, and has no `metric = "meta"`.
+
 - metric:
 
   The type of data to return. **Required.**
@@ -47,7 +52,8 @@ get_ideb(level, stage, metric, year = NULL, quiet = FALSE)
 
   - `"nota"`: SAEB scores by subject (math/portuguese)
 
-  - `"meta"`: IDEB targets/projections
+  - `"meta"`: IDEB targets/projections (not published for
+    `stage = "ensino_medio_integrado"`)
 
 - year:
 
@@ -101,6 +107,15 @@ The index ranges from 0 to 10. Brazil's national goal is to reach 6.0 by
 The function always downloads the most recent IDEB file available from
 INEP, which contains the full historical series (2005-2025).
 
+`stage = "ensino_medio_integrado"` reads the "Ensino médio mais educação
+profissional técnica integrada" spreadsheets first published with IDEB
+2025. Unlike the traditional high school IDEB — which excludes students
+of integrated technical-professional education (EPT integrada) from the
+SAEB performance component to preserve historical comparability — this
+cut includes them. INEP publishes it only at the national and state
+levels (state networks only), covering editions 2017-2025 for states and
+2019-2025 for Brazil, with no official targets.
+
 ## Data source
 
 Official IDEB portal:
@@ -130,5 +145,8 @@ notas <- get_ideb("estado", "anos_iniciais", "nota")
 
 # region-level IDEB indicators
 regioes <- get_ideb("regiao", "anos_finais", "indicador")
+
+# state-level IDEB including EPT integrada students (2025+ cut)
+emi <- get_ideb("estado", "ensino_medio_integrado", "indicador")
 } # }
 ```

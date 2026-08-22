@@ -99,7 +99,7 @@ list_ideb_available()
 | brasil                                   | anos_iniciais | nota      |
 | brasil                                   | ensino_medio  | aprovacao |
 | brasil                                   | ensino_medio  | indicador |
-|  Showing 10 of 60 available combinations |               |           |
+|  Showing 10 of 66 available combinations |               |           |
 
 ### Downloading IDEB data
 
@@ -119,6 +119,14 @@ ideb_municipalities <- get_ideb(
   stage  = "ensino_medio",
   metric = "indicador",
   year   = 2023
+)
+
+# IDEB by state - High school including EPT integrada students
+# (cut first published with IDEB 2025; brasil/estado levels only, no "meta")
+ideb_emi <- get_ideb(
+  level  = "estado",
+  stage  = "ensino_medio_integrado",
+  metric = "indicador"
 )
 
 # Filter by state after downloading

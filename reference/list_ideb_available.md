@@ -22,7 +22,7 @@ Other IDEB functions:
 
 ``` r
 list_ideb_available()
-#> # A tibble: 60 × 3
+#> # A tibble: 66 × 3
 #>    level  stage         metric   
 #>    <chr>  <chr>         <chr>    
 #>  1 brasil anos_finais   aprovacao
@@ -35,5 +35,5 @@ list_ideb_available()
 #>  8 brasil anos_iniciais nota     
 #>  9 brasil ensino_medio  aprovacao
 #> 10 brasil ensino_medio  indicador
-#> # ℹ 50 more rows
+#> # ℹ 56 more rows
 ```

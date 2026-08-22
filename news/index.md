@@ -11,6 +11,19 @@
   file remains the inner `.xlsx`, so existing cache handling is
   unchanged.
 
+- [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)
+  gains `stage = "ensino_medio_integrado"`, covering the “Ensino médio
+  mais educação profissional técnica integrada” spreadsheets first
+  published with IDEB 2025 — high school IDEB *including* students of
+  integrated technical-professional education (EPT integrada), which the
+  traditional high school cut excludes for historical comparability.
+  INEP publishes this cut only for `level = "brasil"` (editions
+  2019-2025) and `level = "estado"` (2017-2025), state networks only,
+  with no official targets (`metric = "meta"` is rejected with a clear
+  error).
+  [`list_ideb_available()`](https://sidneybissoli.github.io/educabR/reference/list_ideb_available.md)
+  now lists these combinations.
+
 ### Bug fixes
 
 - [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)
