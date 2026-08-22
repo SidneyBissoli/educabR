@@ -61,9 +61,18 @@ test_that("get_ideb rejects metric meta for ensino_medio_integrado", {
 # --- backward compatibility ---
 
 test_that("get_ideb detects old positional usage (numeric first arg)", {
-  # we can't run the download, but we can verify the deprecation path
+  # block the download stage: without this mock the call attempts a real
+  # INEP download (swallowed by the tryCatch below), which is slow, hits
+  # the network during tests, and seeds the session cache in a way that
+  # masks failures in later pipeline tests
+  local_mocked_bindings(
+    fetch_ideb_file = function(url, xlsx_path, quiet = FALSE) {
+      stop("no network in tests")
+    },
+    .package = "educabR"
+  )
 
-  # by checking that a numeric first arg triggers lifecycle warning
+  # a numeric first arg must trigger the lifecycle warning
   expect_warning(
     tryCatch(
       get_ideb(2023, "escola", "anos_iniciais"),
