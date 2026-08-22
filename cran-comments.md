@@ -50,3 +50,8 @@ Brazilian federal `gov.br` infrastructure) but resolve correctly in a
 browser. These are the canonical entry points for the data sources
 documented by the package and the same URLs accepted by CRAN in
 v1.0.0.
+
+`https://dadosabertos.capes.gov.br` (the canonical CAPES open-data
+portal, documented in `get_capes()`) suffers intermittent outages and
+may time out during automated URL checks; it recovers on the
+government's side and resolves correctly in a browser when up.
