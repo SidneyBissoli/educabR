@@ -1,25 +1,20 @@
 ## Release summary
 
-This is a major release (0.9.1 -> 1.0.0).
+This is a minor release (1.0.0 -> 1.1.0), with no breaking changes.
 
-`get_ideb()` has been redesigned around a tidy long-format output and
-five geographic levels, and now performs column projection at the
-`readxl` C++ layer so school-level reads no longer exhaust memory
-(previously several GB; now ~37 MB for four years of school-level
-indicador data). The old positional signature still works with a
-deprecation warning routed through `lifecycle::deprecate_warn()`, and
-`get_ideb_series()` is soft-deprecated in favor of the new
-`get_ideb(level, stage, metric, year)` interface. Other changes in this
-cycle: configurable download timeout via
-`options(educabR.download_timeout = N)`, large-file memory warning in
-`read_inep_file()`, post-download integrity verification (size,
-HTML-masquerade, ZIP magic bytes), clear error on year vectors, UTF-8
-NFC normalization of character columns across all four read entrypoints
-so equality with literals like `"Pública"` works on Windows, and
-several smaller fixes documented in `NEWS.md`.
+`get_ideb()` now supports the IDEB 2025 edition released by INEP on
+2026-08-05. INEP changed the packaging for this edition: spreadsheets
+now ship inside a `.zip` archive, which the pipeline downloads and
+extracts transparently (the cached file remains the inner `.xlsx`, so
+cache handling is unchanged). `get_ideb()` also gains
+`stage = "ensino_medio_integrado"`, covering the new "Ensino médio mais
+educação profissional técnica integrada" cut first published with IDEB
+2025, and `list_ideb_available()` lists the new combinations. Bug
+fixes: a clear error when the `year` filter matches no IDEB edition,
+and dynamic year discovery no longer drops known years on transient
+network failures.
 
-See `NEWS.md` for the full list, grouped by Breaking changes, New
-features, Bug fixes, and Internal.
+See `NEWS.md` for the full list, grouped by New features and Bug fixes.
 
 ## R CMD check results
 
@@ -27,7 +22,7 @@ features, Bug fixes, and Internal.
 
 ## Test environments
 
-* local: Windows 11, R 4.6.0
+* local: Windows 11, R 4.6.1
 * GitHub Actions (`.github/workflows/R-CMD-check.yaml`):
   - macos-latest (R release)
   - windows-latest (R release)
@@ -54,4 +49,4 @@ return HTTP 403 to automated user agents (anti-bot behavior of the
 Brazilian federal `gov.br` infrastructure) but resolve correctly in a
 browser. These are the canonical entry points for the data sources
 documented by the package and the same URLs accepted by CRAN in
-v0.9.x.
+v1.0.0.

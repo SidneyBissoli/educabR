@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 type: software
 title: "educabR: Download and Process Brazilian Education Data from INEP"
-version: 1.0.0
-date-released: 2026-05-26
+version: 1.1.0
+date-released: 2026-08-22
 authors:
   - family-names: "Bissoli"
     given-names: "Sidney da Silva Pereira"
