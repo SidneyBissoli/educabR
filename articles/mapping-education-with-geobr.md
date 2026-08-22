@@ -1,7 +1,7 @@
 # Mapping education indicators with geobr
 
 This vignette shows how to combine educabR with
-[geobr](https://ipeagit.github.io/geobr/) to create choropleth maps of
+[geobr](https://github.com/ipea/geobr) to create choropleth maps of
 education indicators across Brazilian municipalities and states.
 
 ``` r
@@ -139,5 +139,5 @@ states |>
   composite IDEB.
 - Combine with other educabR datasets (ENEM, School Census) using the
   same municipality codes.
-- See the [geobr documentation](https://ipeagit.github.io/geobr/) for
+- See the [geobr documentation](https://github.com/ipea/geobr) for
   additional geographic layers (regions, micro/mesoregions, etc.).
