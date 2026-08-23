@@ -89,10 +89,10 @@ remotes::install_github("SidneyBissoli/educabR")
 | Dataset | Função | Anos disponíveis |
 |----|----|----|
 | IDEB - Índice de Desenvolvimento da Educação Básica | [`get_ideb()`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md), [`get_ideb_series()`](https://sidneybissoli.github.io/educabR/reference/get_ideb_series.md) | 2017, 2019, 2021, 2023, 2025 |
-| ENEM - Exame Nacional do Ensino Médio | [`get_enem()`](https://sidneybissoli.github.io/educabR/reference/get_enem.md), [`get_enem_itens()`](https://sidneybissoli.github.io/educabR/reference/get_enem_itens.md) | 1998-2024 |
+| ENEM - Exame Nacional do Ensino Médio | [`get_enem()`](https://sidneybissoli.github.io/educabR/reference/get_enem.md), [`get_enem_itens()`](https://sidneybissoli.github.io/educabR/reference/get_enem_itens.md) | 1998-2025 |
 | Censo Escolar | [`get_censo_escolar()`](https://sidneybissoli.github.io/educabR/reference/get_censo_escolar.md) | 1995-2024 |
 | SAEB - Sistema de Avaliação da Educação Básica | [`get_saeb()`](https://sidneybissoli.github.io/educabR/reference/get_saeb.md) | 2011-2023 (bienal) |
-| ENCCEJA - Exame Nacional de Certificação de Jovens e Adultos | [`get_encceja()`](https://sidneybissoli.github.io/educabR/reference/get_encceja.md) | 2014-2024 |
+| ENCCEJA - Exame Nacional de Certificação de Jovens e Adultos | [`get_encceja()`](https://sidneybissoli.github.io/educabR/reference/get_encceja.md) | 2014-2025 |
 | ENEM por Escola (descontinuado) | [`get_enem_escola()`](https://sidneybissoli.github.io/educabR/reference/get_enem_escola.md) | 2005-2015 |
 
 ### Educação Superior

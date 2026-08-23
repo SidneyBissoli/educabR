@@ -20,7 +20,7 @@ get_enem(
 
 - year:
 
-  The year of the exam (1998-2024).
+  The year of the exam (1998-2025).
 
 - type:
 

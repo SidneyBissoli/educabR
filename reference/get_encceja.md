@@ -15,7 +15,7 @@ get_encceja(year, n_max = Inf, keep_zip = TRUE, quiet = FALSE)
 
 - year:
 
-  The year of the exam (2014-2024).
+  The year of the exam (2014-2025).
 
 - n_max:
 

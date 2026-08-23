@@ -33,7 +33,15 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.1.0" id="educabr-110">educabR 1.1.0<a class="anchor" aria-label="anchor" href="#educabr-110"></a></h2>
+<h2 class="pkg-version" data-toc-text="development version" id="educabr-development-version">educabR (development version)<a class="anchor" aria-label="anchor" href="#educabr-development-version"></a></h2>
+<ul><li>
+<code><a href="../reference/get_enem.html">get_enem()</a></code> and <code><a href="../reference/get_enem_itens.html">get_enem_itens()</a></code> now support the 2025 edition, published by INEP in 2026. The 2025 zip keeps the split layout introduced in 2024 (<code>PARTICIPANTES_2025.csv</code>, <code>RESULTADOS_2025.csv</code>, <code>ITENS_PROVA_2025.csv</code>), so only the known-years list changed.</li>
+<li>
+<code><a href="../reference/get_encceja.html">get_encceja()</a></code> now supports the 2025 edition (same file set as 2024: <code>REG_NAC</code>, <code>PPL_NAC</code>, <code>PPL_NAC_QSE</code>, <code>ITENS_PROVA</code>).</li>
+</ul><p>Both editions were detected by the portfolio source monitor and validated against the live INEP files.</p>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.0" id="educabr-110">educabR 1.1.0<a class="anchor" aria-label="anchor" href="#educabr-110"></a></h2><p class="text-muted">CRAN release: 2026-08-23</p>
 <div class="section level3">
 <h3 id="new-features-1-1-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-1-0"></a></h3>
 <ul><li><p><code><a href="../reference/get_ideb.html">get_ideb()</a></code> now supports the IDEB 2025 edition (released 2026-08-05). INEP changed the packaging for 2025: spreadsheets now come inside a <code>.zip</code> archive, which the pipeline downloads and extracts transparently. The cached file remains the inner <code>.xlsx</code>, so existing cache handling is unchanged.</p></li>
