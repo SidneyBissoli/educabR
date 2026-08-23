@@ -15,7 +15,7 @@ test_that("validate_year rejects invalid ENEM years", {
   )
 
   expect_error(
-    validate_year(2025, "enem"),
+    validate_year(2026, "enem"),
     "not available"
   )
 })
@@ -24,9 +24,9 @@ test_that("fallback_years returns expected ENEM year range", {
   years <- fallback_years("enem")
 
   expect_true(1998 %in% years)
-  expect_true(2024 %in% years)
+  expect_true(2025 %in% years)
   expect_false(1997 %in% years)
-  expect_equal(length(years), 27)
+  expect_equal(length(years), 28)
 })
 
 # --- get_enem: argument validation ---
@@ -38,7 +38,7 @@ test_that("get_enem rejects invalid year", {
   )
 
   expect_error(
-    get_enem(2025),
+    get_enem(2026),
     "not available"
   )
 })
@@ -67,7 +67,7 @@ test_that("get_enem_itens rejects invalid year", {
   )
 
   expect_error(
-    get_enem_itens(2025),
+    get_enem_itens(2026),
     "not available"
   )
 })

@@ -466,11 +466,11 @@ test_that("validate_year rejects non-numeric year (issue #2)", {
 
 test_that("fallback_years returns correct years for all datasets", {
   expect_equal(fallback_years("censo_escolar"), 1995:2025)
-  expect_equal(fallback_years("enem"), 1998:2024)
+  expect_equal(fallback_years("enem"), 1998:2025)
   expect_equal(fallback_years("saeb"), c(2011L, 2013L, 2015L, 2017L, 2019L, 2021L, 2023L))
   expect_equal(fallback_years("censo_superior"), 2009:2024)
   expect_equal(fallback_years("enade"), c(2004L:2019L, 2021L:2023L))
-  expect_equal(fallback_years("encceja"), 2014:2024)
+  expect_equal(fallback_years("encceja"), 2014:2025)
   expect_equal(fallback_years("idd"), c(2014L:2019L, 2021L:2023L))
   expect_equal(fallback_years("cpc"), c(2007L:2019L, 2021L:2023L))
   expect_equal(fallback_years("igc"), c(2007L:2019L, 2021L:2023L))

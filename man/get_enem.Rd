@@ -13,7 +13,7 @@ get_enem(
 )
 }
 \arguments{
-\item{year}{The year of the exam (1998-2024).}
+\item{year}{The year of the exam (1998-2025).}
 
 \item{type}{Type of data to load. Only used for ENEM 2024+, where
 microdata is split into separate files. Options: \code{"participantes"}

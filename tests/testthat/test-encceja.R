@@ -15,7 +15,7 @@ test_that("validate_year rejects invalid ENCCEJA years", {
   )
 
   expect_error(
-    validate_year(2025, "encceja"),
+    validate_year(2026, "encceja"),
     "not available"
   )
 })
@@ -31,8 +31,9 @@ test_that("fallback_years returns expected ENCCEJA years", {
   expect_true(2014 %in% years)
   expect_true(2023 %in% years)
   expect_true(2024 %in% years)
+  expect_true(2025 %in% years)
   expect_false(2013 %in% years)
-  expect_equal(length(years), 11)
+  expect_equal(length(years), 12)
 })
 
 # --- build_inep_url ---
@@ -83,7 +84,7 @@ test_that("get_encceja rejects invalid year", {
   )
 
   expect_error(
-    get_encceja(2025),
+    get_encceja(2026),
     "not available"
   )
 })

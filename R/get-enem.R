@@ -8,7 +8,7 @@
 #' High School Exam. ENEM is used for university admissions and as a
 #' high school equivalency exam.
 #'
-#' @param year The year of the exam (1998-2024).
+#' @param year The year of the exam (1998-2025).
 #' @param type Type of data to load. Only used for ENEM 2024+, where
 #'   microdata is split into separate files. Options: `"participantes"`
 #'   (demographics and socioeconomic data, default), `"resultados"` (scores).
@@ -198,7 +198,7 @@ find_enem_file <- function(exdir, year, type = "participantes") {
 #' Downloads and processes ENEM item response (gabarito) data,
 #' which contains detailed information about each question.
 #'
-#' @param year The year of the exam (1998-2024).
+#' @param year The year of the exam (1998-2025).
 #' @param n_max Maximum number of rows to read.
 #' @param keep_zip Logical. If `TRUE`, keeps the downloaded ZIP file in cache.
 #' @param quiet Logical. If `TRUE`, suppresses progress messages.

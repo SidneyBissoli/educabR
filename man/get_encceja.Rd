@@ -7,7 +7,7 @@
 get_encceja(year, n_max = Inf, keep_zip = TRUE, quiet = FALSE)
 }
 \arguments{
-\item{year}{The year of the exam (2014-2024).}
+\item{year}{The year of the exam (2014-2025).}
 
 \item{n_max}{Maximum number of rows to read. Default is \code{Inf} (all rows).
 Consider using a smaller value for exploration.}

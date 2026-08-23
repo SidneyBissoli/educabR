@@ -436,11 +436,11 @@ fallback_years <- function(dataset) {
   switch(
     dataset,
     "censo_escolar" = 1995:2025,
-    "enem" = 1998:2024,
+    "enem" = 1998:2025,
     "saeb" = c(2011L, 2013L, 2015L, 2017L, 2019L, 2021L, 2023L),
     "censo_superior" = 2009:2024,
     "enade" = c(2004L:2019L, 2021L:2023L),
-    "encceja" = 2014:2024,
+    "encceja" = 2014:2025,
     "idd" = c(2014L:2019L, 2021L:2023L),
     "cpc" = c(2007L:2019L, 2021L:2023L),
     "igc" = c(2007L:2019L, 2021L:2023L),

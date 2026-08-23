@@ -1,3 +1,15 @@
+# educabR (development version)
+
+* `get_enem()` and `get_enem_itens()` now support the 2025 edition,
+  published by INEP in 2026. The 2025 zip keeps the split layout
+  introduced in 2024 (`PARTICIPANTES_2025.csv`, `RESULTADOS_2025.csv`,
+  `ITENS_PROVA_2025.csv`), so only the known-years list changed.
+* `get_encceja()` now supports the 2025 edition (same file set as 2024:
+  `REG_NAC`, `PPL_NAC`, `PPL_NAC_QSE`, `ITENS_PROVA`).
+
+Both editions were detected by the portfolio source monitor and
+validated against the live INEP files.
+
 # educabR 1.1.0
 
 ## New features

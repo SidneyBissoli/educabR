@@ -9,7 +9,7 @@
 #' competencies of young people and adults who did not complete basic
 #' education at the regular age.
 #'
-#' @param year The year of the exam (2014-2024).
+#' @param year The year of the exam (2014-2025).
 #' @param n_max Maximum number of rows to read. Default is `Inf` (all rows).
 #'   Consider using a smaller value for exploration.
 #' @param keep_zip Logical. If `TRUE`, keeps the downloaded ZIP file in cache.
