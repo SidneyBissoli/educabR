@@ -1,0 +1,24 @@
+# Dependabot só para GitHub Actions: pacote R não tem lockfile que o Dependabot
+# leia (o CRAN é coberto pelo OSV no monitor). Actions AGRUPADAS INCLUINDO MAJOR,
+# de propósito: action de CI é infraestrutura de teste e o próprio CI é o teste
+# dela — major que quebra reprova no PR. Sem grupo, cada action vira PR próprio,
+# major nunca cai em grupo nenhum e eles envelhecem (ver dependabot.yml dos MCPs).
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 3
+    groups:
+      actions:
+        patterns:
+          - "*"
+        update-types:
+          - "major"
+          - "minor"
+          - "patch"
+    labels:
+      - "dependencies"
+      - "github-actions"
