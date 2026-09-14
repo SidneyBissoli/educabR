@@ -1,0 +1,140 @@
+# educabR and the alternatives
+
+If you asked around — or asked a chatbot — how to read Brazilian
+education microdata in R, you were probably pointed at [Base dos
+Dados](https://basedosdados.org) or at
+[`microdadosBrasil`](https://github.com/lucasmation/microdadosBrasil).
+Both are real answers, and `educabR` replaces neither. This page says
+what each one covers, with dates and numbers you can check, so you can
+pick without trying all three.
+
+Everything below was verified on 2026-09-14 and every claim is checkable
+from a package’s own metadata or repository.
+
+## The three, in one paragraph each
+
+**`educabR`** (this package, on CRAN) downloads straight from the
+agencies that publish the data — INEP, FNDE, CAPES and STN — parses what
+they actually publish (fixed-width microdata, CSVs with mixed encodings,
+IDEB spreadsheets whose header is three rows of title) and returns a
+tibble with Portuguese column names kept as the agency writes them. No
+account, no credentials, no cloud project.
+
+**`basedosdados`**
+([CRAN](https://CRAN.R-project.org/package=basedosdados), 0.2.3) is the
+R client for Base dos Dados, a curated data lake. Its own description
+says it lets you “authenticate your project, query our tables, save data
+to disk and memory” — it imports `bigrquery`, because the tables live in
+Google BigQuery. That is its strength and its cost: you get SQL across
+dozens of Brazilian sources already harmonised, and you need a Google
+Cloud project to run a query. When the question spans education *and*
+health *and* the labour market, this is the tool that answers it in one
+join.
+
+**`microdadosBrasil`** (GitHub only, not on CRAN) reads the classic
+Brazilian microdata files and handles their fixed-width dictionaries. It
+is a well-known package — 174 stars — and its last commit is from
+**2019-12-23**. Its INEP coverage, per its own README table, is School
+Census 1995–2014 and Higher Education Census 1995–2014; ENEM, SAEB, IDEB
+and ENADE are not in it.
+
+## Coverage, where the three overlap
+
+INEP datasets, as reported by
+[`available_years()`](https://sidneybissoli.github.io/educabR/reference/available_years.md)
+in `educabR` 1.1.0.9000 against `microdadosBrasil`’s own README table:
+
+| dataset | `educabR` | `microdadosBrasil` |
+|----|----|----|
+| School Census (`censo_escolar`) | **1995–2025**, 31 editions | 1995–2014 |
+| Higher Education Census (`censo_superior`) | 2009–2024, 16 editions | **1995–2014** |
+| ENEM (`enem`) | **1998–2025**, 28 editions | — |
+| SAEB (`saeb`) | **2011–2023**, 7 editions | — |
+| IDEB (`ideb`) | **2017–2025**, 5 editions | — |
+| ENADE (`enade`) | **2004–2023**, 19 editions | — |
+| CPC / IDD / IGC | 2007–2023 / 2014–2023 / 2007–2023 | — |
+| CAPES graduate programmes | 2013–2024 | — |
+| ENCCEJA | 2014–2025 | — |
+
+Read the second column honestly: for the **Higher Education Census
+before 2009**, `microdadosBrasil` covers years `educabR` does not. If
+that is your period, that is your package — and the fact that it stopped
+in 2014 does not make the files it already reads any worse.
+
+For everything published since 2015, though, a package whose last commit
+predates the pandemic cannot help: there is no Census 2020, no ENEM
+2025, no IDEB 2023 in it. That is the gap this package exists to fill.
+
+`basedosdados` is not in the table on purpose. Its coverage is whatever
+Base dos Dados has curated at the moment you ask, which changes;
+checking it means querying the lake, and a table printed here would be
+stale within months.
+
+## A measured example
+
+The question — “IDEB results by municipality, programmatically” — with
+an **empty cache**, on 2026-09-14:
+
+``` r
+
+library(educabR)
+
+ideb <- get_ideb(
+  level  = "municipio",
+  stage  = "anos_finais",
+  metric = "indicador",
+  year   = c(2021, 2023)
+)
+```
+
+|                  |                                 |
+|------------------|--------------------------------:|
+| time, cold cache |                           9.5 s |
+| downloaded       | 10.97 MB (one INEP spreadsheet) |
+| rows             |                          86,478 |
+| municipalities   |                           5,569 |
+| time, warm cache |                           2.1 s |
+
+What came back is already long and typed — one row per municipality,
+network and edition:
+
+``` r
+
+head(ideb, 3)
+#>   uf_sigla municipio_codigo        municipio_nome      rede  ano indicador valor
+#> 1       RO          1100015 Alta Floresta D'Oeste  Estadual 2021      IDEB   4.8
+#> 2       RO          1100015 Alta Floresta D'Oeste Municipal 2021      IDEB   4.7
+#> 3       RO          1100015 Alta Floresta D'Oeste   Pública 2021      IDEB   4.8
+```
+
+The 11 MB is INEP’s own file: IDEB is published as an `.xlsx` whose
+first rows are the title and the notes, with the indicator, the target
+and the components side by side in wide form. The work the package does
+is that reshaping — not the download, which you could do yourself in one
+line.
+
+## Which one to use
+
+- The question is about **education**, you want the data in R and you
+  would rather not set up anything: `educabR`.
+- The question **crosses domains** — education with income, health or
+  employment — and you are comfortable with SQL and a Google Cloud
+  project: `basedosdados`.
+- You need the **pre-2015 microdata** that the older package already
+  maps, especially the Higher Education Census before 2009:
+  `microdadosBrasil`.
+- You are mapping results: `educabR` with
+  [`geobr`](https://CRAN.R-project.org/package=geobr) — see [Mapping
+  education indicators with
+  geobr](https://sidneybissoli.github.io/educabR/articles/mapping-education-with-geobr.md).
+
+## What `educabR` does not do
+
+- It does not host or mirror the data. Every file comes from the agency
+  at call time; when INEP changes a layout, the package is what has to
+  change.
+- It does not harmonise across sources. Column names stay as the agency
+  writes them, in Portuguese — joining ENEM to the School Census is your
+  call, and the dictionaries in `dictionaries/` are there to help.
+- It does not cover what the agencies do not publish openly, and it does
+  not reach data that requires a formal request to INEP.

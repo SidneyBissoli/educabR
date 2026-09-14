@@ -4,6 +4,8 @@
 
 - [Getting Started with
   educabR](https://sidneybissoli.github.io/educabR/articles/getting-started.md):
+- [educabR and the
+  alternatives](https://sidneybissoli.github.io/educabR/articles/educabr-and-the-alternatives.md):
 
 ### Research Questions
 

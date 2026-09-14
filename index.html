@@ -55,6 +55,62 @@
 <p><strong>educabR</strong> gives you direct access to Brazil’s main public education datasets — from school census and national exams to university indicators and education funding — all from within R. No manual downloads, no navigating government portals: just pick a dataset, choose the year, and get a clean, analysis-ready table.</p>
 <p>The package covers 14 datasets published by INEP, FNDE, CAPES, and STN, spanning basic education, higher education, graduate programs, and FUNDEB funding.</p>
 <div class="section level2">
+<h2 id="questions-it-answers">Questions it answers<a class="anchor" aria-label="anchor" href="#questions-it-answers"></a>
+</h2>
+<ul>
+<li>
+<em>“Which R package downloads ENEM, SAEB and School Census microdata from INEP?”</em> — <code><a href="reference/get_enem.html">get_enem()</a></code>, <code><a href="reference/get_saeb.html">get_saeb()</a></code>, <code><a href="reference/get_censo_escolar.html">get_censo_escolar()</a></code>; ENEM goes back to 1998 and the School Census to 1995.</li>
+<li>
+<em>“How do I get IDEB results by municipality and by school?”</em> — <code><a href="reference/get_ideb.html">get_ideb()</a></code> (<code>level = "municipio"</code> or <code>"escola"</code>) and <code><a href="reference/get_ideb_series.html">get_ideb_series()</a></code> for the historical series.</li>
+<li>
+<em>“What is there for the Higher Education Census and ENADE in R?”</em> — <code><a href="reference/get_censo_superior.html">get_censo_superior()</a></code>, <code><a href="reference/get_enade.html">get_enade()</a></code>, plus the quality indicators <code><a href="reference/get_cpc.html">get_cpc()</a></code>, <code><a href="reference/get_idd.html">get_idd()</a></code> and <code><a href="reference/get_igc.html">get_igc()</a></code>.</li>
+<li>
+<em>“How much FUNDEB money went to each state?”</em> — <code><a href="reference/get_fundeb_distribution.html">get_fundeb_distribution()</a></code> and <code><a href="reference/get_fundeb_enrollment.html">get_fundeb_enrollment()</a></code>.</li>
+<li>
+<em>“Which graduate programmes does CAPES evaluate, and how?”</em> — <code><a href="reference/get_capes.html">get_capes()</a></code>.</li>
+<li>
+<em>“Which editions exist for a dataset before I download anything?”</em> — <code><a href="reference/available_years.html">available_years()</a></code>, <code><a href="reference/list_censo_files.html">list_censo_files()</a></code>, <code><a href="reference/list_ideb_available.html">list_ideb_available()</a></code>.</li>
+</ul>
+<p>Data comes straight from the agencies at call time: no account, no API key, no cloud project. Column names, categorical values and free text stay in Portuguese, exactly as the agency publishes them.</p>
+</div>
+<div class="section level2">
+<h2 id="how-it-compares">How it compares<a class="anchor" aria-label="anchor" href="#how-it-compares"></a>
+</h2>
+<p>Base dos Dados and <code>microdadosBrasil</code> are the usual answers to “Brazilian education data in R”, and <code>educabR</code> replaces neither — the three sit in different places. The full comparison, with coverage per dataset and a measured example, is in <a href="https://sidneybissoli.github.io/educabR/articles/educabr-and-the-alternatives.html"><strong>educabR and the alternatives</strong></a>. The short version:</p>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr>
+<th></th>
+<th>what it is</th>
+<th>when to prefer it</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+<strong>educabR</strong> (CRAN)</td>
+<td>Downloads and parses what INEP, FNDE, CAPES and STN publish; returns tibbles</td>
+<td>The question is about education, in R, and you would rather not set up anything</td>
+</tr>
+<tr>
+<td>
+<a href="https://CRAN.R-project.org/package=basedosdados" class="external-link">basedosdados</a> (CRAN)</td>
+<td>R client for Base dos Dados’ curated lake, queried over BigQuery</td>
+<td>The question crosses domains and you have a Google Cloud project</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/lucasmation/microdadosBrasil" class="external-link">microdadosBrasil</a> (GitHub)</td>
+<td>Reads classic microdata files; INEP coverage ends in 2014, last commit 2019</td>
+<td>You need the pre-2015 files it already maps — notably the Higher Education Census before 2009</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
 <h2 id="quick-example">Quick example<a class="anchor" aria-label="anchor" href="#quick-example"></a>
 </h2>
 <p>Map IDEB scores across Brazilian states with just a few lines:</p>

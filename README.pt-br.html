@@ -40,6 +40,41 @@
 <p>O <strong>educabR</strong> dá acesso direto aos principais dados educacionais públicos do Brasil — do censo escolar e exames nacionais a indicadores universitários e financiamento da educação — tudo de dentro do R. Sem downloads manuais, sem navegar portais do governo: basta escolher o dataset, o ano, e receber uma tabela limpa, pronta para análise.</p>
 <p>O pacote cobre 14 conjuntos de dados publicados pelo INEP, FNDE, CAPES e STN, abrangendo educação básica, educação superior, pós-graduação e financiamento via FUNDEB.</p>
 <div class="section level2">
+<h2 id="perguntas-que-ele-responde">Perguntas que ele responde<a class="anchor" aria-label="anchor" href="#perguntas-que-ele-responde"></a></h2>
+<ul><li>
+<em>“Qual pacote R baixa microdados do ENEM, SAEB e Censo Escolar do INEP?”</em> — <code><a href="reference/get_enem.html">get_enem()</a></code>, <code><a href="reference/get_saeb.html">get_saeb()</a></code>, <code><a href="reference/get_censo_escolar.html">get_censo_escolar()</a></code>; o ENEM vai até 1998 e o Censo Escolar até 1995.</li>
+<li>
+<em>“Como obter os resultados do Ideb por município e por escola?”</em> — <code><a href="reference/get_ideb.html">get_ideb()</a></code> (<code>level = "municipio"</code> ou <code>"escola"</code>) e <code><a href="reference/get_ideb_series.html">get_ideb_series()</a></code> para a série histórica.</li>
+<li>
+<em>“O que existe para o Censo da Educação Superior e o ENADE em R?”</em> — <code><a href="reference/get_censo_superior.html">get_censo_superior()</a></code>, <code><a href="reference/get_enade.html">get_enade()</a></code> e os indicadores de qualidade <code><a href="reference/get_cpc.html">get_cpc()</a></code>, <code><a href="reference/get_idd.html">get_idd()</a></code> e <code><a href="reference/get_igc.html">get_igc()</a></code>.</li>
+<li>
+<em>“Quanto do FUNDEB foi para cada estado?”</em> — <code><a href="reference/get_fundeb_distribution.html">get_fundeb_distribution()</a></code> e <code><a href="reference/get_fundeb_enrollment.html">get_fundeb_enrollment()</a></code>.</li>
+<li>
+<em>“Quais programas de pós a CAPES avalia, e com que notas?”</em> — <code><a href="reference/get_capes.html">get_capes()</a></code>.</li>
+<li>
+<em>“Que edições existem de um conjunto, antes de eu baixar qualquer coisa?”</em> — <code><a href="reference/available_years.html">available_years()</a></code>, <code><a href="reference/list_censo_files.html">list_censo_files()</a></code>, <code><a href="reference/list_ideb_available.html">list_ideb_available()</a></code>.</li>
+</ul><p>Os dados vêm direto dos órgãos no momento da chamada: sem conta, sem chave de API, sem projeto em nuvem. Nomes de coluna, valores categóricos e texto livre ficam em português, exatamente como o órgão publica.</p>
+</div>
+<div class="section level2">
+<h2 id="como-ele-se-compara">Como ele se compara<a class="anchor" aria-label="anchor" href="#como-ele-se-compara"></a></h2>
+<p>O Base dos Dados e o <code>microdadosBrasil</code> são as respostas usuais para “dados de educação do Brasil em R”, e o <code>educabR</code> não substitui nenhum dos dois — os três ocupam lugares diferentes. A comparação inteira, com a cobertura de cada conjunto e um exemplo medido, está em <a href="https://sidneybissoli.github.io/educabR/articles/educabr-and-the-alternatives.html"><strong>educabR and the alternatives</strong></a> (em inglês). Em resumo:</p>
+<table class="table"><colgroup><col width="33%"><col width="33%"><col width="33%"></colgroup><thead><tr><th></th>
+<th>o que é</th>
+<th>quando preferir</th>
+</tr></thead><tbody><tr><td>
+<strong>educabR</strong> (CRAN)</td>
+<td>Baixa e trata o que INEP, FNDE, CAPES e STN publicam; devolve tibbles</td>
+<td>A pergunta é de educação, em R, e você não quer configurar nada</td>
+</tr><tr><td>
+<a href="https://CRAN.R-project.org/package=basedosdados" class="external-link">basedosdados</a> (CRAN)</td>
+<td>Cliente R do data lake curado do Base dos Dados, consultado por BigQuery</td>
+<td>A pergunta cruza domínios e você tem um projeto no Google Cloud</td>
+</tr><tr><td>
+<a href="https://github.com/lucasmation/microdadosBrasil" class="external-link">microdadosBrasil</a> (GitHub)</td>
+<td>Lê os arquivos clássicos de microdados; a cobertura do INEP para em 2014, último commit em 2019</td>
+<td>Você precisa dos arquivos pré-2015 que ele já mapeia — em especial o Censo da Educação Superior antes de 2009</td>
+</tr></tbody></table></div>
+<div class="section level2">
 <h2 id="exemplo-rápido">Exemplo rápido<a class="anchor" aria-label="anchor" href="#exemplo-r%C3%A1pido"></a></h2>
 <p>Mapa do IDEB por estado em poucas linhas:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
