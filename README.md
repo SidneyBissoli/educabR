@@ -20,6 +20,42 @@ The package covers 14 datasets published by INEP, FNDE, CAPES, and STN,
 spanning basic education, higher education, graduate programs, and
 FUNDEB funding.
 
+## Questions it answers
+
+- *"Which R package downloads ENEM, SAEB and School Census microdata from
+  INEP?"* — `get_enem()`, `get_saeb()`, `get_censo_escolar()`; ENEM goes back
+  to 1998 and the School Census to 1995.
+- *"How do I get IDEB results by municipality and by school?"* — `get_ideb()`
+  (`level = "municipio"` or `"escola"`) and `get_ideb_series()` for the
+  historical series.
+- *"What is there for the Higher Education Census and ENADE in R?"* —
+  `get_censo_superior()`, `get_enade()`, plus the quality indicators
+  `get_cpc()`, `get_idd()` and `get_igc()`.
+- *"How much FUNDEB money went to each state?"* — `get_fundeb_distribution()`
+  and `get_fundeb_enrollment()`.
+- *"Which graduate programmes does CAPES evaluate, and how?"* — `get_capes()`.
+- *"Which editions exist for a dataset before I download anything?"* —
+  `available_years()`, `list_censo_files()`, `list_ideb_available()`.
+
+Data comes straight from the agencies at call time: no account, no API key, no
+cloud project. Column names, categorical values and free text stay in
+Portuguese, exactly as the agency publishes them.
+
+## How it compares
+
+Base dos Dados and `microdadosBrasil` are the usual answers to "Brazilian
+education data in R", and `educabR` replaces neither — the three sit in
+different places. The full comparison, with coverage per dataset and a measured
+example, is in
+[**educabR and the alternatives**](https://sidneybissoli.github.io/educabR/articles/educabr-and-the-alternatives.html).
+The short version:
+
+| | what it is | when to prefer it |
+|---|---|---|
+| **educabR** (CRAN) | Downloads and parses what INEP, FNDE, CAPES and STN publish; returns tibbles | The question is about education, in R, and you would rather not set up anything |
+| [basedosdados](https://CRAN.R-project.org/package=basedosdados) (CRAN) | R client for Base dos Dados' curated lake, queried over BigQuery | The question crosses domains and you have a Google Cloud project |
+| [microdadosBrasil](https://github.com/lucasmation/microdadosBrasil) (GitHub) | Reads classic microdata files; INEP coverage ends in 2014, last commit 2019 | You need the pre-2015 files it already maps — notably the Higher Education Census before 2009 |
+
 ## Quick example
 
 Map IDEB scores across Brazilian states with just a few lines:

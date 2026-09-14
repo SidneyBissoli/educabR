@@ -20,6 +20,42 @@ O pacote cobre 14 conjuntos de dados publicados pelo INEP, FNDE, CAPES
 e STN, abrangendo educação básica, educação superior, pós-graduação e
 financiamento via FUNDEB.
 
+## Perguntas que ele responde
+
+- *"Qual pacote R baixa microdados do ENEM, SAEB e Censo Escolar do INEP?"* —
+  `get_enem()`, `get_saeb()`, `get_censo_escolar()`; o ENEM vai até 1998 e o
+  Censo Escolar até 1995.
+- *"Como obter os resultados do Ideb por município e por escola?"* —
+  `get_ideb()` (`level = "municipio"` ou `"escola"`) e `get_ideb_series()`
+  para a série histórica.
+- *"O que existe para o Censo da Educação Superior e o ENADE em R?"* —
+  `get_censo_superior()`, `get_enade()` e os indicadores de qualidade
+  `get_cpc()`, `get_idd()` e `get_igc()`.
+- *"Quanto do FUNDEB foi para cada estado?"* — `get_fundeb_distribution()` e
+  `get_fundeb_enrollment()`.
+- *"Quais programas de pós a CAPES avalia, e com que notas?"* — `get_capes()`.
+- *"Que edições existem de um conjunto, antes de eu baixar qualquer coisa?"* —
+  `available_years()`, `list_censo_files()`, `list_ideb_available()`.
+
+Os dados vêm direto dos órgãos no momento da chamada: sem conta, sem chave de
+API, sem projeto em nuvem. Nomes de coluna, valores categóricos e texto livre
+ficam em português, exatamente como o órgão publica.
+
+## Como ele se compara
+
+O Base dos Dados e o `microdadosBrasil` são as respostas usuais para "dados de
+educação do Brasil em R", e o `educabR` não substitui nenhum dos dois — os três
+ocupam lugares diferentes. A comparação inteira, com a cobertura de cada
+conjunto e um exemplo medido, está em
+[**educabR and the alternatives**](https://sidneybissoli.github.io/educabR/articles/educabr-and-the-alternatives.html)
+(em inglês). Em resumo:
+
+| | o que é | quando preferir |
+|---|---|---|
+| **educabR** (CRAN) | Baixa e trata o que INEP, FNDE, CAPES e STN publicam; devolve tibbles | A pergunta é de educação, em R, e você não quer configurar nada |
+| [basedosdados](https://CRAN.R-project.org/package=basedosdados) (CRAN) | Cliente R do data lake curado do Base dos Dados, consultado por BigQuery | A pergunta cruza domínios e você tem um projeto no Google Cloud |
+| [microdadosBrasil](https://github.com/lucasmation/microdadosBrasil) (GitHub) | Lê os arquivos clássicos de microdados; a cobertura do INEP para em 2014, último commit em 2019 | Você precisa dos arquivos pré-2015 que ele já mapeia — em especial o Censo da Educação Superior antes de 2009 |
+
 ## Exemplo rápido
 
 Mapa do IDEB por estado em poucas linhas:
