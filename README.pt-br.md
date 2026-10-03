@@ -124,7 +124,7 @@ remotes::install_github("SidneyBissoli/educabR")
 | ENEM - Exame Nacional do Ensino Médio | `get_enem()`, `get_enem_itens()` | 1998-2025 |
 | Censo Escolar | `get_censo_escolar()` | 1995-2024 |
 | SAEB - Sistema de Avaliação da Educação Básica | `get_saeb()` | 2011-2023 (bienal) |
-| ENCCEJA - Exame Nacional de Certificação de Jovens e Adultos | `get_encceja()` | 2014-2025 |
+| ENCCEJA - Exame Nacional de Certificação de Jovens e Adultos | `get_encceja()` | 2014, 2017-2020, 2022-2025 |
 | ENEM por Escola (descontinuado) | `get_enem_escola()` | 2005-2015 |
 
 ### Educação Superior

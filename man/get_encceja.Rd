@@ -4,10 +4,26 @@
 \alias{get_encceja}
 \title{Get ENCCEJA (Exame Nacional para Certificação de Competências de Jovens e Adultos) data}
 \usage{
-get_encceja(year, n_max = Inf, keep_zip = TRUE, quiet = FALSE)
+get_encceja(
+  year,
+  type = c("regular", "ppl"),
+  n_max = Inf,
+  keep_zip = TRUE,
+  quiet = FALSE
+)
 }
 \arguments{
-\item{year}{The year of the exam (2014-2025).}
+\item{year}{The year of the exam (2014, 2017-2020, 2022-2025; INEP
+published no microdata for 2015, 2016 and 2021).}
+
+\item{type}{Which participants to load. INEP ships two microdata files
+per edition:
+\itemize{
+\item \code{"regular"}: the national regular exam (\code{REG_NAC} / \code{REGULAR}
+file), with almost all participants (default)
+\item \code{"ppl"}: the exam applied to people deprived of liberty
+(\code{PPL_NAC} / \code{PPL} file)
+}}
 
 \item{n_max}{Maximum number of rows to read. Default is \code{Inf} (all rows).
 Consider using a smaller value for exploration.}
@@ -56,6 +72,9 @@ encceja <- get_encceja(2023, n_max = 10000)
 
 # get full dataset for 2022
 encceja_2022 <- get_encceja(2022)
+
+# participants deprived of liberty (PPL)
+encceja_ppl <- get_encceja(2023, type = "ppl")
 }
 }
 \concept{ENCCEJA functions}

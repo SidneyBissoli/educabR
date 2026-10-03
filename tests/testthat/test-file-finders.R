@@ -250,6 +250,70 @@ test_that("find_encceja_file supports txt extension", {
   expect_true(grepl("microdados_encceja_2022\\.TXT$", result))
 })
 
+# real INEP layouts (measured from the published ZIPs); each edition ships a
+# large regular file and a small PPL one, plus PPL questionnaire and items
+encceja_layouts <- list(
+  "2014" = c("DADOS/ITENS_PROVA_2014.csv",
+             "DADOS/MICRODADOS_ENCCEJA_NACIONAL_PPL.csv",
+             "DADOS/MICRODADOS_ENCCEJA_NACIONAL_PPL_QSE.csv",
+             "DADOS/MICRODADOS_ENCCEJA_NACIONAL_REGULAR.csv"),
+  "2017" = c("DADOS/MICRODADOS_ENCCEJA_ITENS_PROVA.csv",
+             "DADOS/MICRODADOS_ENCCEJA_NACIONAL_PPL.csv",
+             "DADOS/MICRODADOS_ENCCEJA_NACIONAL_PPL_QSE.csv",
+             "DADOS/MICRODADOS_ENCCEJA_NACIONAL_REGULAR.csv"),
+  "2018" = c("DADOS/ITENS_PROVA_2018.csv",
+             "DADOS/MICRODADOS_ENCCEJA_2018_PPL_NAC.csv",
+             "DADOS/MICRODADOS_ENCCEJA_2018_REG_NAC.csv",
+             "DADOS/QUESTIONARIO_ENCCEJA_PPL_NAC.csv"),
+  "2019" = c("DADOS/MICRODADOS_ENCCEJA_ITENS_PROVA_2019.csv",
+             "DADOS/MICRODADOS_ENCCEJA_NACIONAL_PPL_2019.csv",
+             "DADOS/MICRODADOS_ENCCEJA_NACIONAL_PPL_QSE_2019.csv",
+             "DADOS/MICRODADOS_ENCCEJA_NACIONAL_REGULAR_2019.csv"),
+  "2020" = c("DADOS/MICRODADOS_ENCCEJA_ITENS_PROVA_2020.csv",
+             "DADOS/MICRODADOS_ENCCEJA_NACIONAL_PPL_2020.csv",
+             "DADOS/MICRODADOS_ENCCEJA_NACIONAL_PPL_QSE_2020.csv",
+             "DADOS/MICRODADOS_ENCCEJA_NACIONAL_REGULAR_2020.csv"),
+  "2025" = c("Microdados_ENCCEJA_2025 (1)/DADOS/MICRODADOS_ENCCEJA_2025_ITENS_PROVA.csv",
+             "Microdados_ENCCEJA_2025 (1)/DADOS/MICRODADOS_ENCCEJA_2025_PPL_NAC.csv",
+             "Microdados_ENCCEJA_2025 (1)/DADOS/MICRODADOS_ENCCEJA_2025_PPL_NAC_QSE.csv",
+             "Microdados_ENCCEJA_2025 (1)/DADOS/MICRODADOS_ENCCEJA_2025_REG_NAC.csv")
+)
+# 2022-2024 share the 2025 file names
+for (y in 2022:2024) {
+  encceja_layouts[[as.character(y)]] <- gsub(
+    "2025", y, basename(encceja_layouts[["2025"]])
+  )
+  encceja_layouts[[as.character(y)]] <- file.path(
+    "DADOS", encceja_layouts[[as.character(y)]]
+  )
+}
+
+test_that("find_encceja_file picks the regular file in every real layout", {
+  for (year in names(encceja_layouts)) {
+    tmp <- withr::local_tempdir()
+    files <- encceja_layouts[[year]]
+    do.call(create_mock_file, c(list(tmp), as.list(files)))
+
+    regular <- basename(educabR:::find_encceja_file(tmp, as.integer(year)))
+    expect_match(regular, "_REG(ULAR)?(_|\\.)", info = year)
+
+    ppl <- basename(
+      educabR:::find_encceja_file(tmp, as.integer(year), type = "ppl")
+    )
+    expect_match(ppl, "_PPL(_\\d{4})?(_NAC)?\\.csv$", info = year)
+  }
+})
+
+test_that("find_encceja_file aborts when the requested type is missing", {
+  tmp <- withr::local_tempdir()
+  create_mock_file(tmp, "DADOS/MICRODADOS_ENCCEJA_2023_PPL_NAC.csv")
+
+  expect_error(
+    educabR:::find_encceja_file(tmp, 2023, type = "regular"),
+    "no ENCCEJA"
+  )
+})
+
 test_that("find_encceja_file errors when directory has no data files", {
   tmp <- withr::local_tempdir()
   create_mock_file(tmp, "DADOS/readme.pdf")

@@ -178,21 +178,32 @@ test_that("get_encceja full pipeline works with cached data", {
     dataset_subdir = "encceja",
     zip_filename = "microdados_encceja_2023.zip",
     exdir_name = "microdados_encceja_2023",
-    csv_filename = "MICRODADOS_ENCCEJA_2023.csv",
+    csv_filename = "MICRODADOS_ENCCEJA_2023_REG_NAC.csv",
     header = "NU_INSCRICAO;NU_ANO;TP_SEXO;CO_MUNICIPIO_RESIDENCIA;TP_COR_RACA",
     rows = c(
       "300001;2023;1;3550308;1",
       "300002;2023;2;3304557;2"
     )
   )
+  # the PPL file sorts before REG_NAC; it must not be picked by default
+  writeLines(
+    c(
+      "NU_INSCRICAO;NU_ANO;TP_SEXO;CO_MUNICIPIO_RESIDENCIA;TP_COR_RACA",
+      "900001;2023;1;3550308;1"
+    ),
+    file.path(temp_cache, "encceja", "microdados_encceja_2023",
+              "MICRODADOS_ENCCEJA_2023_PPL_NAC.csv")
+  )
 
   result <- get_encceja(2023, quiet = TRUE, n_max = 10)
 
   expect_s3_class(result, "tbl_df")
-  expect_true(nrow(result) > 0)
+  expect_equal(result$nu_inscricao, c(300001, 300002))
   expect_true(all(names(result) == tolower(names(result))))
-  expect_true("nu_inscricao" %in% names(result))
   expect_true("co_municipio_residencia" %in% names(result))
+
+  ppl <- get_encceja(2023, type = "ppl", quiet = TRUE, n_max = 10)
+  expect_equal(ppl$nu_inscricao, 900001)
 })
 
 # --------------------------------------------------------------------------
