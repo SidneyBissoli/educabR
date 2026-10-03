@@ -8,14 +8,32 @@ education at the regular age.
 ## Usage
 
 ``` r
-get_encceja(year, n_max = Inf, keep_zip = TRUE, quiet = FALSE)
+get_encceja(
+  year,
+  type = c("regular", "ppl"),
+  n_max = Inf,
+  keep_zip = TRUE,
+  quiet = FALSE
+)
 ```
 
 ## Arguments
 
 - year:
 
-  The year of the exam (2014-2025).
+  The year of the exam (2014, 2017-2020, 2022-2025; INEP published no
+  microdata for 2015, 2016 and 2021).
+
+- type:
+
+  Which participants to load. INEP ships two microdata files per
+  edition:
+
+  - `"regular"`: the national regular exam (`REG_NAC` / `REGULAR` file),
+    with almost all participants (default)
+
+  - `"ppl"`: the exam applied to people deprived of liberty (`PPL_NAC` /
+    `PPL` file)
 
 - n_max:
 
@@ -70,5 +88,8 @@ encceja <- get_encceja(2023, n_max = 10000)
 
 # get full dataset for 2022
 encceja_2022 <- get_encceja(2022)
+
+# participants deprived of liberty (PPL)
+encceja_ppl <- get_encceja(2023, type = "ppl")
 } # }
 ```

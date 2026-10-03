@@ -135,7 +135,7 @@ remotes::install_github("SidneyBissoli/educabR")
 | ENEM - National High School Exam | [`get_enem()`](https://sidneybissoli.github.io/educabR/reference/get_enem.md), [`get_enem_itens()`](https://sidneybissoli.github.io/educabR/reference/get_enem_itens.md) | 1998-2025 |
 | School Census | [`get_censo_escolar()`](https://sidneybissoli.github.io/educabR/reference/get_censo_escolar.md) | 1995-2024 |
 | SAEB - Basic Education Assessment System | [`get_saeb()`](https://sidneybissoli.github.io/educabR/reference/get_saeb.md) | 2011-2023 (biennial) |
-| ENCCEJA - Youth and Adult Certification Exam | [`get_encceja()`](https://sidneybissoli.github.io/educabR/reference/get_encceja.md) | 2014-2025 |
+| ENCCEJA - Youth and Adult Certification Exam | [`get_encceja()`](https://sidneybissoli.github.io/educabR/reference/get_encceja.md) | 2014, 2017-2020, 2022-2025 |
 | ENEM by School (discontinued) | [`get_enem_escola()`](https://sidneybissoli.github.io/educabR/reference/get_enem_escola.md) | 2005-2015 |
 
 ### Higher Education

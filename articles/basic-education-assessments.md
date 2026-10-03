@@ -120,11 +120,20 @@ encceja_2023 <- get_encceja(year = 2023)
 
 # Sample for exploration
 encceja_sample <- get_encceja(year = 2023, n_max = 5000)
+
+# Participants deprived of liberty (PPL) come in a separate file
+encceja_ppl <- get_encceja(year = 2023, type = "ppl")
 ```
+
+By default
+[`get_encceja()`](https://sidneybissoli.github.io/educabR/reference/get_encceja.md)
+reads the national regular exam (`type = "regular"`); `type = "ppl"`
+reads the exam applied to people deprived of liberty.
 
 ### Available years
 
-ENCCEJA data is available from 2014 to 2024.
+ENCCEJA microdata is available for 2014, 2017-2020 and 2022-2025. INEP
+published no microdata for 2015, 2016 and 2021.
 
 ``` r
 
