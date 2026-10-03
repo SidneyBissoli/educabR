@@ -4,12 +4,14 @@
 \alias{find_encceja_file}
 \title{Find the ENCCEJA data file}
 \usage{
-find_encceja_file(exdir, year)
+find_encceja_file(exdir, year, type = "regular")
 }
 \arguments{
 \item{exdir}{The extraction directory.}
 
 \item{year}{The year.}
+
+\item{type}{\code{"regular"} or \code{"ppl"}.}
 }
 \value{
 The path to the data file.
@@ -17,5 +19,12 @@ The path to the data file.
 \description{
 Internal function to locate the ENCCEJA data file within the extracted
 directory.
+}
+\details{
+Every published edition ships a regular file (\code{REG_NAC} or \code{REGULAR})
+and a PPL file (\code{PPL_NAC} or \code{PPL}), plus PPL questionnaire and item
+files. The participant file is chosen by type, so the small PPL file is
+never returned in place of the regular one. Layouts without either
+marker fall back to the generic name patterns.
 }
 \keyword{internal}

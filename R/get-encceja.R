@@ -9,7 +9,14 @@
 #' competencies of young people and adults who did not complete basic
 #' education at the regular age.
 #'
-#' @param year The year of the exam (2014-2025).
+#' @param year The year of the exam (2014, 2017-2020, 2022-2025; INEP
+#'   published no microdata for 2015, 2016 and 2021).
+#' @param type Which participants to load. INEP ships two microdata files
+#'   per edition:
+#'   - `"regular"`: the national regular exam (`REG_NAC` / `REGULAR`
+#'     file), with almost all participants (default)
+#'   - `"ppl"`: the exam applied to people deprived of liberty
+#'     (`PPL_NAC` / `PPL` file)
 #' @param n_max Maximum number of rows to read. Default is `Inf` (all rows).
 #'   Consider using a smaller value for exploration.
 #' @param keep_zip Logical. If `TRUE`, keeps the downloaded ZIP file in cache.
@@ -47,13 +54,18 @@
 #'
 #' # get full dataset for 2022
 #' encceja_2022 <- get_encceja(2022)
+#'
+#' # participants deprived of liberty (PPL)
+#' encceja_ppl <- get_encceja(2023, type = "ppl")
 #' }
 get_encceja <- function(year,
+                        type = c("regular", "ppl"),
                         n_max = Inf,
                         keep_zip = TRUE,
                         quiet = FALSE) {
   # validate arguments
   validate_year(year, "encceja")
+  type <- match.arg(type)
 
   # build url and file paths
   url <- build_inep_url("encceja", year)
@@ -84,10 +96,10 @@ get_encceja <- function(year,
   }
 
   # find the data file
-  data_file <- find_encceja_file(exdir, year)
+  data_file <- find_encceja_file(exdir, year, type = type)
 
   if (!quiet) {
-    cli::cli_alert_info("reading ENCCEJA data...")
+    cli::cli_alert_info("reading ENCCEJA data ({.file {basename(data_file)}})...")
     if (is.infinite(n_max)) {
       cli::cli_alert_warning(
         "reading full file. use {.arg n_max} to limit rows if needed."
@@ -127,11 +139,19 @@ get_encceja <- function(year,
 #'
 #' @param exdir The extraction directory.
 #' @param year The year.
+#' @param type `"regular"` or `"ppl"`.
+#'
+#' @details
+#' Every published edition ships a regular file (`REG_NAC` or `REGULAR`)
+#' and a PPL file (`PPL_NAC` or `PPL`), plus PPL questionnaire and item
+#' files. The participant file is chosen by type, so the small PPL file is
+#' never returned in place of the regular one. Layouts without either
+#' marker fall back to the generic name patterns.
 #'
 #' @return The path to the data file.
 #'
 #' @keywords internal
-find_encceja_file <- function(exdir, year) {
+find_encceja_file <- function(exdir, year, type = "regular") {
   # list all data files
   all_files <- list.files(
     exdir,
@@ -148,6 +168,26 @@ find_encceja_file <- function(exdir, year) {
   # if all files were excluded, fall back to all files
   if (length(candidate_files) == 0) {
     candidate_files <- all_files
+  }
+
+  # participant files: regular exam vs people deprived of liberty (PPL);
+  # questionnaires (QSE, QUESTIONARIO) are not participant files
+  names_upper <- str_to_upper(basename(candidate_files))
+  participant <- !str_detect(names_upper, "QSE|QUESTIONARIO")
+  is_ppl <- participant & str_detect(names_upper, "(^|_)PPL(_|\\.)")
+  is_regular <- participant & str_detect(names_upper, "(^|_)REG(ULAR)?(_|\\.)")
+
+  if (any(is_ppl | is_regular)) {
+    wanted <- if (type == "ppl") is_ppl else is_regular
+    if (!any(wanted)) {
+      cli::cli_abort(
+        c(
+          "no ENCCEJA {.val {type}} file found for {.val {year}}",
+          "i" = "participant files: {.file {basename(candidate_files[is_ppl | is_regular])}}"
+        )
+      )
+    }
+    return(candidate_files[wanted][1])
   }
 
   # try patterns in priority order on the filtered list

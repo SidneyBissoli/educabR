@@ -67,7 +67,7 @@ against `microdadosBrasil`'s own README table:
 | ENADE (`enade`) | **2004–2023**, 19 editions | — |
 | CPC / IDD / IGC | 2007–2023 / 2014–2023 / 2007–2023 | — |
 | CAPES graduate programmes | 2013–2024 | — |
-| ENCCEJA | 2014–2025 | — |
+| ENCCEJA | 2014, 2017–2020, 2022–2025 | — |
 
 Read the second column honestly: for the **Higher Education Census before 2009**,
 `microdadosBrasil` covers years `educabR` does not. If that is your period, that

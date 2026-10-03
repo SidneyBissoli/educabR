@@ -10,6 +10,15 @@
   has several grades and `serie` is missing, `get_saeb()` stops and lists
   them. For 2011, `type = "aluno"` now reads `TS_RESULTADO_ALUNO`
   (proficiency results) instead of the student questionnaire.
+* `get_encceja()` gains `type = c("regular", "ppl")` and now reads the
+  national regular exam by default. Each edition ships a regular file
+  (`REG_NAC` / `REGULAR`, 260-940 MB) and a much smaller file for people
+  deprived of liberty (`PPL_NAC` / `PPL`), and `get_encceja()` used to
+  load whichever matched first: the PPL file in 2014, 2017-2020 and
+  2022-2025. `type = "ppl"` keeps that file reachable.
+* ENCCEJA years now exclude 2015, 2016 and 2021: INEP published no
+  microdata for those editions (the download URLs return 404), so
+  `get_encceja()` rejects them up front instead of failing at download.
 * `get_enem()` and `get_enem_itens()` now support the 2025 edition,
   published by INEP in 2026. The 2025 zip keeps the split layout
   introduced in 2024 (`PARTICIPANTES_2025.csv`, `RESULTADOS_2025.csv`,
