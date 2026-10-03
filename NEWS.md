@@ -1,4 +1,11 @@
-# educabR (development version)
+# educabR 1.2.0
+
+This release fixes two bugs that returned the **wrong data without any
+error or warning**. If you used `get_saeb(type = "aluno")` or
+`get_encceja()` with educabR 1.1.0 or earlier, please re-check your
+results: see the first two items below.
+
+## Bug fixes
 
 * `get_saeb()` gains a `serie` argument and no longer loads the wrong
   grade silently (#21). Since 2013 INEP ships one student file per grade
@@ -19,6 +26,9 @@
 * ENCCEJA years now exclude 2015, 2016 and 2021: INEP published no
   microdata for those editions (the download URLs return 404), so
   `get_encceja()` rejects them up front instead of failing at download.
+
+## New features
+
 * `get_enem()` and `get_enem_itens()` now support the 2025 edition,
   published by INEP in 2026. The 2025 zip keeps the split layout
   introduced in 2024 (`PARTICIPANTES_2025.csv`, `RESULTADOS_2025.csv`,
