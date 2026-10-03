@@ -4,6 +4,8 @@
 
 ## educabR 1.2.0
 
+CRAN release: 2026-10-03
+
 This release fixes two bugs that returned the **wrong data without any
 error or warning**. If you used `get_saeb(type = "aluno")` or
 [`get_encceja()`](https://sidneybissoli.github.io/educabR/reference/get_encceja.md)
