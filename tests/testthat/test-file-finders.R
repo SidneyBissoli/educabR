@@ -374,20 +374,111 @@ test_that("find_idd_file errors when no matching files found", {
 # find_saeb_file
 # ============================================================================
 
-test_that("find_saeb_file finds TS_ALUNO_YYYY pattern", {
-  tmp <- withr::local_tempdir()
-  create_mock_file(tmp, "DADOS/TS_ALUNO_2023.csv")
+# real INEP layouts (measured from the published ZIPs, issue #21)
+saeb_aluno_layouts <- list(
+  "2023" = c("MICRODADOS_SAEB_2023/DADOS/TS_ALUNO_2EF.csv",
+             "MICRODADOS_SAEB_2023/DADOS/TS_ALUNO_34EM.csv",
+             "MICRODADOS_SAEB_2023/DADOS/TS_ALUNO_5EF.csv",
+             "MICRODADOS_SAEB_2023/DADOS/TS_ALUNO_9EF.csv"),
+  "2021" = c("DADOS/TS_ALUNO_2EF.csv", "DADOS/TS_ALUNO_34EM.csv",
+             "DADOS/TS_ALUNO_5EF.csv", "DADOS/TS_ALUNO_9EF.csv"),
+  "2019" = c("DADOS/TS_ALUNO_2EF.csv", "DADOS/TS_ALUNO_34EM.csv",
+             "DADOS/TS_ALUNO_5EF.csv", "DADOS/TS_ALUNO_9EF.csv"),
+  "2017" = c("DADOS/TS_ALUNO_3EM_AG.csv", "DADOS/TS_ALUNO_3EM_ESC.csv",
+             "DADOS/TS_ALUNO_5EF.csv", "DADOS/TS_ALUNO_9EF.csv"),
+  "2015" = c("DADOS/TS_ALUNO_3EM.csv", "DADOS/TS_ALUNO_5EF.csv",
+             "DADOS/TS_ALUNO_9EF.csv"),
+  "2013" = c("DADOS/TS_ALUNO_3EM.csv", "DADOS/TS_ALUNO_5EF.csv",
+             "DADOS/TS_ALUNO_9EF.csv")
+)
 
-  result <- educabR:::find_saeb_file(tmp, 2023, "aluno")
-  expect_true(grepl("TS_ALUNO_2023\\.csv$", result))
+test_that("find_saeb_file reaches every grade in every real layout", {
+  for (year in names(saeb_aluno_layouts)) {
+    tmp <- withr::local_tempdir()
+    files <- saeb_aluno_layouts[[year]]
+    do.call(create_mock_file, c(list(tmp), as.list(files)))
+
+    for (f in files) {
+      serie <- tolower(sub("^TS_ALUNO_(.+)\\.csv$", "\\1", basename(f)))
+      result <- educabR:::find_saeb_file(tmp, as.integer(year), "aluno",
+                                         serie = serie)
+      expect_equal(basename(result), basename(f), info = paste(year, serie))
+    }
+  }
 })
 
-test_that("find_saeb_file finds TS_ALUNO fallback pattern", {
+test_that("find_saeb_file aborts without serie when several grades exist", {
   tmp <- withr::local_tempdir()
-  create_mock_file(tmp, "DADOS/TS_ALUNO.csv")
+  do.call(create_mock_file, c(list(tmp), as.list(saeb_aluno_layouts[["2023"]])))
+
+  expect_error(
+    educabR:::find_saeb_file(tmp, 2023, "aluno"),
+    "choose one with"
+  )
+  expect_error(
+    educabR:::find_saeb_file(tmp, 2023, "aluno"),
+    "34em"
+  )
+})
+
+test_that("find_saeb_file aborts listing grades when serie is not in the year", {
+  tmp <- withr::local_tempdir()
+  do.call(create_mock_file, c(list(tmp), as.list(saeb_aluno_layouts[["2017"]])))
+
+  expect_error(
+    educabR:::find_saeb_file(tmp, 2017, "aluno", serie = "2ef"),
+    "not found"
+  )
+  expect_error(
+    educabR:::find_saeb_file(tmp, 2017, "aluno", serie = "2ef"),
+    "3em_ag"
+  )
+})
+
+test_that("find_saeb_file uses the only per-grade file without serie", {
+  tmp <- withr::local_tempdir()
+  create_mock_file(tmp, "DADOS/TS_ALUNO_5EF.csv")
 
   result <- educabR:::find_saeb_file(tmp, 2023, "aluno")
-  expect_true(grepl("TS_ALUNO\\.csv$", result))
+  expect_equal(basename(result), "TS_ALUNO_5EF.csv")
+})
+
+test_that("find_saeb_file reads TS_RESULTADO_ALUNO for 2011", {
+  tmp <- withr::local_tempdir()
+  create_mock_file(
+    tmp,
+    "Dados/TS_ITEM.csv",
+    "Dados/TS_PESOS.csv",
+    "Dados/TS_QUEST_ALUNO.csv",
+    "Dados/TS_RESPOSTA_ALUNO.csv",
+    "Dados/TS_RESULTADO_ALUNO.csv",
+    "Dados/TS_RESULTADO_ESCOLA.csv"
+  )
+
+  result <- educabR:::find_saeb_file(tmp, 2011, "aluno")
+  expect_equal(basename(result), "TS_RESULTADO_ALUNO.csv")
+
+  # serie has nothing to choose from in 2011: warned and ignored
+  expect_message(
+    result <- educabR:::find_saeb_file(tmp, 2011, "aluno", serie = "5ef"),
+    "ignored"
+  )
+  expect_equal(basename(result), "TS_RESULTADO_ALUNO.csv")
+})
+
+test_that("normalize_saeb_serie maps shortcuts and case", {
+  expect_null(educabR:::normalize_saeb_serie(NULL))
+  expect_equal(educabR:::normalize_saeb_serie(5), "5ef")
+  expect_equal(educabR:::normalize_saeb_serie(9L), "9ef")
+  expect_equal(educabR:::normalize_saeb_serie("5EF"), "5ef")
+  expect_equal(educabR:::normalize_saeb_serie("3EM_AG"), "3em_ag")
+})
+
+test_that("normalize_saeb_serie rejects vectors and unknown numbers", {
+  expect_error(educabR:::normalize_saeb_serie(c(5, 9)), "single grade")
+  expect_error(educabR:::normalize_saeb_serie(NA), "single grade")
+  expect_error(educabR:::normalize_saeb_serie(3), "2, 5 or 9")
+  expect_error(educabR:::normalize_saeb_serie(TRUE), "character code")
 })
 
 test_that("find_saeb_file finds ALUNO generic pattern", {
@@ -446,17 +537,17 @@ test_that("find_saeb_file finds TS_SECRETARIO_MUNICIPAL pattern for escola type"
   expect_true(grepl("TS_SECRETARIO_MUNICIPAL_2023\\.csv$", result))
 })
 
-test_that("find_saeb_file prefers year-specific over generic for aluno", {
+test_that("find_saeb_file ignores serie-less files when per-grade ones exist", {
   tmp <- withr::local_tempdir()
   create_mock_file(
     tmp,
-    "DADOS/TS_ALUNO_2023.csv",
-    "DADOS/TS_ALUNO.csv",
+    "DADOS/TS_ALUNO_5EF.csv",
+    "DADOS/TS_ALUNO_9EF.csv",
     "DADOS/MICRODADOS_SAEB.csv"
   )
 
-  result <- educabR:::find_saeb_file(tmp, 2023, "aluno")
-  expect_true(grepl("TS_ALUNO_2023\\.csv$", result))
+  result <- educabR:::find_saeb_file(tmp, 2023, "aluno", serie = "9ef")
+  expect_equal(basename(result), "TS_ALUNO_9EF.csv")
 })
 
 test_that("find_saeb_file errors when no matching files found", {
