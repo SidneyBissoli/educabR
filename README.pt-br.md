@@ -276,7 +276,7 @@ clear_cache()
 
 ## Agradecimentos
 
-Um pacote R anterior com o mesmo nome, focado na importação de dados do IDEB, foi desenvolvido por [Rodrigo Borges](https://github.com/rodrigoesborges/educabR).
+Um pacote R anterior com o mesmo nome, focado na importação de dados do IDEB, foi desenvolvido por [Rodrigo Borges](https://github.com/rodrigoesborges/edubr) (repositório depois renomeado para `edubr`).
 
 ## Licença
 

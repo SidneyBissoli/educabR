@@ -1,20 +1,32 @@
 ## Release summary
 
-This is a minor release (1.0.0 -> 1.1.0), with no breaking changes.
+This is a minor release (1.1.0 -> 1.2.0). It comes about six weeks after
+1.1.0 because it fixes two bugs that made the package return **wrong
+data silently** (no error, no warning). We'd rather not leave users
+analysing the wrong population until the usual interval has passed.
 
-`get_ideb()` now supports the IDEB 2025 edition released by INEP on
-2026-08-05. INEP changed the packaging for this edition: spreadsheets
-now ship inside a `.zip` archive, which the pipeline downloads and
-extracts transparently (the cached file remains the inner `.xlsx`, so
-cache handling is unchanged). `get_ideb()` also gains
-`stage = "ensino_medio_integrado"`, covering the new "Ensino médio mais
-educação profissional técnica integrada" cut first published with IDEB
-2025, and `list_ideb_available()` lists the new combinations. Bug
-fixes: a clear error when the `year` filter matches no IDEB edition,
-and dynamic year discovery no longer drops known years on transient
-network failures.
+1. `get_saeb(type = "aluno")` loaded the wrong school grade. Since 2013
+   INEP ships one student file per grade, and the package read whichever
+   came first alphabetically: the 2nd grade in 2019-2023 and the 3rd year
+   of high school in 2013-2017. The 5th and 9th grades, which are the
+   most used, could not be reached in any edition. A user reported this
+   on GitHub (issue #21). `get_saeb()` gains a `serie` argument, and when
+   an edition has several grades it now stops and lists them instead of
+   picking one.
 
-See `NEWS.md` for the full list, grouped by New features and Bug fixes.
+2. `get_encceja()` loaded the small file for people deprived of liberty
+   (PPL) instead of the national regular exam in 2014, 2017-2020 and
+   2022-2025. It now reads the regular exam by default and gains
+   `type = c("regular", "ppl")`.
+
+Also: ENCCEJA years for which INEP never published microdata (2015,
+2016, 2021) are rejected up front, and ENEM 2025 / ENCCEJA 2025 are
+supported.
+
+Both fixes change what the affected calls return. This is intended, and
+`NEWS.md` opens with a note asking users to re-check their results.
+
+See `NEWS.md` for the full list, grouped by Bug fixes and New features.
 
 ## R CMD check results
 
@@ -27,7 +39,7 @@ See `NEWS.md` for the full list, grouped by New features and Bug fixes.
   - macos-latest (R release)
   - windows-latest (R release)
   - ubuntu-latest (R devel, release, oldrel-1)
-* win-builder (R devel) -- to be run before submission
+* win-builder (R devel)
 * R-hub (`.github/workflows/rhub.yaml`)
 
 ## Reverse dependencies
