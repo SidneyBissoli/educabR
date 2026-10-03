@@ -1,6 +1,14 @@
 # Changelog
 
-## educabR (development version)
+## educabR 1.2.0
+
+This release fixes two bugs that returned the **wrong data without any
+error or warning**. If you used `get_saeb(type = "aluno")` or
+[`get_encceja()`](https://sidneybissoli.github.io/educabR/reference/get_encceja.md)
+with educabR 1.1.0 or earlier, please re-check your results: see the
+first two items below.
+
+### Bug fixes
 
 - [`get_saeb()`](https://sidneybissoli.github.io/educabR/reference/get_saeb.md)
   gains a `serie` argument and no longer loads the wrong grade silently
@@ -28,6 +36,9 @@
   microdata for those editions (the download URLs return 404), so
   [`get_encceja()`](https://sidneybissoli.github.io/educabR/reference/get_encceja.md)
   rejects them up front instead of failing at download.
+
+### New features
+
 - [`get_enem()`](https://sidneybissoli.github.io/educabR/reference/get_enem.md)
   and
   [`get_enem_itens()`](https://sidneybissoli.github.io/educabR/reference/get_enem_itens.md)
