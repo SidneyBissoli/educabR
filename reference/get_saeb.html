@@ -49,6 +49,7 @@ performance assessments in Portuguese and Mathematics.</p>
 <span>  <span class="va">year</span>,</span>
 <span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"aluno"</span>, <span class="st">"escola"</span>, <span class="st">"diretor"</span>, <span class="st">"professor"</span><span class="op">)</span>,</span>
 <span>  level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fundamental_medio"</span>, <span class="st">"educacao_infantil"</span><span class="op">)</span>,</span>
+<span>  serie <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  n_max <span class="op">=</span> <span class="cn">Inf</span>,</span>
 <span>  keep_zip <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
@@ -79,6 +80,23 @@ Ignored for other years.</p></li>
 </ul></dd>
 
 
+<dt id="arg-serie">serie<a class="anchor" aria-label="anchor" href="#arg-serie"></a></dt>
+<dd><p>For <code>type = "aluno"</code>, the grade to load. Since 2013 INEP
+publishes one student file per grade (<code>TS_ALUNO_&lt;serie&gt;.csv</code>), so
+<code>get_saeb()</code> reads one grade per call. Use INEP's codes, in any case:</p><ul><li><p><code>"2ef"</code>: 2nd grade of elementary school (2019, 2021, 2023)</p></li>
+<li><p><code>"5ef"</code>: 5th grade of elementary school (2013-2023)</p></li>
+<li><p><code>"9ef"</code>: 9th grade of elementary school (2013-2023)</p></li>
+<li><p><code>"3em"</code>: 3rd grade of high school (2013, 2015)</p></li>
+<li><p><code>"3em_ag"</code>, <code>"3em_esc"</code>: 3rd grade of high school, aggregated and
+school samples (2017)</p></li>
+<li><p><code>"34em"</code>: 3rd and 4th grades of high school (2019, 2021, 2023)</p></li>
+</ul><p>The numbers <code>2</code>, <code>5</code> and <code>9</code> are accepted as shortcuts for <code>"2ef"</code>,
+<code>"5ef"</code> and <code>"9ef"</code>. Required when the edition has more than one
+student file; the error message lists the grades available for the
+year. Ignored for 2011 (a single results file covers all grades) and
+for the 2021 early childhood file.</p></dd>
+
+
 <dt id="arg-n-max">n_max<a class="anchor" aria-label="anchor" href="#arg-n-max"></a></dt>
 <dd><p>Maximum number of rows to read. Default is <code>Inf</code> (all rows).
 Consider using a smaller value for exploration.</p></dd>
@@ -107,6 +125,12 @@ and 9 of elementary school, and grade 3 of high school. The data includes:</p><u
 <li><p>Column names are standardized to lowercase with underscores.</p></li>
 <li><p>In 2021, INEP split SAEB into two separate downloads (elementary/high
 school and early childhood). Use the <code>level</code> parameter to choose.</p></li>
+<li><p>Student files are split by grade from 2013 on; choose one with
+<code>serie</code>. The 5th and 9th grade files are about 1 GB of CSV each. To
+combine grades, call once per grade, e.g.
+<code>purrr::map(c("5ef", "9ef"), function(s) get_saeb(2023, serie = s))</code>.</p></li>
+<li><p>For 2011, <code>type = "aluno"</code> reads <code>TS_RESULTADO_ALUNO</code> (proficiency
+results), which covers all grades in one file.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="data-dictionary">Data dictionary<a class="anchor" aria-label="anchor" href="#data-dictionary"></a></h2>
@@ -119,8 +143,11 @@ school and early childhood). Use the <code>level</code> parameter to choose.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="co"># get student results for 2023</span></span></span>
-<span class="r-in"><span><span class="va">saeb</span> <span class="op">&lt;-</span> <span class="fu">get_saeb</span><span class="op">(</span><span class="fl">2023</span>, n_max <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># get 5th grade student results for 2023</span></span></span>
+<span class="r-in"><span><span class="va">saeb_5ef</span> <span class="op">&lt;-</span> <span class="fu">get_saeb</span><span class="op">(</span><span class="fl">2023</span>, serie <span class="op">=</span> <span class="st">"5ef"</span>, n_max <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># 5th and 9th grades, one call per grade</span></span></span>
+<span class="r-in"><span><span class="va">saeb_ef</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"5ef"</span>, <span class="st">"9ef"</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">s</span><span class="op">)</span> <span class="fu">get_saeb</span><span class="op">(</span><span class="fl">2023</span>, serie <span class="op">=</span> <span class="va">s</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># get school questionnaire data</span></span></span>
 <span class="r-in"><span><span class="va">saeb_escola</span> <span class="op">&lt;-</span> <span class="fu">get_saeb</span><span class="op">(</span><span class="fl">2023</span>, type <span class="op">=</span> <span class="st">"escola"</span><span class="op">)</span></span></span>

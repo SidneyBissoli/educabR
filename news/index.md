@@ -2,6 +2,20 @@
 
 ## educabR (development version)
 
+- [`get_saeb()`](https://sidneybissoli.github.io/educabR/reference/get_saeb.md)
+  gains a `serie` argument and no longer loads the wrong grade silently
+  ([\#21](https://github.com/SidneyBissoli/educabR/issues/21)). Since
+  2013 INEP ships one student file per grade (`TS_ALUNO_2EF.csv`,
+  `TS_ALUNO_5EF.csv`, `TS_ALUNO_9EF.csv`, …), and `type = "aluno"` used
+  to read whichever came first alphabetically: the 2nd grade in
+  2019-2023, the 3rd year of high school in 2013-2017, so the 5th and
+  9th grades were unreachable in every edition. Now `serie = "5ef"` (or
+  `5`) picks the file by exact name; when an edition has several grades
+  and `serie` is missing,
+  [`get_saeb()`](https://sidneybissoli.github.io/educabR/reference/get_saeb.md)
+  stops and lists them. For 2011, `type = "aluno"` now reads
+  `TS_RESULTADO_ALUNO` (proficiency results) instead of the student
+  questionnaire.
 - [`get_enem()`](https://sidneybissoli.github.io/educabR/reference/get_enem.md)
   and
   [`get_enem_itens()`](https://sidneybissoli.github.io/educabR/reference/get_enem_itens.md)

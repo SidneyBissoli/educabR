@@ -11,6 +11,7 @@ get_saeb(
   year,
   type = c("aluno", "escola", "diretor", "professor"),
   level = c("fundamental_medio", "educacao_infantil"),
+  serie = NULL,
   n_max = Inf,
   keep_zip = TRUE,
   quiet = FALSE
@@ -43,6 +44,31 @@ get_saeb(
 
   - `"educacao_infantil"`: Early Childhood Education Ignored for other
     years.
+
+- serie:
+
+  For `type = "aluno"`, the grade to load. Since 2013 INEP publishes one
+  student file per grade (`TS_ALUNO_<serie>.csv`), so `get_saeb()` reads
+  one grade per call. Use INEP's codes, in any case:
+
+  - `"2ef"`: 2nd grade of elementary school (2019, 2021, 2023)
+
+  - `"5ef"`: 5th grade of elementary school (2013-2023)
+
+  - `"9ef"`: 9th grade of elementary school (2013-2023)
+
+  - `"3em"`: 3rd grade of high school (2013, 2015)
+
+  - `"3em_ag"`, `"3em_esc"`: 3rd grade of high school, aggregated and
+    school samples (2017)
+
+  - `"34em"`: 3rd and 4th grades of high school (2019, 2021, 2023)
+
+  The numbers `2`, `5` and `9` are accepted as shortcuts for `"2ef"`,
+  `"5ef"` and `"9ef"`. Required when the edition has more than one
+  student file; the error message lists the grades available for the
+  year. Ignored for 2011 (a single results file covers all grades) and
+  for the 2021 early childhood file.
 
 - n_max:
 
@@ -84,6 +110,14 @@ includes:
 - In 2021, INEP split SAEB into two separate downloads (elementary/high
   school and early childhood). Use the `level` parameter to choose.
 
+- Student files are split by grade from 2013 on; choose one with
+  `serie`. The 5th and 9th grade files are about 1 GB of CSV each. To
+  combine grades, call once per grade, e.g.
+  `purrr::map(c("5ef", "9ef"), function(s) get_saeb(2023, serie = s))`.
+
+- For 2011, `type = "aluno"` reads `TS_RESULTADO_ALUNO` (proficiency
+  results), which covers all grades in one file.
+
 ## Data dictionary
 
 For detailed information about variables, see INEP's documentation:
@@ -93,8 +127,11 @@ For detailed information about variables, see INEP's documentation:
 
 ``` r
 if (FALSE) { # \dontrun{
-# get student results for 2023
-saeb <- get_saeb(2023, n_max = 10000)
+# get 5th grade student results for 2023
+saeb_5ef <- get_saeb(2023, serie = "5ef", n_max = 10000)
+
+# 5th and 9th grades, one call per grade
+saeb_ef <- purrr::map(c("5ef", "9ef"), function(s) get_saeb(2023, serie = s))
 
 # get school questionnaire data
 saeb_escola <- get_saeb(2023, type = "escola")

@@ -46,6 +46,7 @@
 <url><loc>https://sidneybissoli.github.io/educabR/reference/find_enem_escola_file.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/find_enem_file.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/find_idd_file.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/find_saeb_aluno_by_serie.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/find_saeb_file.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/fix_brasil_cols.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/fix_regiao_uf_cols.html</loc></url>
@@ -73,6 +74,7 @@
 <url><loc>https://sidneybissoli.github.io/educabR/reference/list_censo_files.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/list_censo_superior_files.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/list_ideb_available.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/normalize_saeb_serie.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/normalize_utf8_nfc.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/parse_sas_dates.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/read_excel_safe.html</loc></url>

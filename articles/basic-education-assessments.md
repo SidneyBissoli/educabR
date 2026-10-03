@@ -31,16 +31,31 @@ SAEB microdata includes four perspectives:
 
 ### Downloading SAEB data
 
+Since 2013, INEP publishes one student file per grade, so
+`type = "aluno"` needs a `serie`: `"5ef"` and `"9ef"` (5th and 9th
+grades of elementary school), `"2ef"` (2nd grade, 2019 onwards),
+`"34em"` (3rd/4th grades of high school, 2019 onwards), `"3em"` (2013,
+2015) or `"3em_ag"`/`"3em_esc"` (2017). The numbers 2, 5 and 9 work as
+shortcuts. Without `serie`,
+[`get_saeb()`](https://sidneybissoli.github.io/educabR/reference/get_saeb.md)
+stops and lists the grades available for that year.
+
 ``` r
 
-# Student performance data
-saeb_students <- get_saeb(year = 2023, type = "aluno")
+# Student performance data, 5th grade
+saeb_5ef <- get_saeb(year = 2023, type = "aluno", serie = "5ef")
 
 # School questionnaire
 saeb_schools <- get_saeb(year = 2023, type = "escola")
 
 # Use n_max for exploration
-saeb_sample <- get_saeb(year = 2023, type = "aluno", n_max = 5000)
+saeb_sample <- get_saeb(year = 2023, serie = 9, n_max = 5000)
+
+# Several grades: one call per grade (columns differ between grades;
+# the 5th and 9th grade files are about 1 GB of CSV each)
+saeb_ef <- purrr::map(c("5ef", "9ef"), function(s) {
+  get_saeb(year = 2023, serie = s)
+})
 ```
 
 ### Available years
@@ -54,7 +69,8 @@ SAEB is conducted every two years: 2011, 2013, 2015, 2017, 2019, 2021,
 saeb_fund <- get_saeb(
   year  = 2021,
   type  = "aluno",
-  level = "fundamental_medio"
+  level = "fundamental_medio",
+  serie = "9ef"
 )
 
 saeb_infantil <- get_saeb(
@@ -68,8 +84,8 @@ saeb_infantil <- get_saeb(
 
 ``` r
 
-# Explore student scores
-saeb_sample <- get_saeb(2023, type = "aluno", n_max = 10000)
+# Explore student scores (2nd grade of elementary school)
+saeb_sample <- get_saeb(2023, type = "aluno", serie = "2ef", n_max = 10000)
 
 # Score distribution by subject
 saeb_sample |>
@@ -77,7 +93,7 @@ saeb_sample |>
   ggplot(aes(x = proficiencia_mt)) +
   geom_histogram(bins = 50, fill = "steelblue", alpha = 0.7) +
   labs(
-    title = "SAEB 2023 - Mathematics Proficiency Distribution",
+    title = "SAEB 2023 - Mathematics Proficiency Distribution (2nd grade)",
     x     = "Mathematics Score",
     y     = "Count"
   ) +

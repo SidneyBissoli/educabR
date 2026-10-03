@@ -105,15 +105,31 @@ components used to calculate IDEB.</p>
 <div class="section level3">
 <h3 id="downloading-saeb-data">Downloading SAEB data<a class="anchor" aria-label="anchor" href="#downloading-saeb-data"></a>
 </h3>
+<p>Since 2013, INEP publishes one student file per grade, so
+<code>type = "aluno"</code> needs a <code>serie</code>:
+<code>"5ef"</code> and <code>"9ef"</code> (5th and 9th grades of
+elementary school), <code>"2ef"</code> (2nd grade, 2019 onwards),
+<code>"34em"</code> (3rd/4th grades of high school, 2019 onwards),
+<code>"3em"</code> (2013, 2015) or
+<code>"3em_ag"</code>/<code>"3em_esc"</code> (2017). The numbers 2, 5
+and 9 work as shortcuts. Without <code>serie</code>,
+<code><a href="../reference/get_saeb.html">get_saeb()</a></code> stops and lists the grades available for that
+year.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Student performance data</span></span>
-<span><span class="va">saeb_students</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_saeb.html">get_saeb</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2023</span>, type <span class="op">=</span> <span class="st">"aluno"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Student performance data, 5th grade</span></span>
+<span><span class="va">saeb_5ef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_saeb.html">get_saeb</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2023</span>, type <span class="op">=</span> <span class="st">"aluno"</span>, serie <span class="op">=</span> <span class="st">"5ef"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># School questionnaire</span></span>
 <span><span class="va">saeb_schools</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_saeb.html">get_saeb</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2023</span>, type <span class="op">=</span> <span class="st">"escola"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Use n_max for exploration</span></span>
-<span><span class="va">saeb_sample</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_saeb.html">get_saeb</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2023</span>, type <span class="op">=</span> <span class="st">"aluno"</span>, n_max <span class="op">=</span> <span class="fl">5000</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">saeb_sample</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_saeb.html">get_saeb</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2023</span>, serie <span class="op">=</span> <span class="fl">9</span>, n_max <span class="op">=</span> <span class="fl">5000</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Several grades: one call per grade (columns differ between grades;</span></span>
+<span><span class="co"># the 5th and 9th grade files are about 1 GB of CSV each)</span></span>
+<span><span class="va">saeb_ef</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"5ef"</span>, <span class="st">"9ef"</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">s</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="../reference/get_saeb.html">get_saeb</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2023</span>, serie <span class="op">=</span> <span class="va">s</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="available-years">Available years<a class="anchor" aria-label="anchor" href="#available-years"></a>
@@ -125,7 +141,8 @@ components used to calculate IDEB.</p>
 <span><span class="va">saeb_fund</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_saeb.html">get_saeb</a></span><span class="op">(</span></span>
 <span>  year  <span class="op">=</span> <span class="fl">2021</span>,</span>
 <span>  type  <span class="op">=</span> <span class="st">"aluno"</span>,</span>
-<span>  level <span class="op">=</span> <span class="st">"fundamental_medio"</span></span>
+<span>  level <span class="op">=</span> <span class="st">"fundamental_medio"</span>,</span>
+<span>  serie <span class="op">=</span> <span class="st">"9ef"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">saeb_infantil</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_saeb.html">get_saeb</a></span><span class="op">(</span></span>
@@ -138,8 +155,8 @@ components used to calculate IDEB.</p>
 <h3 id="example-analysis-score-distribution">Example analysis: Score distribution<a class="anchor" aria-label="anchor" href="#example-analysis-score-distribution"></a>
 </h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Explore student scores</span></span>
-<span><span class="va">saeb_sample</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_saeb.html">get_saeb</a></span><span class="op">(</span><span class="fl">2023</span>, type <span class="op">=</span> <span class="st">"aluno"</span>, n_max <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Explore student scores (2nd grade of elementary school)</span></span>
+<span><span class="va">saeb_sample</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_saeb.html">get_saeb</a></span><span class="op">(</span><span class="fl">2023</span>, type <span class="op">=</span> <span class="st">"aluno"</span>, serie <span class="op">=</span> <span class="st">"2ef"</span>, n_max <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Score distribution by subject</span></span>
 <span><span class="va">saeb_sample</span> <span class="op">|&gt;</span></span>
@@ -147,7 +164,7 @@ components used to calculate IDEB.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">proficiencia_mt</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">50</span>, fill <span class="op">=</span> <span class="st">"steelblue"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
-<span>    title <span class="op">=</span> <span class="st">"SAEB 2023 - Mathematics Proficiency Distribution"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"SAEB 2023 - Mathematics Proficiency Distribution (2nd grade)"</span>,</span>
 <span>    x     <span class="op">=</span> <span class="st">"Mathematics Score"</span>,</span>
 <span>    y     <span class="op">=</span> <span class="st">"Count"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
