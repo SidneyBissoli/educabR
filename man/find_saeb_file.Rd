@@ -4,7 +4,7 @@
 \alias{find_saeb_file}
 \title{Find the SAEB data file}
 \usage{
-find_saeb_file(exdir, year, type = "aluno")
+find_saeb_file(exdir, year, type = "aluno", serie = NULL)
 }
 \arguments{
 \item{exdir}{The extraction directory.}
@@ -12,6 +12,9 @@ find_saeb_file(exdir, year, type = "aluno")
 \item{year}{The year.}
 
 \item{type}{The data type ("aluno", "escola", "diretor", "professor").}
+
+\item{serie}{For \code{"aluno"}, the normalized grade code (e.g. \code{"5ef"}), or
+\code{NULL}.}
 }
 \value{
 The path to the data file.
@@ -19,5 +22,11 @@ The path to the data file.
 \description{
 Internal function to locate a SAEB data file within the extracted
 directory based on the requested type.
+}
+\details{
+Since 2013 INEP ships one student file per grade (\code{TS_ALUNO_2EF.csv},
+\code{TS_ALUNO_5EF.csv}, ...). These are matched by exact name: with more than
+one grade available and no \code{serie}, the function aborts listing the
+grades instead of picking one silently.
 }
 \keyword{internal}

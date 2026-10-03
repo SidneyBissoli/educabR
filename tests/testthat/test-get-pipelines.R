@@ -214,16 +214,30 @@ test_that("get_saeb full pipeline works for aluno type", {
       "1;1001;250.5;230.2;2023",
       "2;1002;280.1;260.8;2023"
     ),
-    file.path(exdir, "TS_ALUNO_2023.csv")
+    file.path(exdir, "TS_ALUNO_5EF.csv")
+  )
+  writeLines(
+    c(
+      "ID_SAEB;ID_ALUNO;PROFICIENCIA_MT;PROFICIENCIA_LP;NU_ANO_SAEB",
+      "3;2001;150.5;140.2;2023"
+    ),
+    file.path(exdir, "TS_ALUNO_2EF.csv")
   )
 
-  result <- get_saeb(2023, type = "aluno", quiet = TRUE, n_max = 10)
+  result <- get_saeb(2023, type = "aluno", serie = 5, quiet = TRUE,
+                     n_max = 10)
 
   expect_s3_class(result, "tbl_df")
-  expect_true(nrow(result) > 0)
+  expect_equal(nrow(result), 2)
   expect_true(all(names(result) == tolower(names(result))))
   expect_true("id_saeb" %in% names(result))
-  expect_true("id_aluno" %in% names(result))
+  expect_equal(result$id_aluno, c(1001, 1002))
+
+  # several grades and no serie: abort instead of loading one silently
+  expect_error(
+    get_saeb(2023, type = "aluno", quiet = TRUE, n_max = 10),
+    "choose one with"
+  )
 })
 
 test_that("get_saeb full pipeline works for escola type", {
