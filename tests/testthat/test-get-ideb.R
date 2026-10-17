@@ -148,7 +148,9 @@ test_that("clean_ideb_values leaves already-numeric vl columns unchanged", {
 test_that("read_ideb_excel errors when readxl not available", {
   local_mocked_bindings(
     requireNamespace = function(pkg, ...) {
-      if (pkg == "readxl") return(FALSE)
+      if (pkg == "readxl") {
+        return(FALSE)
+      }
       base::requireNamespace(pkg, ...)
     },
     .package = "base"
@@ -163,77 +165,115 @@ test_that("read_ideb_excel errors when readxl not available", {
 # --- ideb_keep_cols: column projection (issue #1) ---
 
 test_that("ideb_keep_cols always keeps id columns regardless of metric", {
-  cols <- c("SG_UF", "CO_MUNICIPIO", "NO_MUNICIPIO", "REDE",
-            "VL_OBSERVADO_2017", "VL_OBSERVADO_2019")
+  cols <- c(
+    "SG_UF",
+    "CO_MUNICIPIO",
+    "NO_MUNICIPIO",
+    "REDE",
+    "VL_OBSERVADO_2017",
+    "VL_OBSERVADO_2019"
+  )
   keep <- educabR:::ideb_keep_cols(cols, metric = "indicador")
   expect_true(all(keep[1:4]))
 })
 
 test_that("ideb_keep_cols filters vl_* columns by metric=indicador", {
-  cols <- c("SG_UF", "REDE",
-            "VL_OBSERVADO_2019", "VL_INDICADOR_REND_2019", "VL_NOTA_MEDIA_2019",
-            "VL_APROVACAO_2019_1", "VL_NOTA_MATEMATICA_2019", "VL_PROJECAO_2019")
+  cols <- c(
+    "SG_UF",
+    "REDE",
+    "VL_OBSERVADO_2019",
+    "VL_INDICADOR_REND_2019",
+    "VL_NOTA_MEDIA_2019",
+    "VL_APROVACAO_2019_1",
+    "VL_NOTA_MATEMATICA_2019",
+    "VL_PROJECAO_2019"
+  )
   keep <- educabR:::ideb_keep_cols(cols, metric = "indicador")
   expect_equal(
     cols[keep],
-    c("SG_UF", "REDE",
-      "VL_OBSERVADO_2019", "VL_INDICADOR_REND_2019", "VL_NOTA_MEDIA_2019")
+    c(
+      "SG_UF",
+      "REDE",
+      "VL_OBSERVADO_2019",
+      "VL_INDICADOR_REND_2019",
+      "VL_NOTA_MEDIA_2019"
+    )
   )
 })
 
 test_that("ideb_keep_cols filters vl_* columns by metric=aprovacao", {
-  cols <- c("SG_UF",
-            "VL_APROVACAO_2019_1", "VL_APROVACAO_2019_SI_4",
-            "VL_OBSERVADO_2019", "VL_NOTA_MEDIA_2019")
+  cols <- c(
+    "SG_UF",
+    "VL_APROVACAO_2019_1",
+    "VL_APROVACAO_2019_SI_4",
+    "VL_OBSERVADO_2019",
+    "VL_NOTA_MEDIA_2019"
+  )
   keep <- educabR:::ideb_keep_cols(cols, metric = "aprovacao")
-  expect_equal(cols[keep],
-               c("SG_UF", "VL_APROVACAO_2019_1", "VL_APROVACAO_2019_SI_4"))
+  expect_equal(
+    cols[keep],
+    c("SG_UF", "VL_APROVACAO_2019_1", "VL_APROVACAO_2019_SI_4")
+  )
 })
 
 test_that("ideb_keep_cols filters vl_* columns by metric=nota", {
-  cols <- c("SG_UF",
-            "VL_NOTA_MATEMATICA_2019", "VL_NOTA_PORTUGUES_2019",
-            "VL_NOTA_MEDIA_2019",  # this is "indicador", not "nota"
-            "VL_OBSERVADO_2019")
+  cols <- c(
+    "SG_UF",
+    "VL_NOTA_MATEMATICA_2019",
+    "VL_NOTA_PORTUGUES_2019",
+    "VL_NOTA_MEDIA_2019", # this is "indicador", not "nota"
+    "VL_OBSERVADO_2019"
+  )
   keep <- educabR:::ideb_keep_cols(cols, metric = "nota")
-  expect_equal(cols[keep],
-               c("SG_UF", "VL_NOTA_MATEMATICA_2019", "VL_NOTA_PORTUGUES_2019"))
+  expect_equal(
+    cols[keep],
+    c("SG_UF", "VL_NOTA_MATEMATICA_2019", "VL_NOTA_PORTUGUES_2019")
+  )
 })
 
 test_that("ideb_keep_cols filters vl_* columns by metric=meta", {
-  cols <- c("SG_UF",
-            "VL_PROJECAO_2019", "VL_PROJECAO_2021",
-            "VL_OBSERVADO_2019")
+  cols <- c(
+    "SG_UF",
+    "VL_PROJECAO_2019",
+    "VL_PROJECAO_2021",
+    "VL_OBSERVADO_2019"
+  )
   keep <- educabR:::ideb_keep_cols(cols, metric = "meta")
-  expect_equal(cols[keep],
-               c("SG_UF", "VL_PROJECAO_2019", "VL_PROJECAO_2021"))
+  expect_equal(cols[keep], c("SG_UF", "VL_PROJECAO_2019", "VL_PROJECAO_2021"))
 })
 
 test_that("ideb_keep_cols further restricts by year when given", {
-  cols <- c("SG_UF",
-            "VL_OBSERVADO_2017", "VL_OBSERVADO_2019",
-            "VL_OBSERVADO_2021", "VL_OBSERVADO_2023")
-  keep <- educabR:::ideb_keep_cols(cols, metric = "indicador",
-                                   year = c(2019, 2023))
-  expect_equal(cols[keep],
-               c("SG_UF", "VL_OBSERVADO_2019", "VL_OBSERVADO_2023"))
+  cols <- c(
+    "SG_UF",
+    "VL_OBSERVADO_2017",
+    "VL_OBSERVADO_2019",
+    "VL_OBSERVADO_2021",
+    "VL_OBSERVADO_2023"
+  )
+  keep <- educabR:::ideb_keep_cols(
+    cols,
+    metric = "indicador",
+    year = c(2019, 2023)
+  )
+  expect_equal(cols[keep], c("SG_UF", "VL_OBSERVADO_2019", "VL_OBSERVADO_2023"))
 })
 
 test_that("ideb_keep_cols year filter applies to aprovacao suffix columns", {
-  cols <- c("SG_UF",
-            "VL_APROVACAO_2017_1", "VL_APROVACAO_2019_SI_4",
-            "VL_APROVACAO_2021_3")
-  keep <- educabR:::ideb_keep_cols(cols, metric = "aprovacao",
-                                   year = c(2019))
+  cols <- c(
+    "SG_UF",
+    "VL_APROVACAO_2017_1",
+    "VL_APROVACAO_2019_SI_4",
+    "VL_APROVACAO_2021_3"
+  )
+  keep <- educabR:::ideb_keep_cols(cols, metric = "aprovacao", year = c(2019))
   expect_equal(cols[keep], c("SG_UF", "VL_APROVACAO_2019_SI_4"))
 })
 
 test_that("ideb_keep_cols handles accented and mixed-case headers", {
   # mirrors what INEP can publish: accented id columns
-  cols <- c("Sigla da UF", "Código do Município",
-            "VL_OBSERVADO_2023")
+  cols <- c("Sigla da UF", "Código do Município", "VL_OBSERVADO_2023")
   keep <- educabR:::ideb_keep_cols(cols, metric = "indicador")
-  expect_true(all(keep))  # all id + matching vl_
+  expect_true(all(keep)) # all id + matching vl_
 })
 
 # --- build_ideb_url ---
@@ -268,7 +308,10 @@ test_that("build_ideb_url uses zip extension for 2025+", {
 
 test_that("build_ideb_url builds direct xlsx URLs for ensino_medio_integrado", {
   url <- educabR:::build_ideb_url("brasil", "ensino_medio_integrado", 2025)
-  expect_match(url, "divulgacao_brasil_Ensino_Medio_integrado_ideb_2025\\.xlsx$")
+  expect_match(
+    url,
+    "divulgacao_brasil_Ensino_Medio_integrado_ideb_2025\\.xlsx$"
+  )
 
   # estado maps to file_level "regiao_uf", which becomes "ufs" for this cut
   url <- educabR:::build_ideb_url("regiao_uf", "ensino_medio_integrado", 2025)
@@ -306,9 +349,18 @@ test_that("fetch_ideb_file extracts the xlsx from a 2025-style zip", {
   # build a zip mirroring INEP's 2025 layout: folder with xlsx + ods + md5
   payload_dir <- file.path(tmp, "payload", "divulgacao_brasil_ideb_2025")
   dir.create(payload_dir, recursive = TRUE)
-  writeLines("xlsx-payload", file.path(payload_dir, "divulgacao_brasil_ideb_2025.xlsx"))
-  writeLines("ods-payload", file.path(payload_dir, "divulgacao_brasil_ideb_2025.ods"))
-  writeLines("md5", file.path(payload_dir, "md5_divulgacao_brasil_ideb_2025.txt"))
+  writeLines(
+    "xlsx-payload",
+    file.path(payload_dir, "divulgacao_brasil_ideb_2025.xlsx")
+  )
+  writeLines(
+    "ods-payload",
+    file.path(payload_dir, "divulgacao_brasil_ideb_2025.ods")
+  )
+  writeLines(
+    "md5",
+    file.path(payload_dir, "md5_divulgacao_brasil_ideb_2025.txt")
+  )
   zip_src <- file.path(tmp, "src.zip")
   withr::with_dir(
     file.path(tmp, "payload"),
@@ -335,8 +387,14 @@ test_that("fetch_ideb_file extracts the xlsx from a 2025-style zip", {
   expect_true(file.exists(xlsx_path))
   expect_equal(readLines(xlsx_path), "xlsx-payload")
   # zip and extraction dir are cleaned up
-  expect_false(file.exists(file.path(cache_dir, "divulgacao_brasil_ideb_2025.zip")))
-  expect_false(dir.exists(file.path(cache_dir, "divulgacao_brasil_ideb_2025_extract")))
+  expect_false(file.exists(file.path(
+    cache_dir,
+    "divulgacao_brasil_ideb_2025.zip"
+  )))
+  expect_false(dir.exists(file.path(
+    cache_dir,
+    "divulgacao_brasil_ideb_2025_extract"
+  )))
 })
 
 test_that("fetch_ideb_file errors when the zip has no xlsx inside", {
@@ -429,8 +487,13 @@ test_that("reshape_ideb returns correct format for metric = indicador", {
   result <- educabR:::reshape_ideb(df, "escola", "indicador")
 
   expect_s3_class(result, "tbl_df")
-  expect_true(all(c("sg_uf", "rede", "ano", "indicador", "valor") %in% names(result)))
-  expect_true(all(c("Indicador de Rendimento", "Nota M\u00e9dia Padronizada", "IDEB") %in% result$indicador))
+  expect_true(all(
+    c("sg_uf", "rede", "ano", "indicador", "valor") %in% names(result)
+  ))
+  expect_true(all(
+    c("Indicador de Rendimento", "Nota M\u00e9dia Padronizada", "IDEB") %in%
+      result$indicador
+  ))
   expect_true(all(c(2019, 2021) %in% result$ano))
 })
 
@@ -468,7 +531,12 @@ test_that("reshape_ideb maps series for stage = ensino_medio_integrado", {
     stringsAsFactors = FALSE
   )
 
-  result <- educabR:::reshape_ideb(df, "estado", "aprovacao", "ensino_medio_integrado")
+  result <- educabR:::reshape_ideb(
+    df,
+    "estado",
+    "aprovacao",
+    "ensino_medio_integrado"
+  )
 
   expect_s3_class(result, "tbl_df")
   expect_true(all(c("ano", "serie", "taxa_aprovacao") %in% names(result)))
@@ -533,15 +601,22 @@ test_that("list_ideb_available has correct column names", {
 test_that("list_ideb_available contains all valid levels", {
   result <- list_ideb_available()
 
-  expect_true(all(c("escola", "municipio", "estado", "regiao", "brasil") %in% result$level))
+  expect_true(all(
+    c("escola", "municipio", "estado", "regiao", "brasil") %in% result$level
+  ))
 })
 
 test_that("list_ideb_available contains all valid stages", {
   result <- list_ideb_available()
 
   expect_true(all(
-    c("anos_iniciais", "anos_finais", "ensino_medio",
-      "ensino_medio_integrado") %in% result$stage
+    c(
+      "anos_iniciais",
+      "anos_finais",
+      "ensino_medio",
+      "ensino_medio_integrado"
+    ) %in%
+      result$stage
   ))
 })
 
@@ -558,7 +633,9 @@ test_that("list_ideb_available restricts ensino_medio_integrado combos", {
 test_that("list_ideb_available contains all valid metrics", {
   result <- list_ideb_available()
 
-  expect_true(all(c("indicador", "aprovacao", "nota", "meta") %in% result$metric))
+  expect_true(all(
+    c("indicador", "aprovacao", "nota", "meta") %in% result$metric
+  ))
 })
 
 # --- IDEB year validation via available_years ---
@@ -635,8 +712,11 @@ test_that("read_ideb_excel normalizes char cols in safety-fallback path", {
       # ideb_keep_cols returns nothing matching the requested metric and
       # the function falls into the safety branch.
       if (!is.null(args$n_max) && args$n_max == 0) {
-        data.frame(id_uf = character(), rede = character(),
-                   stringsAsFactors = FALSE)
+        data.frame(
+          id_uf = character(),
+          rede = character(),
+          stringsAsFactors = FALSE
+        )
       } else {
         data.frame(
           id_uf = "SP",
@@ -685,8 +765,11 @@ test_that("read_ideb_excel normalizes char cols in optimized read path", {
     .package = "readxl"
   )
 
-  out <- educabR:::read_ideb_excel("dummy.xlsx", metric = "indicador",
-                                   year = 2023)
+  out <- educabR:::read_ideb_excel(
+    "dummy.xlsx",
+    metric = "indicador",
+    year = 2023
+  )
 
   expect_true(out$rede[1] == nfc)
   expect_true(nfc %in% out$rede)

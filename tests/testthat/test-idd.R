@@ -73,7 +73,10 @@ test_that("IDD archive format switches at year 2021", {
   # years >= 2021 should use .zip
   for (y in c(2021, 2022, 2023)) {
     url <- build_inep_url("idd", y)
-    expect_true(grepl("\\.zip$", url), info = paste("year", y, "should be .zip"))
+    expect_true(
+      grepl("\\.zip$", url),
+      info = paste("year", y, "should be .zip")
+    )
   }
 })
 

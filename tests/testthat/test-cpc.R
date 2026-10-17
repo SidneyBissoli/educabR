@@ -146,7 +146,9 @@ test_that("convert_faixa_columns does not modify non-faixa columns", {
 test_that("read_excel_safe errors when readxl not available", {
   local_mocked_bindings(
     requireNamespace = function(pkg, ...) {
-      if (pkg == "readxl") return(FALSE)
+      if (pkg == "readxl") {
+        return(FALSE)
+      }
       base::requireNamespace(pkg, ...)
     },
     .package = "base"

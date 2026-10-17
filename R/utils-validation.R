@@ -113,8 +113,13 @@ validate_enem_itens <- function(data, year) {
 
 # saeb: check for student or school identifiers
 validate_saeb <- function(data, year) {
-  expected <- c("id_aluno", "id_escola", "id_saeb", "id_educacao_infantil",
-                "nu_ano_saeb")
+  expected <- c(
+    "id_aluno",
+    "id_escola",
+    "id_saeb",
+    "id_educacao_infantil",
+    "nu_ano_saeb"
+  )
   found <- expected[expected %in% names(data)]
 
   if (length(found) == 0) {
@@ -162,8 +167,15 @@ validate_encceja <- function(data, year) {
 
 # enem_escola: check for school and score columns
 validate_enem_escola <- function(data, year) {
-  expected <- c("co_escola_educacenso", "no_escola", "nu_ano",
-                "nu_media_cn", "nu_media_ch", "nu_media_lc", "nu_media_mt")
+  expected <- c(
+    "co_escola_educacenso",
+    "no_escola",
+    "nu_ano",
+    "nu_media_cn",
+    "nu_media_ch",
+    "nu_media_lc",
+    "nu_media_mt"
+  )
   found <- expected[expected %in% names(data)]
 
   if (length(found) == 0) {
@@ -179,8 +191,14 @@ validate_enem_escola <- function(data, year) {
 
 # idd: check for course and IDD score columns
 validate_idd <- function(data, year) {
-  expected <- c("co_curso", "co_ies", "idd_continuo", "idd_faixa",
-                "no_curso", "co_grupo")
+  expected <- c(
+    "co_curso",
+    "co_ies",
+    "idd_continuo",
+    "idd_faixa",
+    "no_curso",
+    "co_grupo"
+  )
   found <- expected[expected %in% names(data)]
 
   if (length(found) == 0) {
@@ -196,8 +214,14 @@ validate_idd <- function(data, year) {
 
 # cpc: check for course and CPC score columns
 validate_cpc <- function(data, year) {
-  expected <- c("co_curso", "co_ies", "cpc_continuo", "cpc_faixa",
-                "no_curso", "co_grupo")
+  expected <- c(
+    "co_curso",
+    "co_ies",
+    "cpc_continuo",
+    "cpc_faixa",
+    "no_curso",
+    "co_grupo"
+  )
   found <- expected[expected %in% names(data)]
 
   if (length(found) == 0) {
@@ -213,8 +237,14 @@ validate_cpc <- function(data, year) {
 
 # igc: check for institution and IGC score columns
 validate_igc <- function(data, year) {
-  expected <- c("co_ies", "no_ies", "igc_continuo", "igc_faixa",
-                "sigla_ies", "co_mantenedora")
+  expected <- c(
+    "co_ies",
+    "no_ies",
+    "igc_continuo",
+    "igc_faixa",
+    "sigla_ies",
+    "co_mantenedora"
+  )
   found <- expected[expected %in% names(data)]
 
   if (length(found) == 0) {
@@ -230,8 +260,14 @@ validate_igc <- function(data, year) {
 
 # capes: check for program or student identifiers
 validate_capes <- function(data, year) {
-  expected <- c("cd_programa_ies", "nm_programa", "sg_entidade_ensino",
-                "nm_entidade_ensino", "an_base", "cd_conceito_curso")
+  expected <- c(
+    "cd_programa_ies",
+    "nm_programa",
+    "sg_entidade_ensino",
+    "nm_entidade_ensino",
+    "an_base",
+    "cd_conceito_curso"
+  )
   found <- expected[expected %in% names(data)]
 
   if (length(found) == 0) {
@@ -260,8 +296,14 @@ validate_ideb <- function(data, year) {
 
 # censo_superior: check for institution or course identifiers
 validate_censo_superior <- function(data, year) {
-  expected <- c("co_ies", "co_curso", "co_aluno", "co_docente",
-                "no_ies", "no_curso")
+  expected <- c(
+    "co_ies",
+    "co_curso",
+    "co_aluno",
+    "co_docente",
+    "no_ies",
+    "no_curso"
+  )
   found <- expected[expected %in% names(data)]
 
   if (length(found) == 0) {
@@ -293,8 +335,13 @@ validate_fundeb <- function(data, year) {
 
 # fundeb enrollment: check for census/enrollment columns
 validate_fundeb_enrollment <- function(data, year) {
-  expected <- c("ano_censo", "uf", "qtd_matricula", "tipo_rede_educacao",
-                "descricao_tipo_educacao")
+  expected <- c(
+    "ano_censo",
+    "uf",
+    "qtd_matricula",
+    "tipo_rede_educacao",
+    "descricao_tipo_educacao"
+  )
   found <- expected[expected %in% names(data)]
 
   if (length(found) == 0) {

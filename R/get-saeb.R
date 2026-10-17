@@ -85,13 +85,15 @@
 #' # SAEB 2021: early childhood education
 #' saeb_infantil <- get_saeb(2021, level = "educacao_infantil", n_max = 1000)
 #' }
-get_saeb <- function(year,
-                     type = c("aluno", "escola", "diretor", "professor"),
-                     level = c("fundamental_medio", "educacao_infantil"),
-                     serie = NULL,
-                     n_max = Inf,
-                     keep_zip = TRUE,
-                     quiet = FALSE) {
+get_saeb <- function(
+  year,
+  type = c("aluno", "escola", "diretor", "professor"),
+  level = c("fundamental_medio", "educacao_infantil"),
+  serie = NULL,
+  n_max = Inf,
+  keep_zip = TRUE,
+  quiet = FALSE
+) {
   # validate arguments
   validate_year(year, "saeb")
   type <- match.arg(type)

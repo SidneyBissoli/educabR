@@ -59,11 +59,13 @@
 #' participantes <- get_enem(2024, type = "participantes", n_max = 1000)
 #' resultados <- get_enem(2024, type = "resultados", n_max = 1000)
 #' }
-get_enem <- function(year,
-                     type = "participantes",
-                     n_max = Inf,
-                     keep_zip = TRUE,
-                     quiet = FALSE) {
+get_enem <- function(
+  year,
+  type = "participantes",
+  n_max = Inf,
+  keep_zip = TRUE,
+  quiet = FALSE
+) {
   # validate arguments
   validate_year(year, "enem")
   type <- match.arg(type, c("participantes", "resultados"))
@@ -312,7 +314,9 @@ enem_summary <- function(data, by = NULL) {
   score_cols <- names(data)[str_detect(names(data), "^nu_nota_")]
 
   if (length(score_cols) == 0) {
-    cli::cli_abort("no score columns found (expected columns starting with 'nu_nota_')")
+    cli::cli_abort(
+      "no score columns found (expected columns starting with 'nu_nota_')"
+    )
   }
 
   # group if requested

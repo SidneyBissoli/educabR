@@ -32,3 +32,4 @@
 ^prompt-proxima-sessao\.md$
 ^coverage_report\.html$
 ^cov_output\.txt$
+^air\.toml$

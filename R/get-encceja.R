@@ -58,11 +58,13 @@
 #' # participants deprived of liberty (PPL)
 #' encceja_ppl <- get_encceja(2023, type = "ppl")
 #' }
-get_encceja <- function(year,
-                        type = c("regular", "ppl"),
-                        n_max = Inf,
-                        keep_zip = TRUE,
-                        quiet = FALSE) {
+get_encceja <- function(
+  year,
+  type = c("regular", "ppl"),
+  n_max = Inf,
+  keep_zip = TRUE,
+  quiet = FALSE
+) {
   # validate arguments
   validate_year(year, "encceja")
   type <- match.arg(type)
@@ -99,7 +101,9 @@ get_encceja <- function(year,
   data_file <- find_encceja_file(exdir, year, type = type)
 
   if (!quiet) {
-    cli::cli_alert_info("reading ENCCEJA data ({.file {basename(data_file)}})...")
+    cli::cli_alert_info(
+      "reading ENCCEJA data ({.file {basename(data_file)}})..."
+    )
     if (is.infinite(n_max)) {
       cli::cli_alert_warning(
         "reading full file. use {.arg n_max} to limit rows if needed."
@@ -163,7 +167,9 @@ find_encceja_file <- function(exdir, year, type = "regular") {
 
   # exclude item/question files (itens_prova, itens, gabarito)
   exclude_pattern <- "itens|gabarito"
-  candidate_files <- all_files[!str_detect(str_to_lower(all_files), exclude_pattern)]
+  candidate_files <- all_files[
+    !str_detect(str_to_lower(all_files), exclude_pattern)
+  ]
 
   # if all files were excluded, fall back to all files
   if (length(candidate_files) == 0) {

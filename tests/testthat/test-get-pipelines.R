@@ -11,8 +11,15 @@ setup_temp_cache <- function(env = parent.frame()) {
 }
 
 # helper: create a mock zip file and extracted directory with a CSV
-create_mock_data <- function(temp_cache, dataset_subdir, zip_filename,
-                             exdir_name, csv_filename, header, rows) {
+create_mock_data <- function(
+  temp_cache,
+  dataset_subdir,
+  zip_filename,
+  exdir_name,
+  csv_filename,
+  header,
+  rows
+) {
   dataset_dir <- file.path(temp_cache, dataset_subdir)
   dir.create(dataset_dir, recursive = TRUE, showWarnings = FALSE)
   file.create(file.path(dataset_dir, zip_filename))
@@ -191,8 +198,12 @@ test_that("get_encceja full pipeline works with cached data", {
       "NU_INSCRICAO;NU_ANO;TP_SEXO;CO_MUNICIPIO_RESIDENCIA;TP_COR_RACA",
       "900001;2023;1;3550308;1"
     ),
-    file.path(temp_cache, "encceja", "microdados_encceja_2023",
-              "MICRODADOS_ENCCEJA_2023_PPL_NAC.csv")
+    file.path(
+      temp_cache,
+      "encceja",
+      "microdados_encceja_2023",
+      "MICRODADOS_ENCCEJA_2023_PPL_NAC.csv"
+    )
   )
 
   result <- get_encceja(2023, quiet = TRUE, n_max = 10)
@@ -235,8 +246,7 @@ test_that("get_saeb full pipeline works for aluno type", {
     file.path(exdir, "TS_ALUNO_2EF.csv")
   )
 
-  result <- get_saeb(2023, type = "aluno", serie = 5, quiet = TRUE,
-                     n_max = 10)
+  result <- get_saeb(2023, type = "aluno", serie = 5, quiet = TRUE, n_max = 10)
 
   expect_s3_class(result, "tbl_df")
   expect_equal(nrow(result), 2)
@@ -522,7 +532,13 @@ test_that("get_censo_superior filters by UF with co_uf_ies", {
     )
   )
 
-  result <- get_censo_superior(2023, type = "ies", uf = "SP", quiet = TRUE, n_max = 10)
+  result <- get_censo_superior(
+    2023,
+    type = "ies",
+    uf = "SP",
+    quiet = TRUE,
+    n_max = 10
+  )
 
   expect_s3_class(result, "tbl_df")
   expect_equal(nrow(result), 2)
@@ -585,7 +601,8 @@ test_that("list_censo_superior_files returns expected filenames", {
   temp_cache <- setup_temp_cache()
 
   exdir <- file.path(
-    temp_cache, "censo_superior",
+    temp_cache,
+    "censo_superior",
     "microdados_censo_da_educacao_superior_2023"
   )
   dir.create(exdir, recursive = TRUE, showWarnings = FALSE)
@@ -662,13 +679,20 @@ test_that("n_max parameter limits the number of rows returned", {
   temp_cache <- setup_temp_cache()
 
   rows <- paste0(
-    seq(100001, 100020), ";2023;",
-    rep(c(1, 2), 10), ";",
-    rep(1:5, 4), ";",
-    round(runif(20, 400, 700), 1), ";",
-    round(runif(20, 400, 700), 1), ";",
-    round(runif(20, 400, 700), 1), ";",
-    round(runif(20, 400, 700), 1), ";",
+    seq(100001, 100020),
+    ";2023;",
+    rep(c(1, 2), 10),
+    ";",
+    rep(1:5, 4),
+    ";",
+    round(runif(20, 400, 700), 1),
+    ";",
+    round(runif(20, 400, 700), 1),
+    ";",
+    round(runif(20, 400, 700), 1),
+    ";",
+    round(runif(20, 400, 700), 1),
+    ";",
     round(runif(20, 400, 800), 0)
   )
 
@@ -775,12 +799,18 @@ test_that("get_censo_escolar respects n_max parameter", {
   temp_cache <- setup_temp_cache()
 
   rows <- paste0(
-    rep(c(35, 33, 29), 5), ";",
-    paste0("Escola ", seq_len(15)), ";",
-    seq(35000001, 35000015), ";",
-    rep(c(1, 2, 3), 5), ";",
-    rep(c("SP", "RJ", "BA"), 5), ";",
-    rep(c("Sao Paulo", "Rio", "Salvador"), 5), ";",
+    rep(c(35, 33, 29), 5),
+    ";",
+    paste0("Escola ", seq_len(15)),
+    ";",
+    seq(35000001, 35000015),
+    ";",
+    rep(c(1, 2, 3), 5),
+    ";",
+    rep(c("SP", "RJ", "BA"), 5),
+    ";",
+    rep(c("Sao Paulo", "Rio", "Salvador"), 5),
+    ";",
     seq(3550308, 3550322)
   )
 
@@ -861,7 +891,11 @@ test_that("keep_zip=FALSE removes zip for censo_escolar", {
     rows = "35;Escola SP;35000001;2;SP;Sao Paulo;3550308"
   )
 
-  zip_path <- file.path(temp_cache, "censo_escolar", "microdados_censo_escolar_2023.zip")
+  zip_path <- file.path(
+    temp_cache,
+    "censo_escolar",
+    "microdados_censo_escolar_2023.zip"
+  )
   expect_true(file.exists(zip_path))
 
   result <- get_censo_escolar(2023, keep_zip = FALSE, quiet = TRUE, n_max = 10)
@@ -915,7 +949,13 @@ test_that("keep_file=FALSE removes cached CSV for capes", {
 
   expect_true(file.exists(mock_csv))
 
-  result <- get_capes(2023, type = "programas", keep_file = FALSE, quiet = TRUE, n_max = 10)
+  result <- get_capes(
+    2023,
+    type = "programas",
+    keep_file = FALSE,
+    quiet = TRUE,
+    n_max = 10
+  )
 
   expect_s3_class(result, "tbl_df")
   expect_false(file.exists(mock_csv))

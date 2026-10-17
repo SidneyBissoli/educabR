@@ -26,9 +26,11 @@ get_remote_file_size <- function(url) {
 # verify a downloaded file is structurally plausible
 # unlinks destfile and aborts on detected corruption so a bad blob
 # is never silently cached
-verify_download_integrity <- function(destfile,
-                                      expected_size = NULL,
-                                      url = NULL) {
+verify_download_integrity <- function(
+  destfile,
+  expected_size = NULL,
+  url = NULL
+) {
   if (!file.exists(destfile)) {
     cli::cli_abort("download missing: {.path {destfile}}")
   }
@@ -65,8 +67,14 @@ verify_download_integrity <- function(destfile,
   # payloads as the system locale and emitting translation warnings
   if (!any(first_bytes == as.raw(0))) {
     first_text <- rawToChar(first_bytes)
-    if (grepl("^\\s*<(!doctype|html)", first_text,
-              ignore.case = TRUE, useBytes = TRUE)) {
+    if (
+      grepl(
+        "^\\s*<(!doctype|html)",
+        first_text,
+        ignore.case = TRUE,
+        useBytes = TRUE
+      )
+    ) {
       unlink(destfile)
       cli::cli_abort(c(
         "downloaded file is HTML, not data",
@@ -138,7 +146,7 @@ download_inep_file <- function(url, destfile, quiet = FALSE) {
     {
       req <- httr2::request(url) |>
         httr2::req_timeout(seconds = timeout) |>
-        httr2::req_retry(max_tries = 3, backoff = ~ 5)
+        httr2::req_retry(max_tries = 3, backoff = ~5)
 
       resp <- httr2::req_perform(req)
 
@@ -199,8 +207,10 @@ extract_zip <- function(zipfile, exdir, quiet = FALSE) {
           # fallback below still triggers via length(files) == 0, so
           # silencing here only suppresses log noise, not recovery.
           msg <- conditionMessage(w)
-          if (grepl("error -?\\d+ in extracting", msg, ignore.case = TRUE) ||
-              grepl("Falha na convers", msg, ignore.case = TRUE)) {
+          if (
+            grepl("error -?\\d+ in extracting", msg, ignore.case = TRUE) ||
+              grepl("Falha na convers", msg, ignore.case = TRUE)
+          ) {
             invokeRestart("muffleWarning")
           }
         }
@@ -234,10 +244,18 @@ extract_zip <- function(zipfile, exdir, quiet = FALSE) {
               normalizePath(zipfile, winslash = "/"),
               normalizePath(exdir, winslash = "/", mustWork = FALSE)
             )
-            system(cmd, intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
+            system(
+              cmd,
+              intern = FALSE,
+              ignore.stdout = TRUE,
+              ignore.stderr = TRUE
+            )
           } else {
             # on unix, use unzip command
-            system2("unzip", args = c("-o", "-q", shQuote(zipfile), "-d", shQuote(exdir)))
+            system2(
+              "unzip",
+              args = c("-o", "-q", shQuote(zipfile), "-d", shQuote(exdir))
+            )
           }
 
           # list extracted files
@@ -272,7 +290,9 @@ extract_zip <- function(zipfile, exdir, quiet = FALSE) {
 find_7z <- function() {
   # try PATH first
   path_result <- Sys.which("7z")
-  if (nzchar(path_result)) return(unname(path_result))
+  if (nzchar(path_result)) {
+    return(unname(path_result))
+  }
 
   # common install locations on Windows
   if (.Platform$OS.type == "windows") {
@@ -326,10 +346,17 @@ extract_archive <- function(archive, exdir, quiet = FALSE) {
       {
         system2(
           sevenz_cmd,
-          args = c("x", shQuote(normalizePath(archive, winslash = "/")),
-                   paste0("-o", shQuote(normalizePath(exdir, winslash = "/", mustWork = FALSE))),
-                   "-y"),
-          stdout = TRUE, stderr = TRUE
+          args = c(
+            "x",
+            shQuote(normalizePath(archive, winslash = "/")),
+            paste0(
+              "-o",
+              shQuote(normalizePath(exdir, winslash = "/", mustWork = FALSE))
+            ),
+            "-y"
+          ),
+          stdout = TRUE,
+          stderr = TRUE
         )
       },
       error = function(e) {
@@ -386,11 +413,18 @@ build_inep_url <- function(dataset, year, ...) {
       # 2025: INEP added trailing underscore to filename
       suffix <- if (year == 2025) "_" else ""
       str_c(
-        base, "/dados_abertos/microdados_censo_escolar_", year, suffix, ".zip"
+        base,
+        "/dados_abertos/microdados_censo_escolar_",
+        year,
+        suffix,
+        ".zip"
       )
     },
     "enem" = str_c(
-      base, "/microdados/microdados_enem_", year, ".zip"
+      base,
+      "/microdados/microdados_enem_",
+      year,
+      ".zip"
     ),
     "saeb" = {
       level <- list(...)$level %||% "fundamental_medio"
@@ -406,16 +440,26 @@ build_inep_url <- function(dataset, year, ...) {
       }
     },
     "censo_superior" = str_c(
-      base, "/microdados/microdados_censo_da_educacao_superior_", year, ".zip"
+      base,
+      "/microdados/microdados_censo_da_educacao_superior_",
+      year,
+      ".zip"
     ),
     "enade" = str_c(
-      base, "/microdados/microdados_enade_", year, ".zip"
+      base,
+      "/microdados/microdados_enade_",
+      year,
+      ".zip"
     ),
     "encceja" = str_c(
-      base, "/microdados/microdados_encceja_", year, ".zip"
+      base,
+      "/microdados/microdados_encceja_",
+      year,
+      ".zip"
     ),
     "enem_escola" = str_c(
-      base, "/microdados/enem_por_escola/2005_a_2015/microdados_enem_por_escola.zip"
+      base,
+      "/microdados/enem_por_escola/2005_a_2015/microdados_enem_por_escola.zip"
     ),
     "idd" = {
       ext <- if (year >= 2021) ".zip" else ".7z"
@@ -488,22 +532,32 @@ inep_head_ok <- function(url) {
 # removed — a transient HEAD failure must not hide a valid year (#17)
 discover_inep_years <- function(dataset) {
   candidates <- candidate_year_range(dataset)
-  if (is.null(candidates)) return(NULL)
+  if (is.null(candidates)) {
+    return(NULL)
+  }
 
   known <- fallback_years(dataset)
   new_candidates <- sort(candidates[candidates > max(known)])
 
-  if (length(new_candidates) == 0) return(known)
+  if (length(new_candidates) == 0) {
+    return(known)
+  }
 
-  check_results <- vapply(new_candidates, function(year) {
-    url <- tryCatch(
-      build_inep_url(dataset, year),
-      error = function(e) NA_character_
-    )
-    if (is.na(url)) return(FALSE)
+  check_results <- vapply(
+    new_candidates,
+    function(year) {
+      url <- tryCatch(
+        build_inep_url(dataset, year),
+        error = function(e) NA_character_
+      )
+      if (is.na(url)) {
+        return(FALSE)
+      }
 
-    inep_head_ok(url)
-  }, logical(1))
+      inep_head_ok(url)
+    },
+    logical(1)
+  )
 
   sort(unique(c(known, new_candidates[check_results])))
 }
@@ -516,24 +570,28 @@ discover_fundeb_enrollment_years <- function() {
 
   base_url <- fundeb_enrollment_api_url()
 
-  check_results <- vapply(to_check, function(year) {
-    tryCatch(
-      {
-        req <- httr2::request(base_url) |>
-          httr2::req_url_query(
-            `$filter` = paste0("AnoCenso eq ", year),
-            `$top` = 1,
-            `$format` = "json"
-          ) |>
-          httr2::req_timeout(seconds = 10) |>
-          httr2::req_error(is_error = function(resp) FALSE)
-        resp <- httr2::req_perform(req)
-        body <- httr2::resp_body_json(resp)
-        length(body$value) > 0
-      },
-      error = function(e) FALSE
-    )
-  }, logical(1))
+  check_results <- vapply(
+    to_check,
+    function(year) {
+      tryCatch(
+        {
+          req <- httr2::request(base_url) |>
+            httr2::req_url_query(
+              `$filter` = paste0("AnoCenso eq ", year),
+              `$top` = 1,
+              `$format` = "json"
+            ) |>
+            httr2::req_timeout(seconds = 10) |>
+            httr2::req_error(is_error = function(resp) FALSE)
+          resp <- httr2::req_perform(req)
+          body <- httr2::resp_body_json(resp)
+          length(body$value) > 0
+        },
+        error = function(e) FALSE
+      )
+    },
+    logical(1)
+  )
 
   sort(to_check[check_results])
 }
@@ -546,25 +604,31 @@ discover_enade_years <- function() {
   known_years <- sort(as.integer(names(enade_urls)))
   max_known <- max(known_years)
 
-  if (max_known >= current_year) return(known_years)
+  if (max_known >= current_year) {
+    return(known_years)
+  }
 
   new_candidates <- setdiff((max_known + 1L):current_year, 2020L)
 
   base <- inep_base_url()
 
-  check_results <- vapply(new_candidates, function(year) {
-    # new years aren't in the URL map, try multiple patterns
-    urls <- c(
-      str_c(base, "/microdados/microdados_enade_", year, ".zip"),
-      str_c(base, "/microdados/microdados_enade_", year, "_LGPD.zip"),
-      str_c(base, "/microdados/microdados_enade_", year, "_LGPD.rar")
-    )
+  check_results <- vapply(
+    new_candidates,
+    function(year) {
+      # new years aren't in the URL map, try multiple patterns
+      urls <- c(
+        str_c(base, "/microdados/microdados_enade_", year, ".zip"),
+        str_c(base, "/microdados/microdados_enade_", year, "_LGPD.zip"),
+        str_c(base, "/microdados/microdados_enade_", year, "_LGPD.rar")
+      )
 
-    for (url in urls) {
-      if (inep_head_ok(url)) return(TRUE)
-    }
-    FALSE
-  }, logical(1))
+      for (url in urls) {
+        if (inep_head_ok(url)) return(TRUE)
+      }
+      FALSE
+    },
+    logical(1)
+  )
 
   sort(unique(c(known_years, new_candidates[check_results])))
 }
@@ -572,8 +636,14 @@ discover_enade_years <- function() {
 # main discovery dispatcher
 discover_available_years <- function(dataset) {
   # datasets with HEAD-checkable INEP URLs (consistent patterns)
-  head_check <- c("censo_escolar", "enem", "saeb", "censo_superior",
-                   "encceja", "idd")
+  head_check <- c(
+    "censo_escolar",
+    "enem",
+    "saeb",
+    "censo_superior",
+    "encceja",
+    "idd"
+  )
 
   if (dataset %in% head_check) {
     return(discover_inep_years(dataset))
@@ -585,9 +655,15 @@ discover_available_years <- function(dataset) {
   }
 
   # datasets with hardcoded URL maps (years = map keys)
-  if (dataset == "cpc") return(sort(as.integer(names(cpc_urls))))
-  if (dataset == "igc") return(sort(as.integer(names(igc_urls))))
-  if (dataset == "fundeb") return(sort(as.integer(names(fundeb_recursos_ids))))
+  if (dataset == "cpc") {
+    return(sort(as.integer(names(cpc_urls))))
+  }
+  if (dataset == "igc") {
+    return(sort(as.integer(names(igc_urls))))
+  }
+  if (dataset == "fundeb") {
+    return(sort(as.integer(names(fundeb_recursos_ids))))
+  }
 
   # FUNDEB enrollment: query OData API
   if (dataset == "fundeb_enrollment") {
@@ -621,25 +697,43 @@ discover_available_years <- function(dataset) {
 available_years <- function(dataset) {
   dataset <- match.arg(
     dataset,
-    choices = c("censo_escolar", "enem", "saeb", "censo_superior", "enade",
-                "encceja", "idd", "cpc", "igc", "capes", "ideb",
-                "fundeb", "fundeb_enrollment")
+    choices = c(
+      "censo_escolar",
+      "enem",
+      "saeb",
+      "censo_superior",
+      "enade",
+      "encceja",
+      "idd",
+      "cpc",
+      "igc",
+      "capes",
+      "ideb",
+      "fundeb",
+      "fundeb_enrollment"
+    )
   )
 
   # check session cache
 
   cache_key <- paste0("available_years_", dataset)
   cached <- .educabr_env[[cache_key]]
-  if (!is.null(cached)) return(cached)
+  if (!is.null(cached)) {
+    return(cached)
+  }
 
   # skip discovery if disabled (e.g., during testing)
   skip_discovery <- identical(Sys.getenv("EDUCABR_SKIP_DISCOVERY"), "true")
 
   # try dynamic discovery
-  years <- if (skip_discovery) NULL else tryCatch(
-    discover_available_years(dataset),
-    error = function(e) NULL
-  )
+  years <- if (skip_discovery) {
+    NULL
+  } else {
+    tryCatch(
+      discover_available_years(dataset),
+      error = function(e) NULL
+    )
+  }
 
   # fallback to hardcoded list if discovery fails
   if (is.null(years) || length(years) == 0) {
@@ -814,11 +908,13 @@ normalize_utf8_nfc <- function(df) {
 #' @return A tibble with the data.
 #'
 #' @keywords internal
-read_inep_file <- function(file,
-                           delim = ";",
-                           encoding = NULL,
-                           n_max = Inf,
-                           quiet = FALSE) {
+read_inep_file <- function(
+  file,
+  delim = ";",
+  encoding = NULL,
+  n_max = Inf,
+  quiet = FALSE
+) {
   # detect encoding if not specified
   if (is.null(encoding)) {
     encoding <- detect_encoding(file)

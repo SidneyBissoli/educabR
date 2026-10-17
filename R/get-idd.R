@@ -52,10 +52,7 @@
 #' # get IDD data for 2021 with limited rows
 #' idd_2021 <- get_idd(2021, n_max = 1000)
 #' }
-get_idd <- function(year,
-                    n_max = Inf,
-                    keep_zip = TRUE,
-                    quiet = FALSE) {
+get_idd <- function(year, n_max = Inf, keep_zip = TRUE, quiet = FALSE) {
   # validate arguments
   validate_year(year, "idd")
 

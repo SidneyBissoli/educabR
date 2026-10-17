@@ -72,10 +72,7 @@ enade_urls <- c(
 #' # get full dataset for 2021
 #' enade_2021 <- get_enade(2021)
 #' }
-get_enade <- function(year,
-                      n_max = Inf,
-                      keep_zip = TRUE,
-                      quiet = FALSE) {
+get_enade <- function(year, n_max = Inf, keep_zip = TRUE, quiet = FALSE) {
   # validate arguments
   validate_year(year, "enade")
 
@@ -129,7 +126,12 @@ get_enade <- function(year,
 
   # read first file (contains key columns)
   delim <- detect_delim(data_files[1])
-  df <- read_inep_file(data_files[1], delim = delim, n_max = n_max, quiet = quiet)
+  df <- read_inep_file(
+    data_files[1],
+    delim = delim,
+    n_max = n_max,
+    quiet = quiet
+  )
   df <- standardize_names(df)
 
   # read and join remaining split files (suppress per-file messages)

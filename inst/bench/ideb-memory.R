@@ -18,35 +18,66 @@ bench_one <- function(label, expr) {
   val <- eval(expr)
   dt <- as.numeric(Sys.time() - t0, units = "secs")
   g <- gc(reset = FALSE, full = TRUE)
-  peak_mb <- sum(g[, 6])  # "max used" in Mb (col name has trailing "(Mb)" header quirk)
-  obj_mb  <- as.numeric(object.size(val)) / 1024^2
-  cat(sprintf("%-50s rows=%-8d cols=%-3d time=%6.2fs peak=%6.0fMB result=%5.0fMB\n",
-              label, nrow(val), ncol(val), dt, peak_mb, obj_mb))
+  peak_mb <- sum(g[, 6]) # "max used" in Mb (col name has trailing "(Mb)" header quirk)
+  obj_mb <- as.numeric(object.size(val)) / 1024^2
+  cat(sprintf(
+    "%-50s rows=%-8d cols=%-3d time=%6.2fs peak=%6.0fMB result=%5.0fMB\n",
+    label,
+    nrow(val),
+    ncol(val),
+    dt,
+    peak_mb,
+    obj_mb
+  ))
   invisible(val)
 }
 
 cat("--- baseline (read full sheet, no projection) ---\n")
-bench_one("legacy read_ideb_excel", quote({
-  read_ideb_excel(xlsx_path, sheet = NULL)
-}))
+bench_one(
+  "legacy read_ideb_excel",
+  quote({
+    read_ideb_excel(xlsx_path, sheet = NULL)
+  })
+)
 
 cat("--- projected: metric only ---\n")
-bench_one("metric=indicador", quote({
-  read_ideb_excel(xlsx_path, sheet = NULL, metric = "indicador")
-}))
+bench_one(
+  "metric=indicador",
+  quote({
+    read_ideb_excel(xlsx_path, sheet = NULL, metric = "indicador")
+  })
+)
 
 cat("--- projected: metric + year subset ---\n")
-bench_one("metric=indicador, year=c(2023)", quote({
-  read_ideb_excel(xlsx_path, sheet = NULL, metric = "indicador", year = 2023)
-}))
+bench_one(
+  "metric=indicador, year=c(2023)",
+  quote({
+    read_ideb_excel(xlsx_path, sheet = NULL, metric = "indicador", year = 2023)
+  })
+)
 
-bench_one("metric=indicador, year=c(2017,2019,2021,2023)", quote({
-  read_ideb_excel(xlsx_path, sheet = NULL, metric = "indicador",
-                  year = c(2017, 2019, 2021, 2023))
-}))
+bench_one(
+  "metric=indicador, year=c(2017,2019,2021,2023)",
+  quote({
+    read_ideb_excel(
+      xlsx_path,
+      sheet = NULL,
+      metric = "indicador",
+      year = c(2017, 2019, 2021, 2023)
+    )
+  })
+)
 
 cat("--- end-to-end get_ideb (full pipeline) ---\n")
-bench_one("get_ideb escola/anos_iniciais/indicador, 4 anos", quote({
-  get_ideb("escola", "anos_iniciais", "indicador",
-           year = c(2017, 2019, 2021, 2023), quiet = TRUE)
-}))
+bench_one(
+  "get_ideb escola/anos_iniciais/indicador, 4 anos",
+  quote({
+    get_ideb(
+      "escola",
+      "anos_iniciais",
+      "indicador",
+      year = c(2017, 2019, 2021, 2023),
+      quiet = TRUE
+    )
+  })
+)

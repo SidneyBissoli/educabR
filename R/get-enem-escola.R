@@ -46,9 +46,7 @@
 #' # read only first 1000 rows for exploration
 #' enem_escola_sample <- get_enem_escola(n_max = 1000)
 #' }
-get_enem_escola <- function(n_max = Inf,
-                            keep_zip = TRUE,
-                            quiet = FALSE) {
+get_enem_escola <- function(n_max = Inf, keep_zip = TRUE, quiet = FALSE) {
   # build url and file paths
   url <- build_inep_url("enem_escola", year = NULL)
   zip_filename <- "microdados_enem_por_escola.zip"

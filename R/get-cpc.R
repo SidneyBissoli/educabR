@@ -75,10 +75,7 @@ cpc_urls <- c(
 #' # get CPC data for 2021 with limited rows
 #' cpc_2021 <- get_cpc(2021, n_max = 1000)
 #' }
-get_cpc <- function(year,
-                    n_max = Inf,
-                    keep_file = TRUE,
-                    quiet = FALSE) {
+get_cpc <- function(year, n_max = Inf, keep_file = TRUE, quiet = FALSE) {
   # validate arguments
   validate_year(year, "cpc")
 

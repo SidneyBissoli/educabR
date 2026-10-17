@@ -33,13 +33,22 @@ test_that("available_years returns expected FUNDEB years", {
 
 test_that("build_fundeb_url returns correct URLs", {
   url_2007 <- build_fundeb_url(2007)
-  expect_equal(url_2007, "https://thot-arquivos.tesouro.gov.br/publicacao/28512")
+  expect_equal(
+    url_2007,
+    "https://thot-arquivos.tesouro.gov.br/publicacao/28512"
+  )
 
   url_2019 <- build_fundeb_url(2019)
-  expect_equal(url_2019, "https://thot-arquivos.tesouro.gov.br/publicacao/29102")
+  expect_equal(
+    url_2019,
+    "https://thot-arquivos.tesouro.gov.br/publicacao/29102"
+  )
 
   url_2026 <- build_fundeb_url(2026)
-  expect_equal(url_2026, "https://thot-arquivos.tesouro.gov.br/publicacao/53824")
+  expect_equal(
+    url_2026,
+    "https://thot-arquivos.tesouro.gov.br/publicacao/53824"
+  )
 })
 
 test_that("build_fundeb_url errors for unknown year", {
@@ -139,18 +148,36 @@ test_that("rename_fundeb_enrollment converts CamelCase to snake_case", {
 
   expect_equal(
     names(result),
-    c("ano_censo", "uf", "municipio", "tipo_rede_educacao",
-      "descricao_tipo_educacao", "descricao_tipo_ensino",
-      "descricao_tipo_turma", "descricao_tipo_carga_horaria",
-      "descricao_tipo_localizacao", "qtd_matricula")
+    c(
+      "ano_censo",
+      "uf",
+      "municipio",
+      "tipo_rede_educacao",
+      "descricao_tipo_educacao",
+      "descricao_tipo_ensino",
+      "descricao_tipo_turma",
+      "descricao_tipo_carga_horaria",
+      "descricao_tipo_localizacao",
+      "qtd_matricula"
+    )
   )
 })
 
 # --- constants ---
 
 test_that("fundeb_sources contains all expected sources", {
-  expected <- c("FPE", "FPM", "IPI", "ITR", "VAAF", "VAAT", "VAAR",
-                "ICMS", "IPVA", "ITCMD")
+  expected <- c(
+    "FPE",
+    "FPM",
+    "IPI",
+    "ITR",
+    "VAAF",
+    "VAAT",
+    "VAAR",
+    "ICMS",
+    "IPVA",
+    "ITCMD"
+  )
   expect_equal(fundeb_sources, expected)
 })
 
