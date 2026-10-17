@@ -29,25 +29,43 @@ fundeb_recursos_ids <- c(
 )
 
 # valid FUNDEB transfer sources (sheet name suffixes)
-fundeb_sources <- c("FPE", "FPM", "IPI", "ITR", "VAAF", "VAAT", "VAAR",
-                     "ICMS", "IPVA", "ITCMD")
+fundeb_sources <- c(
+  "FPE",
+  "FPM",
+  "IPI",
+  "ITR",
+  "VAAF",
+  "VAAT",
+  "VAAR",
+  "ICMS",
+  "IPVA",
+  "ITCMD"
+)
 
 # Portuguese month names to month numbers (ASCII only, input is normalized)
 fundeb_month_map <- c(
-  "JANEIRO" = 1L, "FEVEREIRO" = 2L, "MARCO" = 3L,
-  "ABRIL" = 4L, "MAIO" = 5L, "JUNHO" = 6L,
-  "JULHO" = 7L, "AGOSTO" = 8L, "SETEMBRO" = 9L,
-  "OUTUBRO" = 10L, "NOVEMBRO" = 11L, "DEZEMBRO" = 12L
+  "JANEIRO" = 1L,
+  "FEVEREIRO" = 2L,
+  "MARCO" = 3L,
+  "ABRIL" = 4L,
+  "MAIO" = 5L,
+  "JUNHO" = 6L,
+  "JULHO" = 7L,
+  "AGOSTO" = 8L,
+  "SETEMBRO" = 9L,
+  "OUTUBRO" = 10L,
+  "NOVEMBRO" = 11L,
+  "DEZEMBRO" = 12L
 )
 
 # strip common diacriticals to ASCII (avoids encoding issues on Windows)
 strip_diacriticals <- function(x) {
-  x <- gsub("\u00c7|\u00e7", "C", x)  # Ç/ç -> C
-  x <- gsub("\u00e3|\u00c3", "A", x)  # ã/Ã -> A
-  x <- gsub("\u00e9|\u00c9", "E", x)  # é/É -> E
-  x <- gsub("\u00ed|\u00cd", "I", x)  # í/Í -> I
-  x <- gsub("\u00f3|\u00d3", "O", x)  # ó/Ó -> O
-  x <- gsub("\u00fa|\u00da", "U", x)  # ú/Ú -> U
+  x <- gsub("\u00c7|\u00e7", "C", x) # Ç/ç -> C
+  x <- gsub("\u00e3|\u00c3", "A", x) # ã/Ã -> A
+  x <- gsub("\u00e9|\u00c9", "E", x) # é/É -> E
+  x <- gsub("\u00ed|\u00cd", "I", x) # í/Í -> I
+  x <- gsub("\u00f3|\u00d3", "O", x) # ó/Ó -> O
+  x <- gsub("\u00fa|\u00da", "U", x) # ú/Ú -> U
   x
 }
 
@@ -127,13 +145,15 @@ fundeb_enrollment_api_url <- function() {
 #' # get data for Sao Paulo only
 #' sp <- get_fundeb_distribution(2023, uf = "SP")
 #' }
-get_fundeb_distribution <- function(year,
-                                    uf = NULL,
-                                    source = NULL,
-                                    destination = NULL,
-                                    n_max = Inf,
-                                    keep_file = TRUE,
-                                    quiet = FALSE) {
+get_fundeb_distribution <- function(
+  year,
+  uf = NULL,
+  source = NULL,
+  destination = NULL,
+  n_max = Inf,
+  keep_file = TRUE,
+  quiet = FALSE
+) {
   # validate arguments
   validate_year(year, "fundeb")
 
@@ -183,8 +203,13 @@ get_fundeb_distribution <- function(year,
     cli::cli_alert_info("reading FUNDEB distribution data...")
   }
 
-  df <- read_fundeb_sheets(file_path, year, source = source,
-                           destination = destination, quiet = quiet)
+  df <- read_fundeb_sheets(
+    file_path,
+    year,
+    source = source,
+    destination = destination,
+    quiet = quiet
+  )
 
   # filter by UF if requested
   if (!is.null(uf)) {
@@ -216,16 +241,16 @@ get_fundeb_distribution <- function(year,
 
 # column name mapping for FUNDEB enrollment (OData CamelCase -> snake_case)
 fundeb_enrollment_col_names <- c(
-  "anocenso"                   = "ano_censo",
-  "uf"                         = "uf",
-  "municipioge"                = "municipio",
-  "tiporedeeducacao"           = "tipo_rede_educacao",
-  "descricaotipoeducacao"      = "descricao_tipo_educacao",
-  "descricaotipoensino"        = "descricao_tipo_ensino",
-  "descricaotipoturma"         = "descricao_tipo_turma",
-  "descricaotipocargahoraria"  = "descricao_tipo_carga_horaria",
-  "descricaotipolocalizacao"   = "descricao_tipo_localizacao",
-  "qtdmatricula"               = "qtd_matricula"
+  "anocenso" = "ano_censo",
+  "uf" = "uf",
+  "municipioge" = "municipio",
+  "tiporedeeducacao" = "tipo_rede_educacao",
+  "descricaotipoeducacao" = "descricao_tipo_educacao",
+  "descricaotipoensino" = "descricao_tipo_ensino",
+  "descricaotipoturma" = "descricao_tipo_turma",
+  "descricaotipocargahoraria" = "descricao_tipo_carga_horaria",
+  "descricaotipolocalizacao" = "descricao_tipo_localizacao",
+  "qtdmatricula" = "qtd_matricula"
 )
 
 #' Get FUNDEB enrollment data
@@ -288,11 +313,13 @@ fundeb_enrollment_col_names <- c(
 #' # get enrollment data with limited rows
 #' mat_sample <- get_fundeb_enrollment(2023, n_max = 1000)
 #' }
-get_fundeb_enrollment <- function(year,
-                                  uf = NULL,
-                                  n_max = Inf,
-                                  keep_file = TRUE,
-                                  quiet = FALSE) {
+get_fundeb_enrollment <- function(
+  year,
+  uf = NULL,
+  n_max = Inf,
+  keep_file = TRUE,
+  quiet = FALSE
+) {
   # validate arguments
   validate_year(year, "fundeb_enrollment")
 
@@ -344,7 +371,9 @@ get_fundeb_enrollment <- function(year,
 
   # fetch from OData API with pagination
   if (!quiet) {
-    cli::cli_alert_info("fetching FUNDEB enrollment {.val {year}} from FNDE API...")
+    cli::cli_alert_info(
+      "fetching FUNDEB enrollment {.val {year}} from FNDE API..."
+    )
   }
 
   # always fetch the complete dataset (no UF filter) so we can cache it safely
@@ -415,15 +444,24 @@ build_fundeb_url <- function(year) {
 }
 
 # read all valid sheets from the FUNDEB Excel file and combine into tidy format
-read_fundeb_sheets <- function(file_path, year, source = NULL,
-                               destination = NULL, quiet = FALSE) {
+read_fundeb_sheets <- function(
+  file_path,
+  year,
+  source = NULL,
+  destination = NULL,
+  quiet = FALSE
+) {
   sheets <- readxl::excel_sheets(file_path)
 
   # keep only data sheets: E_ or M_ prefix + valid source suffix
   # excludes summary sheets (Tot1, Tot2, Total) and non-standard sheets (COUN)
   # match sheets starting with E_ or M_ and ending with a valid source
   # handles both E_FPE and E_COUN_VAAR patterns
-  valid_suffix_pattern <- str_c("(", str_c(fundeb_sources, collapse = "|"), ")$")
+  valid_suffix_pattern <- str_c(
+    "(",
+    str_c(fundeb_sources, collapse = "|"),
+    ")$"
+  )
   valid_sheets <- sheets[grepl(
     str_c("^[EM]_.*", valid_suffix_pattern),
     toupper(sheets)
@@ -449,8 +487,12 @@ read_fundeb_sheets <- function(file_path, year, source = NULL,
     src_name <- parts[length(parts)]
 
     # filter by destination/source before reading (efficiency)
-    if (!is.null(destination) && dest_name != destination) next
-    if (!is.null(source) && src_name != toupper(source)) next
+    if (!is.null(destination) && dest_name != destination) {
+      next
+    }
+    if (!is.null(source) && src_name != toupper(source)) {
+      next
+    }
 
     if (!quiet) {
       cli::cli_alert_info("processing sheet {.val {sheet}}...")
@@ -482,10 +524,19 @@ read_fundeb_sheets <- function(file_path, year, source = NULL,
 
 # parse a single sheet from the FUNDEB Excel file
 # each sheet has two tables: main fundeb + ajuste fundeb
-parse_fundeb_sheet <- function(file_path, sheet_name, year,
-                               source_name, dest_name) {
-  raw <- readxl::read_excel(file_path, sheet = sheet_name,
-                            col_names = FALSE, .name_repair = "minimal")
+parse_fundeb_sheet <- function(
+  file_path,
+  sheet_name,
+  year,
+  source_name,
+  dest_name
+) {
+  raw <- readxl::read_excel(
+    file_path,
+    sheet = sheet_name,
+    col_names = FALSE,
+    .name_repair = "minimal"
+  )
 
   # find all header rows (rows containing "UF")
   header_rows <- integer(0)
@@ -496,7 +547,9 @@ parse_fundeb_sheet <- function(file_path, sheet_name, year,
     }
   }
 
-  if (length(header_rows) == 0) return(dplyr::tibble())
+  if (length(header_rows) == 0) {
+    return(dplyr::tibble())
+  }
 
   table_names <- c("Fundeb", "Ajuste Fundeb")
   tables <- list()
@@ -511,7 +564,9 @@ parse_fundeb_sheet <- function(file_path, sheet_name, year,
       end_row <- nrow(raw)
     }
 
-    if (h >= end_row) next
+    if (h >= end_row) {
+      next
+    }
 
     # column names from header row
     col_names <- trimws(as.character(unlist(raw[h, ])))
@@ -520,15 +575,27 @@ parse_fundeb_sheet <- function(file_path, sheet_name, year,
     data_section <- raw[(h + 1):end_row, ]
     names(data_section) <- col_names
 
-    tabela <- if (t <= length(table_names)) table_names[t] else str_c("tabela_", t)
+    tabela <- if (t <= length(table_names)) {
+      table_names[t]
+    } else {
+      str_c("tabela_", t)
+    }
 
-    tidy <- tidy_fundeb_table(data_section, year, source_name, dest_name, tabela)
+    tidy <- tidy_fundeb_table(
+      data_section,
+      year,
+      source_name,
+      dest_name,
+      tabela
+    )
     if (nrow(tidy) > 0) {
       tables <- c(tables, list(tidy))
     }
   }
 
-  if (length(tables) == 0) return(dplyr::tibble())
+  if (length(tables) == 0) {
+    return(dplyr::tibble())
+  }
   dplyr::bind_rows(tables)
 }
 
@@ -549,13 +616,17 @@ tidy_fundeb_table <- function(df, year, source_name, dest_name, tabela) {
   # identify month columns
   month_idx <- which(upper_names %in% names(fundeb_month_map))
 
-  if (length(month_idx) == 0) return(dplyr::tibble())
+  if (length(month_idx) == 0) {
+    return(dplyr::tibble())
+  }
 
   # find estado (first column) and UF column
   uf_idx <- which(upper_names == "UF")[1]
   estado_idx <- 1L
 
-  if (is.na(uf_idx)) return(dplyr::tibble())
+  if (is.na(uf_idx)) {
+    return(dplyr::tibble())
+  }
 
   # remove non-data rows (summary, observations, empty, repeated headers)
   first_col <- toupper(trimws(as.character(df[[estado_idx]])))
@@ -563,7 +634,9 @@ tidy_fundeb_table <- function(df, year, source_name, dest_name, tabela) {
     grepl("^(REPASSE|OBSERVA|AJUSTE|ESTADOS|$)", first_col)
   df <- df[!skip, ]
 
-  if (nrow(df) == 0) return(dplyr::tibble())
+  if (nrow(df) == 0) {
+    return(dplyr::tibble())
+  }
 
   # select columns: estado, uf, months
   month_cols <- names(df)[month_idx]
@@ -587,12 +660,15 @@ tidy_fundeb_table <- function(df, year, source_name, dest_name, tabela) {
   df_long$valor <- suppressWarnings(as.numeric(df_long$valor))
 
   # convert month names to dates (last day of each month)
-  month_num <- fundeb_month_map[strip_diacriticals(toupper(trimws(df_long$mes_nome)))]
+  month_num <- fundeb_month_map[strip_diacriticals(toupper(trimws(
+    df_long$mes_nome
+  )))]
   next_month <- ifelse(month_num == 12L, 1L, month_num + 1L)
   next_year <- ifelse(month_num == 12L, year + 1L, year)
   df_long$mes_ano <- as.Date(
     paste(next_year, next_month, "01", sep = "-")
-  ) - 1L
+  ) -
+    1L
 
   # add metadata columns
   df_long$origem <- source_name
@@ -600,8 +676,15 @@ tidy_fundeb_table <- function(df, year, source_name, dest_name, tabela) {
   df_long$tabela <- tabela
 
   # select and order final columns
-  df_long <- df_long[, c("estados", "uf", "mes_ano", "origem", "destino",
-                          "tabela", "valor")]
+  df_long <- df_long[, c(
+    "estados",
+    "uf",
+    "mes_ano",
+    "origem",
+    "destino",
+    "tabela",
+    "valor"
+  )]
 
   dplyr::as_tibble(df_long)
 }
@@ -629,7 +712,12 @@ rename_fundeb_enrollment <- function(df) {
 #' @return A tibble with enrollment data.
 #'
 #' @keywords internal
-fetch_fundeb_enrollment <- function(year, uf = NULL, n_max = Inf, quiet = FALSE) {
+fetch_fundeb_enrollment <- function(
+  year,
+  uf = NULL,
+  n_max = Inf,
+  quiet = FALSE
+) {
   base_url <- fundeb_enrollment_api_url()
   page_size <- 10000L
   all_rows <- list()
@@ -644,11 +732,19 @@ fetch_fundeb_enrollment <- function(year, uf = NULL, n_max = Inf, quiet = FALSE)
 
   repeat {
     # determine how many to fetch this page
-    remaining <- if (is.infinite(n_max)) page_size else min(page_size, n_max - total_fetched)
-    if (remaining <= 0) break
+    remaining <- if (is.infinite(n_max)) {
+      page_size
+    } else {
+      min(page_size, n_max - total_fetched)
+    }
+    if (remaining <= 0) {
+      break
+    }
 
     if (!quiet) {
-      cli::cli_alert_info("fetching records {.val {skip + 1}} to {.val {skip + remaining}}...")
+      cli::cli_alert_info(
+        "fetching records {.val {skip + 1}} to {.val {skip + remaining}}..."
+      )
     }
 
     # perform request (use req_url_query for proper URL encoding)
@@ -662,7 +758,7 @@ fetch_fundeb_enrollment <- function(year, uf = NULL, n_max = Inf, quiet = FALSE)
             `$format` = "json"
           ) |>
           httr2::req_timeout(seconds = 300) |>
-          httr2::req_retry(max_tries = 3, backoff = ~ 15)
+          httr2::req_retry(max_tries = 3, backoff = ~15)
 
         resp <- httr2::req_perform(req)
         body <- httr2::resp_body_json(resp)
@@ -682,7 +778,9 @@ fetch_fundeb_enrollment <- function(year, uf = NULL, n_max = Inf, quiet = FALSE)
     )
 
     # no more data
-    if (length(page_data) == 0) break
+    if (length(page_data) == 0) {
+      break
+    }
 
     # convert list of lists to tibble
     page_df <- dplyr::bind_rows(lapply(page_data, as.data.frame))
@@ -696,7 +794,9 @@ fetch_fundeb_enrollment <- function(year, uf = NULL, n_max = Inf, quiet = FALSE)
     }
 
     # stop if we got fewer rows than requested (last page)
-    if (nrow(page_df) < remaining) break
+    if (nrow(page_df) < remaining) {
+      break
+    }
 
     # stop if we reached n_max
     if (!is.infinite(n_max) && total_fetched >= n_max) break

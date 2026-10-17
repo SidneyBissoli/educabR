@@ -11,8 +11,21 @@ test_that("enem_summary calculates correct statistics", {
 
   expect_s3_class(result, "tbl_df")
   expect_equal(nrow(result), 2)
-  expect_true(all(c("variable", "n", "n_valid", "mean", "sd",
-                     "min", "q25", "median", "q75", "max") %in% names(result)))
+  expect_true(all(
+    c(
+      "variable",
+      "n",
+      "n_valid",
+      "mean",
+      "sd",
+      "min",
+      "q25",
+      "median",
+      "q75",
+      "max"
+    ) %in%
+      names(result)
+  ))
 
   # check nu_nota_cn stats
   cn <- result[result$variable == "nu_nota_cn", ]

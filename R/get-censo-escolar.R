@@ -72,12 +72,14 @@
 #' docentes_2025 <- get_censo_escolar(2025, file = "Docente")
 #' turmas_2025 <- get_censo_escolar(2025, file = "Turma")
 #' }
-get_censo_escolar <- function(year,
-                              file = NULL,
-                              uf = NULL,
-                              n_max = Inf,
-                              keep_zip = TRUE,
-                              quiet = FALSE) {
+get_censo_escolar <- function(
+  year,
+  file = NULL,
+  uf = NULL,
+  n_max = Inf,
+  keep_zip = TRUE,
+  quiet = FALSE
+) {
   # validate arguments
   validate_year(year, "censo_escolar")
 
@@ -128,7 +130,12 @@ get_censo_escolar <- function(year,
   read_max <- if (!is.null(uf)) Inf else n_max
 
   # read the file
-  df <- read_inep_file(data_file, delim = delim, n_max = read_max, quiet = quiet)
+  df <- read_inep_file(
+    data_file,
+    delim = delim,
+    n_max = read_max,
+    quiet = quiet
+  )
 
   # standardize column names
   df <- standardize_names(df)
@@ -241,7 +248,6 @@ find_censo_file_by_name <- function(exdir, file, year) {
 #'
 #' @keywords internal
 find_censo_file <- function(exdir, year) {
-
   # look for the main microdados file
   # 2007-2024: microdados_ed_basica_{year}.csv
   # 1995-2006: CENSOESC_{year}.CSV
@@ -302,12 +308,33 @@ uf_to_code <- function(uf) {
 
   # uf mapping
   uf_map <- c(
-    "RO" = 11, "AC" = 12, "AM" = 13, "RR" = 14, "PA" = 15,
-    "AP" = 16, "TO" = 17, "MA" = 21, "PI" = 22, "CE" = 23,
-    "RN" = 24, "PB" = 25, "PE" = 26, "AL" = 27, "SE" = 28,
-    "BA" = 29, "MG" = 31, "ES" = 32, "RJ" = 33, "SP" = 35,
-    "PR" = 41, "SC" = 42, "RS" = 43, "MS" = 50, "MT" = 51,
-    "GO" = 52, "DF" = 53
+    "RO" = 11,
+    "AC" = 12,
+    "AM" = 13,
+    "RR" = 14,
+    "PA" = 15,
+    "AP" = 16,
+    "TO" = 17,
+    "MA" = 21,
+    "PI" = 22,
+    "CE" = 23,
+    "RN" = 24,
+    "PB" = 25,
+    "PE" = 26,
+    "AL" = 27,
+    "SE" = 28,
+    "BA" = 29,
+    "MG" = 31,
+    "ES" = 32,
+    "RJ" = 33,
+    "SP" = 35,
+    "PR" = 41,
+    "SC" = 42,
+    "RS" = 43,
+    "MS" = 50,
+    "MT" = 51,
+    "GO" = 52,
+    "DF" = 53
   )
 
   uf_upper <- toupper(uf)

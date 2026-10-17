@@ -66,12 +66,14 @@
 #' # get faculty data
 #' docentes <- get_censo_superior(2023, type = "docentes")
 #' }
-get_censo_superior <- function(year,
-                               type = c("ies", "cursos", "alunos", "docentes"),
-                               uf = NULL,
-                               n_max = Inf,
-                               keep_zip = TRUE,
-                               quiet = FALSE) {
+get_censo_superior <- function(
+  year,
+  type = c("ies", "cursos", "alunos", "docentes"),
+  uf = NULL,
+  n_max = Inf,
+  keep_zip = TRUE,
+  quiet = FALSE
+) {
   # validate arguments
   validate_year(year, "censo_superior")
   type <- match.arg(type)
@@ -110,7 +112,9 @@ get_censo_superior <- function(year,
   data_file <- find_censo_superior_file(exdir, year, type)
 
   if (!quiet) {
-    cli::cli_alert_info("reading Higher Education Census data ({.val {type}})...")
+    cli::cli_alert_info(
+      "reading Higher Education Census data ({.val {type}})..."
+    )
     if (is.infinite(n_max) && type == "alunos") {
       cli::cli_alert_warning(
         "student files can be very large. use {.arg n_max} to limit rows if needed."
@@ -125,7 +129,12 @@ get_censo_superior <- function(year,
   read_max <- if (!is.null(uf)) Inf else n_max
 
   # read the file
-  df <- read_inep_file(data_file, delim = delim, n_max = read_max, quiet = quiet)
+  df <- read_inep_file(
+    data_file,
+    delim = delim,
+    n_max = read_max,
+    quiet = quiet
+  )
 
   # standardize column names
   df <- standardize_names(df)

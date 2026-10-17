@@ -73,10 +73,7 @@ igc_urls <- c(
 #' # get IGC data for 2021 with limited rows
 #' igc_2021 <- get_igc(2021, n_max = 1000)
 #' }
-get_igc <- function(year,
-                    n_max = Inf,
-                    keep_file = TRUE,
-                    quiet = FALSE) {
+get_igc <- function(year, n_max = Inf, keep_file = TRUE, quiet = FALSE) {
   # validate arguments
   validate_year(year, "igc")
 
@@ -108,7 +105,9 @@ get_igc <- function(year,
     # extract the 7z archive and find the excel file inside
     exdir <- cache_path("igc", str_c("igc_", year))
 
-    if (!dir.exists(exdir) || length(list.files(exdir, recursive = TRUE)) == 0) {
+    if (
+      !dir.exists(exdir) || length(list.files(exdir, recursive = TRUE)) == 0
+    ) {
       extract_archive(file_path, exdir, quiet = quiet)
     }
 

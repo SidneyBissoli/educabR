@@ -21,9 +21,11 @@ test_that("get_capes full pipeline when not cached", {
     download_inep_file = function(url, destfile, quiet = FALSE) {
       dir.create(dirname(destfile), recursive = TRUE, showWarnings = FALSE)
       writeLines(
-        c("CD_PROGRAMA_IES;NM_PROGRAMA;SG_ENTIDADE_ENSINO;NM_ENTIDADE_ENSINO;AN_BASE;CD_CONCEITO_CURSO",
+        c(
+          "CD_PROGRAMA_IES;NM_PROGRAMA;SG_ENTIDADE_ENSINO;NM_ENTIDADE_ENSINO;AN_BASE;CD_CONCEITO_CURSO",
           "001;PROG A;USP;Universidade de Sao Paulo;2023;5",
-          "002;PROG B;UNICAMP;Universidade Estadual de Campinas;2023;4"),
+          "002;PROG B;UNICAMP;Universidade Estadual de Campinas;2023;4"
+        ),
         destfile
       )
       destfile
@@ -46,8 +48,10 @@ test_that("get_capes with keep_file=FALSE removes cached file", {
     download_inep_file = function(url, destfile, quiet = FALSE) {
       dir.create(dirname(destfile), recursive = TRUE, showWarnings = FALSE)
       writeLines(
-        c("CD_PROGRAMA_IES;NM_PROGRAMA;SG_ENTIDADE_ENSINO;AN_BASE",
-          "001;PROG A;USP;2023"),
+        c(
+          "CD_PROGRAMA_IES;NM_PROGRAMA;SG_ENTIDADE_ENSINO;AN_BASE",
+          "001;PROG A;USP;2023"
+        ),
         destfile
       )
       destfile
@@ -70,8 +74,10 @@ test_that("get_capes not-quiet path prints messages", {
     download_inep_file = function(url, destfile, quiet = FALSE) {
       dir.create(dirname(destfile), recursive = TRUE, showWarnings = FALSE)
       writeLines(
-        c("CD_PROGRAMA_IES;NM_PROGRAMA;SG_ENTIDADE_ENSINO;AN_BASE",
-          "001;PROG A;USP;2023"),
+        c(
+          "CD_PROGRAMA_IES;NM_PROGRAMA;SG_ENTIDADE_ENSINO;AN_BASE",
+          "001;PROG A;USP;2023"
+        ),
         destfile
       )
       destfile
@@ -92,8 +98,10 @@ test_that("get_capes uses cached file when present", {
   capes_dir <- file.path(temp_cache, "capes")
   dir.create(capes_dir, recursive = TRUE)
   writeLines(
-    c("CD_PROGRAMA_IES;NM_PROGRAMA;SG_ENTIDADE_ENSINO;AN_BASE",
-      "001;PROG A;USP;2023"),
+    c(
+      "CD_PROGRAMA_IES;NM_PROGRAMA;SG_ENTIDADE_ENSINO;AN_BASE",
+      "001;PROG A;USP;2023"
+    ),
     file.path(capes_dir, "capes_programas_2023.csv")
   )
 
@@ -116,8 +124,10 @@ test_that("get_capes applies parse_sas_dates and clean_dash_values", {
     download_inep_file = function(url, destfile, quiet = FALSE) {
       dir.create(dirname(destfile), recursive = TRUE, showWarnings = FALSE)
       writeLines(
-        c("CD_PROGRAMA_IES;DT_SITUACAO;NM_PROGRAMA;SG_ENTIDADE_ENSINO",
-          "001;01JAN2023:00:00:00;-;USP"),
+        c(
+          "CD_PROGRAMA_IES;DT_SITUACAO;NM_PROGRAMA;SG_ENTIDADE_ENSINO",
+          "001;01JAN2023:00:00:00;-;USP"
+        ),
         destfile
       )
       destfile
@@ -161,8 +171,11 @@ test_that("discover_capes_url builds correct package slug", {
         success = TRUE,
         result = list(
           resources = list(
-            list(format = "CSV", name = "programas-2023-data",
-                 url = "http://example.com/prog-2023.csv")
+            list(
+              format = "CSV",
+              name = "programas-2023-data",
+              url = "http://example.com/prog-2023.csv"
+            )
           )
         )
       )
@@ -193,10 +206,16 @@ test_that("discover_capes_url falls back to URL matching when name does not matc
         result = list(
           resources = list(
             # name does NOT contain 2023, but URL does
-            list(format = "CSV", name = "programas-data",
-                 url = "http://example.com/prog-2023-data.csv"),
-            list(format = "PDF", name = "dicionario",
-                 url = "http://example.com/dict.pdf")
+            list(
+              format = "CSV",
+              name = "programas-data",
+              url = "http://example.com/prog-2023-data.csv"
+            ),
+            list(
+              format = "PDF",
+              name = "dicionario",
+              url = "http://example.com/dict.pdf"
+            )
           )
         )
       )
@@ -223,8 +242,11 @@ test_that("discover_capes_url errors when no CSV resource found", {
         success = TRUE,
         result = list(
           resources = list(
-            list(format = "PDF", name = "dicionario-2023",
-                 url = "http://example.com/dict.pdf")
+            list(
+              format = "PDF",
+              name = "dicionario-2023",
+              url = "http://example.com/dict.pdf"
+            )
           )
         )
       )
@@ -285,15 +307,19 @@ test_that("discover_capes_url errors on network failure", {
 
 test_that("read_fundeb_sheets filters by source and destination", {
   mock_tidy <- dplyr::tibble(
-    estados = "SAO PAULO", uf = "SP",
+    estados = "SAO PAULO",
+    uf = "SP",
     mes_ano = as.Date("2023-01-31"),
-    origem = "FPE", destino = "UF",
-    tabela = "Fundeb", valor = 1000
+    origem = "FPE",
+    destino = "UF",
+    tabela = "Fundeb",
+    valor = 1000
   )
 
   local_mocked_bindings(
-    excel_sheets = function(...) c("E_FPE", "M_FPE", "E_ICMS", "M_ICMS",
-                                   "Tot1", "Resumo"),
+    excel_sheets = function(...) {
+      c("E_FPE", "M_FPE", "E_ICMS", "M_ICMS", "Tot1", "Resumo")
+    },
     .package = "readxl"
   )
 
@@ -317,21 +343,33 @@ test_that("read_fundeb_sheets filters by source only", {
   )
 
   local_mocked_bindings(
-    parse_fundeb_sheet = function(file_path, sheet_name, year,
-                                  source_name, dest_name) {
+    parse_fundeb_sheet = function(
+      file_path,
+      sheet_name,
+      year,
+      source_name,
+      dest_name
+    ) {
       call_count <<- call_count + 1
       dplyr::tibble(
-        estados = "SAO PAULO", uf = "SP",
+        estados = "SAO PAULO",
+        uf = "SP",
         mes_ano = as.Date("2023-01-31"),
-        origem = source_name, destino = dest_name,
-        tabela = "Fundeb", valor = 1000
+        origem = source_name,
+        destino = dest_name,
+        tabela = "Fundeb",
+        valor = 1000
       )
     },
     .package = "educabR"
   )
 
-  result <- educabR:::read_fundeb_sheets("dummy.xls", 2023,
-                                         source = "FPE", quiet = TRUE)
+  result <- educabR:::read_fundeb_sheets(
+    "dummy.xls",
+    2023,
+    source = "FPE",
+    quiet = TRUE
+  )
   # Only E_FPE and M_FPE should be processed
   expect_equal(call_count, 2)
   expect_true(all(result$origem == "FPE"))
@@ -346,21 +384,33 @@ test_that("read_fundeb_sheets filters by destination only", {
   )
 
   local_mocked_bindings(
-    parse_fundeb_sheet = function(file_path, sheet_name, year,
-                                  source_name, dest_name) {
+    parse_fundeb_sheet = function(
+      file_path,
+      sheet_name,
+      year,
+      source_name,
+      dest_name
+    ) {
       call_count <<- call_count + 1
       dplyr::tibble(
-        estados = "SAO PAULO", uf = "SP",
+        estados = "SAO PAULO",
+        uf = "SP",
         mes_ano = as.Date("2023-01-31"),
-        origem = source_name, destino = dest_name,
-        tabela = "Fundeb", valor = 1000
+        origem = source_name,
+        destino = dest_name,
+        tabela = "Fundeb",
+        valor = 1000
       )
     },
     .package = "educabR"
   )
 
-  result <- educabR:::read_fundeb_sheets("dummy.xls", 2023,
-                                         destination = "UF", quiet = TRUE)
+  result <- educabR:::read_fundeb_sheets(
+    "dummy.xls",
+    2023,
+    destination = "UF",
+    quiet = TRUE
+  )
   # Only E_ sheets (UF destination)
   expect_equal(call_count, 2)
 })
@@ -375,12 +425,17 @@ test_that("read_fundeb_sheets handles parse errors gracefully", {
   local_mocked_bindings(
     parse_fundeb_sheet = function(...) {
       call_num <<- call_num + 1
-      if (call_num == 1) stop("corrupt sheet")
+      if (call_num == 1) {
+        stop("corrupt sheet")
+      }
       dplyr::tibble(
-        estados = "SP STATE", uf = "SP",
+        estados = "SP STATE",
+        uf = "SP",
         mes_ano = as.Date("2023-01-31"),
-        origem = "ICMS", destino = "UF",
-        tabela = "Fundeb", valor = 500
+        origem = "ICMS",
+        destino = "UF",
+        tabela = "Fundeb",
+        valor = 500
       )
     },
     .package = "educabR"
@@ -426,13 +481,21 @@ test_that("read_fundeb_sheets handles sheets with 3-part names like E_COUN_VAAR"
   )
 
   local_mocked_bindings(
-    parse_fundeb_sheet = function(file_path, sheet_name, year,
-                                  source_name, dest_name) {
+    parse_fundeb_sheet = function(
+      file_path,
+      sheet_name,
+      year,
+      source_name,
+      dest_name
+    ) {
       dplyr::tibble(
-        estados = "SAO PAULO", uf = "SP",
+        estados = "SAO PAULO",
+        uf = "SP",
         mes_ano = as.Date("2023-01-31"),
-        origem = source_name, destino = dest_name,
-        tabela = "Fundeb", valor = 1000
+        origem = source_name,
+        destino = dest_name,
+        tabela = "Fundeb",
+        valor = 1000
       )
     },
     .package = "educabR"
@@ -444,8 +507,16 @@ test_that("read_fundeb_sheets handles sheets with 3-part names like E_COUN_VAAR"
 
 test_that("parse_fundeb_sheet finds header rows and extracts tables", {
   mock_raw <- dplyr::tibble(
-    ...1 = c("REPASSE DO FUNDEB", "ESTADOS", "SAO PAULO", "RIO DE JANEIRO",
-             "", "AJUSTE FUNDEB", "ESTADOS", "SAO PAULO"),
+    ...1 = c(
+      "REPASSE DO FUNDEB",
+      "ESTADOS",
+      "SAO PAULO",
+      "RIO DE JANEIRO",
+      "",
+      "AJUSTE FUNDEB",
+      "ESTADOS",
+      "SAO PAULO"
+    ),
     ...2 = c("", "UF", "SP", "RJ", "", "", "UF", "SP"),
     ...3 = c("", "JANEIRO", "1000", "2000", "", "", "JANEIRO", "50")
   )
@@ -455,7 +526,13 @@ test_that("parse_fundeb_sheet finds header rows and extracts tables", {
     .package = "readxl"
   )
 
-  result <- educabR:::parse_fundeb_sheet("dummy.xls", "E_FPE", 2023, "FPE", "UF")
+  result <- educabR:::parse_fundeb_sheet(
+    "dummy.xls",
+    "E_FPE",
+    2023,
+    "FPE",
+    "UF"
+  )
   expect_s3_class(result, "tbl_df")
   expect_true(nrow(result) > 0)
   expect_true("valor" %in% names(result))
@@ -473,7 +550,13 @@ test_that("parse_fundeb_sheet returns empty tibble when no header rows", {
     .package = "readxl"
   )
 
-  result <- educabR:::parse_fundeb_sheet("dummy.xls", "E_FPE", 2023, "FPE", "UF")
+  result <- educabR:::parse_fundeb_sheet(
+    "dummy.xls",
+    "E_FPE",
+    2023,
+    "FPE",
+    "UF"
+  )
   expect_equal(nrow(result), 0)
 })
 
@@ -489,7 +572,13 @@ test_that("parse_fundeb_sheet handles single table (no ajuste)", {
     .package = "readxl"
   )
 
-  result <- educabR:::parse_fundeb_sheet("dummy.xls", "E_FPE", 2023, "FPE", "UF")
+  result <- educabR:::parse_fundeb_sheet(
+    "dummy.xls",
+    "E_FPE",
+    2023,
+    "FPE",
+    "UF"
+  )
   expect_true(nrow(result) > 0)
   expect_true(all(result$tabela == "Fundeb"))
 })
@@ -523,14 +612,22 @@ test_that("fetch_fundeb_enrollment paginates and stops on empty page", {
     },
     resp_body_json = function(resp) {
       if (resp$call == 1) {
-        list(value = list(
-          list(AnoCenso = 2023, Uf = "SP", MunicipioGe = "SAO PAULO",
-               TipoRedeEducacao = "PUB", DescricaoTipoEducacao = "REG",
-               DescricaoTipoEnsino = "FUND", DescricaoTipoTurma = "AI",
-               DescricaoTipoCargaHoraria = "PARC",
-               DescricaoTipoLocalizacao = "URB",
-               QtdMatricula = 1000)
-        ))
+        list(
+          value = list(
+            list(
+              AnoCenso = 2023,
+              Uf = "SP",
+              MunicipioGe = "SAO PAULO",
+              TipoRedeEducacao = "PUB",
+              DescricaoTipoEducacao = "REG",
+              DescricaoTipoEnsino = "FUND",
+              DescricaoTipoTurma = "AI",
+              DescricaoTipoCargaHoraria = "PARC",
+              DescricaoTipoLocalizacao = "URB",
+              QtdMatricula = 1000
+            )
+          )
+        )
       } else {
         list(value = list())
       }
@@ -567,14 +664,22 @@ test_that("fetch_fundeb_enrollment with uf filter builds correct query", {
     },
     resp_body_json = function(resp) {
       if (resp$call == 1) {
-        list(value = list(
-          list(AnoCenso = 2023, Uf = "SP", MunicipioGe = "SAO PAULO",
-               TipoRedeEducacao = "PUB", DescricaoTipoEducacao = "REG",
-               DescricaoTipoEnsino = "FUND", DescricaoTipoTurma = "AI",
-               DescricaoTipoCargaHoraria = "PARC",
-               DescricaoTipoLocalizacao = "URB",
-               QtdMatricula = 500)
-        ))
+        list(
+          value = list(
+            list(
+              AnoCenso = 2023,
+              Uf = "SP",
+              MunicipioGe = "SAO PAULO",
+              TipoRedeEducacao = "PUB",
+              DescricaoTipoEducacao = "REG",
+              DescricaoTipoEnsino = "FUND",
+              DescricaoTipoTurma = "AI",
+              DescricaoTipoCargaHoraria = "PARC",
+              DescricaoTipoLocalizacao = "URB",
+              QtdMatricula = 500
+            )
+          )
+        )
       } else {
         list(value = list())
       }
@@ -601,20 +706,34 @@ test_that("fetch_fundeb_enrollment respects n_max", {
       structure(list(call = call_count), class = "httr2_response")
     },
     resp_body_json = function(resp) {
-      list(value = list(
-        list(AnoCenso = 2023, Uf = "SP", MunicipioGe = "SAO PAULO",
-             TipoRedeEducacao = "PUB", DescricaoTipoEducacao = "REG",
-             DescricaoTipoEnsino = "FUND", DescricaoTipoTurma = "AI",
-             DescricaoTipoCargaHoraria = "PARC",
-             DescricaoTipoLocalizacao = "URB",
-             QtdMatricula = 100),
-        list(AnoCenso = 2023, Uf = "RJ", MunicipioGe = "RIO",
-             TipoRedeEducacao = "PUB", DescricaoTipoEducacao = "REG",
-             DescricaoTipoEnsino = "FUND", DescricaoTipoTurma = "AI",
-             DescricaoTipoCargaHoraria = "PARC",
-             DescricaoTipoLocalizacao = "URB",
-             QtdMatricula = 200)
-      ))
+      list(
+        value = list(
+          list(
+            AnoCenso = 2023,
+            Uf = "SP",
+            MunicipioGe = "SAO PAULO",
+            TipoRedeEducacao = "PUB",
+            DescricaoTipoEducacao = "REG",
+            DescricaoTipoEnsino = "FUND",
+            DescricaoTipoTurma = "AI",
+            DescricaoTipoCargaHoraria = "PARC",
+            DescricaoTipoLocalizacao = "URB",
+            QtdMatricula = 100
+          ),
+          list(
+            AnoCenso = 2023,
+            Uf = "RJ",
+            MunicipioGe = "RIO",
+            TipoRedeEducacao = "PUB",
+            DescricaoTipoEducacao = "REG",
+            DescricaoTipoEnsino = "FUND",
+            DescricaoTipoTurma = "AI",
+            DescricaoTipoCargaHoraria = "PARC",
+            DescricaoTipoLocalizacao = "URB",
+            QtdMatricula = 200
+          )
+        )
+      )
     },
     .package = "httr2"
   )
@@ -683,8 +802,12 @@ test_that("get_fundeb_enrollment full pipeline fetches from API when not cached"
   )
 
   local_mocked_bindings(
-    fetch_fundeb_enrollment = function(year, uf = NULL, n_max = Inf,
-                                       quiet = FALSE) {
+    fetch_fundeb_enrollment = function(
+      year,
+      uf = NULL,
+      n_max = Inf,
+      quiet = FALSE
+    ) {
       mock_enrollment
     },
     rename_fundeb_enrollment = function(df) df,
@@ -696,7 +819,10 @@ test_that("get_fundeb_enrollment full pipeline fetches from API when not cached"
   expect_equal(nrow(result), 2)
 
   # Check that it was cached
-  file_path <- educabR:::cache_path("fundeb_enrollment", "fundeb_enrollment_2018.csv")
+  file_path <- educabR:::cache_path(
+    "fundeb_enrollment",
+    "fundeb_enrollment_2018.csv"
+  )
   expect_true(file.exists(file_path))
 })
 
@@ -731,8 +857,11 @@ test_that("download_inep_file creates directory and downloads file", {
     .package = "httr2"
   )
 
-  result <- educabR:::download_inep_file("http://example.com/test.csv", dest,
-                                         quiet = FALSE)
+  result <- educabR:::download_inep_file(
+    "http://example.com/test.csv",
+    dest,
+    quiet = FALSE
+  )
   expect_equal(result, dest)
   expect_true(file.exists(dest))
   expect_true(dir.exists(dirname(dest)))
@@ -757,8 +886,11 @@ test_that("download_inep_file quiet mode skips file size check", {
     .package = "httr2"
   )
 
-  result <- educabR:::download_inep_file("http://example.com/test.csv", dest,
-                                         quiet = TRUE)
+  result <- educabR:::download_inep_file(
+    "http://example.com/test.csv",
+    dest,
+    quiet = TRUE
+  )
   expect_equal(result, dest)
   expect_true(file.exists(dest))
 })
@@ -792,8 +924,11 @@ test_that("download_inep_file reports GB for large files", {
 
   # The GB path: size_mb >= 1000
   expect_message(
-    educabR:::download_inep_file("http://example.com/big.csv", dest,
-                                 quiet = FALSE),
+    educabR:::download_inep_file(
+      "http://example.com/big.csv",
+      dest,
+      quiet = FALSE
+    ),
     "GB"
   )
 })
@@ -823,8 +958,11 @@ test_that("download_inep_file shows generic message when size unknown", {
   )
 
   expect_message(
-    educabR:::download_inep_file("http://example.com/file.csv", dest,
-                                 quiet = FALSE),
+    educabR:::download_inep_file(
+      "http://example.com/file.csv",
+      dest,
+      quiet = FALSE
+    ),
     "downloading from INEP"
   )
 })
@@ -846,8 +984,11 @@ test_that("download_inep_file errors on download failure", {
   )
 
   expect_error(
-    educabR:::download_inep_file("http://bad-url.com/fail.csv", dest,
-                                 quiet = TRUE),
+    educabR:::download_inep_file(
+      "http://bad-url.com/fail.csv",
+      dest,
+      quiet = TRUE
+    ),
     "download failed"
   )
 })
@@ -865,7 +1006,9 @@ test_that("get_remote_file_size returns NULL on failure", {
     .package = "httr2"
   )
 
-  result <- educabR:::get_remote_file_size("http://invalid.example.com/file.zip")
+  result <- educabR:::get_remote_file_size(
+    "http://invalid.example.com/file.zip"
+  )
   expect_null(result)
 })
 
@@ -927,8 +1070,11 @@ test_that("read_inep_file auto-detects encoding", {
 test_that("read_inep_file normalizes character columns to UTF-8 NFC", {
   temp_file <- withr::local_tempfile(fileext = ".csv")
   # Write a file with accented characters in UTF-8
-  writeLines(c("rede;valor", "P\u00fablica;100", "Estadual;200"), temp_file,
-             useBytes = FALSE)
+  writeLines(
+    c("rede;valor", "P\u00fablica;100", "Estadual;200"),
+    temp_file,
+    useBytes = FALSE
+  )
 
   result <- educabR:::read_inep_file(temp_file, delim = ";")
 
@@ -959,8 +1105,9 @@ test_that("extract_zip handles non-zip file", {
     error = function(e) "error_raised",
     warning = function(w) "warning_raised"
   )
-  expect_true(result %in% c("error_raised", "warning_raised") ||
-              length(result) == 0)
+  expect_true(
+    result %in% c("error_raised", "warning_raised") || length(result) == 0
+  )
 })
 
 test_that("extract_archive handles 7z format", {
@@ -977,7 +1124,7 @@ test_that("extract_archive handles 7z format", {
       warning = function(w) invokeRestart("muffleWarning")
     ),
     error = function(e) {
-      expect_true(TRUE)  # any error is expected
+      expect_true(TRUE) # any error is expected
     }
   )
 })
@@ -1052,8 +1199,11 @@ test_that("get_cpc with keep_file=FALSE removes cached file", {
   temp_cache <- setup_temp_cache()
 
   mock_data <- dplyr::tibble(
-    CO_CURSO = 1, CO_IES = 100, NO_CURSO = "DIREITO",
-    CPC_CONTINUO = 3.5, CPC_FAIXA = "4"
+    CO_CURSO = 1,
+    CO_IES = 100,
+    NO_CURSO = "DIREITO",
+    CPC_CONTINUO = 3.5,
+    CPC_FAIXA = "4"
   )
 
   local_mocked_bindings(
@@ -1077,8 +1227,11 @@ test_that("get_cpc not-quiet prints messages", {
   temp_cache <- setup_temp_cache()
 
   mock_data <- dplyr::tibble(
-    CO_CURSO = 1, CO_IES = 100, NO_CURSO = "DIREITO",
-    CPC_CONTINUO = 3.5, CPC_FAIXA = "4"
+    CO_CURSO = 1,
+    CO_IES = 100,
+    NO_CURSO = "DIREITO",
+    CPC_CONTINUO = 3.5,
+    CPC_FAIXA = "4"
   )
 
   local_mocked_bindings(

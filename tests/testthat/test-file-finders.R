@@ -48,7 +48,6 @@ test_that("find_enem_file finds 2024+ RESULTADOS file", {
 })
 
 test_that("find_enem_file excludes ITENS files for pre-2024", {
-
   tmp <- withr::local_tempdir()
   create_mock_file(
     tmp,
@@ -253,38 +252,53 @@ test_that("find_encceja_file supports txt extension", {
 # real INEP layouts (measured from the published ZIPs); each edition ships a
 # large regular file and a small PPL one, plus PPL questionnaire and items
 encceja_layouts <- list(
-  "2014" = c("DADOS/ITENS_PROVA_2014.csv",
-             "DADOS/MICRODADOS_ENCCEJA_NACIONAL_PPL.csv",
-             "DADOS/MICRODADOS_ENCCEJA_NACIONAL_PPL_QSE.csv",
-             "DADOS/MICRODADOS_ENCCEJA_NACIONAL_REGULAR.csv"),
-  "2017" = c("DADOS/MICRODADOS_ENCCEJA_ITENS_PROVA.csv",
-             "DADOS/MICRODADOS_ENCCEJA_NACIONAL_PPL.csv",
-             "DADOS/MICRODADOS_ENCCEJA_NACIONAL_PPL_QSE.csv",
-             "DADOS/MICRODADOS_ENCCEJA_NACIONAL_REGULAR.csv"),
-  "2018" = c("DADOS/ITENS_PROVA_2018.csv",
-             "DADOS/MICRODADOS_ENCCEJA_2018_PPL_NAC.csv",
-             "DADOS/MICRODADOS_ENCCEJA_2018_REG_NAC.csv",
-             "DADOS/QUESTIONARIO_ENCCEJA_PPL_NAC.csv"),
-  "2019" = c("DADOS/MICRODADOS_ENCCEJA_ITENS_PROVA_2019.csv",
-             "DADOS/MICRODADOS_ENCCEJA_NACIONAL_PPL_2019.csv",
-             "DADOS/MICRODADOS_ENCCEJA_NACIONAL_PPL_QSE_2019.csv",
-             "DADOS/MICRODADOS_ENCCEJA_NACIONAL_REGULAR_2019.csv"),
-  "2020" = c("DADOS/MICRODADOS_ENCCEJA_ITENS_PROVA_2020.csv",
-             "DADOS/MICRODADOS_ENCCEJA_NACIONAL_PPL_2020.csv",
-             "DADOS/MICRODADOS_ENCCEJA_NACIONAL_PPL_QSE_2020.csv",
-             "DADOS/MICRODADOS_ENCCEJA_NACIONAL_REGULAR_2020.csv"),
-  "2025" = c("Microdados_ENCCEJA_2025 (1)/DADOS/MICRODADOS_ENCCEJA_2025_ITENS_PROVA.csv",
-             "Microdados_ENCCEJA_2025 (1)/DADOS/MICRODADOS_ENCCEJA_2025_PPL_NAC.csv",
-             "Microdados_ENCCEJA_2025 (1)/DADOS/MICRODADOS_ENCCEJA_2025_PPL_NAC_QSE.csv",
-             "Microdados_ENCCEJA_2025 (1)/DADOS/MICRODADOS_ENCCEJA_2025_REG_NAC.csv")
+  "2014" = c(
+    "DADOS/ITENS_PROVA_2014.csv",
+    "DADOS/MICRODADOS_ENCCEJA_NACIONAL_PPL.csv",
+    "DADOS/MICRODADOS_ENCCEJA_NACIONAL_PPL_QSE.csv",
+    "DADOS/MICRODADOS_ENCCEJA_NACIONAL_REGULAR.csv"
+  ),
+  "2017" = c(
+    "DADOS/MICRODADOS_ENCCEJA_ITENS_PROVA.csv",
+    "DADOS/MICRODADOS_ENCCEJA_NACIONAL_PPL.csv",
+    "DADOS/MICRODADOS_ENCCEJA_NACIONAL_PPL_QSE.csv",
+    "DADOS/MICRODADOS_ENCCEJA_NACIONAL_REGULAR.csv"
+  ),
+  "2018" = c(
+    "DADOS/ITENS_PROVA_2018.csv",
+    "DADOS/MICRODADOS_ENCCEJA_2018_PPL_NAC.csv",
+    "DADOS/MICRODADOS_ENCCEJA_2018_REG_NAC.csv",
+    "DADOS/QUESTIONARIO_ENCCEJA_PPL_NAC.csv"
+  ),
+  "2019" = c(
+    "DADOS/MICRODADOS_ENCCEJA_ITENS_PROVA_2019.csv",
+    "DADOS/MICRODADOS_ENCCEJA_NACIONAL_PPL_2019.csv",
+    "DADOS/MICRODADOS_ENCCEJA_NACIONAL_PPL_QSE_2019.csv",
+    "DADOS/MICRODADOS_ENCCEJA_NACIONAL_REGULAR_2019.csv"
+  ),
+  "2020" = c(
+    "DADOS/MICRODADOS_ENCCEJA_ITENS_PROVA_2020.csv",
+    "DADOS/MICRODADOS_ENCCEJA_NACIONAL_PPL_2020.csv",
+    "DADOS/MICRODADOS_ENCCEJA_NACIONAL_PPL_QSE_2020.csv",
+    "DADOS/MICRODADOS_ENCCEJA_NACIONAL_REGULAR_2020.csv"
+  ),
+  "2025" = c(
+    "Microdados_ENCCEJA_2025 (1)/DADOS/MICRODADOS_ENCCEJA_2025_ITENS_PROVA.csv",
+    "Microdados_ENCCEJA_2025 (1)/DADOS/MICRODADOS_ENCCEJA_2025_PPL_NAC.csv",
+    "Microdados_ENCCEJA_2025 (1)/DADOS/MICRODADOS_ENCCEJA_2025_PPL_NAC_QSE.csv",
+    "Microdados_ENCCEJA_2025 (1)/DADOS/MICRODADOS_ENCCEJA_2025_REG_NAC.csv"
+  )
 )
 # 2022-2024 share the 2025 file names
 for (y in 2022:2024) {
   encceja_layouts[[as.character(y)]] <- gsub(
-    "2025", y, basename(encceja_layouts[["2025"]])
+    "2025",
+    y,
+    basename(encceja_layouts[["2025"]])
   )
   encceja_layouts[[as.character(y)]] <- file.path(
-    "DADOS", encceja_layouts[[as.character(y)]]
+    "DADOS",
+    encceja_layouts[[as.character(y)]]
   )
 }
 
@@ -440,20 +454,40 @@ test_that("find_idd_file errors when no matching files found", {
 
 # real INEP layouts (measured from the published ZIPs, issue #21)
 saeb_aluno_layouts <- list(
-  "2023" = c("MICRODADOS_SAEB_2023/DADOS/TS_ALUNO_2EF.csv",
-             "MICRODADOS_SAEB_2023/DADOS/TS_ALUNO_34EM.csv",
-             "MICRODADOS_SAEB_2023/DADOS/TS_ALUNO_5EF.csv",
-             "MICRODADOS_SAEB_2023/DADOS/TS_ALUNO_9EF.csv"),
-  "2021" = c("DADOS/TS_ALUNO_2EF.csv", "DADOS/TS_ALUNO_34EM.csv",
-             "DADOS/TS_ALUNO_5EF.csv", "DADOS/TS_ALUNO_9EF.csv"),
-  "2019" = c("DADOS/TS_ALUNO_2EF.csv", "DADOS/TS_ALUNO_34EM.csv",
-             "DADOS/TS_ALUNO_5EF.csv", "DADOS/TS_ALUNO_9EF.csv"),
-  "2017" = c("DADOS/TS_ALUNO_3EM_AG.csv", "DADOS/TS_ALUNO_3EM_ESC.csv",
-             "DADOS/TS_ALUNO_5EF.csv", "DADOS/TS_ALUNO_9EF.csv"),
-  "2015" = c("DADOS/TS_ALUNO_3EM.csv", "DADOS/TS_ALUNO_5EF.csv",
-             "DADOS/TS_ALUNO_9EF.csv"),
-  "2013" = c("DADOS/TS_ALUNO_3EM.csv", "DADOS/TS_ALUNO_5EF.csv",
-             "DADOS/TS_ALUNO_9EF.csv")
+  "2023" = c(
+    "MICRODADOS_SAEB_2023/DADOS/TS_ALUNO_2EF.csv",
+    "MICRODADOS_SAEB_2023/DADOS/TS_ALUNO_34EM.csv",
+    "MICRODADOS_SAEB_2023/DADOS/TS_ALUNO_5EF.csv",
+    "MICRODADOS_SAEB_2023/DADOS/TS_ALUNO_9EF.csv"
+  ),
+  "2021" = c(
+    "DADOS/TS_ALUNO_2EF.csv",
+    "DADOS/TS_ALUNO_34EM.csv",
+    "DADOS/TS_ALUNO_5EF.csv",
+    "DADOS/TS_ALUNO_9EF.csv"
+  ),
+  "2019" = c(
+    "DADOS/TS_ALUNO_2EF.csv",
+    "DADOS/TS_ALUNO_34EM.csv",
+    "DADOS/TS_ALUNO_5EF.csv",
+    "DADOS/TS_ALUNO_9EF.csv"
+  ),
+  "2017" = c(
+    "DADOS/TS_ALUNO_3EM_AG.csv",
+    "DADOS/TS_ALUNO_3EM_ESC.csv",
+    "DADOS/TS_ALUNO_5EF.csv",
+    "DADOS/TS_ALUNO_9EF.csv"
+  ),
+  "2015" = c(
+    "DADOS/TS_ALUNO_3EM.csv",
+    "DADOS/TS_ALUNO_5EF.csv",
+    "DADOS/TS_ALUNO_9EF.csv"
+  ),
+  "2013" = c(
+    "DADOS/TS_ALUNO_3EM.csv",
+    "DADOS/TS_ALUNO_5EF.csv",
+    "DADOS/TS_ALUNO_9EF.csv"
+  )
 )
 
 test_that("find_saeb_file reaches every grade in every real layout", {
@@ -464,8 +498,12 @@ test_that("find_saeb_file reaches every grade in every real layout", {
 
     for (f in files) {
       serie <- tolower(sub("^TS_ALUNO_(.+)\\.csv$", "\\1", basename(f)))
-      result <- educabR:::find_saeb_file(tmp, as.integer(year), "aluno",
-                                         serie = serie)
+      result <- educabR:::find_saeb_file(
+        tmp,
+        as.integer(year),
+        "aluno",
+        serie = serie
+      )
       expect_equal(basename(result), basename(f), info = paste(year, serie))
     }
   }

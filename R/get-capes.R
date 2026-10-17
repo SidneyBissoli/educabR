@@ -16,11 +16,11 @@ capes_year_ranges <- list(
 
 # mapping of data types to CKAN slug suffixes
 capes_type_slugs <- c(
-  "programas"  = "programas-da-pos-graduacao-stricto-sensu-no-brasil",
-  "discentes"  = "discentes-da-pos-graduacao-stricto-sensu-do-brasil",
-  "docentes"   = "docentes-da-pos-graduacao-stricto-sensu-no-brasil",
-  "cursos"     = "cursos-da-pos-graduacao-stricto-sensu-no-brasil",
-  "catalogo"   = "catalogo-de-teses-e-dissertacoes-brasil"
+  "programas" = "programas-da-pos-graduacao-stricto-sensu-no-brasil",
+  "discentes" = "discentes-da-pos-graduacao-stricto-sensu-do-brasil",
+  "docentes" = "docentes-da-pos-graduacao-stricto-sensu-no-brasil",
+  "cursos" = "cursos-da-pos-graduacao-stricto-sensu-no-brasil",
+  "catalogo" = "catalogo-de-teses-e-dissertacoes-brasil"
 )
 
 #' Get CAPES graduate education data
@@ -79,12 +79,13 @@ capes_type_slugs <- c(
 #' # get student data for 2022 with limited rows
 #' discentes <- get_capes(2022, type = "discentes", n_max = 1000)
 #' }
-get_capes <- function(year,
-                      type = c("programas", "discentes", "docentes",
-                               "cursos", "catalogo"),
-                      n_max = Inf,
-                      keep_file = TRUE,
-                      quiet = FALSE) {
+get_capes <- function(
+  year,
+  type = c("programas", "discentes", "docentes", "cursos", "catalogo"),
+  n_max = Inf,
+  keep_file = TRUE,
+  quiet = FALSE
+) {
   # validate arguments
   type <- match.arg(type)
   validate_year(year, "capes")
@@ -96,7 +97,9 @@ get_capes <- function(year,
   # download if not cached
   if (!is_cached("capes", filename)) {
     if (!quiet) {
-      cli::cli_alert_info("discovering download URL for CAPES {.val {type}} {.val {year}}...")
+      cli::cli_alert_info(
+        "discovering download URL for CAPES {.val {type}} {.val {year}}..."
+      )
     }
 
     url <- discover_capes_url(year, type)
@@ -186,13 +189,15 @@ discover_capes_url <- function(year, type) {
     {
       req <- httr2::request(api_url) |>
         httr2::req_timeout(seconds = 300) |>
-        httr2::req_retry(max_tries = 3, backoff = ~ 15)
+        httr2::req_retry(max_tries = 3, backoff = ~15)
 
       resp <- httr2::req_perform(req)
       body <- httr2::resp_body_json(resp)
 
       if (!body$success) {
-        cli::cli_abort("CKAN API returned error for package {.val {package_slug}}")
+        cli::cli_abort(
+          "CKAN API returned error for package {.val {package_slug}}"
+        )
       }
 
       # find the CSV resource for the requested year
@@ -227,7 +232,9 @@ discover_capes_url <- function(year, type) {
       )
     },
     error = function(e) {
-      if (inherits(e, "rlang_error")) stop(e)
+      if (inherits(e, "rlang_error")) {
+        stop(e)
+      }
 
       cli::cli_abort(
         c(

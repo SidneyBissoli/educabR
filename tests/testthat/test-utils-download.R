@@ -181,7 +181,6 @@ test_that("build_inep_url builds saeb URL for non-2021 year", {
 })
 
 test_that("build_inep_url builds saeb 2021 URL with default level", {
-
   url <- build_inep_url("saeb", 2021)
   expect_match(url, "microdados_saeb_2021_ensino_fundamental_e_medio\\.zip$")
 })
@@ -208,7 +207,10 @@ test_that("build_inep_url builds encceja URL", {
 
 test_that("build_inep_url builds enem_escola URL (fixed URL)", {
   url <- build_inep_url("enem_escola", 2015)
-  expect_match(url, "enem_por_escola/2005_a_2015/microdados_enem_por_escola\\.zip$")
+  expect_match(
+    url,
+    "enem_por_escola/2005_a_2015/microdados_enem_por_escola\\.zip$"
+  )
 })
 
 test_that("build_inep_url builds idd URL with zip for year >= 2021", {
@@ -243,13 +245,13 @@ test_that("download_inep_file uses default 600s timeout when option unset", {
   captured <- c()
 
   testthat::local_mocked_bindings(
-    request    = function(url) structure(list(url = url), class = "httr2_request"),
+    request = function(url) structure(list(url = url), class = "httr2_request"),
     req_method = function(req, ...) req,
     req_timeout = function(req, seconds, ...) {
       captured <<- c(captured, seconds)
       req
     },
-    req_retry   = function(req, ...) req,
+    req_retry = function(req, ...) req,
     req_perform = function(req) stop("mocked"),
     .package = "httr2"
   )
@@ -270,13 +272,13 @@ test_that("download_inep_file respects educabR.download_timeout option (issue #7
   captured <- c()
 
   testthat::local_mocked_bindings(
-    request    = function(url) structure(list(url = url), class = "httr2_request"),
+    request = function(url) structure(list(url = url), class = "httr2_request"),
     req_method = function(req, ...) req,
     req_timeout = function(req, seconds, ...) {
       captured <<- c(captured, seconds)
       req
     },
-    req_retry   = function(req, ...) req,
+    req_retry = function(req, ...) req,
     req_perform = function(req) stop("mocked"),
     .package = "httr2"
   )
@@ -467,7 +469,10 @@ test_that("validate_year rejects non-numeric year (issue #2)", {
 test_that("fallback_years returns correct years for all datasets", {
   expect_equal(fallback_years("censo_escolar"), 1995:2025)
   expect_equal(fallback_years("enem"), 1998:2025)
-  expect_equal(fallback_years("saeb"), c(2011L, 2013L, 2015L, 2017L, 2019L, 2021L, 2023L))
+  expect_equal(
+    fallback_years("saeb"),
+    c(2011L, 2013L, 2015L, 2017L, 2019L, 2021L, 2023L)
+  )
   expect_equal(fallback_years("censo_superior"), 2009:2024)
   expect_equal(fallback_years("enade"), c(2004L:2019L, 2021L:2023L))
   expect_equal(fallback_years("encceja"), c(2014L, 2017L:2020L, 2022L:2025L))
@@ -482,8 +487,20 @@ test_that("fallback_years returns correct years for all datasets", {
 test_that("available_years returns non-empty sorted integer vector", {
   # available_years may use dynamic discovery or fallback depending on network
   # so we only test general properties, not exact values
-  for (ds in c("censo_escolar", "enem", "saeb", "censo_superior", "enade",
-               "encceja", "idd", "cpc", "igc", "capes", "ideb", "fundeb")) {
+  for (ds in c(
+    "censo_escolar",
+    "enem",
+    "saeb",
+    "censo_superior",
+    "enade",
+    "encceja",
+    "idd",
+    "cpc",
+    "igc",
+    "capes",
+    "ideb",
+    "fundeb"
+  )) {
     yrs <- available_years(ds)
     expect_true(length(yrs) > 0, info = paste("dataset:", ds))
     expect_true(is.numeric(yrs), info = paste("dataset:", ds))
@@ -578,10 +595,33 @@ test_that("standardize_names handles mixed special characters", {
 
 test_that("uf_to_code converts all 27 UF abbreviations", {
   uf_expected <- c(
-    RO = 11, AC = 12, AM = 13, RR = 14, PA = 15, AP = 16, TO = 17,
-    MA = 21, PI = 22, CE = 23, RN = 24, PB = 25, PE = 26, AL = 27,
-    SE = 28, BA = 29, MG = 31, ES = 32, RJ = 33, SP = 35,
-    PR = 41, SC = 42, RS = 43, MS = 50, MT = 51, GO = 52, DF = 53
+    RO = 11,
+    AC = 12,
+    AM = 13,
+    RR = 14,
+    PA = 15,
+    AP = 16,
+    TO = 17,
+    MA = 21,
+    PI = 22,
+    CE = 23,
+    RN = 24,
+    PB = 25,
+    PE = 26,
+    AL = 27,
+    SE = 28,
+    BA = 29,
+    MG = 31,
+    ES = 32,
+    RJ = 33,
+    SP = 35,
+    PR = 41,
+    SC = 42,
+    RS = 43,
+    MS = 50,
+    MT = 51,
+    GO = 52,
+    DF = 53
   )
 
   for (uf_name in names(uf_expected)) {

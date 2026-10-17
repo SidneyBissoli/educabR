@@ -128,7 +128,9 @@ clear_cache <- function(dataset = NULL) {
         cli::cli_alert_warning(
           "{.val {length(remaining)}} file(s) could not be deleted (may be locked by R session)"
         )
-        cli::cli_alert_info("restart R session and try again to fully clear cache")
+        cli::cli_alert_info(
+          "restart R session and try again to fully clear cache"
+        )
       } else {
         cli::cli_alert_success("cache cleared")
       }

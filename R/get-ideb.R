@@ -95,11 +95,7 @@
 #' # state-level IDEB including EPT integrada students (2025+ cut)
 #' emi <- get_ideb("estado", "ensino_medio_integrado", "indicador")
 #' }
-get_ideb <- function(level,
-                     stage,
-                     metric,
-                     year = NULL,
-                     quiet = FALSE) {
+get_ideb <- function(level, stage, metric, year = NULL, quiet = FALSE) {
   # backward compatibility: detect old positional usage get_ideb(2023, "escola", "anos_iniciais")
   if (is.numeric(level)) {
     lifecycle::deprecate_warn(
@@ -119,7 +115,10 @@ get_ideb <- function(level,
   }
 
   # validate arguments
-  level <- match.arg(level, c("escola", "municipio", "estado", "regiao", "brasil"))
+  level <- match.arg(
+    level,
+    c("escola", "municipio", "estado", "regiao", "brasil")
+  )
   stage <- match.arg(
     stage,
     c("anos_iniciais", "anos_finais", "ensino_medio", "ensino_medio_integrado")
@@ -267,7 +266,11 @@ build_ideb_url <- function(level, stage, year) {
   if (stage == "ensino_medio_integrado") {
     level_url <- if (level == "brasil") "brasil" else "ufs"
     filename <- str_c(
-      "divulgacao_", level_url, "_Ensino_Medio_integrado_ideb_", year, ".xlsx"
+      "divulgacao_",
+      level_url,
+      "_Ensino_Medio_integrado_ideb_",
+      year,
+      ".xlsx"
     )
     return(str_c(base_url, "/", filename))
   }
@@ -329,7 +332,10 @@ fetch_ideb_file <- function(url, xlsx_path, quiet = FALSE) {
   extract_zip(zip_path, extract_dir, quiet = quiet)
 
   inner <- list.files(
-    extract_dir, pattern = "\\.xlsx$", recursive = TRUE, full.names = TRUE
+    extract_dir,
+    pattern = "\\.xlsx$",
+    recursive = TRUE,
+    full.names = TRUE
   )
   if (length(inner) == 0) {
     cli::cli_abort(
@@ -388,17 +394,33 @@ ideb_regioes <- c("Norte", "Nordeste", "Sudeste", "Sul", "Centro-Oeste")
 
 # UF name to abbreviation mapping
 uf_nome_to_sigla <- c(
-  "Rond\u00f4nia" = "RO", "Acre" = "AC", "Amazonas" = "AM",
-  "Roraima" = "RR", "Par\u00e1" = "PA", "Amap\u00e1" = "AP",
-  "Tocantins" = "TO", "Maranh\u00e3o" = "MA", "Piau\u00ed" = "PI",
-  "Cear\u00e1" = "CE", "Rio Grande do Norte" = "RN",
-  "Para\u00edba" = "PB", "Pernambuco" = "PE", "Alagoas" = "AL",
-  "Sergipe" = "SE", "Bahia" = "BA", "Minas Gerais" = "MG",
-  "Esp\u00edrito Santo" = "ES", "Rio de Janeiro" = "RJ",
-  "S\u00e3o Paulo" = "SP", "Paran\u00e1" = "PR",
-  "Santa Catarina" = "SC", "Rio Grande do Sul" = "RS",
-  "Mato Grosso do Sul" = "MS", "Mato Grosso" = "MT",
-  "Goi\u00e1s" = "GO", "Distrito Federal" = "DF"
+  "Rond\u00f4nia" = "RO",
+  "Acre" = "AC",
+  "Amazonas" = "AM",
+  "Roraima" = "RR",
+  "Par\u00e1" = "PA",
+  "Amap\u00e1" = "AP",
+  "Tocantins" = "TO",
+  "Maranh\u00e3o" = "MA",
+  "Piau\u00ed" = "PI",
+  "Cear\u00e1" = "CE",
+  "Rio Grande do Norte" = "RN",
+  "Para\u00edba" = "PB",
+  "Pernambuco" = "PE",
+  "Alagoas" = "AL",
+  "Sergipe" = "SE",
+  "Bahia" = "BA",
+  "Minas Gerais" = "MG",
+  "Esp\u00edrito Santo" = "ES",
+  "Rio de Janeiro" = "RJ",
+  "S\u00e3o Paulo" = "SP",
+  "Paran\u00e1" = "PR",
+  "Santa Catarina" = "SC",
+  "Rio Grande do Sul" = "RS",
+  "Mato Grosso do Sul" = "MS",
+  "Mato Grosso" = "MT",
+  "Goi\u00e1s" = "GO",
+  "Distrito Federal" = "DF"
 )
 
 #' Fix regiao/estado unnamed columns and filter rows
@@ -428,15 +450,27 @@ fix_regiao_uf_cols <- function(df, level) {
       } else {
         df <- df[!df[[col1]] %in% ideb_regioes & !is.na(df[[col1]]), ]
         # fix abbreviated state names
-        df[[col1]] <- sub("^R\\. G\\. do Norte$", "Rio Grande do Norte", df[[col1]])
+        df[[col1]] <- sub(
+          "^R\\. G\\. do Norte$",
+          "Rio Grande do Norte",
+          df[[col1]]
+        )
         df[[col1]] <- sub("^R\\. G\\. do Sul$", "Rio Grande do Sul", df[[col1]])
-        df[[col1]] <- sub("^M\\. G\\. do Sul$", "Mato Grosso do Sul", df[[col1]])
+        df[[col1]] <- sub(
+          "^M\\. G\\. do Sul$",
+          "Mato Grosso do Sul",
+          df[[col1]]
+        )
         names(df)[names(df) == col1] <- "uf_nome"
         # insert uf_sigla right after uf_nome
         df$uf_sigla <- unname(uf_nome_to_sigla[df$uf_nome])
         col_order <- names(df)
         idx <- which(col_order == "uf_nome")
-        col_order <- append(col_order[col_order != "uf_sigla"], "uf_sigla", after = idx)
+        col_order <- append(
+          col_order[col_order != "uf_sigla"],
+          "uf_sigla",
+          after = idx
+        )
         df <- df[, col_order]
       }
     }
@@ -521,7 +555,9 @@ reshape_indicador <- function(df, id_cols, patterns) {
   for (indicador_name in names(patterns)) {
     pattern <- patterns[[indicador_name]]
     cols <- grep(pattern, names(df), value = TRUE)
-    if (length(cols) == 0) next
+    if (length(cols) == 0) {
+      next
+    }
 
     # extract years from column names
     anos <- as.integer(str_extract(cols, "[0-9]{4}"))
@@ -576,21 +612,21 @@ reshape_aprovacao <- function(df, id_cols, stage) {
   if (stage == "anos_iniciais") {
     long$ano_escolar <- dplyr::case_when(
       suffix == "si_4" ~ "1\u00ba ao 5\u00ba ano",
-      suffix == "si"   ~ "5\u00ba",
-      suffix == "1"    ~ "1\u00ba",
-      suffix == "2"    ~ "2\u00ba",
-      suffix == "3"    ~ "3\u00ba",
-      suffix == "4"    ~ "4\u00ba",
+      suffix == "si" ~ "5\u00ba",
+      suffix == "1" ~ "1\u00ba",
+      suffix == "2" ~ "2\u00ba",
+      suffix == "3" ~ "3\u00ba",
+      suffix == "4" ~ "4\u00ba",
       TRUE ~ suffix
     )
     col_name <- "ano_escolar"
   } else if (stage == "anos_finais") {
     long$ano_escolar <- dplyr::case_when(
       suffix == "si_4" ~ "6\u00ba ao 9\u00ba ano",
-      suffix == "1"    ~ "6\u00ba",
-      suffix == "2"    ~ "7\u00ba",
-      suffix == "3"    ~ "8\u00ba",
-      suffix == "4"    ~ "9\u00ba",
+      suffix == "1" ~ "6\u00ba",
+      suffix == "2" ~ "7\u00ba",
+      suffix == "3" ~ "8\u00ba",
+      suffix == "4" ~ "9\u00ba",
       TRUE ~ suffix
     )
     col_name <- "ano_escolar"
@@ -598,10 +634,10 @@ reshape_aprovacao <- function(df, id_cols, stage) {
     # ensino_medio
     long$serie <- dplyr::case_when(
       suffix == "si_4" ~ "Total",
-      suffix == "1"    ~ "1\u00aa",
-      suffix == "2"    ~ "2\u00aa",
-      suffix == "3"    ~ "3\u00aa",
-      suffix == "4"    ~ "4\u00aa",
+      suffix == "1" ~ "1\u00aa",
+      suffix == "2" ~ "2\u00aa",
+      suffix == "3" ~ "3\u00aa",
+      suffix == "4" ~ "4\u00aa",
       TRUE ~ suffix
     )
     col_name <- "serie"
@@ -619,7 +655,9 @@ reshape_nota <- function(df, id_cols, patterns) {
   for (disciplina_name in names(patterns)) {
     pattern <- patterns[[disciplina_name]]
     cols <- grep(pattern, names(df), value = TRUE)
-    if (length(cols) == 0) next
+    if (length(cols) == 0) {
+      next
+    }
 
     sub_df <- df[, c(id_cols, cols), drop = FALSE]
 
@@ -730,8 +768,11 @@ read_ideb_excel <- function(file, sheet = NULL, metric = NULL, year = NULL) {
   # legacy / safety path: no metric → read full sheet
   if (is.null(metric)) {
     return(normalize_utf8_nfc(readxl::read_excel(
-      file, sheet = sheet, skip = 9,
-      col_types = "text", na = na_tokens
+      file,
+      sheet = sheet,
+      skip = 9,
+      col_types = "text",
+      na = na_tokens
     )))
   }
 
@@ -741,15 +782,22 @@ read_ideb_excel <- function(file, sheet = NULL, metric = NULL, year = NULL) {
   # them entirely, misaligning col_types against the full sheet.
   # suppressMessages: headerless columns trigger noisy name-repair messages
   header <- suppressMessages(readxl::read_excel(
-    file, sheet = sheet, skip = 9, n_max = 1, col_types = "text"
+    file,
+    sheet = sheet,
+    skip = 9,
+    n_max = 1,
+    col_types = "text"
   ))
   keep <- ideb_keep_cols(names(header), metric = metric, year = year)
 
   # safety: if patterns matched nothing, fall back to reading everything
   if (!any(keep & ideb_is_vl(names(header)))) {
     return(normalize_utf8_nfc(readxl::read_excel(
-      file, sheet = sheet, skip = 9,
-      col_types = "text", na = na_tokens
+      file,
+      sheet = sheet,
+      skip = 9,
+      col_types = "text",
+      na = na_tokens
     )))
   }
 
@@ -760,13 +808,19 @@ read_ideb_excel <- function(file, sheet = NULL, metric = NULL, year = NULL) {
   # fall back to reading the full sheet rather than erroring out
   out <- tryCatch(
     suppressMessages(readxl::read_excel(
-      file, sheet = sheet, skip = 9,
-      col_types = col_types, na = na_tokens
+      file,
+      sheet = sheet,
+      skip = 9,
+      col_types = col_types,
+      na = na_tokens
     )),
     error = function(e) {
       suppressMessages(readxl::read_excel(
-        file, sheet = sheet, skip = 9,
-        col_types = "text", na = na_tokens
+        file,
+        sheet = sheet,
+        skip = 9,
+        col_types = "text",
+        na = na_tokens
       ))
     }
   )
@@ -801,8 +855,8 @@ ideb_keep_cols <- function(col_names, metric, year = NULL) {
     metric,
     "indicador" = "^vl_(indicador_rend_|nota_media_|observado_)",
     "aprovacao" = "^vl_aprovacao_",
-    "nota"      = "^vl_nota_(matematica_|portugues_)",
-    "meta"      = "^vl_projecao_"
+    "nota" = "^vl_nota_(matematica_|portugues_)",
+    "meta" = "^vl_projecao_"
   )
 
   vl_match <- grepl(metric_pattern, std)
@@ -829,7 +883,9 @@ ideb_std_names <- function(x) {
 }
 
 ideb_is_vl <- function(x, already_std = FALSE) {
-  if (!already_std) x <- ideb_std_names(x)
+  if (!already_std) {
+    x <- ideb_std_names(x)
+  }
   grepl("^vl_", x)
 }
 
@@ -858,11 +914,13 @@ ideb_is_vl <- function(x, already_std = FALSE) {
 #' # deprecated: use get_ideb() instead
 #' ideb <- get_ideb("municipio", "anos_iniciais", "indicador")
 #' }
-get_ideb_series <- function(years = NULL,
-                            level = c("escola", "municipio"),
-                            stage = c("anos_iniciais", "anos_finais", "ensino_medio"),
-                            uf = NULL,
-                            quiet = FALSE) {
+get_ideb_series <- function(
+  years = NULL,
+  level = c("escola", "municipio"),
+  stage = c("anos_iniciais", "anos_finais", "ensino_medio"),
+  uf = NULL,
+  quiet = FALSE
+) {
   lifecycle::deprecate_warn(
     "1.0.0",
     "get_ideb_series()",

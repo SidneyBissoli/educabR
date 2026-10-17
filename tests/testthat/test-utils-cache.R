@@ -267,7 +267,10 @@ test_that("cache_path returns correct path", {
 
   expect_equal(
     normalizePath(result, mustWork = FALSE),
-    normalizePath(file.path(cache_dir, "enem", "enem_2023.csv"), mustWork = FALSE)
+    normalizePath(
+      file.path(cache_dir, "enem", "enem_2023.csv"),
+      mustWork = FALSE
+    )
   )
 })
 
@@ -333,7 +336,10 @@ test_that("fallback_years returns correct count for censo_escolar", {
 
 test_that("fallback_years returns correct counts for all datasets", {
   expect_equal(fallback_years("enem"), 1998:2025)
-  expect_equal(fallback_years("saeb"), c(2011L, 2013L, 2015L, 2017L, 2019L, 2021L, 2023L))
+  expect_equal(
+    fallback_years("saeb"),
+    c(2011L, 2013L, 2015L, 2017L, 2019L, 2021L, 2023L)
+  )
   expect_equal(fallback_years("censo_superior"), 2009:2024)
   expect_equal(fallback_years("enade"), c(2004L:2019L, 2021L:2023L))
   expect_equal(fallback_years("encceja"), c(2014L, 2017L:2020L, 2022L:2025L))

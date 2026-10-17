@@ -80,8 +80,11 @@ test_that("find_enade_files returns all split files sorted numerically", {
   tmpdir <- withr::local_tempdir()
   dir.create(file.path(tmpdir, "2.DADOS"), recursive = TRUE)
   for (i in c(1, 2, 3, 10, 11)) {
-    file.create(file.path(tmpdir, "2.DADOS",
-                          paste0("microdados2023_arq", i, ".txt")))
+    file.create(file.path(
+      tmpdir,
+      "2.DADOS",
+      paste0("microdados2023_arq", i, ".txt")
+    ))
   }
 
   result <- educabR:::find_enade_files(tmpdir, 2023)
