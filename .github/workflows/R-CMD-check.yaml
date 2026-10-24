@@ -48,8 +48,11 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
+      # 45 and not 15: on R devel (and on a package whose binary P3M has not
+      # built yet) pak compiles from source — duckdb alone took 13 min on
+      # 2026-10-24 — and that is work, not a stall
       - uses: r-lib/actions/setup-r-dependencies@v2
-        timeout-minutes: 15
+        timeout-minutes: 45
         with:
           extra-packages: any::rcmdcheck
           needs: check
