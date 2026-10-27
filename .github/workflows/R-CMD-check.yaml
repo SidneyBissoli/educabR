@@ -23,9 +23,12 @@ jobs:
         config:
           - {os: macos-latest,   r: 'release'}
           - {os: windows-latest, r: 'release'}
-          - {os: ubuntu-latest,  r: 'devel', http-user-agent: 'release'}
-          - {os: ubuntu-latest,  r: 'release'}
-          - {os: ubuntu-latest,  r: 'oldrel-1'}
+          # ubuntu-24.04, not ubuntu-latest: since ~2026-10-26 latest is 26.04,
+          # where setup-r apt-installs 175 packages from a slow mirror and
+          # stalls past its limit (measured in cvmdata on 2026-10-27).
+          - {os: ubuntu-24.04,   r: 'devel', http-user-agent: 'release'}
+          - {os: ubuntu-24.04,   r: 'release'}
+          - {os: ubuntu-24.04,   r: 'oldrel-1'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}

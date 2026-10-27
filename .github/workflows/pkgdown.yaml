@@ -15,7 +15,8 @@ permissions: read-all
 
 jobs:
   pkgdown:
-    runs-on: ubuntu-latest
+    # 24.04, not latest (26.04): setup-r stalls there, see R-CMD-check.yaml
+    runs-on: ubuntu-24.04
     timeout-minutes: 60
     # Only restrict concurrency for non-PR jobs
     concurrency:
