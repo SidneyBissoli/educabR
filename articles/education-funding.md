@@ -5,12 +5,10 @@ Educacao Basica), the main funding mechanism for basic education in
 Brazil. educabR provides two functions to access FUNDEB data: resource
 distribution and enrollment counts.
 
-``` r
-
-library(educabR)
-library(dplyr)
-library(ggplot2)
-```
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`educabR`](https://github.com/SidneyBissoli/educabR)`)`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`dplyr`](https://dplyr.tidyverse.org)`)`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`
 
 ## Overview
 
@@ -48,23 +46,21 @@ FUNDEB aggregates revenue from multiple tax sources:
 
 ### Downloading distribution data
 
-``` r
-
-# All distribution data for 2023
-dist_2023 <- get_fundeb_distribution(year = 2023)
-
-# Filter by state
-dist_sp <- get_fundeb_distribution(year = 2023, uf = "SP")
-
-# Filter by funding source
-dist_fpm <- get_fundeb_distribution(year = 2023, source = "FPM")
-
-# Filter by destination (states or municipalities)
-dist_estados <- get_fundeb_distribution(
-  year        = 2023,
-  destination = "estados"
-)
-```
+\
+`# All distribution data for 2023`\
+`dist_2023`` ``<-`` `[`get_fundeb_distribution`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_distribution.md)`(``year ``=`` ``2023``)`\
+\
+`# Filter by state`\
+`dist_sp`` ``<-`` `[`get_fundeb_distribution`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_distribution.md)`(``year ``=`` ``2023``, uf ``=`` ``"SP"``)`\
+\
+`# Filter by funding source`\
+`dist_fpm`` ``<-`` `[`get_fundeb_distribution`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_distribution.md)`(``year ``=`` ``2023``, source ``=`` ``"FPM"``)`\
+\
+`# Filter by destination (states or municipalities)`\
+`dist_estados`` ``<-`` `[`get_fundeb_distribution`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_distribution.md)`(`\
+`  year        ``=`` ``2023``,`\
+`  destination ``=`` ``"estados"`\
+`)`
 
 ### Available years
 
@@ -72,65 +68,59 @@ Data is available from 2007 to 2026.
 
 ### Data structure
 
-``` r
-
-dist <- get_fundeb_distribution(2023, uf = "SP")
-glimpse(dist)
-```
+\
+`dist`` ``<-`` `[`get_fundeb_distribution`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_distribution.md)`(``2023``, uf ``=`` ``"SP"``)`\
+[`glimpse`](https://pillar.r-lib.org/reference/glimpse.html)`(``dist``)`
 
 ### Example analysis: Monthly transfers by source
 
-``` r
-
-dist <- get_fundeb_distribution(2023, uf = "SP")
-
-# Total monthly transfers by funding source
-monthly <-
-  dist |>
-  mutate(mes = as.integer(format(as.Date(mes_ano), "%m"))) |>
-  group_by(origem, mes) |>
-  summarise(total = sum(valor, na.rm = TRUE), .groups = "drop")
-
-ggplot(monthly, aes(x = factor(mes), y = total / 1e6, fill = origem)) +
-  geom_col() +
-  labs(
-    title = "FUNDEB Transfers to Sao Paulo by source (2023)",
-    x     = "Month",
-    y     = "Total (millions R$)",
-    fill  = "Source"
-  ) +
-  theme_minimal() +
-  theme(legend.position = "bottom") +
-  scale_y_continuous(labels = scales::number_format(big.mark = ".", decimal.mark = ",")) +
-  guides(fill = guide_legend(nrow = 1))
-```
+\
+`dist`` ``<-`` `[`get_fundeb_distribution`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_distribution.md)`(``2023``, uf ``=`` ``"SP"``)`\
+\
+`# Total monthly transfers by funding source`\
+`monthly`` ``<-`\
+`  ``dist`` ``|>`\
+`  `[`mutate`](https://dplyr.tidyverse.org/reference/mutate.html)`(``mes ``=`` `[`as.integer`](https://rdrr.io/r/base/integer.html)`(`[`format`](https://rdrr.io/r/base/format.html)`(`[`as.Date`](https://rdrr.io/r/base/as.Date.html)`(``mes_ano``)``, ``"%m"``)``)``)`` ``|>`\
+`  `[`group_by`](https://dplyr.tidyverse.org/reference/group_by.html)`(``origem``, ``mes``)`` ``|>`\
+`  `[`summarise`](https://dplyr.tidyverse.org/reference/summarise.html)`(``total ``=`` `[`sum`](https://rdrr.io/r/base/sum.html)`(``valor``, na.rm ``=`` ``TRUE``)``, .groups ``=`` ``"drop"``)`\
+\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``monthly``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` `[`factor`](https://rdrr.io/r/base/factor.html)`(``mes``)``, y ``=`` ``total`` ``/`` ``1e6``, fill ``=`` ``origem``)``)`` ``+`\
+`  `[`geom_col`](https://ggplot2.tidyverse.org/reference/geom_bar.html)`(``)`` ``+`\
+`  `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(`\
+`    title ``=`` ``"FUNDEB Transfers to Sao Paulo by source (2023)"``,`\
+`    x     ``=`` ``"Month"``,`\
+`    y     ``=`` ``"Total (millions R$)"``,`\
+`    fill  ``=`` ``"Source"`\
+`  ``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`` ``+`\
+`  `[`theme`](https://ggplot2.tidyverse.org/reference/theme.html)`(``legend.position ``=`` ``"bottom"``)`` ``+`\
+`  `[`scale_y_continuous`](https://ggplot2.tidyverse.org/reference/scale_continuous.html)`(``labels ``=`` ``scales``::`[`number_format`](https://scales.r-lib.org/reference/comma.html)`(``big.mark ``=`` ``"."``, decimal.mark ``=`` ``","``)``)`` ``+`\
+`  `[`guides`](https://ggplot2.tidyverse.org/reference/guides.html)`(``fill ``=`` `[`guide_legend`](https://ggplot2.tidyverse.org/reference/guide_legend.html)`(``nrow ``=`` ``1``)``)`
 
 ![](../reference/figures/vignette-funding-monthly.png)
 
 ### Example analysis: Comparing states
 
-``` r
-
-dist <- get_fundeb_distribution(2023)
-
-# Total annual transfers by state
-by_state <- 
-  dist |>
-  group_by(uf) |>
-  summarise(total = sum(valor, na.rm = TRUE), .groups = "drop") |>
-  arrange(desc(total)) |>
-  head(10)
-
-ggplot(by_state, aes(x = reorder(uf, total), y = total / 1e9)) +
-  geom_col(fill = "darkgreen") +
-  coord_flip() +
-  labs(
-    title = "Top 10 States by FUNDEB Transfers (2023)",
-    x     = NULL,
-    y     = "Total (billions R$)"
-  ) +
-  theme_minimal()
-```
+\
+`dist`` ``<-`` `[`get_fundeb_distribution`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_distribution.md)`(``2023``)`\
+\
+`# Total annual transfers by state`\
+`by_state`` ``<-`` `\
+`  ``dist`` ``|>`\
+`  `[`group_by`](https://dplyr.tidyverse.org/reference/group_by.html)`(``uf``)`` ``|>`\
+`  `[`summarise`](https://dplyr.tidyverse.org/reference/summarise.html)`(``total ``=`` `[`sum`](https://rdrr.io/r/base/sum.html)`(``valor``, na.rm ``=`` ``TRUE``)``, .groups ``=`` ``"drop"``)`` ``|>`\
+`  `[`arrange`](https://dplyr.tidyverse.org/reference/arrange.html)`(`[`desc`](https://dplyr.tidyverse.org/reference/desc.html)`(``total``)``)`` ``|>`\
+`  `[`head`](https://rdrr.io/r/utils/head.html)`(``10``)`\
+\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``by_state``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` `[`reorder`](https://rdrr.io/r/stats/reorder.factor.html)`(``uf``, ``total``)``, y ``=`` ``total`` ``/`` ``1e9``)``)`` ``+`\
+`  `[`geom_col`](https://ggplot2.tidyverse.org/reference/geom_bar.html)`(``fill ``=`` ``"darkgreen"``)`` ``+`\
+`  `[`coord_flip`](https://ggplot2.tidyverse.org/reference/coord_flip.html)`(``)`` ``+`\
+`  `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(`\
+`    title ``=`` ``"Top 10 States by FUNDEB Transfers (2023)"``,`\
+`    x     ``=`` ``NULL``,`\
+`    y     ``=`` ``"Total (billions R$)"`\
+`  ``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](../reference/figures/vignette-funding-by-state.png)
 
@@ -144,17 +134,15 @@ network, and location.
 
 ### Downloading enrollment data
 
-``` r
-
-# All enrollment data for 2018
-mat_2018 <- get_fundeb_enrollment(year = 2018)
-
-# Filter by state (filtered locally from cached complete dataset)
-mat_sp <- get_fundeb_enrollment(year = 2018, uf = "SP")
-
-# Limited rows for exploration
-mat_sample <- get_fundeb_enrollment(year = 2018, n_max = 5000)
-```
+\
+`# All enrollment data for 2018`\
+`mat_2018`` ``<-`` `[`get_fundeb_enrollment`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_enrollment.md)`(``year ``=`` ``2018``)`\
+\
+`# Filter by state (filtered locally from cached complete dataset)`\
+`mat_sp`` ``<-`` `[`get_fundeb_enrollment`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_enrollment.md)`(``year ``=`` ``2018``, uf ``=`` ``"SP"``)`\
+\
+`# Limited rows for exploration`\
+`mat_sample`` ``<-`` `[`get_fundeb_enrollment`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_enrollment.md)`(``year ``=`` ``2018``, n_max ``=`` ``5000``)`
 
 ### Available years
 
@@ -178,72 +166,66 @@ The enrollment data contains these columns:
 | `descricao_tipo_localizacao`   | Location type (urban/rural) |
 | `qtd_matricula`                | Number of enrollments       |
 
-``` r
-
-mat <- get_fundeb_enrollment(2018, uf = "RJ")
-glimpse(mat)
-```
+\
+`mat`` ``<-`` `[`get_fundeb_enrollment`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_enrollment.md)`(``2018``, uf ``=`` ``"RJ"``)`\
+[`glimpse`](https://pillar.r-lib.org/reference/glimpse.html)`(``mat``)`
 
 ### Example analysis: Enrollment by education type
 
-``` r
-
-mat <- get_fundeb_enrollment(2018, uf = "SP")
-
-# Total enrollment by education type
-by_type <- 
-  mat |>
-  group_by(descricao_tipo_educacao) |>
-  summarise(total = sum(qtd_matricula, na.rm = TRUE), .groups = "drop") |>
-  arrange(desc(total))
-
-ggplot(by_type, aes(x = reorder(descricao_tipo_educacao, total), y = total / 1e3)) +
-  geom_col(fill = "coral", width = .5) +
-  coord_flip() +
-  labs(
-    title = "FUNDEB Enrollment by Education Type - SP (2018)",
-    x     = NULL,
-    y     = "Enrollments (thousands)"
-  ) +
-  theme_minimal() +
-  scale_y_continuous(labels = scales::number_format(big.mark = ".", decimal.mark = ","))
-```
+\
+`mat`` ``<-`` `[`get_fundeb_enrollment`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_enrollment.md)`(``2018``, uf ``=`` ``"SP"``)`\
+\
+`# Total enrollment by education type`\
+`by_type`` ``<-`` `\
+`  ``mat`` ``|>`\
+`  `[`group_by`](https://dplyr.tidyverse.org/reference/group_by.html)`(``descricao_tipo_educacao``)`` ``|>`\
+`  `[`summarise`](https://dplyr.tidyverse.org/reference/summarise.html)`(``total ``=`` `[`sum`](https://rdrr.io/r/base/sum.html)`(``qtd_matricula``, na.rm ``=`` ``TRUE``)``, .groups ``=`` ``"drop"``)`` ``|>`\
+`  `[`arrange`](https://dplyr.tidyverse.org/reference/arrange.html)`(`[`desc`](https://dplyr.tidyverse.org/reference/desc.html)`(``total``)``)`\
+\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``by_type``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` `[`reorder`](https://rdrr.io/r/stats/reorder.factor.html)`(``descricao_tipo_educacao``, ``total``)``, y ``=`` ``total`` ``/`` ``1e3``)``)`` ``+`\
+`  `[`geom_col`](https://ggplot2.tidyverse.org/reference/geom_bar.html)`(``fill ``=`` ``"coral"``, width ``=`` ``.5``)`` ``+`\
+`  `[`coord_flip`](https://ggplot2.tidyverse.org/reference/coord_flip.html)`(``)`` ``+`\
+`  `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(`\
+`    title ``=`` ``"FUNDEB Enrollment by Education Type - SP (2018)"``,`\
+`    x     ``=`` ``NULL``,`\
+`    y     ``=`` ``"Enrollments (thousands)"`\
+`  ``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`` ``+`\
+`  `[`scale_y_continuous`](https://ggplot2.tidyverse.org/reference/scale_continuous.html)`(``labels ``=`` ``scales``::`[`number_format`](https://scales.r-lib.org/reference/comma.html)`(``big.mark ``=`` ``"."``, decimal.mark ``=`` ``","``)``)`
 
 ![](../reference/figures/vignette-funding-enrollment-type.png)
 
 ### Example analysis: Urban vs rural enrollment
 
-``` r
-
-mat <- get_fundeb_enrollment(2018)
-
-# Compare urban vs rural
-by_location <-
-  mat |>
-  mutate(
-    location = case_when(
-      descricao_tipo_localizacao == "URBANA"     ~ "Urban",
-      descricao_tipo_localizacao == "RURAL"      ~ "Rural",
-      descricao_tipo_localizacao == "QUILOMBOLA" ~ "Quilombola",
-      descricao_tipo_localizacao == "IND\u00cdGENA" ~ "Indigenous",
-      .default = descricao_tipo_localizacao
-    )
-  ) |>
-  group_by(uf, location) |>
-  summarise(total = sum(qtd_matricula, na.rm = TRUE), .groups = "drop")
-
-ggplot(by_location, aes(x = uf, y = total / 1e3, fill = location)) +
-  geom_col(position = "dodge") +
-  labs(
-    title = "FUNDEB Enrollment: Urban vs Rural by State (2018)",
-    x     = "State",
-    y     = "Enrollments (thousands)",
-    fill  = "Location"
-  ) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_y_continuous(labels = scales::number_format(big.mark = ".", decimal.mark = ","))
-```
+\
+`mat`` ``<-`` `[`get_fundeb_enrollment`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_enrollment.md)`(``2018``)`\
+\
+`# Compare urban vs rural`\
+`by_location`` ``<-`\
+`  ``mat`` ``|>`\
+`  `[`mutate`](https://dplyr.tidyverse.org/reference/mutate.html)`(`\
+`    location ``=`` `[`case_when`](https://dplyr.tidyverse.org/reference/case-and-replace-when.html)`(`\
+`      ``descricao_tipo_localizacao`` ``==`` ``"URBANA"``     ``~`` ``"Urban"``,`\
+`      ``descricao_tipo_localizacao`` ``==`` ``"RURAL"``      ``~`` ``"Rural"``,`\
+`      ``descricao_tipo_localizacao`` ``==`` ``"QUILOMBOLA"`` ``~`` ``"Quilombola"``,`\
+`      ``descricao_tipo_localizacao`` ``==`` ``"IND\u00cdGENA"`` ``~`` ``"Indigenous"``,`\
+`      .default ``=`` ``descricao_tipo_localizacao`\
+`    ``)`\
+`  ``)`` ``|>`\
+`  `[`group_by`](https://dplyr.tidyverse.org/reference/group_by.html)`(``uf``, ``location``)`` ``|>`\
+`  `[`summarise`](https://dplyr.tidyverse.org/reference/summarise.html)`(``total ``=`` `[`sum`](https://rdrr.io/r/base/sum.html)`(``qtd_matricula``, na.rm ``=`` ``TRUE``)``, .groups ``=`` ``"drop"``)`\
+\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``by_location``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``uf``, y ``=`` ``total`` ``/`` ``1e3``, fill ``=`` ``location``)``)`` ``+`\
+`  `[`geom_col`](https://ggplot2.tidyverse.org/reference/geom_bar.html)`(``position ``=`` ``"dodge"``)`` ``+`\
+`  `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(`\
+`    title ``=`` ``"FUNDEB Enrollment: Urban vs Rural by State (2018)"``,`\
+`    x     ``=`` ``"State"``,`\
+`    y     ``=`` ``"Enrollments (thousands)"``,`\
+`    fill  ``=`` ``"Location"`\
+`  ``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`` ``+`\
+`  `[`theme`](https://ggplot2.tidyverse.org/reference/theme.html)`(``axis.text.x ``=`` `[`element_text`](https://ggplot2.tidyverse.org/reference/element.html)`(``angle ``=`` ``45``, hjust ``=`` ``1``)``)`` ``+`\
+`  `[`scale_y_continuous`](https://ggplot2.tidyverse.org/reference/scale_continuous.html)`(``labels ``=`` ``scales``::`[`number_format`](https://scales.r-lib.org/reference/comma.html)`(``big.mark ``=`` ``"."``, decimal.mark ``=`` ``","``)``)`
 
 ![](../reference/figures/vignette-funding-urban-rural.png)
 
@@ -254,38 +236,36 @@ ggplot(by_location, aes(x = uf, y = total / 1e3, fill = location)) +
 You can combine both datasets to analyze per-student funding across
 states.
 
-``` r
-
-# Total transfers by state
-dist <- get_fundeb_distribution(2018)
-transfers <- 
-  dist |>
-  group_by(uf) |>
-  summarise(total_transfer = sum(valor, na.rm = TRUE), .groups = "drop")
-
-# Total enrollment by state
-mat <- get_fundeb_enrollment(2018)
-enrollment <- 
-  mat |>
-  group_by(uf) |>
-  summarise(total_students = sum(qtd_matricula, na.rm = TRUE), .groups = "drop")
-
-# Per-student funding
-funding <- 
-  inner_join(transfers, enrollment, by = "uf") |>
-  mutate(per_student = total_transfer / total_students) |>
-  arrange(desc(per_student))
-
-ggplot(funding, aes(x = reorder(uf, per_student), y = per_student)) +
-  geom_col(fill = "steelblue") +
-  coord_flip() +
-  labs(
-    title = "FUNDEB Per-Student Funding by State (2018)",
-    x     = NULL,
-    y     = "R$ per Student"
-  ) +
-  theme_minimal() +
-  scale_y_continuous(labels = scales::number_format(big.mark = ".", decimal.mark = ","))
-```
+\
+`# Total transfers by state`\
+`dist`` ``<-`` `[`get_fundeb_distribution`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_distribution.md)`(``2018``)`\
+`transfers`` ``<-`` `\
+`  ``dist`` ``|>`\
+`  `[`group_by`](https://dplyr.tidyverse.org/reference/group_by.html)`(``uf``)`` ``|>`\
+`  `[`summarise`](https://dplyr.tidyverse.org/reference/summarise.html)`(``total_transfer ``=`` `[`sum`](https://rdrr.io/r/base/sum.html)`(``valor``, na.rm ``=`` ``TRUE``)``, .groups ``=`` ``"drop"``)`\
+\
+`# Total enrollment by state`\
+`mat`` ``<-`` `[`get_fundeb_enrollment`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_enrollment.md)`(``2018``)`\
+`enrollment`` ``<-`` `\
+`  ``mat`` ``|>`\
+`  `[`group_by`](https://dplyr.tidyverse.org/reference/group_by.html)`(``uf``)`` ``|>`\
+`  `[`summarise`](https://dplyr.tidyverse.org/reference/summarise.html)`(``total_students ``=`` `[`sum`](https://rdrr.io/r/base/sum.html)`(``qtd_matricula``, na.rm ``=`` ``TRUE``)``, .groups ``=`` ``"drop"``)`\
+\
+`# Per-student funding`\
+`funding`` ``<-`` `\
+`  `[`inner_join`](https://dplyr.tidyverse.org/reference/mutate-joins.html)`(``transfers``, ``enrollment``, by ``=`` ``"uf"``)`` ``|>`\
+`  `[`mutate`](https://dplyr.tidyverse.org/reference/mutate.html)`(``per_student ``=`` ``total_transfer`` ``/`` ``total_students``)`` ``|>`\
+`  `[`arrange`](https://dplyr.tidyverse.org/reference/arrange.html)`(`[`desc`](https://dplyr.tidyverse.org/reference/desc.html)`(``per_student``)``)`\
+\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``funding``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` `[`reorder`](https://rdrr.io/r/stats/reorder.factor.html)`(``uf``, ``per_student``)``, y ``=`` ``per_student``)``)`` ``+`\
+`  `[`geom_col`](https://ggplot2.tidyverse.org/reference/geom_bar.html)`(``fill ``=`` ``"steelblue"``)`` ``+`\
+`  `[`coord_flip`](https://ggplot2.tidyverse.org/reference/coord_flip.html)`(``)`` ``+`\
+`  `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(`\
+`    title ``=`` ``"FUNDEB Per-Student Funding by State (2018)"``,`\
+`    x     ``=`` ``NULL``,`\
+`    y     ``=`` ``"R$ per Student"`\
+`  ``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`` ``+`\
+`  `[`scale_y_continuous`](https://ggplot2.tidyverse.org/reference/scale_continuous.html)`(``labels ``=`` ``scales``::`[`number_format`](https://scales.r-lib.org/reference/comma.html)`(``big.mark ``=`` ``"."``, decimal.mark ``=`` ``","``)``)`
 
 ![](../reference/figures/vignette-funding-per-student.png)

@@ -68,43 +68,41 @@ The short version:
 
 Map IDEB scores across Brazilian states with just a few lines:
 
-``` r
-
-# install package "pacman" if it is not installed
-if (!require("pacman")) install.packages("pacman")
-
-# install and/or load packages
-p_load(
-  educabR,
-  geobr,
-  tidyverse
-)
-
-# read ideb data
-ideb <- get_ideb(
-  level  = "estado", 
-  stage  = "anos_iniciais", 
-  metric = "indicador", 
-  year   = 2023
-  )
-
-# read spatial data
-states <- read_state(year = 2020, showProgress = FALSE)
-
-# plot data
-states |>
-  left_join(ideb, by = c("abbrev_state" = "uf_sigla")) |>
-  drop_na() |>
-  filter(rede == "Pública" & indicador == "IDEB") |>
-  ggplot() +
-  geom_sf(aes(fill = valor), color = "white", size = .2) +
-  scale_fill_distiller(palette = "YlGn", direction = 1, name = "IDEB") +
-  labs(
-    title    = "IDEB - public school system - 2023",
-    subtitle = "Early elementary (1º - 4º) by state"
-  ) +
-  theme_void()
-```
+\
+`# install package "pacman" if it is not installed`\
+`if`` ``(``!`[`require`](https://rdrr.io/r/base/library.html)`(`[`"pacman"`](https://github.com/trinker/pacman)`)``)`` `[`install.packages`](https://rdrr.io/r/utils/install.packages.html)`(``"pacman"``)`\
+\
+`# install and/or load packages`\
+`p_load``(`\
+`  ``educabR``,`\
+`  ``geobr``,`\
+`  ``tidyverse`\
+`)`\
+\
+`# read ideb data`\
+`ideb`` ``<-`` `[`get_ideb`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)`(`\
+`  level  ``=`` ``"estado"``, `\
+`  stage  ``=`` ``"anos_iniciais"``, `\
+`  metric ``=`` ``"indicador"``, `\
+`  year   ``=`` ``2023`\
+`  ``)`\
+\
+`# read spatial data`\
+`states`` ``<-`` ``read_state``(``year ``=`` ``2020``, showProgress ``=`` ``FALSE``)`\
+\
+`# plot data`\
+`states`` ``|>`\
+`  ``left_join``(``ideb``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"abbrev_state"`` ``=`` ``"uf_sigla"``)``)`` ``|>`\
+`  ``drop_na``(``)`` ``|>`\
+`  `[`filter`](https://rdrr.io/r/stats/filter.html)`(``rede`` ``==`` ``"Pública"`` ``&`` ``indicador`` ``==`` ``"IDEB"``)`` ``|>`\
+`  ``ggplot``(``)`` ``+`\
+`  ``geom_sf``(``aes``(``fill ``=`` ``valor``)``, color ``=`` ``"white"``, size ``=`` ``.2``)`` ``+`\
+`  ``scale_fill_distiller``(``palette ``=`` ``"YlGn"``, direction ``=`` ``1``, name ``=`` ``"IDEB"``)`` ``+`\
+`  ``labs``(`\
+`    title    ``=`` ``"IDEB - public school system - 2023"``,`\
+`    subtitle ``=`` ``"Early elementary (1º - 4º) by state"`\
+`  ``)`` ``+`\
+`  ``theme_void``(``)`
 
 ![](reference/figures/README-quick-example.png)
 
@@ -112,18 +110,14 @@ states |>
 
 Install from CRAN:
 
-``` r
-
-install.packages("educabR")
-```
+\
+[`install.packages`](https://rdrr.io/r/utils/install.packages.html)`(``"educabR"``)`
 
 Or install the development version from GitHub:
 
-``` r
-
-# install.packages("remotes")
-remotes::install_github("SidneyBissoli/educabR")
-```
+\
+`# install.packages("remotes")`\
+`remotes``::`[`install_github`](https://remotes.r-lib.org/reference/install_github.html)`(``"SidneyBissoli/educabR"``)`
 
 ## Features
 
@@ -165,122 +159,110 @@ remotes::install_github("SidneyBissoli/educabR")
 
 ### IDEB
 
-``` r
-
-library(educabR)
-
-# School-level IDEB indicators - early elementary (all editions, long format)
-ideb <- get_ideb(
-  level  = "escola",
-  stage  = "anos_iniciais",
-  metric = "indicador"
-)
-
-# Municipality-level approval rates, filtered to the 2021 and 2023 editions
-aprov <- get_ideb(
-  level  = "municipio",
-  stage  = "anos_finais",
-  metric = "aprovacao",
-  year   = c(2021, 2023)
-)
-
-# State-level IDEB including EPT integrada students (cut published from IDEB 2025)
-emi <- get_ideb(
-  level  = "estado",
-  stage  = "ensino_medio_integrado",
-  metric = "indicador"
-)
-```
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`educabR`](https://github.com/SidneyBissoli/educabR)`)`\
+\
+`# School-level IDEB indicators - early elementary (all editions, long format)`\
+`ideb`` ``<-`` `[`get_ideb`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)`(`\
+`  level  ``=`` ``"escola"``,`\
+`  stage  ``=`` ``"anos_iniciais"``,`\
+`  metric ``=`` ``"indicador"`\
+`)`\
+\
+`# Municipality-level approval rates, filtered to the 2021 and 2023 editions`\
+`aprov`` ``<-`` `[`get_ideb`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)`(`\
+`  level  ``=`` ``"municipio"``,`\
+`  stage  ``=`` ``"anos_finais"``,`\
+`  metric ``=`` ``"aprovacao"``,`\
+`  year   ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``2021``, ``2023``)`\
+`)`\
+\
+`# State-level IDEB including EPT integrada students (cut published from IDEB 2025)`\
+`emi`` ``<-`` `[`get_ideb`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)`(`\
+`  level  ``=`` ``"estado"``,`\
+`  stage  ``=`` ``"ensino_medio_integrado"``,`\
+`  metric ``=`` ``"indicador"`\
+`)`
 
 ### ENEM
 
-``` r
-
-# Download a sample for exploration
-enem <- get_enem(year = 2023, n_max = 10000)
-
-# Statistical summary
-enem_summary(enem)
-#> # A tibble: 10 × 10
-#>    variable            n n_valid  mean    sd   min   q25 median   q75   max
-#>    <chr>           <int>   <int> <dbl> <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl>
-#>  1 nu_nota_cn      10000    7281  492.  79.8     0  440.   489.  541.  817.
-#>  2 nu_nota_ch      10000    7562  529.  81.7     0  480.   535.  584.  823
-#>  3 nu_nota_lc      10000    7562  520.  70.4     0  476.   524.  568.  731.
-#>  4 nu_nota_mt      10000    7281  520. 121.      0  426.   507.  608   945.
-#>  5 nu_nota_comp1   10000    7562  126.  32.1     0  120    120   160   200
-#>  6 nu_nota_comp2   10000    7562  147.  48.4     0  120    160   200   200
-#>  7 nu_nota_comp3   10000    7562  124.  41.0     0  100    120   160   200
-#>  8 nu_nota_comp4   10000    7562  136.  41.2     0  120    120   160   200
-#>  9 nu_nota_comp5   10000    7562  117.  60.0     0   80    120   160   200
-#> 10 nu_nota_redacao 10000    7562  649. 201.      0  520    640   820   980
-
-# Summary by sex
-enem_summary(enem, by = "tp_sexo")
-#> # A tibble: 20 × 11
-#>    tp_sexo variable            n n_valid  mean    sd   min   q25 median   q75   max
-#>    <chr>   <chr>           <int>   <int> <dbl> <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl>
-#>  1 F       nu_nota_cn       7042    5130  485.  76.5     0  435    481.  532   817.
-#>  2 M       nu_nota_cn       2958    2151  507.  85.1     0  455.   508.  560.  804.
-#>  3 F       nu_nota_ch       7042    5328  527.  78.6     0  480.   532.  579.  784.
-#>  4 M       nu_nota_ch       2958    2234  535.  88.2     0  483.   542.  596.  823
-#>  5 F       nu_nota_lc       7042    5328  520.  68.2     0  476.   523.  566.  731.
-#>  6 M       nu_nota_lc       2958    2234  522.  75.5     0  478.   527.  574.  729.
-#>  7 F       nu_nota_mt       7042    5130  509. 116.      0  420.   494.  589   944.
-#>  8 M       nu_nota_mt       2958    2151  547. 129.      0  447.   540.  643.  945.
-#>  9 F       nu_nota_comp1    7042    5328  128.  30.8     0  120    120   160   200
-#> 10 M       nu_nota_comp1    2958    2234  121.  34.6     0  100    120   140   200
-#> # ℹ 10 more rows
-```
+\
+`# Download a sample for exploration`\
+`enem`` ``<-`` `[`get_enem`](https://sidneybissoli.github.io/educabR/reference/get_enem.md)`(``year ``=`` ``2023``, n_max ``=`` ``10000``)`\
+\
+`# Statistical summary`\
+[`enem_summary`](https://sidneybissoli.github.io/educabR/reference/enem_summary.md)`(``enem``)`\
+`#> # A tibble: 10 × 10`\
+`#>    variable            n n_valid  mean    sd   min   q25 median   q75   max`\
+`#>    <chr>           <int>   <int> <dbl> <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl>`\
+`#>  1 nu_nota_cn      10000    7281  492.  79.8     0  440.   489.  541.  817.`\
+`#>  2 nu_nota_ch      10000    7562  529.  81.7     0  480.   535.  584.  823`\
+`#>  3 nu_nota_lc      10000    7562  520.  70.4     0  476.   524.  568.  731.`\
+`#>  4 nu_nota_mt      10000    7281  520. 121.      0  426.   507.  608   945.`\
+`#>  5 nu_nota_comp1   10000    7562  126.  32.1     0  120    120   160   200`\
+`#>  6 nu_nota_comp2   10000    7562  147.  48.4     0  120    160   200   200`\
+`#>  7 nu_nota_comp3   10000    7562  124.  41.0     0  100    120   160   200`\
+`#>  8 nu_nota_comp4   10000    7562  136.  41.2     0  120    120   160   200`\
+`#>  9 nu_nota_comp5   10000    7562  117.  60.0     0   80    120   160   200`\
+`#> 10 nu_nota_redacao 10000    7562  649. 201.      0  520    640   820   980`\
+\
+`# Summary by sex`\
+[`enem_summary`](https://sidneybissoli.github.io/educabR/reference/enem_summary.md)`(``enem``, by ``=`` ``"tp_sexo"``)`\
+`#> # A tibble: 20 × 11`\
+`#>    tp_sexo variable            n n_valid  mean    sd   min   q25 median   q75   max`\
+`#>    <chr>   <chr>           <int>   <int> <dbl> <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl>`\
+`#>  1 F       nu_nota_cn       7042    5130  485.  76.5     0  435    481.  532   817.`\
+`#>  2 M       nu_nota_cn       2958    2151  507.  85.1     0  455.   508.  560.  804.`\
+`#>  3 F       nu_nota_ch       7042    5328  527.  78.6     0  480.   532.  579.  784.`\
+`#>  4 M       nu_nota_ch       2958    2234  535.  88.2     0  483.   542.  596.  823`\
+`#>  5 F       nu_nota_lc       7042    5328  520.  68.2     0  476.   523.  566.  731.`\
+`#>  6 M       nu_nota_lc       2958    2234  522.  75.5     0  478.   527.  574.  729.`\
+`#>  7 F       nu_nota_mt       7042    5130  509. 116.      0  420.   494.  589   944.`\
+`#>  8 M       nu_nota_mt       2958    2151  547. 129.      0  447.   540.  643.  945.`\
+`#>  9 F       nu_nota_comp1    7042    5328  128.  30.8     0  120    120   160   200`\
+`#> 10 M       nu_nota_comp1    2958    2234  121.  34.6     0  100    120   140   200`\
+`#> # ℹ 10 more rows`
 
 ### School Census
 
-``` r
-
-# Download School Census 2023 - filter by state
-censo_sp <- get_censo_escolar(year = 2023, uf = "SP")
-```
+\
+`# Download School Census 2023 - filter by state`\
+`censo_sp`` ``<-`` `[`get_censo_escolar`](https://sidneybissoli.github.io/educabR/reference/get_censo_escolar.md)`(``year ``=`` ``2023``, uf ``=`` ``"SP"``)`
 
 ### Higher Education
 
-``` r
-
-# Higher Education Census - institutions
-ies <- get_censo_superior(2023, type = "ies")
-
-# ENADE microdata
-enade <- get_enade(2023, n_max = 10000)
-
-# CAPES graduate programs
-programas <- get_capes(2023, type = "programas")
-```
+\
+`# Higher Education Census - institutions`\
+`ies`` ``<-`` `[`get_censo_superior`](https://sidneybissoli.github.io/educabR/reference/get_censo_superior.md)`(``2023``, type ``=`` ``"ies"``)`\
+\
+`# ENADE microdata`\
+`enade`` ``<-`` `[`get_enade`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)`(``2023``, n_max ``=`` ``10000``)`\
+\
+`# CAPES graduate programs`\
+`programas`` ``<-`` `[`get_capes`](https://sidneybissoli.github.io/educabR/reference/get_capes.md)`(``2023``, type ``=`` ``"programas"``)`
 
 ### FUNDEB
 
-``` r
-
-# Resource distribution by state
-dist <- get_fundeb_distribution(2023, uf = "SP")
-
-# Enrollment counts
-mat <- get_fundeb_enrollment(2023, uf = "SP")
-```
+\
+`# Resource distribution by state`\
+`dist`` ``<-`` `[`get_fundeb_distribution`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_distribution.md)`(``2023``, uf ``=`` ``"SP"``)`\
+\
+`# Enrollment counts`\
+`mat`` ``<-`` `[`get_fundeb_enrollment`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_enrollment.md)`(``2023``, uf ``=`` ``"SP"``)`
 
 ## Cache
 
 The package uses local caching to avoid repeated downloads:
 
-``` r
-
-# Set a permanent cache directory
-set_cache_dir("~/educabR_data")
-
-# List cached files
-list_cache()
-
-# Clear cache
-clear_cache()
-```
+\
+`# Set a permanent cache directory`\
+[`set_cache_dir`](https://sidneybissoli.github.io/educabR/reference/set_cache_dir.md)`(``"~/educabR_data"``)`\
+\
+`# List cached files`\
+[`list_cache`](https://sidneybissoli.github.io/educabR/reference/list_cache.md)`(``)`\
+\
+`# Clear cache`\
+[`clear_cache`](https://sidneybissoli.github.io/educabR/reference/clear_cache.md)`(``)`
 
 ## Documentation
 

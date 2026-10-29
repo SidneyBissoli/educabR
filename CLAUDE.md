@@ -66,8 +66,9 @@ validators checking column counts, expected names, non-empty results -
 `R/zzz.R` — Package init, reads `educabR.cache_dir` option -
 `R/educabR-package.R` — Package-level roxygen block
 (`@keywords internal`, `_PACKAGE` sentinel). Don’t regenerate or delete
-this when running `devtools::document()` — it’s the source of
-`man/educabR-package.Rd`.
+this when running
+[`devtools::document()`](https://devtools.r-lib.org/reference/document.html)
+— it’s the source of `man/educabR-package.Rd`.
 
 ### Adding a new `get_*()` dataset
 

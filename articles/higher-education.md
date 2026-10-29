@@ -5,12 +5,10 @@ available in educabR. These datasets allow you to analyze institutions,
 courses, student performance, and quality indicators across Brazilian
 higher education.
 
-``` r
-
-library(educabR)
-library(dplyr)
-library(ggplot2)
-```
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`educabR`](https://github.com/SidneyBissoli/educabR)`)`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`dplyr`](https://dplyr.tidyverse.org)`)`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`
 
 ## Higher Education Census
 
@@ -29,21 +27,19 @@ courses, student enrollment, and faculty.
 
 ### Downloading data
 
-``` r
-
-# Institution data
-ies_2023 <- get_censo_superior(year = 2023, type = "ies")
-
-# Course data filtered by state
-cursos_sp <- get_censo_superior(year = 2023, type = "cursos", uf = "SP")
-
-# Faculty data with limited rows
-docentes_sample <- get_censo_superior(
-  year  = 2023,
-  type  = "docentes",
-  n_max = 10000
-)
-```
+\
+`# Institution data`\
+`ies_2023`` ``<-`` `[`get_censo_superior`](https://sidneybissoli.github.io/educabR/reference/get_censo_superior.md)`(``year ``=`` ``2023``, type ``=`` ``"ies"``)`\
+\
+`# Course data filtered by state`\
+`cursos_sp`` ``<-`` `[`get_censo_superior`](https://sidneybissoli.github.io/educabR/reference/get_censo_superior.md)`(``year ``=`` ``2023``, type ``=`` ``"cursos"``, uf ``=`` ``"SP"``)`\
+\
+`# Faculty data with limited rows`\
+`docentes_sample`` ``<-`` `[`get_censo_superior`](https://sidneybissoli.github.io/educabR/reference/get_censo_superior.md)`(`\
+`  year  ``=`` ``2023``,`\
+`  type  ``=`` ``"docentes"``,`\
+`  n_max ``=`` ``10000`\
+`)`
 
 ### Available years
 
@@ -51,43 +47,39 @@ Data is available from 2009 to 2024.
 
 ### Exploring ZIP contents
 
-``` r
-
-# See what files are inside the downloaded ZIP
-list_censo_superior_files(2023)
-```
+\
+`# See what files are inside the downloaded ZIP`\
+[`list_censo_superior_files`](https://sidneybissoli.github.io/educabR/reference/list_censo_superior_files.md)`(``2023``)`
 
 ### Example analysis: Institutions by administrative type
 
-``` r
-
-ies <- get_censo_superior(2023, type = "ies")
-
-ies_summary <- 
-  ies |>
-  mutate(
-    admin_type = case_when(
-      tp_categoria_administrativa == 1 ~ "Public Federal",
-      tp_categoria_administrativa == 2 ~ "Public State",
-      tp_categoria_administrativa == 3 ~ "Public Municipal",
-      tp_categoria_administrativa == 4 ~ "Private For-Profit",
-      tp_categoria_administrativa == 5 ~ "Private Non-Profit",
-      TRUE ~ "Other"
-    )
-  ) |>
-  count(admin_type, sort = TRUE)
-
-ggplot(ies_summary, aes(x = reorder(admin_type, n), y = n)) +
-  geom_col(fill = "steelblue") +
-  coord_flip() +
-  labs(
-    title = "Higher Education Institutions by Type (2023)",
-    x     = NULL,
-    y     = "Number of Institutions"
-  ) +
-  theme_minimal() +
-  scale_y_continuous(label = scales::number_format(big.mark = ".", decimal.mark = ","))
-```
+\
+`ies`` ``<-`` `[`get_censo_superior`](https://sidneybissoli.github.io/educabR/reference/get_censo_superior.md)`(``2023``, type ``=`` ``"ies"``)`\
+\
+`ies_summary`` ``<-`` `\
+`  ``ies`` ``|>`\
+`  `[`mutate`](https://dplyr.tidyverse.org/reference/mutate.html)`(`\
+`    admin_type ``=`` `[`case_when`](https://dplyr.tidyverse.org/reference/case-and-replace-when.html)`(`\
+`      ``tp_categoria_administrativa`` ``==`` ``1`` ``~`` ``"Public Federal"``,`\
+`      ``tp_categoria_administrativa`` ``==`` ``2`` ``~`` ``"Public State"``,`\
+`      ``tp_categoria_administrativa`` ``==`` ``3`` ``~`` ``"Public Municipal"``,`\
+`      ``tp_categoria_administrativa`` ``==`` ``4`` ``~`` ``"Private For-Profit"``,`\
+`      ``tp_categoria_administrativa`` ``==`` ``5`` ``~`` ``"Private Non-Profit"``,`\
+`      ``TRUE`` ``~`` ``"Other"`\
+`    ``)`\
+`  ``)`` ``|>`\
+`  `[`count`](https://dplyr.tidyverse.org/reference/count.html)`(``admin_type``, sort ``=`` ``TRUE``)`\
+\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``ies_summary``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` `[`reorder`](https://rdrr.io/r/stats/reorder.factor.html)`(``admin_type``, ``n``)``, y ``=`` ``n``)``)`` ``+`\
+`  `[`geom_col`](https://ggplot2.tidyverse.org/reference/geom_bar.html)`(``fill ``=`` ``"steelblue"``)`` ``+`\
+`  `[`coord_flip`](https://ggplot2.tidyverse.org/reference/coord_flip.html)`(``)`` ``+`\
+`  `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(`\
+`    title ``=`` ``"Higher Education Institutions by Type (2023)"``,`\
+`    x     ``=`` ``NULL``,`\
+`    y     ``=`` ``"Number of Institutions"`\
+`  ``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`` ``+`\
+`  `[`scale_y_continuous`](https://ggplot2.tidyverse.org/reference/scale_continuous.html)`(``label ``=`` ``scales``::`[`number_format`](https://scales.r-lib.org/reference/comma.html)`(``big.mark ``=`` ``"."``, decimal.mark ``=`` ``","``)``)`
 
 ![](../reference/figures/vignette-higher-ies-type.png)
 
@@ -101,14 +93,12 @@ where different course areas are evaluated each year.
 
 ### Downloading ENADE data
 
-``` r
-
-# Download ENADE microdata
-enade_2023 <- get_enade(year = 2023)
-
-# Sample for exploration
-enade_sample <- get_enade(year = 2023, n_max = 5000)
-```
+\
+`# Download ENADE microdata`\
+`enade_2023`` ``<-`` `[`get_enade`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)`(``year ``=`` ``2023``)`\
+\
+`# Sample for exploration`\
+`enade_sample`` ``<-`` `[`get_enade`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)`(``year ``=`` ``2023``, n_max ``=`` ``5000``)`
 
 ### Available years
 
@@ -116,30 +106,26 @@ Data is available from 2004 to 2024.
 
 ### Data structure
 
-``` r
-
-enade <- get_enade(2023, n_max = 5000)
-glimpse(enade)
-```
+\
+`enade`` ``<-`` `[`get_enade`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)`(``2023``, n_max ``=`` ``5000``)`\
+[`glimpse`](https://pillar.r-lib.org/reference/glimpse.html)`(``enade``)`
 
 ### Example analysis: Score distribution
 
-``` r
-
-enade <- get_enade(2023)
-
-enade |>
-  filter(!is.na(nt_ger)) |>
-  ggplot(aes(x = nt_ger)) +
-  geom_histogram(binwidth = 5, fill = "darkorange", color = "white") +
-  labs(
-    title = "ENADE 2023 - General Score Distribution",
-    x     = "General Score (nt_ger)",
-    y     = "Number of Students"
-  ) +
-  theme_minimal() +
-  scale_y_continuous(label = scales::number_format(big.mark = ".", decimal.mark = ","))
-```
+\
+`enade`` ``<-`` `[`get_enade`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)`(``2023``)`\
+\
+`enade`` ``|>`\
+`  `[`filter`](https://dplyr.tidyverse.org/reference/filter.html)`(``!`[`is.na`](https://rdrr.io/r/base/NA.html)`(``nt_ger``)``)`` ``|>`\
+`  `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``nt_ger``)``)`` ``+`\
+`  `[`geom_histogram`](https://ggplot2.tidyverse.org/reference/geom_histogram.html)`(``binwidth ``=`` ``5``, fill ``=`` ``"darkorange"``, color ``=`` ``"white"``)`` ``+`\
+`  `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(`\
+`    title ``=`` ``"ENADE 2023 - General Score Distribution"``,`\
+`    x     ``=`` ``"General Score (nt_ger)"``,`\
+`    y     ``=`` ``"Number of Students"`\
+`  ``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`` ``+`\
+`  `[`scale_y_continuous`](https://ggplot2.tidyverse.org/reference/scale_continuous.html)`(``label ``=`` ``scales``::`[`number_format`](https://scales.r-lib.org/reference/comma.html)`(``big.mark ``=`` ``"."``, decimal.mark ``=`` ``","``)``)`
 
 ![](../reference/figures/vignette-higher-enade-scores.png)
 
@@ -154,14 +140,12 @@ scores.
 
 ### Downloading IDD data
 
-``` r
-
-# Download IDD data
-idd_2023 <- get_idd(year = 2023)
-
-# Sample for exploration
-idd_sample <- get_idd(year = 2023, n_max = 5000)
-```
+\
+`# Download IDD data`\
+`idd_2023`` ``<-`` `[`get_idd`](https://sidneybissoli.github.io/educabR/reference/get_idd.md)`(``year ``=`` ``2023``)`\
+\
+`# Sample for exploration`\
+`idd_sample`` ``<-`` `[`get_idd`](https://sidneybissoli.github.io/educabR/reference/get_idd.md)`(``year ``=`` ``2023``, n_max ``=`` ``5000``)`
 
 ### Available years
 
@@ -170,12 +154,10 @@ COVID).
 
 ### Example analysis: Value-added by institution type
 
-``` r
-
-idd <- get_idd(2023)
-
-glimpse(idd)
-```
+\
+`idd`` ``<-`` `[`get_idd`](https://sidneybissoli.github.io/educabR/reference/get_idd.md)`(``2023``)`\
+\
+[`glimpse`](https://pillar.r-lib.org/reference/glimpse.html)`(``idd``)`
 
 ------------------------------------------------------------------------
 
@@ -190,14 +172,12 @@ considered unsatisfactory.
 
 ### Downloading CPC data
 
-``` r
-
-# Download CPC data (Excel format, requires readxl)
-cpc_2023 <- get_cpc(year = 2023)
-
-# Sample for exploration
-cpc_sample <- get_cpc(year = 2023, n_max = 5000)
-```
+\
+`# Download CPC data (Excel format, requires readxl)`\
+`cpc_2023`` ``<-`` `[`get_cpc`](https://sidneybissoli.github.io/educabR/reference/get_cpc.md)`(``year ``=`` ``2023``)`\
+\
+`# Sample for exploration`\
+`cpc_sample`` ``<-`` `[`get_cpc`](https://sidneybissoli.github.io/educabR/reference/get_cpc.md)`(``year ``=`` ``2023``, n_max ``=`` ``5000``)`
 
 ### Available years
 
@@ -205,24 +185,22 @@ Data is available for 2007-2019 and 2021-2023 (no 2020 edition).
 
 ### Example analysis: Course quality distribution
 
-``` r
-
-cpc <- get_cpc(2023)
-
-# Distribution of CPC scores
-cpc |>
-  filter(!is.na(cpc_faixa)) |>
-  count(cpc_faixa) |>
-  ggplot(aes(x = factor(cpc_faixa), y = n)) +
-  geom_col(fill = "coral") +
-  labs(
-    title = "CPC 2023 - Course Quality Distribution",
-    x     = "CPC Score (1-5)",
-    y     = "Number of Courses"
-  ) +
-  theme_minimal() +
-  scale_y_continuous(label = scales::number_format(big.mark = ".", decimal.mark = ","))
-```
+\
+`cpc`` ``<-`` `[`get_cpc`](https://sidneybissoli.github.io/educabR/reference/get_cpc.md)`(``2023``)`\
+\
+`# Distribution of CPC scores`\
+`cpc`` ``|>`\
+`  `[`filter`](https://dplyr.tidyverse.org/reference/filter.html)`(``!`[`is.na`](https://rdrr.io/r/base/NA.html)`(``cpc_faixa``)``)`` ``|>`\
+`  `[`count`](https://dplyr.tidyverse.org/reference/count.html)`(``cpc_faixa``)`` ``|>`\
+`  `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` `[`factor`](https://rdrr.io/r/base/factor.html)`(``cpc_faixa``)``, y ``=`` ``n``)``)`` ``+`\
+`  `[`geom_col`](https://ggplot2.tidyverse.org/reference/geom_bar.html)`(``fill ``=`` ``"coral"``)`` ``+`\
+`  `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(`\
+`    title ``=`` ``"CPC 2023 - Course Quality Distribution"``,`\
+`    x     ``=`` ``"CPC Score (1-5)"``,`\
+`    y     ``=`` ``"Number of Courses"`\
+`  ``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`` ``+`\
+`  `[`scale_y_continuous`](https://ggplot2.tidyverse.org/reference/scale_continuous.html)`(``label ``=`` ``scales``::`[`number_format`](https://scales.r-lib.org/reference/comma.html)`(``big.mark ``=`` ``"."``, decimal.mark ``=`` ``","``)``)`
 
 ![](../reference/figures/vignette-higher-cpc-dist.png)
 
@@ -239,14 +217,12 @@ each institution.
 
 ### Downloading IGC data
 
-``` r
-
-# Download IGC data (Excel format, requires readxl)
-igc_2023 <- get_igc(year = 2023)
-
-# Sample for exploration
-igc_sample <- get_igc(year = 2023, n_max = 1000)
-```
+\
+`# Download IGC data (Excel format, requires readxl)`\
+`igc_2023`` ``<-`` `[`get_igc`](https://sidneybissoli.github.io/educabR/reference/get_igc.md)`(``year ``=`` ``2023``)`\
+\
+`# Sample for exploration`\
+`igc_sample`` ``<-`` `[`get_igc`](https://sidneybissoli.github.io/educabR/reference/get_igc.md)`(``year ``=`` ``2023``, n_max ``=`` ``1000``)`
 
 ### Available years
 
@@ -255,26 +231,24 @@ IGC 2007 comes as a 7z archive containing an Excel file.
 
 ### Example analysis: Institution quality
 
-``` r
-
-igc <- get_igc(2023)
-
-# Top institutions by continuous IGC
-igc |>
-  filter(!is.na(igc_continuo)) |>
-  filter(!is.na(sigla_da_ies)) |>
-  arrange(desc(igc_continuo)) |>
-  head(20) |>
-  ggplot(aes(x = reorder(sigla_da_ies, igc_continuo), y = igc_continuo)) +
-  geom_col(fill = "darkblue") +
-  coord_flip() +
-  labs(
-    title = "Top 20 Institutions by IGC (2023)",
-    x     = NULL,
-    y     = "IGC (Continuous)"
-  ) +
-  theme_minimal()
-```
+\
+`igc`` ``<-`` `[`get_igc`](https://sidneybissoli.github.io/educabR/reference/get_igc.md)`(``2023``)`\
+\
+`# Top institutions by continuous IGC`\
+`igc`` ``|>`\
+`  `[`filter`](https://dplyr.tidyverse.org/reference/filter.html)`(``!`[`is.na`](https://rdrr.io/r/base/NA.html)`(``igc_continuo``)``)`` ``|>`\
+`  `[`filter`](https://dplyr.tidyverse.org/reference/filter.html)`(``!`[`is.na`](https://rdrr.io/r/base/NA.html)`(``sigla_da_ies``)``)`` ``|>`\
+`  `[`arrange`](https://dplyr.tidyverse.org/reference/arrange.html)`(`[`desc`](https://dplyr.tidyverse.org/reference/desc.html)`(``igc_continuo``)``)`` ``|>`\
+`  `[`head`](https://rdrr.io/r/utils/head.html)`(``20``)`` ``|>`\
+`  `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` `[`reorder`](https://rdrr.io/r/stats/reorder.factor.html)`(``sigla_da_ies``, ``igc_continuo``)``, y ``=`` ``igc_continuo``)``)`` ``+`\
+`  `[`geom_col`](https://ggplot2.tidyverse.org/reference/geom_bar.html)`(``fill ``=`` ``"darkblue"``)`` ``+`\
+`  `[`coord_flip`](https://ggplot2.tidyverse.org/reference/coord_flip.html)`(``)`` ``+`\
+`  `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(`\
+`    title ``=`` ``"Top 20 Institutions by IGC (2023)"``,`\
+`    x     ``=`` ``NULL``,`\
+`    y     ``=`` ``"IGC (Continuous)"`\
+`  ``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](../reference/figures/vignette-higher-igc-top20.png)
 
@@ -298,17 +272,15 @@ masters and doctoral programs).
 
 ### Downloading CAPES data
 
-``` r
-
-# Graduate programs
-programas_2023 <- get_capes(year = 2023, type = "programas")
-
-# Students (large dataset!)
-discentes_sample <- get_capes(year = 2023, type = "discentes", n_max = 10000)
-
-# Theses and dissertations catalog
-catalogo_2023 <- get_capes(year = 2023, type = "catalogo")
-```
+\
+`# Graduate programs`\
+`programas_2023`` ``<-`` `[`get_capes`](https://sidneybissoli.github.io/educabR/reference/get_capes.md)`(``year ``=`` ``2023``, type ``=`` ``"programas"``)`\
+\
+`# Students (large dataset!)`\
+`discentes_sample`` ``<-`` `[`get_capes`](https://sidneybissoli.github.io/educabR/reference/get_capes.md)`(``year ``=`` ``2023``, type ``=`` ``"discentes"``, n_max ``=`` ``10000``)`\
+\
+`# Theses and dissertations catalog`\
+`catalogo_2023`` ``<-`` `[`get_capes`](https://sidneybissoli.github.io/educabR/reference/get_capes.md)`(``year ``=`` ``2023``, type ``=`` ``"catalogo"``)`
 
 ### Available years
 
@@ -317,27 +289,25 @@ Open Data Portal via CKAN API.
 
 ### Example analysis: Graduate programs by knowledge area
 
-``` r
-
-programas <- get_capes(2023, type = "programas")
-
-# Count programs by broad knowledge area
-programas |>
-  count(nm_grande_area_conhecimento, sort = TRUE) |>
-  head(10) |>
-  ggplot(aes(
-    x = reorder(nm_grande_area_conhecimento, n),
-    y = n
-  )) +
-  geom_col(fill = "purple4") +
-  coord_flip() +
-  labs(
-    title = "Graduate Programs by Knowledge Area (2023)",
-    x     = NULL,
-    y     = "Number of Programs"
-  ) +
-  theme_minimal()
-```
+\
+`programas`` ``<-`` `[`get_capes`](https://sidneybissoli.github.io/educabR/reference/get_capes.md)`(``2023``, type ``=`` ``"programas"``)`\
+\
+`# Count programs by broad knowledge area`\
+`programas`` ``|>`\
+`  `[`count`](https://dplyr.tidyverse.org/reference/count.html)`(``nm_grande_area_conhecimento``, sort ``=`` ``TRUE``)`` ``|>`\
+`  `[`head`](https://rdrr.io/r/utils/head.html)`(``10``)`` ``|>`\
+`  `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(`\
+`    x ``=`` `[`reorder`](https://rdrr.io/r/stats/reorder.factor.html)`(``nm_grande_area_conhecimento``, ``n``)``,`\
+`    y ``=`` ``n`\
+`  ``)``)`` ``+`\
+`  `[`geom_col`](https://ggplot2.tidyverse.org/reference/geom_bar.html)`(``fill ``=`` ``"purple4"``)`` ``+`\
+`  `[`coord_flip`](https://ggplot2.tidyverse.org/reference/coord_flip.html)`(``)`` ``+`\
+`  `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(`\
+`    title ``=`` ``"Graduate Programs by Knowledge Area (2023)"``,`\
+`    x     ``=`` ``NULL``,`\
+`    y     ``=`` ``"Number of Programs"`\
+`  ``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](../reference/figures/vignette-higher-capes-area.png)
 
@@ -348,41 +318,39 @@ programas |>
 CPC, IGC, IDD, and ENADE are closely related. Here is an example of how
 to combine them for a comprehensive view.
 
-``` r
-
-# Load CPC and IGC for the same year
-cpc <- get_cpc(2023)
-igc <- get_igc(2023)
-
-# Compare institution-level quality
-# IGC gives the overall institution score
-# CPC gives individual course scores within each institution
-igc_summary <- 
-  igc |>
-  filter(!is.na(igc_faixa)) |>
-  select(codigo_da_ies, sigla_da_ies, igc_continuo, igc_faixa)
-
-cpc_summary <- 
-  cpc |>
-  filter(!is.na(cpc_continuo)) |>
-  group_by(codigo_da_ies) |>
-  summarise(
-    n_courses = n(),
-    mean_cpc  = mean(cpc_continuo, na.rm = TRUE),
-    .groups   = "drop"
-  )
-
-combined <- inner_join(igc_summary, cpc_summary, by = "codigo_da_ies")
-
-ggplot(combined, aes(x = mean_cpc, y = igc_continuo, size = n_courses)) +
-  geom_point(alpha = 0.4, color = "steelblue") +
-  labs(
-    title = "IGC vs Average CPC by Institution (2023)",
-    x     = "Average CPC (Continuous)",
-    y     = "IGC (Continuous)",
-    size  = "Courses Evaluated"
-  ) +
-  theme_minimal()
-```
+\
+`# Load CPC and IGC for the same year`\
+`cpc`` ``<-`` `[`get_cpc`](https://sidneybissoli.github.io/educabR/reference/get_cpc.md)`(``2023``)`\
+`igc`` ``<-`` `[`get_igc`](https://sidneybissoli.github.io/educabR/reference/get_igc.md)`(``2023``)`\
+\
+`# Compare institution-level quality`\
+`# IGC gives the overall institution score`\
+`# CPC gives individual course scores within each institution`\
+`igc_summary`` ``<-`` `\
+`  ``igc`` ``|>`\
+`  `[`filter`](https://dplyr.tidyverse.org/reference/filter.html)`(``!`[`is.na`](https://rdrr.io/r/base/NA.html)`(``igc_faixa``)``)`` ``|>`\
+`  `[`select`](https://dplyr.tidyverse.org/reference/select.html)`(``codigo_da_ies``, ``sigla_da_ies``, ``igc_continuo``, ``igc_faixa``)`\
+\
+`cpc_summary`` ``<-`` `\
+`  ``cpc`` ``|>`\
+`  `[`filter`](https://dplyr.tidyverse.org/reference/filter.html)`(``!`[`is.na`](https://rdrr.io/r/base/NA.html)`(``cpc_continuo``)``)`` ``|>`\
+`  `[`group_by`](https://dplyr.tidyverse.org/reference/group_by.html)`(``codigo_da_ies``)`` ``|>`\
+`  `[`summarise`](https://dplyr.tidyverse.org/reference/summarise.html)`(`\
+`    n_courses ``=`` `[`n`](https://dplyr.tidyverse.org/reference/context.html)`(``)``,`\
+`    mean_cpc  ``=`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``cpc_continuo``, na.rm ``=`` ``TRUE``)``,`\
+`    .groups   ``=`` ``"drop"`\
+`  ``)`\
+\
+`combined`` ``<-`` `[`inner_join`](https://dplyr.tidyverse.org/reference/mutate-joins.html)`(``igc_summary``, ``cpc_summary``, by ``=`` ``"codigo_da_ies"``)`\
+\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``combined``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``mean_cpc``, y ``=`` ``igc_continuo``, size ``=`` ``n_courses``)``)`` ``+`\
+`  `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``alpha ``=`` ``0.4``, color ``=`` ``"steelblue"``)`` ``+`\
+`  `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(`\
+`    title ``=`` ``"IGC vs Average CPC by Institution (2023)"``,`\
+`    x     ``=`` ``"Average CPC (Continuous)"``,`\
+`    y     ``=`` ``"IGC (Continuous)"``,`\
+`    size  ``=`` ``"Courses Evaluated"`\
+`  ``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](../reference/figures/vignette-higher-igc-vs-cpc.png)

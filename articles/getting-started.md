@@ -4,75 +4,69 @@ The **educabR** package provides easy access to Brazilian public
 education data from INEP, FNDE, and CAPES. With simple functions, you
 can download and process data from 14 datasets:
 
-**Basic Education:**  
-- **IDEB** - Basic Education Development Index  
-- **ENEM** - National High School Exam  
-- **School Census**  
-- **SAEB** - Basic Education Assessment System  
-- **ENCCEJA** - Youth and Adult Education Certification Exam  
-- **ENEM by School** - ENEM results aggregated by school (2005-2015)
+**Basic Education:**\
+\- **IDEB** - Basic Education Development Index\
+\- **ENEM** - National High School Exam\
+\- **School Census**\
+\- **SAEB** - Basic Education Assessment System\
+\- **ENCCEJA** - Youth and Adult Education Certification Exam\
+\- **ENEM by School** - ENEM results aggregated by school (2005-2015)
 
-**Higher Education:**  
-- **Higher Education Census**  
-- **ENADE** - National Student Performance Exam  
-- **IDD** - Value-Added Indicator  
-- **CPC** - Preliminary Course Concept  
-- **IGC** - General Courses Index
+**Higher Education:**\
+\- **Higher Education Census**\
+\- **ENADE** - National Student Performance Exam\
+\- **IDD** - Value-Added Indicator\
+\- **CPC** - Preliminary Course Concept\
+\- **IGC** - General Courses Index
 
-**Graduate Education:**  
-- **CAPES** - Graduate programs, students, faculty, courses, and theses
+**Graduate Education:**\
+\- **CAPES** - Graduate programs, students, faculty, courses, and theses
 
-**Education Funding:**  
-- **FUNDEB** - Resource distribution and enrollment data
+**Education Funding:**\
+\- **FUNDEB** - Resource distribution and enrollment data
 
 This vignette covers IDEB, ENEM, and the School Census. For other
-datasets, see:  
--
+datasets, see:\
+\-
 [`vignette("basic-education-assessments")`](https://sidneybissoli.github.io/educabR/articles/basic-education-assessments.md)
-— SAEB, ENCCEJA, ENEM by School  
--
+— SAEB, ENCCEJA, ENEM by School\
+\-
 [`vignette("higher-education")`](https://sidneybissoli.github.io/educabR/articles/higher-education.md)
-— Higher Education Census, ENADE, IDD, CPC, IGC, CAPES  
--
+— Higher Education Census, ENADE, IDD, CPC, IGC, CAPES\
+\-
 [`vignette("education-funding")`](https://sidneybissoli.github.io/educabR/articles/education-funding.md)
 — FUNDEB
 
 ## Installation
 
-``` r
+\
+`# Install from GitHub (development version)`\
+`# install.packages("remotes")`\
+`remotes``::`[`install_github`](https://remotes.r-lib.org/reference/install_github.html)`(``"SidneyBissoli/educabR"``)`
 
-# Install from GitHub (development version)
-# install.packages("remotes")
-remotes::install_github("SidneyBissoli/educabR")
-```
-
-``` r
-
-library(educabR)
-library(dplyr)
-library(ggplot2)
-library(kableExtra)
-```
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`educabR`](https://github.com/SidneyBissoli/educabR)`)`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`dplyr`](https://dplyr.tidyverse.org)`)`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`kableExtra`](https://haozhu233.github.io/kableExtra/)`)`
 
 ## Configuring Cache
 
 educabR caches downloaded files to avoid repeated downloads. By default,
 it uses a temporary directory. To persist data across sessions:
 
-``` r
-
-# Check current cache directory
-get_cache_dir()
-
-# Set a permanent directory
-set_cache_dir("~/educabR_data")
-
-# List cached files
-list_cache()
-
-# Clear cache (when needed)
-clear_cache()
-```
+\
+`# Check current cache directory`\
+[`get_cache_dir`](https://sidneybissoli.github.io/educabR/reference/get_cache_dir.md)`(``)`\
+\
+`# Set a permanent directory`\
+[`set_cache_dir`](https://sidneybissoli.github.io/educabR/reference/set_cache_dir.md)`(``"~/educabR_data"``)`\
+\
+`# List cached files`\
+[`list_cache`](https://sidneybissoli.github.io/educabR/reference/list_cache.md)`(``)`\
+\
+`# Clear cache (when needed)`\
+[`clear_cache`](https://sidneybissoli.github.io/educabR/reference/clear_cache.md)`(``)`
 
 ## IDEB - Basic Education Development Index
 
@@ -81,11 +75,9 @@ combining test performance (SAEB) with grade promotion rates.
 
 ### Available years and levels
 
-``` r
-
-# See available combinations
-list_ideb_available()
-```
+\
+`# See available combinations`\
+[`list_ideb_available`](https://sidneybissoli.github.io/educabR/reference/list_ideb_available.md)`(``)`
 
 | Level                                    | Stage         | Metric    |
 |:-----------------------------------------|:--------------|:----------|
@@ -103,120 +95,112 @@ list_ideb_available()
 
 ### Downloading IDEB data
 
-``` r
-
-# IDEB by school - Early elementary (1st-5th grade)
-ideb_schools <- get_ideb(
-  level  = "escola",
-  stage  = "anos_iniciais",
-  metric = "indicador",
-  year   = 2021
-)
-
-# IDEB by municipality - High school (1st-4th grade)
-ideb_municipalities <- get_ideb(
-  level  = "municipio",
-  stage  = "ensino_medio",
-  metric = "indicador",
-  year   = 2023
-)
-
-# IDEB by state - High school including EPT integrada students
-# (cut first published with IDEB 2025; brasil/estado levels only, no "meta")
-ideb_emi <- get_ideb(
-  level  = "estado",
-  stage  = "ensino_medio_integrado",
-  metric = "indicador"
-)
-
-# Filter by state after downloading
-ideb_sp <-
-  ideb_schools |>
-  dplyr::filter(uf_sigla == "SP")
-```
+\
+`# IDEB by school - Early elementary (1st-5th grade)`\
+`ideb_schools`` ``<-`` `[`get_ideb`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)`(`\
+`  level  ``=`` ``"escola"``,`\
+`  stage  ``=`` ``"anos_iniciais"``,`\
+`  metric ``=`` ``"indicador"``,`\
+`  year   ``=`` ``2021`\
+`)`\
+\
+`# IDEB by municipality - High school (1st-4th grade)`\
+`ideb_municipalities`` ``<-`` `[`get_ideb`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)`(`\
+`  level  ``=`` ``"municipio"``,`\
+`  stage  ``=`` ``"ensino_medio"``,`\
+`  metric ``=`` ``"indicador"``,`\
+`  year   ``=`` ``2023`\
+`)`\
+\
+`# IDEB by state - High school including EPT integrada students`\
+`# (cut first published with IDEB 2025; brasil/estado levels only, no "meta")`\
+`ideb_emi`` ``<-`` `[`get_ideb`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)`(`\
+`  level  ``=`` ``"estado"``,`\
+`  stage  ``=`` ``"ensino_medio_integrado"``,`\
+`  metric ``=`` ``"indicador"`\
+`)`\
+\
+`# Filter by state after downloading`\
+`ideb_sp`` ``<-`\
+`  ``ideb_schools`` ``|>`\
+`  ``dplyr``::`[`filter`](https://dplyr.tidyverse.org/reference/filter.html)`(``uf_sigla`` ``==`` ``"SP"``)`
 
 ### Data structure
 
-``` r
-
-# View structure
-glimpse(ideb_schools)
-#> Rows: 194,715
-#> Columns: 9
-#> $ uf_sigla         <chr> "RO", "RO", "RO", ...
-#> $ municipio_codigo <chr> "1100015", "1100015", ...
-#> $ municipio_nome   <chr> "Alta Floresta D'Oeste", ...
-#> $ escola_id        <chr> "11024372", "11024666", ...
-#> $ escola_nome      <chr> "EMEIEF ANA NERY", "EMEIEF BOA ESPERANCA", ...
-#> $ rede             <chr> "Municipal", "Municipal", ...
-#> $ ano              <int> 2021, 2021, ...
-#> $ indicador        <chr> "IDEB", "IDEB", ...
-#> $ valor            <dbl> NA, NA, 5.9, 4.1, ...
-```
+\
+`# View structure`\
+[`glimpse`](https://pillar.r-lib.org/reference/glimpse.html)`(``ideb_schools``)`\
+`#> Rows: 194,715`\
+`#> Columns: 9`\
+`#> $ uf_sigla         <chr> "RO", "RO", "RO", ...`\
+`#> $ municipio_codigo <chr> "1100015", "1100015", ...`\
+`#> $ municipio_nome   <chr> "Alta Floresta D'Oeste", ...`\
+`#> $ escola_id        <chr> "11024372", "11024666", ...`\
+`#> $ escola_nome      <chr> "EMEIEF ANA NERY", "EMEIEF BOA ESPERANCA", ...`\
+`#> $ rede             <chr> "Municipal", "Municipal", ...`\
+`#> $ ano              <int> 2021, 2021, ...`\
+`#> $ indicador        <chr> "IDEB", "IDEB", ...`\
+`#> $ valor            <dbl> NA, NA, 5.9, 4.1, ...`
 
 ### Example analysis: Average IDEB by state
 
-``` r
-
-# Calculate average IDEB by state (observed indicator only)
-ideb_by_state <-
-  ideb_schools |>
-  filter(indicador == "IDEB", !is.na(valor)) |>
-  group_by(uf_sigla) |>
-  summarise(
-    n_schools   = n(),
-    mean_ideb   = mean(valor, na.rm = TRUE),
-    median_ideb = median(valor, na.rm = TRUE)
-  ) |>
-  arrange(desc(mean_ideb))
-
-# Plot
-ggplot(ideb_by_state, aes(x = reorder(uf_sigla, mean_ideb), y = mean_ideb)) +
-  geom_col(fill = "steelblue") +
-  coord_flip() +
-  labs(
-    title = "Average IDEB by State - Early Elementary (2021)",
-    x     = "State",
-    y     = "Average IDEB"
-  ) +
-  theme_minimal()
-```
+\
+`# Calculate average IDEB by state (observed indicator only)`\
+`ideb_by_state`` ``<-`\
+`  ``ideb_schools`` ``|>`\
+`  `[`filter`](https://dplyr.tidyverse.org/reference/filter.html)`(``indicador`` ``==`` ``"IDEB"``, ``!`[`is.na`](https://rdrr.io/r/base/NA.html)`(``valor``)``)`` ``|>`\
+`  `[`group_by`](https://dplyr.tidyverse.org/reference/group_by.html)`(``uf_sigla``)`` ``|>`\
+`  `[`summarise`](https://dplyr.tidyverse.org/reference/summarise.html)`(`\
+`    n_schools   ``=`` `[`n`](https://dplyr.tidyverse.org/reference/context.html)`(``)``,`\
+`    mean_ideb   ``=`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``valor``, na.rm ``=`` ``TRUE``)``,`\
+`    median_ideb ``=`` `[`median`](https://rdrr.io/r/stats/median.html)`(``valor``, na.rm ``=`` ``TRUE``)`\
+`  ``)`` ``|>`\
+`  `[`arrange`](https://dplyr.tidyverse.org/reference/arrange.html)`(`[`desc`](https://dplyr.tidyverse.org/reference/desc.html)`(``mean_ideb``)``)`\
+\
+`# Plot`\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``ideb_by_state``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` `[`reorder`](https://rdrr.io/r/stats/reorder.factor.html)`(``uf_sigla``, ``mean_ideb``)``, y ``=`` ``mean_ideb``)``)`` ``+`\
+`  `[`geom_col`](https://ggplot2.tidyverse.org/reference/geom_bar.html)`(``fill ``=`` ``"steelblue"``)`` ``+`\
+`  `[`coord_flip`](https://ggplot2.tidyverse.org/reference/coord_flip.html)`(``)`` ``+`\
+`  `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(`\
+`    title ``=`` ``"Average IDEB by State - Early Elementary (2021)"``,`\
+`    x     ``=`` ``"State"``,`\
+`    y     ``=`` ``"Average IDEB"`\
+`  ``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](../reference/figures/vignette-gs-ideb-by-state.png)
 
 ### IDEB historical series
 
-``` r
-
-# Download historical series (get_ideb() already returns long format)
-ideb_history <- get_ideb(
-  level  = "municipio",
-  stage  = "anos_iniciais",
-  metric = "indicador",
-  year   = c(2017, 2019, 2021, 2023)
-)
-
-# National trend
-trend <-
-  ideb_history |>
-  filter(indicador == "IDEB") |>
-  group_by(ano) |>
-  summarise(mean_ideb = mean(valor, na.rm = TRUE))
-
-ggplot(trend, aes(x = factor(ano), y = mean_ideb)) +
-  geom_col(fill = "darkgreen", width = 0.6) +
-  geom_text(
-    aes(label = sprintf("%.2f", mean_ideb)),
-    vjust = -0.5, size = 3.5
-  ) +
-  labs(
-    title = "IDEB Trend - Early Elementary",
-    x     = "Year",
-    y     = "National Average IDEB"
-  ) +
-  theme_minimal() +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.1)))
-```
+\
+`# Download historical series (get_ideb() already returns long format)`\
+`ideb_history`` ``<-`` `[`get_ideb`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)`(`\
+`  level  ``=`` ``"municipio"``,`\
+`  stage  ``=`` ``"anos_iniciais"``,`\
+`  metric ``=`` ``"indicador"``,`\
+`  year   ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``2017``, ``2019``, ``2021``, ``2023``)`\
+`)`\
+\
+`# National trend`\
+`trend`` ``<-`\
+`  ``ideb_history`` ``|>`\
+`  `[`filter`](https://dplyr.tidyverse.org/reference/filter.html)`(``indicador`` ``==`` ``"IDEB"``)`` ``|>`\
+`  `[`group_by`](https://dplyr.tidyverse.org/reference/group_by.html)`(``ano``)`` ``|>`\
+`  `[`summarise`](https://dplyr.tidyverse.org/reference/summarise.html)`(``mean_ideb ``=`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``valor``, na.rm ``=`` ``TRUE``)``)`\
+\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``trend``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` `[`factor`](https://rdrr.io/r/base/factor.html)`(``ano``)``, y ``=`` ``mean_ideb``)``)`` ``+`\
+`  `[`geom_col`](https://ggplot2.tidyverse.org/reference/geom_bar.html)`(``fill ``=`` ``"darkgreen"``, width ``=`` ``0.6``)`` ``+`\
+`  `[`geom_text`](https://ggplot2.tidyverse.org/reference/geom_text.html)`(`\
+`    `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``label ``=`` `[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"%.2f"``, ``mean_ideb``)``)``,`\
+`    vjust ``=`` ``-``0.5``, size ``=`` ``3.5`\
+`  ``)`` ``+`\
+`  `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(`\
+`    title ``=`` ``"IDEB Trend - Early Elementary"``,`\
+`    x     ``=`` ``"Year"``,`\
+`    y     ``=`` ``"National Average IDEB"`\
+`  ``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`` ``+`\
+`  `[`scale_y_continuous`](https://ggplot2.tidyverse.org/reference/scale_continuous.html)`(``expand ``=`` `[`expansion`](https://ggplot2.tidyverse.org/reference/expansion.html)`(``mult ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``0``, ``0.1``)``)``)`
 
 ![](../reference/figures/vignette-gs-ideb-trend.png)
 
@@ -227,47 +211,41 @@ The microdata includes demographics, socioeconomic data, and scores.
 
 ### Downloading ENEM data
 
-``` r
-
-# WARNING: Large files (1-3 GB)!
-# Use n_max for initial exploration
-
-# Sample for exploration
-enem_sample <- get_enem(2023, n_max = 10000)
-
-# Full data (takes a while!)
-# enem_full <- get_enem(2023)
-```
+\
+`# WARNING: Large files (1-3 GB)!`\
+`# Use n_max for initial exploration`\
+\
+`# Sample for exploration`\
+`enem_sample`` ``<-`` `[`get_enem`](https://sidneybissoli.github.io/educabR/reference/get_enem.md)`(``2023``, n_max ``=`` ``10000``)`\
+\
+`# Full data (takes a while!)`\
+`# enem_full <- get_enem(2023)`
 
 ### Data structure
 
-``` r
-
-glimpse(enem_sample)
-#> Rows: 10,000
-#> Columns: 76
-#> $ nu_inscricao           <dbl> 210059085136, 210059527735, ...
-#> $ nu_ano                 <dbl> 2023, 2023, ...
-#> $ tp_faixa_etaria        <dbl> 14, 12, 6, ...
-#> $ tp_sexo                <chr> "M", "M", "F", ...
-#> $ tp_estado_civil        <dbl> 2, 2, 1, ...
-#> $ tp_cor_raca            <dbl> 1, 1, 1, ...
-#> $ sg_uf_prova            <chr> "DF", "DF", "RS", ...
-#> $ nu_nota_cn             <dbl> NA, NA, 502.0, ...
-#> $ nu_nota_ch             <dbl> NA, NA, 498.9, ...
-#> $ nu_nota_lc             <dbl> NA, NA, 475.6, ...
-#> $ nu_nota_mt             <dbl> NA, NA, 363.2, ...
-#> $ nu_nota_redacao        <dbl> NA, NA, 700, ...
-#> # ... 64 more variables
-```
+\
+[`glimpse`](https://pillar.r-lib.org/reference/glimpse.html)`(``enem_sample``)`\
+`#> Rows: 10,000`\
+`#> Columns: 76`\
+`#> $ nu_inscricao           <dbl> 210059085136, 210059527735, ...`\
+`#> $ nu_ano                 <dbl> 2023, 2023, ...`\
+`#> $ tp_faixa_etaria        <dbl> 14, 12, 6, ...`\
+`#> $ tp_sexo                <chr> "M", "M", "F", ...`\
+`#> $ tp_estado_civil        <dbl> 2, 2, 1, ...`\
+`#> $ tp_cor_raca            <dbl> 1, 1, 1, ...`\
+`#> $ sg_uf_prova            <chr> "DF", "DF", "RS", ...`\
+`#> $ nu_nota_cn             <dbl> NA, NA, 502.0, ...`\
+`#> $ nu_nota_ch             <dbl> NA, NA, 498.9, ...`\
+`#> $ nu_nota_lc             <dbl> NA, NA, 475.6, ...`\
+`#> $ nu_nota_mt             <dbl> NA, NA, 363.2, ...`\
+`#> $ nu_nota_redacao        <dbl> NA, NA, 700, ...`\
+`#> # ... 64 more variables`
 
 ### Performance analysis
 
-``` r
-
-# Summary statistics for scores
-enem_summary(enem_sample)
-```
+\
+`# Summary statistics for scores`\
+[`enem_summary`](https://sidneybissoli.github.io/educabR/reference/enem_summary.md)`(``enem_sample``)`
 
 | Variable | n | n_valid | Mean | SD | Min | Q25 | Median | Q75 | Max |
 |:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -283,11 +261,9 @@ enem_summary(enem_sample)
 | nu_nota_redacao | 10000 | 7562 | 649 | 201.0 | 0 | 520 | 640 | 820 | 980 |
 |  Based on a random sample of 10,000 observations |  |  |  |  |  |  |  |  |  |
 
-``` r
-
-# Summary by sex
-enem_summary(enem_sample, by = "tp_sexo")
-```
+\
+`# Summary by sex`\
+[`enem_summary`](https://sidneybissoli.github.io/educabR/reference/enem_summary.md)`(``enem_sample``, by ``=`` ``"tp_sexo"``)`
 
 | Sex | Variable | n | n_valid | Mean | SD | Min | Q25 | Median | Q75 | Max |
 |:--:|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -303,29 +279,27 @@ enem_summary(enem_sample, by = "tp_sexo")
 | M | nu_nota_comp1 | 2958 | 2234 | 121 | 34.6 | 0 | 100 | 120 | 140 | 200 |
 |  Showing 10 of 20 rows |  |  |  |  |  |  |  |  |  |  |
 
-``` r
-
-# Average scores by race/ethnicity
-scores_by_race <- 
-  enem_sample |>
-  filter(!is.na(nu_nota_mt)) |>
-  mutate(
-    race = case_when(
-      tp_cor_raca == 0 ~ "Not declared",
-      tp_cor_raca == 1 ~ "White",
-      tp_cor_raca == 2 ~ "Black",
-      tp_cor_raca == 3 ~ "Mixed race",
-      tp_cor_raca == 4 ~ "Asian",
-      tp_cor_raca == 5 ~ "Indigenous"
-    )
-  ) |>
-  group_by(race) |>
-  summarise(
-    n          = n(),
-    mean_math  = mean(nu_nota_mt, na.rm = TRUE),
-    mean_essay = mean(nu_nota_redacao, na.rm = TRUE)
-  )
-```
+\
+`# Average scores by race/ethnicity`\
+`scores_by_race`` ``<-`` `\
+`  ``enem_sample`` ``|>`\
+`  `[`filter`](https://dplyr.tidyverse.org/reference/filter.html)`(``!`[`is.na`](https://rdrr.io/r/base/NA.html)`(``nu_nota_mt``)``)`` ``|>`\
+`  `[`mutate`](https://dplyr.tidyverse.org/reference/mutate.html)`(`\
+`    race ``=`` `[`case_when`](https://dplyr.tidyverse.org/reference/case-and-replace-when.html)`(`\
+`      ``tp_cor_raca`` ``==`` ``0`` ``~`` ``"Not declared"``,`\
+`      ``tp_cor_raca`` ``==`` ``1`` ``~`` ``"White"``,`\
+`      ``tp_cor_raca`` ``==`` ``2`` ``~`` ``"Black"``,`\
+`      ``tp_cor_raca`` ``==`` ``3`` ``~`` ``"Mixed race"``,`\
+`      ``tp_cor_raca`` ``==`` ``4`` ``~`` ``"Asian"``,`\
+`      ``tp_cor_raca`` ``==`` ``5`` ``~`` ``"Indigenous"`\
+`    ``)`\
+`  ``)`` ``|>`\
+`  `[`group_by`](https://dplyr.tidyverse.org/reference/group_by.html)`(``race``)`` ``|>`\
+`  `[`summarise`](https://dplyr.tidyverse.org/reference/summarise.html)`(`\
+`    n          ``=`` `[`n`](https://dplyr.tidyverse.org/reference/context.html)`(``)``,`\
+`    mean_math  ``=`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``nu_nota_mt``, na.rm ``=`` ``TRUE``)``,`\
+`    mean_essay ``=`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``nu_nota_redacao``, na.rm ``=`` ``TRUE``)`\
+`  ``)`
 
 | Race                                             |    n | Mean Math | Mean Essay |
 |:-------------------------------------------------|-----:|----------:|-----------:|
@@ -339,27 +313,25 @@ scores_by_race <-
 
 ### Item response data
 
-``` r
-
-# Data about exam questions
-items <- get_enem_itens(2023)
-
-glimpse(items)
-#> Rows: 5,550
-#> Columns: 14
-#> $ co_posicao       <chr> "21", "20", "11", ...
-#> $ sg_area          <chr> "LC", "LC", "LC", ...
-#> $ co_item          <chr> "141283", "118144", ...
-#> $ tx_gabarito      <chr> "B", "C", "D", ...
-#> $ co_habilidade    <chr> "14", "23", "26", ...
-#> $ in_item_aban     <dbl> 0, 0, 0, ...
-#> $ nu_param_a       <dbl> 2.20, 2.43, 1.95, ...
-#> $ nu_param_b       <dbl> 0.83, 0.90, -0.13, ...
-#> $ nu_param_c       <dbl> 0.21, 0.13, 0.20, ...
-#> $ tx_cor           <chr> "AMARELA", "AMARELA", ...
-#> $ co_prova         <chr> "1286", "1286", ...
-#> # ... 3 more variables
-```
+\
+`# Data about exam questions`\
+`items`` ``<-`` `[`get_enem_itens`](https://sidneybissoli.github.io/educabR/reference/get_enem_itens.md)`(``2023``)`\
+\
+[`glimpse`](https://pillar.r-lib.org/reference/glimpse.html)`(``items``)`\
+`#> Rows: 5,550`\
+`#> Columns: 14`\
+`#> $ co_posicao       <chr> "21", "20", "11", ...`\
+`#> $ sg_area          <chr> "LC", "LC", "LC", ...`\
+`#> $ co_item          <chr> "141283", "118144", ...`\
+`#> $ tx_gabarito      <chr> "B", "C", "D", ...`\
+`#> $ co_habilidade    <chr> "14", "23", "26", ...`\
+`#> $ in_item_aban     <dbl> 0, 0, 0, ...`\
+`#> $ nu_param_a       <dbl> 2.20, 2.43, 1.95, ...`\
+`#> $ nu_param_b       <dbl> 0.83, 0.90, -0.13, ...`\
+`#> $ nu_param_c       <dbl> 0.21, 0.13, 0.20, ...`\
+`#> $ tx_cor           <chr> "AMARELA", "AMARELA", ...`\
+`#> $ co_prova         <chr> "1286", "1286", ...`\
+`#> # ... 3 more variables`
 
 ## School Census
 
@@ -368,95 +340,87 @@ education, covering all public and private schools.
 
 ### Downloading Census data
 
-``` r
-
-# School data
-schools_2023 <- get_censo_escolar(2023)
-
-# Filter by state (faster)
-schools_sp <- get_censo_escolar(2023, uf = "SP")
-
-# Sample for exploration
-schools_sample <- get_censo_escolar(2023, n_max = 1000)
-```
+\
+`# School data`\
+`schools_2023`` ``<-`` `[`get_censo_escolar`](https://sidneybissoli.github.io/educabR/reference/get_censo_escolar.md)`(``2023``)`\
+\
+`# Filter by state (faster)`\
+`schools_sp`` ``<-`` `[`get_censo_escolar`](https://sidneybissoli.github.io/educabR/reference/get_censo_escolar.md)`(``2023``, uf ``=`` ``"SP"``)`\
+\
+`# Sample for exploration`\
+`schools_sample`` ``<-`` `[`get_censo_escolar`](https://sidneybissoli.github.io/educabR/reference/get_censo_escolar.md)`(``2023``, n_max ``=`` ``1000``)`
 
 ### Data structure
 
-``` r
-
-# The census contains over 400 variables per school!
-glimpse(schools_2023)
-#> Rows: 217,625
-#> Columns: 408
-#> $ nu_ano_censo              <dbl> 2023, 2023, ...
-#> $ no_regiao                 <chr> "Norte", "Norte", ...
-#> $ co_regiao                 <chr> "1", "1", ...
-#> $ no_uf                     <chr> "Rondônia", "Rondônia", ...
-#> $ sg_uf                     <chr> "RO", "RO", ...
-#> $ co_uf                     <chr> "11", "11", ...
-#> $ no_municipio              <chr> "Porto Velho", "Porto Velho", ...
-#> $ co_municipio              <chr> "1100205", "1100205", ...
-#> $ no_regiao_geog_interm     <chr> "Porto Velho", "Porto Velho", ...
-#> $ co_regiao_geog_interm     <chr> "1101", "1101", ...
-#> # ... 398 more variables
-```
+\
+`# The census contains over 400 variables per school!`\
+[`glimpse`](https://pillar.r-lib.org/reference/glimpse.html)`(``schools_2023``)`\
+`#> Rows: 217,625`\
+`#> Columns: 408`\
+`#> $ nu_ano_censo              <dbl> 2023, 2023, ...`\
+`#> $ no_regiao                 <chr> "Norte", "Norte", ...`\
+`#> $ co_regiao                 <chr> "1", "1", ...`\
+`#> $ no_uf                     <chr> "Rondônia", "Rondônia", ...`\
+`#> $ sg_uf                     <chr> "RO", "RO", ...`\
+`#> $ co_uf                     <chr> "11", "11", ...`\
+`#> $ no_municipio              <chr> "Porto Velho", "Porto Velho", ...`\
+`#> $ co_municipio              <chr> "1100205", "1100205", ...`\
+`#> $ no_regiao_geog_interm     <chr> "Porto Velho", "Porto Velho", ...`\
+`#> $ co_regiao_geog_interm     <chr> "1101", "1101", ...`\
+`#> # ... 398 more variables`
 
 ### Analysis: Schools by administrative type
 
-``` r
-
-# Count by administrative type
-schools_by_type <- 
-  schools_2023 |>
-  mutate(
-    admin_type = case_when(
-      tp_dependencia == 1 ~ "Federal",
-      tp_dependencia == 2 ~ "State",
-      tp_dependencia == 3 ~ "Municipal",
-      tp_dependencia == 4 ~ "Private"
-    )
-  ) |>
-  count(admin_type) |>
-  mutate(pct = n / sum(n) * 100)
-
-ggplot(schools_by_type, aes(x = reorder(admin_type, n), y = n, fill = admin_type)) +
-  geom_col() +
-  geom_text(aes(label = sprintf("%.1f%%", pct)), hjust = -0.1) +
-  coord_flip() +
-  scale_fill_brewer(palette = "Set2") +
-  labs(
-    title = "Number of Schools by Administrative Type (2023)",
-    x     = NULL,
-    y     = "Number of Schools"
-  ) +
-  theme_minimal() +
-  theme(legend.position = "none") +
-  scale_y_continuous(
-    labels = scales::label_number(big.mark = ".", decimal.mark = ","),
-    expand = expansion(mult = c(0, 0.12))
-  )
-```
+\
+`# Count by administrative type`\
+`schools_by_type`` ``<-`` `\
+`  ``schools_2023`` ``|>`\
+`  `[`mutate`](https://dplyr.tidyverse.org/reference/mutate.html)`(`\
+`    admin_type ``=`` `[`case_when`](https://dplyr.tidyverse.org/reference/case-and-replace-when.html)`(`\
+`      ``tp_dependencia`` ``==`` ``1`` ``~`` ``"Federal"``,`\
+`      ``tp_dependencia`` ``==`` ``2`` ``~`` ``"State"``,`\
+`      ``tp_dependencia`` ``==`` ``3`` ``~`` ``"Municipal"``,`\
+`      ``tp_dependencia`` ``==`` ``4`` ``~`` ``"Private"`\
+`    ``)`\
+`  ``)`` ``|>`\
+`  `[`count`](https://dplyr.tidyverse.org/reference/count.html)`(``admin_type``)`` ``|>`\
+`  `[`mutate`](https://dplyr.tidyverse.org/reference/mutate.html)`(``pct ``=`` ``n`` ``/`` `[`sum`](https://rdrr.io/r/base/sum.html)`(``n``)`` ``*`` ``100``)`\
+\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``schools_by_type``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` `[`reorder`](https://rdrr.io/r/stats/reorder.factor.html)`(``admin_type``, ``n``)``, y ``=`` ``n``, fill ``=`` ``admin_type``)``)`` ``+`\
+`  `[`geom_col`](https://ggplot2.tidyverse.org/reference/geom_bar.html)`(``)`` ``+`\
+`  `[`geom_text`](https://ggplot2.tidyverse.org/reference/geom_text.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``label ``=`` `[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"%.1f%%"``, ``pct``)``)``, hjust ``=`` ``-``0.1``)`` ``+`\
+`  `[`coord_flip`](https://ggplot2.tidyverse.org/reference/coord_flip.html)`(``)`` ``+`\
+`  `[`scale_fill_brewer`](https://ggplot2.tidyverse.org/reference/scale_brewer.html)`(``palette ``=`` ``"Set2"``)`` ``+`\
+`  `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(`\
+`    title ``=`` ``"Number of Schools by Administrative Type (2023)"``,`\
+`    x     ``=`` ``NULL``,`\
+`    y     ``=`` ``"Number of Schools"`\
+`  ``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`` ``+`\
+`  `[`theme`](https://ggplot2.tidyverse.org/reference/theme.html)`(``legend.position ``=`` ``"none"``)`` ``+`\
+`  `[`scale_y_continuous`](https://ggplot2.tidyverse.org/reference/scale_continuous.html)`(`\
+`    labels ``=`` ``scales``::`[`label_number`](https://scales.r-lib.org/reference/label_number.html)`(``big.mark ``=`` ``"."``, decimal.mark ``=`` ``","``)``,`\
+`    expand ``=`` `[`expansion`](https://ggplot2.tidyverse.org/reference/expansion.html)`(``mult ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``0``, ``0.12``)``)`\
+`  ``)`
 
 ![](../reference/figures/vignette-gs-schools-by-type.png)
 
 ### Analysis: School infrastructure
 
-``` r
-
-# Check infrastructure availability in public schools
-infra <- 
-  schools_2023 |>
-  filter(tp_dependencia %in% c(2, 3)) |>  # Public schools only
-  summarise(
-    pct_internet      = mean(in_internet == 1, na.rm = TRUE) * 100,
-    pct_library       = mean(in_biblioteca == 1, na.rm = TRUE) * 100,
-    pct_computer_lab  = mean(in_laboratorio_informatica == 1, na.rm = TRUE) * 100,
-    pct_sports_court  = mean(in_quadra_esportes == 1, na.rm = TRUE) * 100,
-    pct_ramps         = mean(in_acessibilidade_rampas == 1, na.rm = TRUE) * 100
-  )
-
-print(infra)
-```
+\
+`# Check infrastructure availability in public schools`\
+`infra`` ``<-`` `\
+`  ``schools_2023`` ``|>`\
+`  `[`filter`](https://dplyr.tidyverse.org/reference/filter.html)`(``tp_dependencia`` `[`%in%`](https://rdrr.io/r/base/match.html)` `[`c`](https://rdrr.io/r/base/c.html)`(``2``, ``3``)``)`` ``|>``  ``# Public schools only`\
+`  `[`summarise`](https://dplyr.tidyverse.org/reference/summarise.html)`(`\
+`    pct_internet      ``=`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``in_internet`` ``==`` ``1``, na.rm ``=`` ``TRUE``)`` ``*`` ``100``,`\
+`    pct_library       ``=`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``in_biblioteca`` ``==`` ``1``, na.rm ``=`` ``TRUE``)`` ``*`` ``100``,`\
+`    pct_computer_lab  ``=`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``in_laboratorio_informatica`` ``==`` ``1``, na.rm ``=`` ``TRUE``)`` ``*`` ``100``,`\
+`    pct_sports_court  ``=`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``in_quadra_esportes`` ``==`` ``1``, na.rm ``=`` ``TRUE``)`` ``*`` ``100``,`\
+`    pct_ramps         ``=`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``in_acessibilidade_rampas`` ``==`` ``1``, na.rm ``=`` ``TRUE``)`` ``*`` ``100`\
+`  ``)`\
+\
+[`print`](https://rdrr.io/r/base/print.html)`(``infra``)`
 
 | Internet | Library | Computer Lab | Sports Court | Ramps |
 |:--------:|:-------:|:------------:|:------------:|:-----:|
@@ -470,45 +434,37 @@ style="width: auto !important; margin-left: auto; margin-right: auto;"}
 
 ### 1. Set a permanent cache
 
-``` r
-
-# At the start of each project
-set_cache_dir("~/educabR_data")
-```
+\
+`# At the start of each project`\
+[`set_cache_dir`](https://sidneybissoli.github.io/educabR/reference/set_cache_dir.md)`(``"~/educabR_data"``)`
 
 ### 2. Use samples for exploration
 
-``` r
-
-# Explore with a small sample first
-test_data <- get_enem(2023, n_max = 1000)
-
-# Then download the full data
-# full_data <- get_enem(2023)
-```
+\
+`# Explore with a small sample first`\
+`test_data`` ``<-`` `[`get_enem`](https://sidneybissoli.github.io/educabR/reference/get_enem.md)`(``2023``, n_max ``=`` ``1000``)`\
+\
+`# Then download the full data`\
+`# full_data <- get_enem(2023)`
 
 ### 3. Filter by state after downloading
 
-``` r
-
-# Download once, then filter
-ideb <- get_ideb(level = "escola", stage = "anos_iniciais", metric = "indicador", year = 2021)
-ideb_sp <- ideb |> dplyr::filter(uf_sigla == "SP")
-```
+\
+`# Download once, then filter`\
+`ideb`` ``<-`` `[`get_ideb`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)`(``level ``=`` ``"escola"``, stage ``=`` ``"anos_iniciais"``, metric ``=`` ``"indicador"``, year ``=`` ``2021``)`\
+`ideb_sp`` ``<-`` ``ideb`` ``|>`` ``dplyr``::`[`filter`](https://dplyr.tidyverse.org/reference/filter.html)`(``uf_sigla`` ``==`` ``"SP"``)`
 
 ### 4. Monitor memory usage
 
-``` r
-
-# Large files can consume a lot of RAM
-# Use n_max or filter data after loading
-data <- get_censo_escolar(2023)
-data_filtered <- 
-  data |>
-  select(co_entidade, no_entidade, sg_uf, tp_dependencia)
-rm(data)  # Free memory
-gc()
-```
+\
+`# Large files can consume a lot of RAM`\
+`# Use n_max or filter data after loading`\
+`data`` ``<-`` `[`get_censo_escolar`](https://sidneybissoli.github.io/educabR/reference/get_censo_escolar.md)`(``2023``)`\
+`data_filtered`` ``<-`` `\
+`  ``data`` ``|>`\
+`  `[`select`](https://dplyr.tidyverse.org/reference/select.html)`(``co_entidade``, ``no_entidade``, ``sg_uf``, ``tp_dependencia``)`\
+[`rm`](https://rdrr.io/r/base/rm.html)`(``data``)``  ``# Free memory`\
+[`gc`](https://rdrr.io/r/base/gc.html)`(``)`
 
 ## Data dictionary
 

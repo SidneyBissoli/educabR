@@ -75,17 +75,15 @@ stale within months.
 The question — “IDEB results by municipality, programmatically” — with
 an **empty cache**, on 2026-09-14:
 
-``` r
-
-library(educabR)
-
-ideb <- get_ideb(
-  level  = "municipio",
-  stage  = "anos_finais",
-  metric = "indicador",
-  year   = c(2021, 2023)
-)
-```
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`educabR`](https://github.com/SidneyBissoli/educabR)`)`\
+\
+`ideb`` ``<-`` `[`get_ideb`](https://sidneybissoli.github.io/educabR/reference/get_ideb.md)`(`\
+`  level  ``=`` ``"municipio"``,`\
+`  stage  ``=`` ``"anos_finais"``,`\
+`  metric ``=`` ``"indicador"``,`\
+`  year   ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``2021``, ``2023``)`\
+`)`
 
 |                  |                                 |
 |------------------|--------------------------------:|
@@ -98,14 +96,12 @@ ideb <- get_ideb(
 What came back is already long and typed — one row per municipality,
 network and edition:
 
-``` r
-
-head(ideb, 3)
-#>   uf_sigla municipio_codigo        municipio_nome      rede  ano indicador valor
-#> 1       RO          1100015 Alta Floresta D'Oeste  Estadual 2021      IDEB   4.8
-#> 2       RO          1100015 Alta Floresta D'Oeste Municipal 2021      IDEB   4.7
-#> 3       RO          1100015 Alta Floresta D'Oeste   Pública 2021      IDEB   4.8
-```
+\
+[`head`](https://rdrr.io/r/utils/head.html)`(``ideb``, ``3``)`\
+`#>   uf_sigla municipio_codigo        municipio_nome      rede  ano indicador valor`\
+`#> 1       RO          1100015 Alta Floresta D'Oeste  Estadual 2021      IDEB   4.8`\
+`#> 2       RO          1100015 Alta Floresta D'Oeste Municipal 2021      IDEB   4.7`\
+`#> 3       RO          1100015 Alta Floresta D'Oeste   Pública 2021      IDEB   4.8`
 
 The 11 MB is INEP’s own file: IDEB is published as an `.xlsx` whose
 first rows are the title and the notes, with the indicator, the target
