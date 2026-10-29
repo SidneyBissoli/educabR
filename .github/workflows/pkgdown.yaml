@@ -15,8 +15,11 @@ permissions: read-all
 
 jobs:
   pkgdown:
-    # 24.04, not latest (26.04): setup-r stalls there, see R-CMD-check.yaml
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
+    # the ubuntu job of the current R release runs in the portfolio's CI
+    # image (SidneyBissoli/r-ci): R, pandoc and every dependency are already
+    # there, nothing is installed through the apt mirror at job time
+    container: ghcr.io/sidneybissoli/r-ci:latest
     timeout-minutes: 60
     # Only restrict concurrency for non-PR jobs
     concurrency:
@@ -28,20 +31,12 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: r-lib/actions/setup-pandoc@v2
-
-      # The setup steps take 20-80 s when the Ubuntu apt mirror of the
-      # runners answers; on 2026-10-23 it crawled and they hung for hours
-      # (azure.archive.ubuntu.com). Past the deadline the job fails fast
-      # and is re-run, instead of holding the PR.
-      - uses: r-lib/actions/setup-r@v2
-        timeout-minutes: 10
-        with:
-          use-public-rspm: true
-
+      # covers a dependency the package gained after the last image build;
+      # with everything already installed it takes seconds
       - uses: r-lib/actions/setup-r-dependencies@v2
         timeout-minutes: 15
         with:
+          cache: false
           extra-packages: any::pkgdown, local::.
           needs: website
 
