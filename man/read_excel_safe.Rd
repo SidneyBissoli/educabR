@@ -4,18 +4,28 @@
 \alias{read_excel_safe}
 \title{Read Excel file safely}
 \usage{
-read_excel_safe(file, n_max = Inf)
+read_excel_safe(file, n_max = Inf, sheet = 1)
 }
 \arguments{
 \item{file}{Path to the Excel file.}
 
 \item{n_max}{Maximum number of rows to read.}
+
+\item{sheet}{Sheet name or position. Default is the first sheet.}
 }
 \value{
 A tibble with the data.
 }
 \description{
 Internal function to read Excel files (xls/xlsx) with error handling.
-Tries to read the first sheet by default.
+Reads the first sheet by default. Three INEP layout quirks are handled:
+\itemize{
+\item a title row above the header (e.g. IGC 2009) is skipped, by taking as
+header the first row where at least half of the columns are filled;
+\item a sub-header row below the header (e.g. IGC 2008: "IGC" over
+"Continuo" and "Faixas") is merged into the column names;
+\item blank, footnote and total rows (e.g. CPC 2021 and 2022, IGC 2021),
+i.e. rows with at most one filled cell, are dropped.
+}
 }
 \keyword{internal}

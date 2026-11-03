@@ -56,7 +56,11 @@ igc_urls <- c(
 #' - IGC is published annually based on the last three ENADE cycles.
 #' - There is no 2020 edition (COVID-19 suspension).
 #' - Column names are standardized to lowercase with underscores.
-#' - Files are in Excel format (xls/xlsx), except 2007 which is 7z.
+#' - Files are in Excel format (xls/xlsx), except 2007, a 7z archive of
+#'   CSV files.
+#' - From 2007 to 2016, INEP splits the table by type of institution
+#'   (one sheet or CSV each for universities, university centers and
+#'   faculties); all parts are read and stacked into one tibble.
 #'
 #' @section Data dictionary:
 #' For detailed information about variables, see INEP's documentation:
@@ -111,26 +115,47 @@ get_igc <- function(year, n_max = Inf, keep_file = TRUE, quiet = FALSE) {
       extract_archive(file_path, exdir, quiet = quiet)
     }
 
-    # find excel file inside extracted directory
-    excel_files <- list.files(
+    # the 2007 archive holds one CSV per type of institution
+    # (Universidade, Centro Universitario, Outros), not an Excel file
+    data_files <- list.files(
       exdir,
-      pattern = "\\.(xlsx|xls|XLS|XLSX)$",
+      pattern = "\\.(csv|xlsx|xls)$",
       recursive = TRUE,
-      full.names = TRUE
+      full.names = TRUE,
+      ignore.case = TRUE
     )
 
-    if (length(excel_files) == 0) {
+    if (length(data_files) == 0) {
       cli::cli_abort(
         c(
-          "no Excel file found in IGC {.val {year}} archive",
+          "no data file found in IGC {.val {year}} archive",
           "i" = "directory: {.path {exdir}}"
         )
       )
     }
 
-    df <- read_excel_safe(excel_files[1], n_max = n_max)
+    parts <- lapply(data_files, function(f) {
+      if (grepl("\\.csv$", f, ignore.case = TRUE)) {
+        suppressMessages(read_inep_file(
+          f,
+          delim = detect_delim(f),
+          n_max = n_max,
+          quiet = TRUE
+        ))
+      } else {
+        read_excel_safe(f, n_max = n_max)
+      }
+    })
+    df <- bind_igc_parts(parts)
   } else {
-    df <- read_excel_safe(file_path, n_max = n_max)
+    # 2008-2016 spread the institutions over one sheet per type of
+    # institution (Universidades / Centros Universitarios / Faculdades);
+    # later sheets hold course- or program-level inputs, not IGC rows
+    sheets <- igc_institution_sheets(file_path)
+    parts <- lapply(sheets, function(s) {
+      read_excel_safe(file_path, n_max = n_max, sheet = s)
+    })
+    df <- bind_igc_parts(parts)
   }
 
   # standardize column names
@@ -157,4 +182,81 @@ get_igc <- function(year, n_max = Inf, keep_file = TRUE, quiet = FALSE) {
   }
 
   df
+}
+
+#' Find the institution-level sheets of an IGC spreadsheet
+#'
+#' @description
+#' Internal function. From 2008 to 2016, INEP splits the IGC table into
+#' one sheet per type of institution ("Universidades", "Centros
+#' Universitarios", "Faculdades" or "Outros"), followed by sheets with
+#' course- or program-level inputs. Returns the institution sheets, or the
+#' first sheet when the file is not split (2017 onwards).
+#'
+#' @param file Path to the Excel file.
+#'
+#' @return A character vector of sheet names.
+#'
+#' @keywords internal
+igc_institution_sheets <- function(file) {
+  if (!requireNamespace("readxl", quietly = TRUE)) {
+    cli::cli_abort(
+      c(
+        "the {.pkg readxl} package is required to read CPC/IGC data",
+        "i" = "install it with {.code install.packages(\"readxl\")}"
+      )
+    )
+  }
+  sheets <- readxl::excel_sheets(file)
+  folded <- tolower(ascii_fold(sheets))
+  is_inst <- grepl("^(universidade|centro|faculdade|outros)", folded)
+  if (any(is_inst)) sheets[is_inst] else sheets[1]
+}
+
+#' Stack the parts of an IGC table
+#'
+#' @description
+#' Internal function. Stacks the per-institution-type parts of an IGC
+#' table. Parts with the same number of columns take the column names of
+#' the first part, because INEP sometimes words the same header
+#' differently across sheets (IGC 2010: "Porcentagem de" in one sheet,
+#' "%" in the others). Otherwise parts are stacked by name. Columns whose
+#' type differs across parts are converted to character.
+#'
+#' @param parts A list of data frames.
+#'
+#' @return A tibble.
+#'
+#' @keywords internal
+bind_igc_parts <- function(parts) {
+  if (length(parts) == 1) {
+    return(parts[[1]])
+  }
+
+  widths <- vapply(parts, ncol, integer(1))
+  if (all(widths == widths[1])) {
+    first_names <- names(parts[[1]])
+    parts <- lapply(parts, function(p) {
+      names(p) <- first_names
+      p
+    })
+  }
+
+  all_cols <- unique(unlist(lapply(parts, names)))
+  for (col in all_cols) {
+    classes <- unique(unlist(lapply(parts, function(p) {
+      if (col %in% names(p)) class(p[[col]])[1]
+    })))
+    # an all-empty column comes back as logical and binds with any type
+    if (length(setdiff(classes, "logical")) > 1) {
+      parts <- lapply(parts, function(p) {
+        if (col %in% names(p)) {
+          p[[col]] <- as.character(p[[col]])
+        }
+        p
+      })
+    }
+  }
+
+  dplyr::bind_rows(parts)
 }
