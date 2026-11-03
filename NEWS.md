@@ -54,6 +54,13 @@ fixes below.
   connection drops ("server closed abruptly"), not only on HTTP error
   codes: `httr2::req_retry()` does not retry connection failures unless
   asked to. Requires httr2 >= 1.0.0.
+* Date columns (`dt_*`, `dh_*`) are no longer erased when they are not
+  in SAS format. They were parsed with "12FEB2024:00:00:00" only, so
+  "12/12/2013 00:00:00" became `NA`: `get_capes(type = "catalogo")` lost
+  every `dt_titulacao` and `dt_matricula` in 2013-2016 (67,534 of 67,534
+  in 2013) and most of four other date columns. SAS, "dd/mm/yyyy" and ISO
+  dates are now read; a column that no format reads completely is kept as
+  text.
 * `get_idd(2022)` works. INEP serves that edition as a RAR archive under
   a `.zip` name, and the download check rejected it as "not a valid ZIP
   archive". Archives are now identified by their signature (ZIP, 7z or

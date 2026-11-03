@@ -346,11 +346,16 @@ uf_to_code <- function(uf) {
   unname(uf_map[uf_upper])
 }
 
-#' Parse SAS datetime columns to Date
+#' Parse date columns (dt_*, dh_*) to Date
 #'
 #' @description
-#' Internal function to convert columns with SAS datetime format
-#' (e.g. "12FEB2024:00:00:00") to Date objects.
+#' Internal function to convert text date columns to Date objects. INEP
+#' and CAPES use several formats: SAS datetime ("12FEB2024:00:00:00"),
+#' "12/12/2013 00:00:00", "12/12/2013" and ISO "2013-12-12". For each
+#' column the format that reads every non-empty value is used. If no
+#' format reads them all, the column is kept as text: converting with a
+#' single fixed format turned every value of the CAPES catalogo 2013-2016
+#' dates into `NA`.
 #'
 #' @param df A data frame.
 #'
@@ -364,9 +369,23 @@ parse_sas_dates <- function(df) {
   on.exit(Sys.setlocale("LC_TIME", old_locale), add = TRUE)
   Sys.setlocale("LC_TIME", "C")
 
+  formats <- c("%d%b%Y:%H:%M:%S", "%d/%m/%Y", "%Y-%m-%d")
+
   for (col in dt_cols) {
-    if (is.character(df[[col]])) {
-      df[[col]] <- as.Date(df[[col]], format = "%d%b%Y:%H:%M:%S")
+    x <- df[[col]]
+    if (!is.character(x)) {
+      next
+    }
+    filled <- !is.na(x) & nzchar(trimws(x))
+    if (!any(filled)) {
+      next
+    }
+    for (fmt in formats) {
+      parsed <- as.Date(x, format = fmt)
+      if (all(!is.na(parsed[filled]))) {
+        df[[col]] <- parsed
+        break
+      }
     }
   }
 

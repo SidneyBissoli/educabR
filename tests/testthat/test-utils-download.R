@@ -704,6 +704,34 @@ test_that("parse_sas_dates converts dt_ columns with SAS datetime format", {
   expect_equal(result$dt_criacao[2], as.Date("2023-01-01"))
 })
 
+test_that("parse_sas_dates reads dd/mm/yyyy dates instead of erasing them", {
+  # CAPES catalogo 2013-2016: every date became NA with the SAS-only format
+  df <- data.frame(
+    dt_titulacao = c("12/12/2013 00:00:00", "18/02/2013 00:00:00", NA, ""),
+    dt_iso = c("2013-12-12", NA, NA, NA),
+    stringsAsFactors = FALSE
+  )
+
+  result <- educabR:::parse_sas_dates(df)
+
+  expect_equal(
+    result$dt_titulacao,
+    as.Date(c("2013-12-12", "2013-02-18", NA, NA))
+  )
+  expect_equal(result$dt_iso[1], as.Date("2013-12-12"))
+})
+
+test_that("parse_sas_dates keeps text when no format reads every value", {
+  df <- data.frame(
+    dt_mixed = c("12FEB2024:00:00:00", "sem data", "13/02/2024"),
+    stringsAsFactors = FALSE
+  )
+
+  result <- educabR:::parse_sas_dates(df)
+
+  expect_identical(result$dt_mixed, df$dt_mixed)
+})
+
 test_that("parse_sas_dates converts dh_ columns", {
   df <- data.frame(
     dh_alteracao = c("15MAR2023:10:30:00"),
