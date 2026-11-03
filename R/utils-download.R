@@ -853,16 +853,55 @@ detect_delim <- function(file) {
 detect_encoding <- function(file) {
   # read raw bytes from the first chunk of the file
   raw_bytes <- readBin(file, "raw", n = 10000)
-  text <- rawToChar(raw_bytes)
 
-  # iconv returns NA if input is not valid UTF-8
-  result <- iconv(text, from = "UTF-8", to = "UTF-8")
-
-  if (is.na(result)) {
-    "latin1"
-  } else {
-    "UTF-8"
+  # validUTF8() behaves the same on every platform; the former
+  # iconv(from = "UTF-8", to = "UTF-8") check returned NA for invalid
+  # bytes on Windows and Linux but not on macOS, whose iconv passes them
+  # through, so latin1 files were read as UTF-8 there.
+  # When the chunk stops before the end of the file it may cut a multibyte
+  # character: drop an incomplete trailing sequence before checking.
+  if (file.size(file) > length(raw_bytes)) {
+    raw_bytes <- drop_incomplete_utf8_tail(raw_bytes)
   }
+
+  if (validUTF8(rawToChar(raw_bytes))) "UTF-8" else "latin1"
+}
+
+#' Drop an incomplete UTF-8 sequence at the end of a raw vector
+#'
+#' @description
+#' Internal function. A fixed-size chunk read from a UTF-8 file can cut a
+#' multibyte character. Only a trailing lead byte whose sequence is
+#' incomplete (with its continuation bytes) is dropped, so a latin1 byte
+#' at the end is kept and still makes the chunk invalid.
+#'
+#' @param bytes A raw vector.
+#'
+#' @return The raw vector, possibly shorter.
+#'
+#' @keywords internal
+drop_incomplete_utf8_tail <- function(bytes) {
+  n <- length(bytes)
+  for (i in rev(seq_len(n))[seq_len(min(4L, n))]) {
+    b <- as.integer(bytes[i])
+    if (b < 0x80) {
+      return(bytes)
+    }
+    if (b >= 0xC0) {
+      expected <- if (b >= 0xF0) {
+        4L
+      } else if (b >= 0xE0) {
+        3L
+      } else {
+        2L
+      }
+      if (n - i + 1L < expected) {
+        return(bytes[seq_len(i - 1L)])
+      }
+      return(bytes)
+    }
+  }
+  bytes
 }
 
 #' Normalize character columns to UTF-8 NFC

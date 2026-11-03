@@ -24,6 +24,10 @@ it: see the first item below.
 * `get_cpc()` 2007 and 2008 no longer return duplicated column names:
   "% Docentes Doutores" and similar columns become `pct_docentes_doutores`
   instead of colliding with `docentes_doutores`.
+* On macOS, latin1 CSV files are no longer read as UTF-8, which garbled
+  accented text and column names. The encoding check relied on `iconv()`
+  returning `NA` for invalid UTF-8, which macOS's iconv does not do; it
+  now uses `validUTF8()`.
 * `igc_continuo`, `*_faixas` and other `*_continuo` columns stored as text
   are converted to numeric, like `*_faixa` already were; markers such as
   "SC" and "sub judice" become `NA`.
