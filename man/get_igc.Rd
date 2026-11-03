@@ -69,6 +69,7 @@ igc_2021 <- get_igc(2021, n_max = 1000)
 }
 \seealso{
 Other CPC/IGC functions:
+\code{\link[=get_conceito_enade]{get_conceito_enade()}},
 \code{\link[=get_cpc]{get_cpc()}}
 }
 \concept{CPC/IGC functions}

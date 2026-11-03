@@ -168,6 +168,10 @@ read_excel_safe <- function(file, n_max = Inf, sheet = 1) {
         sheet = sheet,
         skip = skip,
         n_max = n_max_arg,
+        # guess types from every row: INEP columns can be empty for the
+        # first 1000 rows (Conceito Enade 2006 "Sub Area"), and the default
+        # guess turns them into logical, silently dropping later values
+        guess_max = if (is.infinite(n_max)) 1e6 else n_max,
         .name_repair = "minimal",
         na = c("", "-", "ND", "\u2013", "\u2014")
       )

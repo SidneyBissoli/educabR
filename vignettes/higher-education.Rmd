@@ -186,6 +186,30 @@ glimpse(idd)
 
 ---
 
+## Conceito Enade
+
+The Conceito Enade is the course-level indicator derived from ENADE: the
+performance of graduating students, on a continuous scale and in five levels
+(faixas 1 to 5). `get_enade()` returns the student microdata;
+`get_conceito_enade()` returns the official indicator, one row per course.
+
+```{r conceito-enade-download}
+# Conceito Enade 2023
+ce_2023 <- get_conceito_enade(2023)
+
+# 2025 is published as two files with their own methodology
+ce_lic <- get_conceito_enade(2025, type = "licenciaturas")
+ce_med <- get_conceito_enade(2025, type = "medicina")
+```
+
+Up to 2014 a row is a course *unit* (all courses of the same institution,
+municipality and area); from 2015 on, a row is a course with its e-MEC code
+(`codigo_do_curso`). For 2007-2011, INEP publishes the Conceito Enade inside
+the Enade/CPC table, which `get_conceito_enade()` returns as is. Column names
+change across editions, so map them to a common set before stacking years.
+
+---
+
 ## CPC - Preliminary Course Concept
 
 CPC (Conceito Preliminar de Curso) is a quality indicator for undergraduate

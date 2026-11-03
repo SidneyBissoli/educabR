@@ -488,6 +488,7 @@ fallback_years <- function(dataset) {
     "encceja" = c(2014L, 2017L:2020L, 2022L:2025L),
     "idd" = c(2014L:2019L, 2021L:2023L),
     "cpc" = c(2007L:2019L, 2021L:2023L),
+    "conceito_enade" = c(2004L:2019L, 2021L:2023L, 2025L),
     "igc" = c(2007L:2019L, 2021L:2023L),
     "capes" = 2013:2024,
     "ideb" = c(2017L, 2019L, 2021L, 2023L, 2025L),
@@ -655,6 +656,14 @@ discover_available_years <- function(dataset) {
   }
 
   # datasets with hardcoded URL maps (years = map keys)
+  if (dataset == "conceito_enade") {
+    # own spreadsheets + 2007-2011 from the Enade/CPC table + 2025
+    return(sort(unique(c(
+      as.integer(names(conceito_enade_urls)),
+      2007L:2011L,
+      2025L
+    ))))
+  }
   if (dataset == "cpc") {
     return(sort(as.integer(names(cpc_urls))))
   }
@@ -706,6 +715,7 @@ available_years <- function(dataset) {
       "encceja",
       "idd",
       "cpc",
+      "conceito_enade",
       "igc",
       "capes",
       "ideb",

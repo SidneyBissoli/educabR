@@ -52,6 +52,7 @@ validate_data <- function(data, dataset, year) {
     "enem_escola" = validate_enem_escola(data, year),
     "idd" = validate_idd(data, year),
     "cpc" = validate_cpc(data, year),
+    "conceito_enade" = validate_conceito_enade(data, year),
     "igc" = validate_igc(data, year),
     "capes" = validate_capes(data, year),
     "ideb" = validate_ideb(data, year),
@@ -206,6 +207,25 @@ validate_idd <- function(data, year) {
       c(
         "IDD {.val {year}} data may have an unexpected structure",
         "i" = "expected columns like {.val {expected}}",
+        "i" = "column names found: {.val {head(names(data), 10)}}"
+      )
+    )
+  }
+}
+
+# conceito enade: check for the indicator or the institution code
+validate_conceito_enade <- function(data, year) {
+  # the faixa column is the indicator itself; its name varies by edition
+  found <- grepl(
+    "conceito_enade|^cod_ies$|^codigo_da_ies$|^co_ies$",
+    names(data)
+  )
+
+  if (!any(found)) {
+    cli::cli_warn(
+      c(
+        "Conceito Enade {.val {year}} data may have an unexpected structure",
+        "i" = "expected columns like {.val conceito_enade_faixa}, {.val codigo_da_ies}",
         "i" = "column names found: {.val {head(names(data), 10)}}"
       )
     )

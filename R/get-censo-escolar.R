@@ -390,8 +390,20 @@ parse_sas_dates <- function(df) {
 #'
 #' @keywords internal
 standardize_names <- function(df) {
+  # superscript 1-3 and the superscript/subscript block, as code points
+  # (keeps the source ASCII-only)
+  superscripts <- str_c(
+    "[",
+    intToUtf8(c(0xB9, 0xB2, 0xB3, 0x2070)),
+    "-",
+    intToUtf8(0x209F),
+    "]"
+  )
+
   clean <- function(x) {
     x |>
+      # superscript footnote marks ("Nome da IES¹") are not part of the name
+      str_replace_all(superscripts, "") |>
       str_to_lower() |>
       iconv(from = "UTF-8", to = "ASCII//TRANSLIT") |>
       str_replace_all("[^a-z0-9]", "_") |>
