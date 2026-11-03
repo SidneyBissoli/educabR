@@ -182,6 +182,14 @@ download_inep_file <- function(url, destfile, quiet = FALSE) {
 #' @description
 #' Internal function to extract ZIP files with progress indication.
 #'
+#' `utils::unzip()` is tried first. Its zlib backend cannot decode some
+#' entries INEP ships (Deflate64 compression, used for `RESULTADOS_2025.csv`
+#' in the ENEM 2025 archive) and skips them with only a "zip file is corrupt"
+#' warning, so the number of extracted files is compared with the archive's
+#' listing. When anything is missing, the archive is extracted again with an
+#' external tool (7-Zip, then PowerShell on Windows or `unzip` elsewhere),
+#' and an error is raised if the archive is still incomplete.
+#'
 #' @param zipfile Path to the ZIP file.
 #' @param exdir Directory to extract to.
 #' @param quiet Logical. If `TRUE`, suppresses progress messages.
@@ -197,94 +205,134 @@ extract_zip <- function(zipfile, exdir, quiet = FALSE) {
   # create directory if needed
   dir.create(exdir, recursive = TRUE, showWarnings = FALSE)
 
-  # try standard unzip first, fall back to system command if encoding issues
-  tryCatch(
-    {
-      files <- withCallingHandlers(
-        utils::unzip(zipfile, exdir = exdir),
-        warning = function(w) {
-          # mute only the specific warnings utils::unzip emits when it
-          # fails to decode non-ASCII filenames in INEP archives — the
-          # fallback below still triggers via length(files) == 0, so
-          # silencing here only suppresses log noise, not recovery.
-          msg <- conditionMessage(w)
-          if (
-            grepl("error -?\\d+ in extracting", msg, ignore.case = TRUE) ||
-              grepl("Falha na convers", msg, ignore.case = TRUE)
-          ) {
-            invokeRestart("muffleWarning")
-          }
-        }
-      )
+  expected <- zip_file_count(zipfile)
 
-      if (length(files) == 0) {
-        stop("unzip extracted 0 files")
-      }
+  # utils::unzip warns (instead of failing) on entries it cannot decode:
+  # non-ASCII names in old INEP archives and Deflate64 entries. Completeness
+  # is checked below by counting, so the warnings themselves are muffled.
+  files <- tryCatch(
+    suppressWarnings(utils::unzip(zipfile, exdir = exdir)),
+    error = function(e) character()
+  )
 
+  if (length(files) > 0 && (is.na(expected) || length(files) >= expected)) {
+    if (!quiet) {
+      cli::cli_alert_success("extracted {.val {length(files)}} file(s)")
+    }
+    return(files)
+  }
+
+  if (!quiet) {
+    cli::cli_alert_warning(
+      "standard extraction incomplete, trying an external tool..."
+    )
+  }
+
+  for (tool in zip_external_tools()) {
+    ok <- tryCatch(
+      {
+        tool$run(zipfile, exdir)
+        TRUE
+      },
+      error = function(e) FALSE
+    )
+    if (!ok) {
+      next
+    }
+    files <- list.files(exdir, recursive = TRUE, full.names = TRUE)
+    if (length(files) > 0 && (is.na(expected) || length(files) >= expected)) {
       if (!quiet) {
-        cli::cli_alert_success("extracted {.val {length(files)}} file(s)")
-      }
-
-      files
-    },
-    error = function(e) {
-      # encoding errors or empty extraction — try alternative method
-      if (!quiet) {
-        cli::cli_alert_warning(
-          "standard extraction failed due to encoding, trying alternative method..."
+        cli::cli_alert_success(
+          "extracted {.val {length(files)}} file(s) with {tool$name}"
         )
       }
-
-      # try using system unzip command (Windows has tar that can handle zip)
-      tryCatch(
-        {
-          # use PowerShell Expand-Archive on Windows
-          if (.Platform$OS.type == "windows") {
-            cmd <- sprintf(
-              'powershell -Command "Expand-Archive -Path \'%s\' -DestinationPath \'%s\' -Force"',
-              normalizePath(zipfile, winslash = "/"),
-              normalizePath(exdir, winslash = "/", mustWork = FALSE)
-            )
-            system(
-              cmd,
-              intern = FALSE,
-              ignore.stdout = TRUE,
-              ignore.stderr = TRUE
-            )
-          } else {
-            # on unix, use unzip command
-            system2(
-              "unzip",
-              args = c("-o", "-q", shQuote(zipfile), "-d", shQuote(exdir))
-            )
-          }
-
-          # list extracted files
-          files <- list.files(exdir, recursive = TRUE, full.names = TRUE)
-
-          if (length(files) == 0) {
-            stop("no files extracted")
-          }
-
-          if (!quiet) {
-            cli::cli_alert_success("extracted {.val {length(files)}} file(s)")
-          }
-
-          files
-        },
-        error = function(e2) {
-          cli::cli_abort(
-            c(
-              "extraction failed with both methods",
-              "x" = "file: {.path {zipfile}}",
-              "i" = "original error: {conditionMessage(e)}",
-              "i" = "alternative error: {conditionMessage(e2)}"
-            )
-          )
-        }
-      )
+      return(files)
     }
+  }
+
+  cli::cli_abort(
+    c(
+      "could not extract every file from the archive",
+      "x" = "file: {.path {zipfile}}",
+      "i" = "the archive may use a compression method R cannot read (Deflate64)",
+      "i" = "install 7-Zip ({.url https://www.7-zip.org/}) and try again"
+    )
   )
+}
+
+# number of files (not directories) listed in a ZIP; NA when unreadable
+zip_file_count <- function(zipfile) {
+  listing <- tryCatch(
+    suppressWarnings(utils::unzip(zipfile, list = TRUE)),
+    error = function(e) NULL
+  )
+  if (is.null(listing) || nrow(listing) == 0) {
+    return(NA_integer_)
+  }
+  sum(!grepl("/$", listing$Name))
+}
+
+# external extractors, in order of preference; each `run` errors on failure
+zip_external_tools <- function() {
+  tools <- list()
+
+  sevenz <- find_7z()
+  if (nzchar(Sys.which(sevenz)) || file.exists(sevenz)) {
+    tools <- c(tools, list(list(
+      name = "7-Zip",
+      run = function(zipfile, exdir) {
+        out <- system2(
+          sevenz,
+          args = c(
+            "x",
+            shQuote(normalizePath(zipfile, winslash = "/")),
+            paste0(
+              "-o",
+              shQuote(normalizePath(exdir, winslash = "/", mustWork = FALSE))
+            ),
+            "-y"
+          ),
+          stdout = TRUE,
+          stderr = TRUE
+        )
+        status <- attr(out, "status")
+        if (!is.null(status) && status != 0) stop("7z exit status ", status)
+      }
+    )))
+  }
+
+  if (.Platform$OS.type == "windows") {
+    tools <- c(tools, list(list(
+      name = "PowerShell",
+      run = function(zipfile, exdir) {
+        cmd <- sprintf(
+          'powershell -Command "Expand-Archive -Path \'%s\' -DestinationPath \'%s\' -Force"',
+          normalizePath(zipfile, winslash = "/"),
+          normalizePath(exdir, winslash = "/", mustWork = FALSE)
+        )
+        status <- system(
+          cmd,
+          intern = FALSE,
+          ignore.stdout = TRUE,
+          ignore.stderr = TRUE
+        )
+        if (status != 0) stop("Expand-Archive exit status ", status)
+      }
+    )))
+  } else if (nzchar(Sys.which("unzip"))) {
+    tools <- c(tools, list(list(
+      name = "unzip",
+      run = function(zipfile, exdir) {
+        status <- system2(
+          "unzip",
+          args = c("-o", "-q", shQuote(zipfile), "-d", shQuote(exdir))
+        )
+        if (status != 0) stop("unzip exit status ", status)
+      }
+    )))
+  }
+
+  tools
 }
 
 # find the 7z executable (checks PATH and common install locations)

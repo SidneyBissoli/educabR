@@ -36,6 +36,14 @@ fixes below.
 
 ## Bug fixes
 
+* `get_enem(2025, type = "resultados")` works. INEP compressed
+  `RESULTADOS_2025.csv` with Deflate64, which R's built-in unzip cannot
+  read: the file was skipped with only a "zip file is corrupt" warning and
+  the call failed with "no ENEM data file found". ZIP extraction now
+  checks that every file in the archive was extracted and, if not, falls
+  back to 7-Zip (or PowerShell on Windows, `unzip` elsewhere), erroring
+  clearly if the archive is still incomplete. This applies to every
+  function that downloads a ZIP.
 * CSV columns that are empty in their first 1,000 rows no longer lose
   their later values. readr guessed those columns as logical and turned
   every later value into `NA`, with only a generic "parsing issues"
