@@ -18,7 +18,9 @@
 <url><loc>https://sidneybissoli.github.io/educabR/authors.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/index.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/news/index.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/ascii_fold.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/available_years.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/bind_igc_parts.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/build_fundeb_url.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/build_ideb_url.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/build_inep_url.html</loc></url>
@@ -31,8 +33,11 @@
 <url><loc>https://sidneybissoli.github.io/educabR/reference/detect_encoding.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/discover_capes_url.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/download_inep_file.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/drop_footer_rows.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/drop_incomplete_utf8_tail.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/educabR-package.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/enem_summary.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/excel_header_skip.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/extract_archive.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/extract_zip.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/fetch_fundeb_enrollment.html</loc></url>
@@ -69,11 +74,13 @@
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_igc.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/get_saeb.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/ideb_keep_cols.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/igc_institution_sheets.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/index.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/list_cache.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/list_censo_files.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/list_censo_superior_files.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/list_ideb_available.html</loc></url>
+<url><loc>https://sidneybissoli.github.io/educabR/reference/merge_subheader_row.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/normalize_saeb_serie.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/normalize_utf8_nfc.html</loc></url>
 <url><loc>https://sidneybissoli.github.io/educabR/reference/parse_sas_dates.html</loc></url>

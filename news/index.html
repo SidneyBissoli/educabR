@@ -34,6 +34,22 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="educabr-development-version">educabR (development version)<a class="anchor" aria-label="anchor" href="#educabr-development-version"></a></h2>
+<p>This release fixes a bug that returned <strong>incomplete data without any error or warning</strong>. If you used <code><a href="../reference/get_igc.html">get_igc()</a></code> for 2008-2016, please re-run it: see the first item below.</p>
+<div class="section level3">
+<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<ul><li>
+<code><a href="../reference/get_igc.html">get_igc()</a></code> now returns every institution for 2008-2016. INEP splits those editions into one sheet per type of institution (universities, university centers, faculties), and <code><a href="../reference/get_igc.html">get_igc()</a></code> read only the first one: about 180-230 universities instead of about 2,000-2,200 institutions per year. All institution sheets are now read and stacked; course- and program-level sheets in the same file are still ignored.</li>
+<li>
+<code>get_igc(2007)</code> works again. The 2007 archive holds three CSV files, one per type of institution, not an Excel file, and <code><a href="../reference/get_igc.html">get_igc()</a></code> stopped with “no Excel file found”. It now reads and stacks the three CSVs (1,840 institutions).</li>
+<li>
+<code><a href="../reference/get_cpc.html">get_cpc()</a></code> and <code><a href="../reference/get_igc.html">get_igc()</a></code> no longer return blank, footnote or total rows as data (CPC 2021 and 2022, IGC 2021), nor a sub-header row as the first record (IGC 2008, now with <code>igc_continuo</code> and <code>igc_faixas</code> columns). A title row above the header (IGC 2009) is skipped.</li>
+<li>
+<code><a href="../reference/get_cpc.html">get_cpc()</a></code> 2007 and 2008 no longer return duplicated column names: “% Docentes Doutores” and similar columns become <code>pct_docentes_doutores</code> instead of colliding with <code>docentes_doutores</code>.</li>
+<li>On macOS, column names built from accented headers no longer differ from Windows and Linux: “Município” became <code>munic_ipio</code> instead of <code>municipio</code>, in every <code>get_*()</code> function, because macOS’s <code>iconv(to = "ASCII//TRANSLIT")</code> writes “í” as “’i”. Names are now folded with ICU (stringi) and are identical on every platform; on Windows and Linux they are unchanged (checked against 260 accented INEP headers).</li>
+<li>On macOS, latin1 CSV files are no longer read as UTF-8, which garbled accented text and column names. The encoding check relied on <code><a href="https://rdrr.io/r/base/iconv.html" class="external-link">iconv()</a></code> returning <code>NA</code> for invalid UTF-8, which macOS’s iconv does not do; it now uses <code><a href="https://rdrr.io/r/base/validUTF8.html" class="external-link">validUTF8()</a></code>.</li>
+<li>
+<code>igc_continuo</code>, <code>*_faixas</code> and other <code>*_continuo</code> columns stored as text are converted to numeric, like <code>*_faixa</code> already were; markers such as “SC” and “sub judice” become <code>NA</code>.</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.0" id="educabr-120">educabR 1.2.0<a class="anchor" aria-label="anchor" href="#educabr-120"></a></h2><p class="text-muted">CRAN release: 2026-10-03</p>

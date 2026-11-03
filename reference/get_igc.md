@@ -60,7 +60,12 @@ The data includes:
 
 - Column names are standardized to lowercase with underscores.
 
-- Files are in Excel format (xls/xlsx), except 2007 which is 7z.
+- Files are in Excel format (xls/xlsx), except 2007, a 7z archive of CSV
+  files.
+
+- From 2007 to 2016, INEP splits the table by type of institution (one
+  sheet or CSV each for universities, university centers and faculties);
+  all parts are read and stacked into one tibble.
 
 ## Data dictionary
 

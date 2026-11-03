@@ -1,7 +1,10 @@
-# Convert faixa columns to numeric
+# Convert faixa and continuo columns to numeric
 
-Internal function to convert columns ending in `_faixa` from character
-to numeric. Values like `"SC"` (Sem Conceito) are converted to `NA`.
+Internal function to convert score columns (names ending in `_faixa`,
+`_faixas` or `_continuo`) from character to numeric. Non-numeric markers
+such as `"SC"` (Sem Conceito) and `"sub judice"` are converted to `NA`.
+Stacking the sheets of the IGC 2007-2016 can turn these columns into
+text when only one sheet carries such a marker.
 
 ## Usage
 
@@ -17,4 +20,4 @@ convert_faixa_columns(df)
 
 ## Value
 
-The data frame with faixa columns as numeric.
+The data frame with score columns as numeric.
