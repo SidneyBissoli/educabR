@@ -1,6 +1,6 @@
 # MIT License
 
-Copyright (c) 2025 Sidney da Silva Pereira Bissoli
+Copyright (c) 2026 Sidney da Silva Pereira Bissoli
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

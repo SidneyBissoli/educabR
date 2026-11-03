@@ -1,10 +1,10 @@
 Package: educabR
 Title: Download and Process Brazilian Education Data from INEP
-Version: 1.2.0.9000
+Version: 2.0.0
 Authors@R: 
     person("Sidney da Silva Pereira", "Bissoli", 
            email = "sbissoli76@gmail.com", 
-           role = c("aut", "cre"),
+           role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0009-0001-0442-3700"))
 Description: Download and process public education data from INEP (Instituto
     Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira). Provides
