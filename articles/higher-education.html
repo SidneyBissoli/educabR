@@ -175,32 +175,41 @@ institutions, courses, student enrollment, and faculty.</p>
 assessing undergraduate student performance. It follows a rotating cycle
 where different course areas are evaluated each year.</p>
 <div class="section level3">
-<h3 id="downloading-enade-data">Downloading ENADE data<a class="anchor" aria-label="anchor" href="#downloading-enade-data"></a>
+<h3 id="one-file-per-call">One file per call<a class="anchor" aria-label="anchor" href="#one-file-per-call"></a>
 </h3>
+<p>INEP publishes each ENADE edition as several files
+(<code>arq1</code>, <code>arq2</code>, …), each with one group of
+variables. To comply with the LGPD, each file is sorted by different
+variables, so <strong>the files cannot be joined student by
+student</strong>: the first row of one file is not the same student as
+the first row of another. <code><a href="../reference/get_enade.html">get_enade()</a></code> reads one file per
+call, and <code><a href="../reference/list_enade_files.html">list_enade_files()</a></code> shows which variables each
+file holds.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Download ENADE microdata</span></span>
-<span><span class="va">enade_2023</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_enade.html">get_enade</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2023</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># which file holds which variables?</span></span>
+<span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/list_enade_files.html">list_enade_files</a></span><span class="op">(</span><span class="fl">2023</span><span class="op">)</span></span>
+<span><span class="va">files</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"nt_ger"</span>, <span class="va">files</span><span class="op">$</span><span class="va">variaveis</span><span class="op">)</span>, <span class="op">]</span></span>
 <span></span>
-<span><span class="co"># Sample for exploration</span></span>
-<span><span class="va">enade_sample</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_enade.html">get_enade</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2023</span>, n_max <span class="op">=</span> <span class="fl">5000</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># scores are in file 3 in 2023</span></span>
+<span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_enade.html">get_enade</a></span><span class="op">(</span><span class="fl">2023</span>, arquivo <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># sample for exploration</span></span>
+<span><span class="va">scores_sample</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_enade.html">get_enade</a></span><span class="op">(</span><span class="fl">2023</span>, arquivo <span class="op">=</span> <span class="fl">3</span>, n_max <span class="op">=</span> <span class="fl">5000</span><span class="op">)</span></span></code></pre></div>
+<p>Files can be combined at the course level (<code>co_curso</code>),
+for example by averaging scores per course, as INEP’s user manual
+recommends.</p>
 </div>
 <div class="section level3">
 <h3 id="available-years-1">Available years<a class="anchor" aria-label="anchor" href="#available-years-1"></a>
 </h3>
-<p>Data is available from 2004 to 2024.</p>
-</div>
-<div class="section level3">
-<h3 id="data-structure">Data structure<a class="anchor" aria-label="anchor" href="#data-structure"></a>
-</h3>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">enade</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_enade.html">get_enade</a></span><span class="op">(</span><span class="fl">2023</span>, n_max <span class="op">=</span> <span class="fl">5000</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">enade</span><span class="op">)</span></span></code></pre></div>
+<p>Data is available for 2004-2019 and 2021-2023 (there was no ENADE in
+2020).</p>
 </div>
 <div class="section level3">
 <h3 id="example-analysis-score-distribution">Example analysis: Score distribution<a class="anchor" aria-label="anchor" href="#example-analysis-score-distribution"></a>
 </h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">enade</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_enade.html">get_enade</a></span><span class="op">(</span><span class="fl">2023</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">enade</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_enade.html">get_enade</a></span><span class="op">(</span><span class="fl">2023</span>, arquivo <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">enade</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">nt_ger</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -227,7 +236,7 @@ ENEM admission scores.</p>
 <div class="section level3">
 <h3 id="downloading-idd-data">Downloading IDD data<a class="anchor" aria-label="anchor" href="#downloading-idd-data"></a>
 </h3>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Download IDD data</span></span>
 <span><span class="va">idd_2023</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_idd.html">get_idd</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2023</span><span class="op">)</span></span>
 <span></span>
@@ -243,12 +252,35 @@ COVID).</p>
 <div class="section level3">
 <h3 id="example-analysis-value-added-by-institution-type">Example analysis: Value-added by institution type<a class="anchor" aria-label="anchor" href="#example-analysis-value-added-by-institution-type"></a>
 </h3>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">idd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_idd.html">get_idd</a></span><span class="op">(</span><span class="fl">2023</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">idd</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
+</div>
+<div class="section level2">
+<h2 id="conceito-enade">Conceito Enade<a class="anchor" aria-label="anchor" href="#conceito-enade"></a>
+</h2>
+<p>The Conceito Enade is the course-level indicator derived from ENADE:
+the performance of graduating students, on a continuous scale and in
+five levels (faixas 1 to 5). <code><a href="../reference/get_enade.html">get_enade()</a></code> returns the
+student microdata; <code><a href="../reference/get_conceito_enade.html">get_conceito_enade()</a></code> returns the
+official indicator, one row per course.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Conceito Enade 2023</span></span>
+<span><span class="va">ce_2023</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_conceito_enade.html">get_conceito_enade</a></span><span class="op">(</span><span class="fl">2023</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># 2025 is published as two files with their own methodology</span></span>
+<span><span class="va">ce_lic</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_conceito_enade.html">get_conceito_enade</a></span><span class="op">(</span><span class="fl">2025</span>, type <span class="op">=</span> <span class="st">"licenciaturas"</span><span class="op">)</span></span>
+<span><span class="va">ce_med</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_conceito_enade.html">get_conceito_enade</a></span><span class="op">(</span><span class="fl">2025</span>, type <span class="op">=</span> <span class="st">"medicina"</span><span class="op">)</span></span></code></pre></div>
+<p>Up to 2014 a row is a course <em>unit</em> (all courses of the same
+institution, municipality and area); from 2015 on, a row is a course
+with its e-MEC code (<code>codigo_do_curso</code>). For 2007-2011, INEP
+publishes the Conceito Enade inside the Enade/CPC table, which
+<code><a href="../reference/get_conceito_enade.html">get_conceito_enade()</a></code> returns as is. Column names change
+across editions, so map them to a common set before stacking years.</p>
+<hr>
 </div>
 <div class="section level2">
 <h2 id="cpc---preliminary-course-concept">CPC - Preliminary Course Concept<a class="anchor" aria-label="anchor" href="#cpc---preliminary-course-concept"></a>

@@ -9,7 +9,7 @@ student performance assessments in Portuguese and Mathematics.
 ``` r
 get_saeb(
   year,
-  type = c("aluno", "escola", "diretor", "professor"),
+  type = c("aluno", "escola", "diretor", "professor", "secretario"),
   level = c("fundamental_medio", "educacao_infantil"),
   serie = NULL,
   n_max = Inf,
@@ -35,6 +35,11 @@ get_saeb(
   - `"diretor"`: Principal questionnaire
 
   - `"professor"`: Teacher questionnaire
+
+  - `"secretario"`: Municipal education secretary questionnaire
+    (`TS_SECRETARIO_MUNICIPAL`, 2019 onwards). For the 2021 early
+    childhood level (`level = "educacao_infantil"`) INEP publishes only
+    this file and `TS_EDUCACAO_INFANTIL` (read with `type = "aluno"`).
 
 - level:
 

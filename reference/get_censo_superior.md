@@ -31,9 +31,11 @@ get_censo_superior(
 
   - `"cursos"`: Undergraduate courses
 
-  - `"alunos"`: Student enrollment
-
-  - `"docentes"`: Faculty/professors
+  - `"alunos"`, `"docentes"`: **\[deprecated\]** INEP no longer
+    publishes student or faculty microdata (withdrawn under the LGPD);
+    the archive of every year (2009-2024) holds only the IES and course
+    files. These options now stop with an explanation. Course-level
+    counts of students and faculty are in `type = "cursos"`.
 
 - uf:
 

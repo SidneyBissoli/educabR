@@ -21,7 +21,8 @@ find_saeb_file(exdir, year, type = "aluno", serie = NULL)
 
 - type:
 
-  The data type ("aluno", "escola", "diretor", "professor").
+  The data type ("aluno", "escola", "diretor", "professor",
+  "secretario").
 
 - serie:
 

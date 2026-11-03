@@ -75,7 +75,11 @@ Default is <code>NULL</code> (all states).</p></dd>
 <dt id="arg-source">source<a class="anchor" aria-label="anchor" href="#arg-source"></a></dt>
 <dd><p>Optional. The funding source to filter by. One of:
 <code>"FPE"</code>, <code>"FPM"</code>, <code>"IPI"</code>, <code>"ITR"</code>, <code>"VAAF"</code>, <code>"VAAT"</code>, <code>"VAAR"</code>,
-<code>"ICMS"</code>, <code>"IPVA"</code>, <code>"ITCMD"</code>. Default is <code>NULL</code> (all sources).</p></dd>
+<code>"ICMS"</code>, <code>"IPVA"</code>, <code>"ITCMD"</code> (tax shares), <code>"COUN"</code> (Complementacao
+da Uniao, 2007-2020), <code>"COUN_FTI"</code> (2025 onwards), <code>"LC8796"</code> (Lei
+Kandir compensation, 2007-2021), <code>"AJUSTE"</code> (adjustments, 2012-2019),
+<code>"AFE_EC123"</code> (EC 123/2022 aid). Default is <code>NULL</code> (all sources, which
+add up to STN's TOTAL sheet).</p></dd>
 
 
 <dt id="arg-destination">destination<a class="anchor" aria-label="anchor" href="#arg-destination"></a></dt>
@@ -135,7 +139,12 @@ FUNDEB adjustment table.</p>
 <p><strong>Important notes:</strong></p><ul><li><p>Data is sourced from STN (Tesouro Nacional), not INEP.</p></li>
 <li><p>Files are in Excel format (XLS) — requires the <code>readxl</code> package.</p></li>
 <li><p>Column names are standardized to lowercase with underscores.</p></li>
-<li><p>Summary sheets (Resumo, Total, etc.) are automatically excluded.</p></li>
+<li><p>Summary sheets (Resumo, Total, etc.) are automatically excluded;
+every other sheet is read, so the sum of <code>valor</code> over all sources
+equals STN's TOTAL sheet.</p></li>
+<li><p>From 2021 on, the Complementacao da Uniao comes in VAAF, VAAT and
+VAAR shares (sources <code>"VAAF"</code>, <code>"VAAT"</code>, <code>"VAAR"</code>); up to 2020 it is a
+single source, <code>"COUN"</code>.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="data-source">Data source<a class="anchor" aria-label="anchor" href="#data-source"></a></h2>

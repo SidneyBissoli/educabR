@@ -6,7 +6,7 @@ typically use Latin-1 or UTF-8.
 ## Usage
 
 ``` r
-detect_encoding(file)
+detect_encoding(file, chunk_size = 4 * 1024^2)
 ```
 
 ## Arguments

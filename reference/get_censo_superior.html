@@ -66,8 +66,11 @@ Returns data on institutions, courses, students, or faculty.</p>
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
 <dd><p>Type of data to load. Options:</p><ul><li><p><code>"ies"</code>: Higher education institutions (default)</p></li>
 <li><p><code>"cursos"</code>: Undergraduate courses</p></li>
-<li><p><code>"alunos"</code>: Student enrollment</p></li>
-<li><p><code>"docentes"</code>: Faculty/professors</p></li>
+<li><p><code>"alunos"</code>, <code>"docentes"</code>: <a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> INEP no
+longer publishes student or faculty microdata (withdrawn under the
+LGPD); the archive of every year (2009-2024) holds only the IES and
+course files. These options now stop with an explanation. Course-level
+counts of students and faculty are in <code>type = "cursos"</code>.</p></li>
 </ul></dd>
 
 

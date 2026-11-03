@@ -34,7 +34,11 @@ get_fundeb_distribution(
 
   Optional. The funding source to filter by. One of: `"FPE"`, `"FPM"`,
   `"IPI"`, `"ITR"`, `"VAAF"`, `"VAAT"`, `"VAAR"`, `"ICMS"`, `"IPVA"`,
-  `"ITCMD"`. Default is `NULL` (all sources).
+  `"ITCMD"` (tax shares), `"COUN"` (Complementacao da Uniao, 2007-2020),
+  `"COUN_FTI"` (2025 onwards), `"LC8796"` (Lei Kandir compensation,
+  2007-2021), `"AJUSTE"` (adjustments, 2012-2019), `"AFE_EC123"` (EC
+  123/2022 aid). Default is `NULL` (all sources, which add up to STN's
+  TOTAL sheet).
 
 - destination:
 
@@ -111,7 +115,13 @@ adjustment table.
 
 - Column names are standardized to lowercase with underscores.
 
-- Summary sheets (Resumo, Total, etc.) are automatically excluded.
+- Summary sheets (Resumo, Total, etc.) are automatically excluded; every
+  other sheet is read, so the sum of `valor` over all sources equals
+  STN's TOTAL sheet.
+
+- From 2021 on, the Complementacao da Uniao comes in VAAF, VAAT and VAAR
+  shares (sources `"VAAF"`, `"VAAT"`, `"VAAR"`); up to 2020 it is a
+  single source, `"COUN"`.
 
 ## Data source
 

@@ -30,6 +30,7 @@ FUNDEB funding.
   [`get_censo_superior()`](https://sidneybissoli.github.io/educabR/reference/get_censo_superior.md),
   [`get_enade()`](https://sidneybissoli.github.io/educabR/reference/get_enade.md),
   plus the quality indicators
+  [`get_conceito_enade()`](https://sidneybissoli.github.io/educabR/reference/get_conceito_enade.md),
   [`get_cpc()`](https://sidneybissoli.github.io/educabR/reference/get_cpc.md),
   [`get_idd()`](https://sidneybissoli.github.io/educabR/reference/get_idd.md)
   and
@@ -137,7 +138,8 @@ Or install the development version from GitHub:
 | Dataset | Function | Available Years |
 |----|----|----|
 | Higher Education Census | [`get_censo_superior()`](https://sidneybissoli.github.io/educabR/reference/get_censo_superior.md) | 2009-2024 |
-| ENADE - National Student Performance Exam | [`get_enade()`](https://sidneybissoli.github.io/educabR/reference/get_enade.md) | 2004-2024 |
+| ENADE - National Student Performance Exam | [`get_enade()`](https://sidneybissoli.github.io/educabR/reference/get_enade.md) | 2004-2019, 2021-2023 |
+| Conceito Enade - course-level ENADE indicator | [`get_conceito_enade()`](https://sidneybissoli.github.io/educabR/reference/get_conceito_enade.md) | 2004-2019, 2021-2023, 2025 |
 | IDD - Value-Added Indicator | [`get_idd()`](https://sidneybissoli.github.io/educabR/reference/get_idd.md) | 2014-2023 |
 | CPC - Preliminary Course Concept | [`get_cpc()`](https://sidneybissoli.github.io/educabR/reference/get_cpc.md) | 2007-2023 |
 | IGC - General Courses Index | [`get_igc()`](https://sidneybissoli.github.io/educabR/reference/get_igc.md) | 2007-2023 |
@@ -235,8 +237,8 @@ Or install the development version from GitHub:
 `# Higher Education Census - institutions`\
 `ies`` ``<-`` `[`get_censo_superior`](https://sidneybissoli.github.io/educabR/reference/get_censo_superior.md)`(``2023``, type ``=`` ``"ies"``)`\
 \
-`# ENADE microdata`\
-`enade`` ``<-`` `[`get_enade`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)`(``2023``, n_max ``=`` ``10000``)`\
+`# ENADE microdata: one file per call (file 3 holds the scores in 2023)`\
+`enade`` ``<-`` `[`get_enade`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)`(``2023``, arquivo ``=`` ``3``, n_max ``=`` ``10000``)`\
 \
 `# CAPES graduate programs`\
 `programas`` ``<-`` `[`get_capes`](https://sidneybissoli.github.io/educabR/reference/get_capes.md)`(``2023``, type ``=`` ``"programas"``)`
@@ -333,6 +335,10 @@ Functions for ENADE data
 
 - [`get_enade()`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)
   : Get ENADE (Exame Nacional de Desempenho dos Estudantes) data
+- [`list_enade_files()`](https://sidneybissoli.github.io/educabR/reference/list_enade_files.md)
+  : List the files of an ENADE edition
+- [`get_conceito_enade()`](https://sidneybissoli.github.io/educabR/reference/get_conceito_enade.md)
+  : Get Conceito Enade data
 
 ## IDD
 

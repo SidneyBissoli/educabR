@@ -42,6 +42,10 @@ Functions for ENADE data
 
 - [`get_enade()`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)
   : Get ENADE (Exame Nacional de Desempenho dos Estudantes) data
+- [`list_enade_files()`](https://sidneybissoli.github.io/educabR/reference/list_enade_files.md)
+  : List the files of an ENADE edition
+- [`get_conceito_enade()`](https://sidneybissoli.github.io/educabR/reference/get_conceito_enade.md)
+  : Get Conceito Enade data
 
 ## IDD
 

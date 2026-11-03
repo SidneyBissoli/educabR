@@ -2,12 +2,177 @@
 
 ## educabR (development version)
 
-This release fixes a bug that returned **incomplete data without any
-error or warning**. If you used
+This release fixes bugs that returned **wrong or incomplete data without
+any error or warning**. Most important:
+**[`get_enade()`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)
+returned rows that mixed different students** in every edition; any
+analysis that crossed ENADE variables at the student level must be
+redone (see Breaking changes). If you used
 [`get_igc()`](https://sidneybissoli.github.io/educabR/reference/get_igc.md)
-for 2008-2016, please re-run it: see the first item below.
+for 2008-2016,
+[`get_fundeb_distribution()`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_distribution.md)
+for 2007-2022 or 2025-2026, or the `sub_area` column of `get_cpc(2008)`,
+please re-run it: see the bug fixes below.
+
+### Breaking changes
+
+- [`get_enade()`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)
+  now reads **one file per call**, chosen with the new `arquivo`
+  argument (the number in the file name: `arq3` is `arquivo = 3`). INEP
+  publishes every ENADE edition (2004-2023) as 27 to 53 files, each
+  sorted by different variables so that they cannot be joined by student
+  (LGPD; INEP’s user manual: “nao e possivel agrupar as informacoes no
+  nivel de estudante”).
+  [`get_enade()`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)
+  used to glue the files side by side, so every row combined variables
+  of different students: in 2023, the course code of file 2 differed
+  from file 1 in 406,163 of 406,294 rows. Without `arquivo`, file 1 is
+  read with a warning. Files can still be combined at the course level
+  (`co_curso`).
+- New
+  [`list_enade_files()`](https://sidneybissoli.github.io/educabR/reference/list_enade_files.md)
+  lists the files of an edition and the variables in each, to find the
+  `arquivo` that holds a variable.
+
+### New features
+
+- New
+  [`get_conceito_enade()`](https://sidneybissoli.github.io/educabR/reference/get_conceito_enade.md)
+  downloads the Conceito Enade, the course-level ENADE indicator, for
+  2004-2019, 2021-2023 and 2025 (`type = "licenciaturas"` or
+  `"medicina"`).
+  [`get_enade()`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)
+  returns student microdata; until now the official indicator itself,
+  with its 1-5 faixa, was only reachable inside the CPC table up
+  to 2011. For 2007-2011, INEP publishes it inside the Enade/CPC table,
+  which is returned as is.
 
 ### Bug fixes
+
+- `get_enem(2025, type = "resultados")` works. INEP compressed
+  `RESULTADOS_2025.csv` with Deflate64, which R’s built-in unzip cannot
+  read: the file was skipped with only a “zip file is corrupt” warning
+  and the call failed with “no ENEM data file found”. ZIP extraction now
+  checks that every file in the archive was extracted and, if not, falls
+  back to 7-Zip (or PowerShell on Windows, `unzip` elsewhere), erroring
+  clearly if the archive is still incomplete. This applies to every
+  function that downloads a ZIP.
+
+- CSV columns that are empty in their first 1,000 rows no longer lose
+  their later values. readr guessed those columns as logical and turned
+  every later value into `NA`, with only a generic “parsing issues”
+  warning:
+  [`get_censo_escolar()`](https://sidneybissoli.github.io/educabR/reference/get_censo_escolar.md)
+  lost values in 1995 (234 of `vem2206`), 1997 (567 of `vpe626`), 1998
+  and 1999, among others. Columns with parsing problems are now re-read
+  and typed from all their values. This applies to every function that
+  reads INEP CSV files.
+
+- Columns holding only zeros, which readr read as `FALSE` (Censo Escolar
+  1995-2006 counts), come back numeric.
+
+- [`get_censo_escolar()`](https://sidneybissoli.github.io/educabR/reference/get_censo_escolar.md)
+  returns `dt_ano_letivo_inicio` and `dt_ano_letivo_termino` as dates in
+  2008-2021 too. INEP writes “0” for a missing date, so the columns
+  stayed text; “0” is now read as missing (2015: 188,689 dates, 49,190
+  missing).
+
+- Answer letters “T” and “F” are no longer turned into `TRUE`/`FALSE`.
+  readr reads a column holding only those letters as logical, so in
+  `get_saeb(2021, type = "diretor")` 17,427 answers “F” to question 106
+  (and three other questions) came out as `FALSE`. INEP files have no
+  logical columns; such columns are now kept as text.
+
+- [`get_saeb()`](https://sidneybissoli.github.io/educabR/reference/get_saeb.md)
+  gains `type = "secretario"` (municipal education secretary
+  questionnaire, 2019 onwards), which no type reached before.
+  `type = "escola"` no longer falls back on that file: with
+  `level = "educacao_infantil"` (2021) it returned the secretary
+  questionnaire labelled as the school one; it now stops and lists the
+  files of the edition.
+
+- latin1 files whose first accent comes late are no longer read as
+  UTF-8. The encoding was guessed from the first 10 KB; in
+  `get_censo_escolar(2000)` the first accent is 238 MB into the file,
+  and 34,882 values of `uf` came out with the accented letter replaced
+  by “�” (“S?o Paulo”). The encoding is now decided on the first part of
+  the file that holds a non-ASCII byte.
+
+- [`get_fundeb_distribution()`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_distribution.md)
+  now returns every FUNDEB source. It read only the tax-share sheets and
+  left out the Complementacao da Uniao (`"COUN"`), the Lei Kandir
+  compensation (`"LC8796"`), the adjustment sheets (`"AJUSTE"`) and,
+  from 2022, the EC 123/2022 aid and the FTI share. With `source = NULL`
+  the sum of `valor` was 3% to 13% below STN’s own total in 2007-2020
+  (R\$ 11.25 billion missing for municipalities in 2019). It now equals
+  STN’s TOTAL sheet in every year and destination, 2007-2026. Footnote
+  rows (“Obs.: …”) are no longer returned as a 28th state with empty
+  values (2009, 2012, 2013, 2020, 2021).
+
+- [`get_fundeb_enrollment()`](https://sidneybissoli.github.io/educabR/reference/get_fundeb_enrollment.md)
+  returns the same column types on the first call and on cached calls
+  (`ano_censo` and `qtd_matricula` were integer from the API and double
+  from the cache), and keeps paging the FNDE API until an empty page
+  instead of stopping at the first short page, which would truncate a
+  year if the server capped its page size. Counts were checked against
+  an independent paging of the API: 104,358 records and 45,656,716
+  enrolments in 2017, 103,560 and 43,400,372 in 2018.
+
+- [`get_capes()`](https://sidneybissoli.github.io/educabR/reference/get_capes.md)
+  now reaches every year it announces (2013-2024) for every `type`.
+  CAPES publishes several of those years under package names that do not
+  follow the usual pattern (including a “stricto-census” typo), so 28 of
+  the 60 type x year combinations failed with an error: programas,
+  docentes and cursos 2013-2016, discentes 2013-2020 and catalogo
+  2013-2020. The file is also matched on its reference year: in the
+  2013-2016 packages every file name contains “2016”, and matching on
+  “contains the year” could pick the wrong year’s file.
+
+- `get_ideb(level = "estado" | "regiao", stage = "anos_iniciais", metric = "indicador")`
+  returns the 2025 “Indicador de Rendimento”. INEP’s 2025 spreadsheet
+  codes that column `VL_INDICADOR_REND_2023`, so it was returned as a
+  second 2023 value and 2025 had none. Repeated codes now take their
+  year from the block header above them (“Taxa de Aprovacao - 2025”).
+  Checked with IDEB = N x P, which now holds to rounding for every
+  level, stage and edition.
+
+- Downloads and API calls (INEP, CAPES, FNDE) now retry when the
+  connection drops (“server closed abruptly”), not only on HTTP error
+  codes:
+  [`httr2::req_retry()`](https://httr2.r-lib.org/reference/req_retry.html)
+  does not retry connection failures unless asked to. Requires httr2 \>=
+  1.0.0.
+
+- Date columns (`dt_*`, `dh_*`) are no longer erased when they are not
+  in SAS format. They were parsed with “12FEB2024:00:00:00” only, so
+  “12/12/2013 00:00:00” became `NA`: `get_capes(type = "catalogo")` lost
+  every `dt_titulacao` and `dt_matricula` in 2013-2016 (67,534 of 67,534
+  in 2013) and most of four other date columns. SAS, “dd/mm/yyyy” and
+  ISO dates are now read; a column that no format reads completely is
+  kept as text.
+
+- `get_censo_superior(type = "alunos")` and `type = "docentes"` are
+  deprecated and stop with an explanation: INEP no longer publishes
+  student or faculty microdata (the archive of every year, 2009-2024,
+  holds only the IES and course files), and the old error (“no data file
+  found”) suggested a broken download. `"ies"` and `"cursos"` were
+  checked in every year: row counts equal the files and no value is
+  lost.
+
+- [`get_enade()`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)
+  2004-2009 works again: INEP replaced those files with `_LGPD` versions
+  and the old addresses no longer exist.
+
+- `get_idd(2022)` works. INEP serves that edition as a RAR archive under
+  a `.zip` name, and the download check rejected it as “not a valid ZIP
+  archive”. Archives are now identified by their signature (ZIP, 7z or
+  RAR), both when checking a download and when extracting it.
+
+- Excel columns are no longer emptied when their first 1,000 rows are
+  blank. readxl guessed the column type from those rows only, read the
+  column as logical and turned every later value into `NA`:
+  `get_cpc(2008)` lost 1,785 values of `sub_area` and `get_cpc(2017)` 28
+  of `observacao`. Types are now guessed from every row.
 
 - [`get_igc()`](https://sidneybissoli.github.io/educabR/reference/get_igc.md)
   now returns every institution for 2008-2016. INEP splits those
@@ -18,11 +183,13 @@ for 2008-2016, please re-run it: see the first item below.
   2,000-2,200 institutions per year. All institution sheets are now read
   and stacked; course- and program-level sheets in the same file are
   still ignored.
+
 - `get_igc(2007)` works again. The 2007 archive holds three CSV files,
   one per type of institution, not an Excel file, and
   [`get_igc()`](https://sidneybissoli.github.io/educabR/reference/get_igc.md)
   stopped with “no Excel file found”. It now reads and stacks the three
   CSVs (1,840 institutions).
+
 - [`get_cpc()`](https://sidneybissoli.github.io/educabR/reference/get_cpc.md)
   and
   [`get_igc()`](https://sidneybissoli.github.io/educabR/reference/get_igc.md)
@@ -30,10 +197,12 @@ for 2008-2016, please re-run it: see the first item below.
   2022, IGC 2021), nor a sub-header row as the first record (IGC 2008,
   now with `igc_continuo` and `igc_faixas` columns). A title row above
   the header (IGC 2009) is skipped.
+
 - [`get_cpc()`](https://sidneybissoli.github.io/educabR/reference/get_cpc.md)
   2007 and 2008 no longer return duplicated column names: “% Docentes
   Doutores” and similar columns become `pct_docentes_doutores` instead
   of colliding with `docentes_doutores`.
+
 - On macOS, column names built from accented headers no longer differ
   from Windows and Linux: “Município” became `munic_ipio` instead of
   `municipio`, in every `get_*()` function, because macOS’s
@@ -41,11 +210,13 @@ for 2008-2016, please re-run it: see the first item below.
   folded with ICU (stringi) and are identical on every platform; on
   Windows and Linux they are unchanged (checked against 260 accented
   INEP headers).
+
 - On macOS, latin1 CSV files are no longer read as UTF-8, which garbled
   accented text and column names. The encoding check relied on
   [`iconv()`](https://rdrr.io/r/base/iconv.html) returning `NA` for
   invalid UTF-8, which macOS’s iconv does not do; it now uses
   [`validUTF8()`](https://rdrr.io/r/base/validUTF8.html).
+
 - `igc_continuo`, `*_faixas` and other `*_continuo` columns stored as
   text are converted to numeric, like `*_faixa` already were; markers
   such as “SC” and “sub judice” become `NA`.

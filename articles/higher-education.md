@@ -91,29 +91,41 @@ ENADE (Exame Nacional de Desempenho dos Estudantes) is an annual exam
 assessing undergraduate student performance. It follows a rotating cycle
 where different course areas are evaluated each year.
 
-### Downloading ENADE data
+### One file per call
+
+INEP publishes each ENADE edition as several files (`arq1`, `arq2`, …),
+each with one group of variables. To comply with the LGPD, each file is
+sorted by different variables, so **the files cannot be joined student
+by student**: the first row of one file is not the same student as the
+first row of another.
+[`get_enade()`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)
+reads one file per call, and
+[`list_enade_files()`](https://sidneybissoli.github.io/educabR/reference/list_enade_files.md)
+shows which variables each file holds.
 
 \
-`# Download ENADE microdata`\
-`enade_2023`` ``<-`` `[`get_enade`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)`(``year ``=`` ``2023``)`\
+`# which file holds which variables?`\
+`files`` ``<-`` `[`list_enade_files`](https://sidneybissoli.github.io/educabR/reference/list_enade_files.md)`(``2023``)`\
+`files``[`[`grepl`](https://rdrr.io/r/base/grep.html)`(``"nt_ger"``, ``files``$``variaveis``)``, ``]`\
 \
-`# Sample for exploration`\
-`enade_sample`` ``<-`` `[`get_enade`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)`(``year ``=`` ``2023``, n_max ``=`` ``5000``)`
+`# scores are in file 3 in 2023`\
+`scores`` ``<-`` `[`get_enade`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)`(``2023``, arquivo ``=`` ``3``)`\
+\
+`# sample for exploration`\
+`scores_sample`` ``<-`` `[`get_enade`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)`(``2023``, arquivo ``=`` ``3``, n_max ``=`` ``5000``)`
+
+Files can be combined at the course level (`co_curso`), for example by
+averaging scores per course, as INEP’s user manual recommends.
 
 ### Available years
 
-Data is available from 2004 to 2024.
-
-### Data structure
-
-\
-`enade`` ``<-`` `[`get_enade`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)`(``2023``, n_max ``=`` ``5000``)`\
-[`glimpse`](https://pillar.r-lib.org/reference/glimpse.html)`(``enade``)`
+Data is available for 2004-2019 and 2021-2023 (there was no ENADE in
+2020).
 
 ### Example analysis: Score distribution
 
 \
-`enade`` ``<-`` `[`get_enade`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)`(``2023``)`\
+`enade`` ``<-`` `[`get_enade`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)`(``2023``, arquivo ``=`` ``3``)`\
 \
 `enade`` ``|>`\
 `  `[`filter`](https://dplyr.tidyverse.org/reference/filter.html)`(``!`[`is.na`](https://rdrr.io/r/base/NA.html)`(``nt_ger``)``)`` ``|>`\
@@ -158,6 +170,34 @@ COVID).
 `idd`` ``<-`` `[`get_idd`](https://sidneybissoli.github.io/educabR/reference/get_idd.md)`(``2023``)`\
 \
 [`glimpse`](https://pillar.r-lib.org/reference/glimpse.html)`(``idd``)`
+
+------------------------------------------------------------------------
+
+## Conceito Enade
+
+The Conceito Enade is the course-level indicator derived from ENADE: the
+performance of graduating students, on a continuous scale and in five
+levels (faixas 1 to 5).
+[`get_enade()`](https://sidneybissoli.github.io/educabR/reference/get_enade.md)
+returns the student microdata;
+[`get_conceito_enade()`](https://sidneybissoli.github.io/educabR/reference/get_conceito_enade.md)
+returns the official indicator, one row per course.
+
+\
+`# Conceito Enade 2023`\
+`ce_2023`` ``<-`` `[`get_conceito_enade`](https://sidneybissoli.github.io/educabR/reference/get_conceito_enade.md)`(``2023``)`\
+\
+`# 2025 is published as two files with their own methodology`\
+`ce_lic`` ``<-`` `[`get_conceito_enade`](https://sidneybissoli.github.io/educabR/reference/get_conceito_enade.md)`(``2025``, type ``=`` ``"licenciaturas"``)`\
+`ce_med`` ``<-`` `[`get_conceito_enade`](https://sidneybissoli.github.io/educabR/reference/get_conceito_enade.md)`(``2025``, type ``=`` ``"medicina"``)`
+
+Up to 2014 a row is a course *unit* (all courses of the same
+institution, municipality and area); from 2015 on, a row is a course
+with its e-MEC code (`codigo_do_curso`). For 2007-2011, INEP publishes
+the Conceito Enade inside the Enade/CPC table, which
+[`get_conceito_enade()`](https://sidneybissoli.github.io/educabR/reference/get_conceito_enade.md)
+returns as is. Column names change across editions, so map them to a
+common set before stacking years.
 
 ------------------------------------------------------------------------
 

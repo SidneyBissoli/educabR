@@ -75,6 +75,7 @@ For detailed information about variables, see INEP's documentation:
 ## See also
 
 Other CPC/IGC functions:
+[`get_conceito_enade()`](https://sidneybissoli.github.io/educabR/reference/get_conceito_enade.md),
 [`get_cpc()`](https://sidneybissoli.github.io/educabR/reference/get_cpc.md)
 
 ## Examples

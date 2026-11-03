@@ -2,8 +2,8 @@
 
 Internal function to locate all ENADE data files within the extracted
 directory. INEP distributes ENADE microdata split across multiple files
-(`arq1.txt`, `arq2.txt`, ...) that share key columns (`NU_ANO`,
-`CO_CURSO`) and contain different variable groups.
+(`arq1.txt`, `arq2.txt`, ...) that share the columns `NU_ANO` and
+`CO_CURSO` but are sorted differently (they cannot be joined by row).
 
 ## Usage
 
