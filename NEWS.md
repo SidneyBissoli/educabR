@@ -35,6 +35,14 @@ fixes below.
   would truncate a year if the server capped its page size. Counts were
   checked against an independent paging of the API: 104,358 records and
   45,656,716 enrolments in 2017, 103,560 and 43,400,372 in 2018.
+* `get_capes()` now reaches every year it announces (2013-2024) for every
+  `type`. CAPES publishes several of those years under package names that
+  do not follow the usual pattern (including a "stricto-census" typo), so
+  28 of the 60 type x year combinations failed with an error: programas,
+  docentes and cursos 2013-2016, discentes 2013-2020 and catalogo
+  2013-2020. The file is also matched on its reference year: in the
+  2013-2016 packages every file name contains "2016", and matching on
+  "contains the year" could pick the wrong year's file.
 * `get_idd(2022)` works. INEP serves that edition as a RAR archive under
   a `.zip` name, and the download check rejected it as "not a valid ZIP
   archive". Archives are now identified by their signature (ZIP, 7z or
