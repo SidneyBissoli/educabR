@@ -1,7 +1,8 @@
 # educabR (development version)
 
 This release fixes bugs that returned **incomplete data without any
-error or warning**. If you used `get_igc()` for 2008-2016, or the
+error or warning**. If you used `get_igc()` for 2008-2016,
+`get_fundeb_distribution()` for 2007-2022 or 2025-2026, or the
 `sub_area` column of `get_cpc(2008)`, please re-run it: see the bug
 fixes below.
 
@@ -17,6 +18,16 @@ fixes below.
 
 ## Bug fixes
 
+* `get_fundeb_distribution()` now returns every FUNDEB source. It read
+  only the tax-share sheets and left out the Complementacao da Uniao
+  (`"COUN"`), the Lei Kandir compensation (`"LC8796"`), the adjustment
+  sheets (`"AJUSTE"`) and, from 2022, the EC 123/2022 aid and the FTI
+  share. With `source = NULL` the sum of `valor` was 3% to 13% below
+  STN's own total in 2007-2020 (R$ 11.25 billion missing for
+  municipalities in 2019). It now equals STN's TOTAL sheet in every year
+  and destination, 2007-2026. Footnote rows ("Obs.: ...") are no longer
+  returned as a 28th state with empty values (2009, 2012, 2013, 2020,
+  2021).
 * `get_idd(2022)` works. INEP serves that edition as a RAR archive under
   a `.zip` name, and the download check rejected it as "not a valid ZIP
   archive". Archives are now identified by their signature (ZIP, 7z or

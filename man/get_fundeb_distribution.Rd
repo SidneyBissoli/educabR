@@ -22,7 +22,11 @@ Default is \code{NULL} (all states).}
 
 \item{source}{Optional. The funding source to filter by. One of:
 \code{"FPE"}, \code{"FPM"}, \code{"IPI"}, \code{"ITR"}, \code{"VAAF"}, \code{"VAAT"}, \code{"VAAR"},
-\code{"ICMS"}, \code{"IPVA"}, \code{"ITCMD"}. Default is \code{NULL} (all sources).}
+\code{"ICMS"}, \code{"IPVA"}, \code{"ITCMD"} (tax shares), \code{"COUN"} (Complementacao
+da Uniao, 2007-2020), \code{"COUN_FTI"} (2025 onwards), \code{"LC8796"} (Lei
+Kandir compensation, 2007-2021), \code{"AJUSTE"} (adjustments, 2012-2019),
+\code{"AFE_EC123"} (EC 123/2022 aid). Default is \code{NULL} (all sources, which
+add up to STN's TOTAL sheet).}
 
 \item{destination}{Optional. The transfer destination. One of:
 \itemize{
@@ -73,7 +77,12 @@ FUNDEB adjustment table.
 \item Data is sourced from STN (Tesouro Nacional), not INEP.
 \item Files are in Excel format (XLS) — requires the \code{readxl} package.
 \item Column names are standardized to lowercase with underscores.
-\item Summary sheets (Resumo, Total, etc.) are automatically excluded.
+\item Summary sheets (Resumo, Total, etc.) are automatically excluded;
+every other sheet is read, so the sum of \code{valor} over all sources
+equals STN's TOTAL sheet.
+\item From 2021 on, the Complementacao da Uniao comes in VAAF, VAAT and
+VAAR shares (sources \code{"VAAF"}, \code{"VAAT"}, \code{"VAAR"}); up to 2020 it is a
+single source, \code{"COUN"}.
 }
 }
 \section{Data source}{

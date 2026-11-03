@@ -39,8 +39,42 @@ fundeb_sources <- c(
   "VAAR",
   "ICMS",
   "IPVA",
-  "ITCMD"
+  "ITCMD",
+  # sheets outside the tax sources: Complementacao da Uniao (2007-2020,
+  # and the FTI share from 2025), Lei Kandir compensation, adjustments and
+  # the EC 123/2022 financial aid. They are part of the FUNDEB total.
+  "COUN",
+  "COUN_FTI",
+  "LC8796",
+  "AJUSTE",
+  "AFE_EC123"
 )
+
+# summary sheets: totals of the data sheets, never data themselves
+fundeb_summary_sheets <- c("TOT1_U", "TOT2_E", "TOTAL", "RESUMO")
+
+#' Source name of a FUNDEB sheet
+#'
+#' @description
+#' Internal function. The sheet name is the destination prefix (`E_` for
+#' states, `M_` for municipalities) followed by the source. The VAAF, VAAT
+#' and VAAR shares of the Complementacao da Uniao (`E_COUN_VAAF`) keep the
+#' short name (`"VAAF"`); every other sheet keeps its full suffix
+#' (`E_COUN` -> `"COUN"`, `E_AFE_EC123` -> `"AFE_EC123"`).
+#'
+#' @param sheet A sheet name.
+#'
+#' @return A string.
+#'
+#' @keywords internal
+fundeb_sheet_source <- function(sheet) {
+  parts <- strsplit(toupper(sheet), "_", fixed = TRUE)[[1]][-1]
+  last <- parts[length(parts)]
+  if (last %in% c("VAAF", "VAAT", "VAAR")) {
+    return(last)
+  }
+  paste(parts, collapse = "_")
+}
 
 # Portuguese month names to month numbers (ASCII only, input is normalized)
 fundeb_month_map <- c(
@@ -87,7 +121,11 @@ fundeb_enrollment_api_url <- function() {
 #'   Default is `NULL` (all states).
 #' @param source Optional. The funding source to filter by. One of:
 #'   `"FPE"`, `"FPM"`, `"IPI"`, `"ITR"`, `"VAAF"`, `"VAAT"`, `"VAAR"`,
-#'   `"ICMS"`, `"IPVA"`, `"ITCMD"`. Default is `NULL` (all sources).
+#'   `"ICMS"`, `"IPVA"`, `"ITCMD"` (tax shares), `"COUN"` (Complementacao
+#'   da Uniao, 2007-2020), `"COUN_FTI"` (2025 onwards), `"LC8796"` (Lei
+#'   Kandir compensation, 2007-2021), `"AJUSTE"` (adjustments, 2012-2019),
+#'   `"AFE_EC123"` (EC 123/2022 aid). Default is `NULL` (all sources, which
+#'   add up to STN's TOTAL sheet).
 #' @param destination Optional. The transfer destination. One of:
 #'   - `"uf"`: Transfers to states and the Federal District
 #'   - `"municipio"`: Transfers to municipalities
@@ -125,7 +163,12 @@ fundeb_enrollment_api_url <- function() {
 #' - Data is sourced from STN (Tesouro Nacional), not INEP.
 #' - Files are in Excel format (XLS) — requires the `readxl` package.
 #' - Column names are standardized to lowercase with underscores.
-#' - Summary sheets (Resumo, Total, etc.) are automatically excluded.
+#' - Summary sheets (Resumo, Total, etc.) are automatically excluded;
+#'   every other sheet is read, so the sum of `valor` over all sources
+#'   equals STN's TOTAL sheet.
+#' - From 2021 on, the Complementacao da Uniao comes in VAAF, VAAT and
+#'   VAAR shares (sources `"VAAF"`, `"VAAT"`, `"VAAR"`); up to 2020 it is a
+#'   single source, `"COUN"`.
 #'
 #' @section Data source:
 #' \url{https://www.tesourotransparente.gov.br}
@@ -453,19 +496,13 @@ read_fundeb_sheets <- function(
 ) {
   sheets <- readxl::excel_sheets(file_path)
 
-  # keep only data sheets: E_ or M_ prefix + valid source suffix
-  # excludes summary sheets (Tot1, Tot2, Total) and non-standard sheets (COUN)
-  # match sheets starting with E_ or M_ and ending with a valid source
-  # handles both E_FPE and E_COUN_VAAR patterns
-  valid_suffix_pattern <- str_c(
-    "(",
-    str_c(fundeb_sources, collapse = "|"),
-    ")$"
-  )
-  valid_sheets <- sheets[grepl(
-    str_c("^[EM]_.*", valid_suffix_pattern),
-    toupper(sheets)
-  )]
+  # keep every data sheet (E_ or M_ prefix) except the summary sheets.
+  # Until 1.2.0 only the tax-source sheets were read, which left out the
+  # Complementacao da Uniao (3-13% of FUNDEB in 2007-2020)
+  suffix <- toupper(sub("^[EeMm]_", "", sheets))
+  valid_sheets <- sheets[
+    grepl("^[EM]_", toupper(sheets)) & !suffix %in% fundeb_summary_sheets
+  ]
 
   if (length(valid_sheets) == 0) {
     cli::cli_abort(
@@ -484,7 +521,7 @@ read_fundeb_sheets <- function(
     # some sheets have 3 parts: E_COUN_VAAR -> dest="UF", src="VAAR"
     parts <- strsplit(toupper(sheet), "_", fixed = TRUE)[[1]]
     dest_name <- if (parts[1] == "E") "UF" else "Munic\u00edpio"
-    src_name <- parts[length(parts)]
+    src_name <- fundeb_sheet_source(sheet)
 
     # filter by destination/source before reading (efficiency)
     if (!is.null(destination) && dest_name != destination) {
@@ -632,6 +669,10 @@ tidy_fundeb_table <- function(df, year, source_name, dest_name, tabela) {
   first_col <- toupper(trimws(as.character(df[[estado_idx]])))
   skip <- is.na(first_col) |
     grepl("^(REPASSE|OBSERVA|AJUSTE|ESTADOS|$)", first_col)
+  # a data row has a two-letter UF code; footnotes ("Obs.: Dados de
+  # novembro retificados ...") and totals do not
+  uf_values <- toupper(trimws(as.character(df[[uf_idx]])))
+  skip <- skip | !grepl("^[A-Z]{2}$", uf_values)
   df <- df[!skip, ]
 
   if (nrow(df) == 0) {
