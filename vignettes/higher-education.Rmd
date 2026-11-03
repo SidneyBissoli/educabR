@@ -3,7 +3,7 @@ title: "Higher and Graduate Education: Census, ENADE, IDD, CPC, IGC, and CAPES"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Higher and Graduate Education: Census, ENADE, IDD, CPC, IGC, and CAPES}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::rmarkdown_notangle}
   %\VignetteEncoding{UTF-8}
 ---
 

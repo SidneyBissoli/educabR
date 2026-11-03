@@ -1,4 +1,4 @@
-# educabR (development version)
+# educabR 2.0.0
 
 This release fixes bugs that returned **wrong or incomplete data without
 any error or warning**. Most important: **`get_enade()` returned rows that

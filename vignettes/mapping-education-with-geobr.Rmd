@@ -3,7 +3,7 @@ title: "Mapping education indicators with geobr"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Mapping education indicators with geobr}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::rmarkdown_notangle}
   %\VignetteEncoding{UTF-8}
 ---
 
