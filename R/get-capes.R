@@ -230,7 +230,7 @@ discover_capes_url <- function(year, type) {
     {
       req <- httr2::request(api_url) |>
         httr2::req_timeout(seconds = 300) |>
-        httr2::req_retry(max_tries = 3, backoff = ~15)
+        httr2::req_retry(max_tries = 3, backoff = ~15, retry_on_failure = TRUE)
 
       resp <- httr2::req_perform(req)
       body <- httr2::resp_body_json(resp)

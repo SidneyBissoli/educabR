@@ -147,7 +147,7 @@ download_inep_file <- function(url, destfile, quiet = FALSE) {
     {
       req <- httr2::request(url) |>
         httr2::req_timeout(seconds = timeout) |>
-        httr2::req_retry(max_tries = 3, backoff = ~5)
+        httr2::req_retry(max_tries = 3, backoff = ~5, retry_on_failure = TRUE)
 
       resp <- httr2::req_perform(req)
 

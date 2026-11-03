@@ -50,6 +50,10 @@ fixes below.
   take their year from the block header above them ("Taxa de Aprovacao -
   2025"). Checked with IDEB = N x P, which now holds to rounding for every
   level, stage and edition.
+* Downloads and API calls (INEP, CAPES, FNDE) now retry when the
+  connection drops ("server closed abruptly"), not only on HTTP error
+  codes: `httr2::req_retry()` does not retry connection failures unless
+  asked to. Requires httr2 >= 1.0.0.
 * `get_idd(2022)` works. INEP serves that edition as a RAR archive under
   a `.zip` name, and the download check rejected it as "not a valid ZIP
   archive". Archives are now identified by their signature (ZIP, 7z or

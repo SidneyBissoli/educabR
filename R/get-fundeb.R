@@ -805,7 +805,7 @@ fetch_fundeb_enrollment <- function(
             `$format` = "json"
           ) |>
           httr2::req_timeout(seconds = 300) |>
-          httr2::req_retry(max_tries = 3, backoff = ~15)
+          httr2::req_retry(max_tries = 3, backoff = ~15, retry_on_failure = TRUE)
 
         resp <- httr2::req_perform(req)
         body <- httr2::resp_body_json(resp)

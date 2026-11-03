@@ -32,7 +32,7 @@ Depends:
 Imports:
     cli,
     dplyr,
-    httr2,
+    httr2 (>= 1.0.0),
     lifecycle,
     purrr,
     readr,
