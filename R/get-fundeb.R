@@ -736,6 +736,12 @@ rename_fundeb_enrollment <- function(df) {
   current <- names(df)
   matched <- fundeb_enrollment_col_names[current]
   names(df) <- ifelse(is.na(matched), current, matched)
+
+  # same types on the first call (JSON: integer) and on cached reads
+  # (CSV re-read: double)
+  for (col in intersect(c("ano_censo", "qtd_matricula"), names(df))) {
+    df[[col]] <- as.integer(df[[col]])
+  }
   df
 }
 
@@ -834,10 +840,9 @@ fetch_fundeb_enrollment <- function(
       cli::cli_alert_success("fetched {.val {total_fetched}} records so far")
     }
 
-    # stop if we got fewer rows than requested (last page)
-    if (nrow(page_df) < remaining) {
-      break
-    }
+    # keep paging until an empty page: a short page does not prove the end,
+    # because the server may cap the page size below `$top` and stopping
+    # there would silently truncate the year
 
     # stop if we reached n_max
     if (!is.infinite(n_max) && total_fetched >= n_max) break

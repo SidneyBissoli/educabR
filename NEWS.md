@@ -28,6 +28,13 @@ fixes below.
   and destination, 2007-2026. Footnote rows ("Obs.: ...") are no longer
   returned as a 28th state with empty values (2009, 2012, 2013, 2020,
   2021).
+* `get_fundeb_enrollment()` returns the same column types on the first
+  call and on cached calls (`ano_censo` and `qtd_matricula` were integer
+  from the API and double from the cache), and keeps paging the FNDE API
+  until an empty page instead of stopping at the first short page, which
+  would truncate a year if the server capped its page size. Counts were
+  checked against an independent paging of the API: 104,358 records and
+  45,656,716 enrolments in 2017, 103,560 and 43,400,372 in 2018.
 * `get_idd(2022)` works. INEP serves that edition as a RAR archive under
   a `.zip` name, and the download check rejected it as "not a valid ZIP
   archive". Archives are now identified by their signature (ZIP, 7z or

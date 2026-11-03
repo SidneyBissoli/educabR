@@ -641,6 +641,48 @@ test_that("fetch_fundeb_enrollment paginates and stops on empty page", {
   expect_true("AnoCenso" %in% names(result) || "anocenso" %in% names(result))
 })
 
+test_that("fetch_fundeb_enrollment keeps paging after a short page", {
+  # a server that caps pages below $top returns short pages that are not
+  # the last one; stopping there would truncate the year silently
+  call_count <- 0
+  record <- function(i) list(AnoCenso = 2018L, Uf = "AC", QtdMatricula = i)
+
+  local_mocked_bindings(
+    request = function(url) structure(list(url = url), class = "httr2_request"),
+    req_url_query = function(req, ...) req,
+    req_timeout = function(req, ...) req,
+    req_retry = function(req, ...) req,
+    req_perform = function(req) {
+      call_count <<- call_count + 1
+      structure(list(call = call_count), class = "httr2_response")
+    },
+    resp_body_json = function(resp) {
+      if (resp$call <= 2) {
+        list(value = list(record(resp$call)))
+      } else {
+        list(value = list())
+      }
+    },
+    .package = "httr2"
+  )
+
+  result <- educabR:::fetch_fundeb_enrollment(2018, quiet = TRUE)
+  expect_equal(nrow(result), 2)
+  expect_equal(call_count, 3)
+})
+
+test_that("rename_fundeb_enrollment gives integer counts on every path", {
+  # first call (JSON) gave integer, cached re-read gave double
+  df <- data.frame(
+    AnoCenso = c(2018, 2018),
+    QtdMatricula = c(10, 20),
+    Uf = "AC"
+  )
+  out <- educabR:::rename_fundeb_enrollment(df)
+  expect_type(out$ano_censo, "integer")
+  expect_type(out$qtd_matricula, "integer")
+})
+
 test_that("fetch_fundeb_enrollment with uf filter builds correct query", {
   call_count <- 0
 
