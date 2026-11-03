@@ -208,7 +208,7 @@ igc_institution_sheets <- function(file) {
     )
   }
   sheets <- readxl::excel_sheets(file)
-  folded <- tolower(iconv(sheets, from = "UTF-8", to = "ASCII//TRANSLIT"))
+  folded <- tolower(ascii_fold(sheets))
   is_inst <- grepl("^(universidade|centro|faculdade|outros)", folded)
   if (any(is_inst)) sheets[is_inst] else sheets[1]
 }

@@ -875,7 +875,7 @@ ideb_keep_cols <- function(col_names, metric, year = NULL) {
 ideb_std_names <- function(x) {
   x |>
     str_to_lower() |>
-    iconv(from = "UTF-8", to = "ASCII//TRANSLIT") |>
+    ascii_fold() |>
     str_replace_all("[^a-z0-9]", "_") |>
     str_replace_all("_+", "_") |>
     str_remove("^_") |>

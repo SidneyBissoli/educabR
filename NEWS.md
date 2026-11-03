@@ -24,6 +24,13 @@ it: see the first item below.
 * `get_cpc()` 2007 and 2008 no longer return duplicated column names:
   "% Docentes Doutores" and similar columns become `pct_docentes_doutores`
   instead of colliding with `docentes_doutores`.
+* On macOS, column names built from accented headers no longer differ
+  from Windows and Linux: "Município" became `munic_ipio` instead of
+  `municipio`, in every `get_*()` function, because macOS's
+  `iconv(to = "ASCII//TRANSLIT")` writes "í" as "'i". Names are now
+  folded with ICU (stringi) and are identical on every platform; on
+  Windows and Linux they are unchanged (checked against 260 accented
+  INEP headers).
 * On macOS, latin1 CSV files are no longer read as UTF-8, which garbled
   accented text and column names. The encoding check relied on `iconv()`
   returning `NA` for invalid UTF-8, which macOS's iconv does not do; it

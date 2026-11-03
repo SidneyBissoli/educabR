@@ -270,7 +270,7 @@ merge_subheader_row <- function(df) {
   }
 
   fold <- function(x) {
-    tolower(gsub("[^A-Za-z0-9]", "", iconv(x, "UTF-8", "ASCII//TRANSLIT")))
+    tolower(gsub("[^A-Za-z0-9]", "", ascii_fold(x)))
   }
 
   header <- names(df)

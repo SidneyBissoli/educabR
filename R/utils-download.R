@@ -904,6 +904,35 @@ drop_incomplete_utf8_tail <- function(bytes) {
   bytes
 }
 
+#' Fold text to ASCII the same way on every platform
+#'
+#' @description
+#' Internal function used to build column names and to compare sheet
+#' names. `iconv(to = "ASCII//TRANSLIT")` is platform-dependent: macOS
+#' turns "i-acute" into "'i", so names such as "Municipio" (with accent)
+#' came out as `munic_ipio` there. This uses ICU's Latin-ASCII transform
+#' and then reproduces the names educabR already produced on Windows:
+#' ordinal indicators become letters ("N.o" -> "no"), superscript digits
+#' become digits, and Greek letters and sharp s are dropped.
+#'
+#' @param x A character vector.
+#'
+#' @return A character vector.
+#'
+#' @keywords internal
+ascii_fold <- function(x) {
+  # code points keep this file ASCII-only:
+  # 00BA/00AA ordinal o/a, 00B9/00B2/00B3 superscript 1/2/3, 00DF sharp s
+  from <- intToUtf8(c(0xBA, 0xAA, 0xB9, 0xB2, 0xB3))
+  x <- chartr(from, "oa123", x)
+  x <- stringi::stri_replace_all_regex(
+    x,
+    str_c("[\\p{Greek}", intToUtf8(0xDF), "]"),
+    " "
+  )
+  stringi::stri_trans_general(x, "Latin-ASCII")
+}
+
 #' Normalize character columns to UTF-8 NFC
 #'
 #' @description
