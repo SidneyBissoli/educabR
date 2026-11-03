@@ -1062,3 +1062,15 @@ test_that("normalize_utf8_nfc preserves NA values in character columns", {
   expect_equal(out$rede[1], "Pública")
   expect_equal(out$rede[3], "Federal")
 })
+
+test_that("parse_sas_dates treats INEP's '0' as a missing date", {
+  # Censo Escolar 2008-2021: dt_ano_letivo_inicio uses "0" for no date
+  df <- data.frame(
+    dt_ano_letivo_inicio = c("02FEB2015:00:00:00", "0", NA),
+    stringsAsFactors = FALSE
+  )
+
+  result <- educabR:::parse_sas_dates(df)
+
+  expect_equal(result$dt_ano_letivo_inicio, as.Date(c("2015-02-02", NA, NA)))
+})

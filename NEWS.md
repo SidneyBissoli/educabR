@@ -43,6 +43,12 @@ fixes below.
   1997 (567 of `vpe626`), 1998 and 1999, among others. Columns with
   parsing problems are now re-read and typed from all their values. This
   applies to every function that reads INEP CSV files.
+* Columns holding only zeros, which readr read as `FALSE` (Censo Escolar
+  1995-2006 counts), come back numeric.
+* `get_censo_escolar()` returns `dt_ano_letivo_inicio` and
+  `dt_ano_letivo_termino` as dates in 2008-2021 too. INEP writes "0" for
+  a missing date, so the columns stayed text; "0" is now read as missing
+  (2015: 188,689 dates, 49,190 missing).
 * Answer letters "T" and "F" are no longer turned into `TRUE`/`FALSE`.
   readr reads a column holding only those letters as logical, so in
   `get_saeb(2021, type = "diretor")` 17,427 answers "F" to question 106

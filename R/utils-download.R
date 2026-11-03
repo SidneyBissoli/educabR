@@ -1159,6 +1159,15 @@ reread_problem_columns <- function(df, file, delim, encoding, n_max = Inf) {
     show_col_types = FALSE,
     progress = FALSE
   )
+  # columns guessed logical: numbers ("0" counts in Censo Escolar 1995-2006,
+  # read as FALSE) become numeric, letters ("F" answers) stay text
+  for (col in as_text) {
+    x <- fixed[[col]]
+    if (all(grepl("^-?[0-9]+([.][0-9]+)?$", trimws(x[!is.na(x)])))) {
+      fixed[[col]] <- as.numeric(x)
+    }
+  }
+
   to_type <- setdiff(bad, as_text)
   if (length(to_type) > 0L) {
     text <- fixed

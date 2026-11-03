@@ -376,6 +376,8 @@ parse_sas_dates <- function(df) {
     if (!is.character(x)) {
       next
     }
+    # INEP writes "0" for a missing date (Censo Escolar 2008-2021)
+    x[trimws(x) == "0"] <- NA_character_
     filled <- !is.na(x) & nzchar(trimws(x))
     if (!any(filled)) {
       next

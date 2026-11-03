@@ -59,3 +59,15 @@ test_that("answer letters T/F stay text instead of becoming logical", {
   expect_identical(df$TX_RESP_Q106, c("F", NA, "F"))
   expect_identical(df$TX_RESP_Q107, c("A", "T", "F"))
 })
+
+test_that("a column of zeros guessed as logical comes back numeric", {
+  # Censo Escolar 1998: VEE1056 holds only "0", read as FALSE
+  f <- withr::local_tempfile(fileext = ".csv")
+  writeLines(c("ID;VEE1056", "1;0", "2;", "3;0"), f)
+
+  df <- suppressMessages(
+    read_inep_file(f, delim = ";", encoding = "UTF-8", quiet = TRUE)
+  )
+
+  expect_identical(df$VEE1056, c(0, NA, 0))
+})
