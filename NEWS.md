@@ -79,6 +79,12 @@ fixes below.
   in 2013) and most of four other date columns. SAS, "dd/mm/yyyy" and ISO
   dates are now read; a column that no format reads completely is kept as
   text.
+* `get_censo_superior(type = "alunos")` and `type = "docentes"` are
+  deprecated and stop with an explanation: INEP no longer publishes
+  student or faculty microdata (the archive of every year, 2009-2024,
+  holds only the IES and course files), and the old error ("no data file
+  found") suggested a broken download. `"ies"` and `"cursos"` were
+  checked in every year: row counts equal the files and no value is lost.
 * `get_enade()` 2004-2009 works again: INEP replaced those files with
   `_LGPD` versions and the old addresses no longer exist.
 * `get_idd(2022)` works. INEP serves that edition as a RAR archive under

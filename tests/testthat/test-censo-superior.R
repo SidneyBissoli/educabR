@@ -119,3 +119,12 @@ test_that("get_censo_superior rejects invalid type via match.arg", {
     "arg"
   )
 })
+
+test_that("alunos and docentes stop with an explanation (INEP withdrew them)", {
+  for (type in c("alunos", "docentes")) {
+    expect_error(
+      get_censo_superior(2023, type = type, quiet = TRUE),
+      "no longer publishes"
+    )
+  }
+})
