@@ -43,6 +43,13 @@ fixes below.
   2013-2020. The file is also matched on its reference year: in the
   2013-2016 packages every file name contains "2016", and matching on
   "contains the year" could pick the wrong year's file.
+* `get_ideb(level = "estado" | "regiao", stage = "anos_iniciais",
+  metric = "indicador")` returns the 2025 "Indicador de Rendimento". INEP's
+  2025 spreadsheet codes that column `VL_INDICADOR_REND_2023`, so it was
+  returned as a second 2023 value and 2025 had none. Repeated codes now
+  take their year from the block header above them ("Taxa de Aprovacao -
+  2025"). Checked with IDEB = N x P, which now holds to rounding for every
+  level, stage and edition.
 * `get_idd(2022)` works. INEP serves that edition as a RAR archive under
   a `.zip` name, and the download check rejected it as "not a valid ZIP
   archive". Archives are now identified by their signature (ZIP, 7z or
