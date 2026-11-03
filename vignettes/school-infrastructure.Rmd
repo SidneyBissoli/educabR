@@ -3,7 +3,7 @@ title: "What does school infrastructure look like across Brazil?"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{What does school infrastructure look like across Brazil?}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::rmarkdown_notangle}
   %\VignetteEncoding{UTF-8}
 ---
 

@@ -3,7 +3,7 @@ title: "educabR and the alternatives"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{educabR and the alternatives}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::rmarkdown_notangle}
   %\VignetteEncoding{UTF-8}
 ---
 

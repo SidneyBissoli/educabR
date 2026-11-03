@@ -3,7 +3,7 @@ title: "How has ENEM performance evolved by state?"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{How has ENEM performance evolved by state?}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::rmarkdown_notangle}
   %\VignetteEncoding{UTF-8}
 ---
 

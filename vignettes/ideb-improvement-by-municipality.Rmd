@@ -3,7 +3,7 @@ title: "Which municipalities improved the most in IDEB?"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Which municipalities improved the most in IDEB?}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::rmarkdown_notangle}
   %\VignetteEncoding{UTF-8}
 ---
 

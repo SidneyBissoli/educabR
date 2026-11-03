@@ -3,7 +3,7 @@ title: "Basic Education Assessments: SAEB, ENCCEJA, and ENEM by School"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Basic Education Assessments: SAEB, ENCCEJA, and ENEM by School}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::rmarkdown_notangle}
   %\VignetteEncoding{UTF-8}
 ---
 
