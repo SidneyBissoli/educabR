@@ -30,7 +30,7 @@ FUNDEB funding.
   historical series.
 - *"What is there for the Higher Education Census and ENADE in R?"* —
   `get_censo_superior()`, `get_enade()`, plus the quality indicators
-  `get_cpc()`, `get_idd()` and `get_igc()`.
+  `get_conceito_enade()`, `get_cpc()`, `get_idd()` and `get_igc()`.
 - *"How much FUNDEB money went to each state?"* — `get_fundeb_distribution()`
   and `get_fundeb_enrollment()`.
 - *"Which graduate programmes does CAPES evaluate, and how?"* — `get_capes()`.
@@ -133,6 +133,7 @@ remotes::install_github("SidneyBissoli/educabR")
 |---------|----------|-----------------|
 | Higher Education Census | `get_censo_superior()` | 2009-2024 |
 | ENADE - National Student Performance Exam | `get_enade()` | 2004-2024 |
+| Conceito Enade - course-level ENADE indicator | `get_conceito_enade()` | 2004-2019, 2021-2023, 2025 |
 | IDD - Value-Added Indicator | `get_idd()` | 2014-2023 |
 | CPC - Preliminary Course Concept | `get_cpc()` | 2007-2023 |
 | IGC - General Courses Index | `get_igc()` | 2007-2023 |

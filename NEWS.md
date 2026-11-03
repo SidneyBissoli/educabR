@@ -1,10 +1,27 @@
 # educabR (development version)
 
-This release fixes a bug that returned **incomplete data without any
-error or warning**. If you used `get_igc()` for 2008-2016, please re-run
-it: see the first item below.
+This release fixes bugs that returned **incomplete data without any
+error or warning**. If you used `get_igc()` for 2008-2016, or the
+`sub_area` column of `get_cpc(2008)`, please re-run it: see the bug
+fixes below.
+
+## New features
+
+* New `get_conceito_enade()` downloads the Conceito Enade, the
+  course-level ENADE indicator, for 2004-2019, 2021-2023 and 2025
+  (`type = "licenciaturas"` or `"medicina"`). `get_enade()` returns
+  student microdata; until now the official indicator itself, with its
+  1-5 faixa, was only reachable inside the CPC table up to 2011. For
+  2007-2011, INEP publishes it inside the Enade/CPC table, which is
+  returned as is.
 
 ## Bug fixes
+
+* Excel columns are no longer emptied when their first 1,000 rows are
+  blank. readxl guessed the column type from those rows only, read the
+  column as logical and turned every later value into `NA`:
+  `get_cpc(2008)` lost 1,785 values of `sub_area` and `get_cpc(2017)` 28
+  of `observacao`. Types are now guessed from every row.
 
 * `get_igc()` now returns every institution for 2008-2016. INEP splits
   those editions into one sheet per type of institution (universities,
