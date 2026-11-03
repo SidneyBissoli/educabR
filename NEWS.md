@@ -17,6 +17,10 @@ fixes below.
 
 ## Bug fixes
 
+* `get_idd(2022)` works. INEP serves that edition as a RAR archive under
+  a `.zip` name, and the download check rejected it as "not a valid ZIP
+  archive". Archives are now identified by their signature (ZIP, 7z or
+  RAR), both when checking a download and when extracting it.
 * Excel columns are no longer emptied when their first 1,000 rows are
   blank. readxl guessed the column type from those rows only, read the
   column as logical and turned every later value into `NA`:

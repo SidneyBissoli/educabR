@@ -376,6 +376,44 @@ test_that("verify_download_integrity rejects .zip missing magic bytes", {
   expect_false(file.exists(f))
 })
 
+test_that("verify_download_integrity accepts a RAR served as .zip", {
+  # IDD 2022: INEP serves a RAR v5 archive under a .zip name
+  f <- tempfile(fileext = ".zip")
+  withr::defer(unlink(f))
+  writeBin(as.raw(c(0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x01, 0x00, 0x58)), f)
+
+  expect_silent(educabR:::verify_download_integrity(f))
+  expect_true(file.exists(f))
+})
+
+test_that("archive_format identifies ZIP, 7z and RAR by signature", {
+  fmt <- educabR:::archive_format
+  expect_equal(fmt(as.raw(c(0x50, 0x4B, 0x03, 0x04, 0, 0))), "zip")
+  expect_equal(fmt(as.raw(c(0x37, 0x7A, 0xBC, 0xAF, 0x27, 0x1C))), "7z")
+  expect_equal(fmt(as.raw(c(0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x00))), "rar")
+  expect_true(is.na(fmt(as.raw(c(0xDE, 0xAD, 0xBE, 0xEF, 0, 0)))))
+  expect_true(is.na(fmt(raw(0))))
+})
+
+test_that("extract_archive dispatches on the signature, not the extension", {
+  f <- tempfile(fileext = ".zip")
+  withr::defer(unlink(f))
+  writeBin(as.raw(c(0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x01, 0x00)), f)
+  used_7z <- FALSE
+
+  local_mocked_bindings(
+    extract_zip = function(...) stop("should not use unzip for a RAR file"),
+    find_7z = function() {
+      used_7z <<- TRUE
+      stop("stop after dispatch")
+    },
+    .package = "educabR"
+  )
+
+  expect_error(educabR:::extract_archive(f, tempfile()), "stop after dispatch")
+  expect_true(used_7z)
+})
+
 test_that("verify_download_integrity rejects empty file", {
   f <- tempfile(fileext = ".zip")
   withr::defer(unlink(f))

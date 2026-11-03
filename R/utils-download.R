@@ -85,14 +85,15 @@ verify_download_integrity <- function(
     }
   }
 
-  # ZIP magic-bytes check (only for files we expect to be ZIP)
-  if (tolower(tools::file_ext(destfile)) == "zip") {
-    zip_magic <- as.raw(c(0x50, 0x4B, 0x03, 0x04))
-    if (length(first_bytes) < 4L || !identical(first_bytes[1:4], zip_magic)) {
+  # archive check (only for files we expect to be an archive): any known
+  # archive signature is accepted, because INEP sometimes serves one format
+  # under another extension (IDD 2022 is a RAR file named .zip)
+  if (tolower(tools::file_ext(destfile)) %in% c("zip", "7z", "rar")) {
+    if (is.na(archive_format(first_bytes))) {
       unlink(destfile)
       cli::cli_abort(c(
-        "downloaded file is not a valid ZIP archive",
-        "x" = "missing ZIP magic bytes (PK\\x03\\x04)",
+        "downloaded file is not a valid archive",
+        "x" = "no ZIP, 7z or RAR signature in the first bytes",
         "i" = "retry the download \u2014 the cached file has been deleted"
       ))
     }
@@ -311,6 +312,34 @@ find_7z <- function() {
   "7z"
 }
 
+#' Identify an archive format from its first bytes
+#'
+#' @description
+#' Internal function. Returns `"zip"`, `"7z"` or `"rar"` from the file
+#' signature, or `NA` when none matches. Used instead of the extension,
+#' which INEP does not always get right (IDD 2022 is a RAR named `.zip`).
+#'
+#' @param bytes A raw vector with the first bytes of the file (at least 6).
+#'
+#' @return A string or `NA_character_`.
+#'
+#' @keywords internal
+archive_format <- function(bytes) {
+  starts <- function(sig) {
+    length(bytes) >= length(sig) && identical(bytes[seq_along(sig)], sig)
+  }
+  if (starts(as.raw(c(0x50, 0x4B, 0x03, 0x04)))) {
+    return("zip")
+  }
+  if (starts(as.raw(c(0x37, 0x7A, 0xBC, 0xAF, 0x27, 0x1C)))) {
+    return("7z")
+  }
+  if (starts(as.raw(c(0x52, 0x61, 0x72, 0x21, 0x1A, 0x07)))) {
+    return("rar")
+  }
+  NA_character_
+}
+
 #' Extract an archive file (ZIP, 7z, or RAR)
 #'
 #' @description
@@ -326,7 +355,15 @@ find_7z <- function() {
 #'
 #' @keywords internal
 extract_archive <- function(archive, exdir, quiet = FALSE) {
-  ext <- tools::file_ext(archive)
+  # dispatch on the file's signature, falling back to the extension
+  ext <- if (file.exists(archive)) {
+    archive_format(readBin(archive, "raw", n = 8L))
+  } else {
+    NA_character_
+  }
+  if (is.na(ext)) {
+    ext <- tools::file_ext(archive)
+  }
 
   if (tolower(ext) == "zip") {
     return(extract_zip(archive, exdir, quiet = quiet))
