@@ -132,15 +132,23 @@ get_cpc <- function(year, n_max = Inf, keep_file = TRUE, quiet = FALSE) {
 #'
 #' @description
 #' Internal function to read Excel files (xls/xlsx) with error handling.
-#' Tries to read the first sheet by default.
+#' Reads the first sheet by default. Three INEP layout quirks are handled:
+#'
+#' - a title row above the header (e.g. IGC 2009) is skipped, by taking as
+#'   header the first row where at least half of the columns are filled;
+#' - a sub-header row below the header (e.g. IGC 2008: "IGC" over
+#'   "Continuo" and "Faixas") is merged into the column names;
+#' - blank, footnote and total rows (e.g. CPC 2021 and 2022, IGC 2021),
+#'   i.e. rows with at most one filled cell, are dropped.
 #'
 #' @param file Path to the Excel file.
 #' @param n_max Maximum number of rows to read.
+#' @param sheet Sheet name or position. Default is the first sheet.
 #'
 #' @return A tibble with the data.
 #'
 #' @keywords internal
-read_excel_safe <- function(file, n_max = Inf) {
+read_excel_safe <- function(file, n_max = Inf, sheet = 1) {
   if (!requireNamespace("readxl", quietly = TRUE)) {
     cli::cli_abort(
       c(
@@ -154,8 +162,11 @@ read_excel_safe <- function(file, n_max = Inf) {
 
   df <- tryCatch(
     {
+      skip <- excel_header_skip(file, sheet)
       readxl::read_excel(
         file,
+        sheet = sheet,
+        skip = skip,
         n_max = n_max_arg,
         .name_repair = "minimal",
         na = c("", "-", "ND", "\u2013", "\u2014")
@@ -172,6 +183,9 @@ read_excel_safe <- function(file, n_max = Inf) {
     }
   )
 
+  df <- drop_footer_rows(df)
+  df <- merge_subheader_row(df)
+
   # force code columns (CO_*, CD_*) to character to preserve leading zeros
   code_cols <- grep("^(CO_|CD_)", names(df), ignore.case = TRUE, value = TRUE)
   for (col in code_cols) {
@@ -181,19 +195,130 @@ read_excel_safe <- function(file, n_max = Inf) {
   normalize_utf8_nfc(df)
 }
 
-#' Convert faixa columns to numeric
+#' Find how many title rows precede the header of an Excel sheet
 #'
 #' @description
-#' Internal function to convert columns ending in `_faixa` from character
-#' to numeric. Values like `"SC"` (Sem Conceito) are converted to `NA`.
+#' Internal function. Returns the number of rows to skip so that the
+#' header is the first row where at least half of the columns are filled.
+#' A sheet whose first row is already the header returns 0.
+#'
+#' @param file Path to the Excel file.
+#' @param sheet Sheet name or position.
+#'
+#' @return An integer.
+#'
+#' @keywords internal
+excel_header_skip <- function(file, sheet = 1) {
+  top <- suppressMessages(
+    readxl::read_excel(file, sheet = sheet, col_names = FALSE, n_max = 15)
+  )
+  if (nrow(top) == 0 || ncol(top) == 0) {
+    return(0L)
+  }
+  filled <- rowSums(!is.na(top))
+  header <- which(filled >= max(2, ncol(top) / 2))[1]
+  if (is.na(header)) 0L else as.integer(header - 1L)
+}
+
+#' Drop blank, footnote and total rows from a sheet read with readxl
+#'
+#' @description
+#' Internal function. INEP spreadsheets end with blank rows, footnotes
+#' written in the first column, or a lone total in one column (CPC 2022).
+#' A data row always fills several columns, so rows with at most one
+#' filled cell are dropped.
 #'
 #' @param df A data frame.
 #'
-#' @return The data frame with faixa columns as numeric.
+#' @return The data frame without those rows.
+#'
+#' @keywords internal
+drop_footer_rows <- function(df) {
+  if (ncol(df) < 2 || nrow(df) == 0) {
+    return(df)
+  }
+  df[rowSums(!is.na(df)) > 1, , drop = FALSE]
+}
+
+#' Merge a sub-header row into the column names
+#'
+#' @description
+#' Internal function. Some INEP sheets have a second header row: IGC 2008
+#' has "IGC" over two columns, with "Continuo" and "Faixas" below it, and
+#' repeats "Cod. IES". That row is detected as a first row that fills less
+#' than half of the columns and holds only text. Each of its cells
+#' completes the name of its column (a cell under an empty header
+#' completes the nearest named header to its left; a cell that repeats the
+#' header is ignored). The row is then dropped and the affected columns are
+#' re-typed.
+#'
+#' @param df A data frame.
+#'
+#' @return The data frame.
+#'
+#' @keywords internal
+merge_subheader_row <- function(df) {
+  if (nrow(df) < 2 || ncol(df) < 2) {
+    return(df)
+  }
+
+  first <- vapply(df[1, ], function(x) as.character(x[[1]]), character(1))
+  filled <- !is.na(first)
+  numeric_like <- !is.na(suppressWarnings(as.numeric(first[filled])))
+  if (sum(filled) < 1 || sum(filled) >= ncol(df) / 2 || any(numeric_like)) {
+    return(df)
+  }
+
+  fold <- function(x) {
+    tolower(gsub("[^A-Za-z0-9]", "", iconv(x, "UTF-8", "ASCII//TRANSLIT")))
+  }
+
+  header <- names(df)
+  new <- header
+  for (j in which(filled)) {
+    if (!is.na(header[j]) && header[j] != "") {
+      if (fold(first[j]) != fold(header[j])) {
+        new[j] <- str_c(header[j], " ", first[j])
+      }
+    } else {
+      named <- which(!is.na(header[seq_len(j)]) & header[seq_len(j)] != "")
+      left <- if (length(named) > 0) header[max(named)] else ""
+      new[j] <- str_trim(str_c(left, " ", first[j]))
+    }
+  }
+
+  df <- df[-1, , drop = FALSE]
+  names(df) <- new
+  affected <- names(df)[filled & vapply(df, is.character, logical(1))]
+  if (length(affected) > 0) {
+    df[affected] <- readr::type_convert(
+      df[affected],
+      col_types = readr::cols(.default = readr::col_guess()),
+      na = c("", "NA")
+    )
+  }
+  df
+}
+
+#' Convert faixa and continuo columns to numeric
+#'
+#' @description
+#' Internal function to convert score columns (names ending in `_faixa`,
+#' `_faixas` or `_continuo`) from character to numeric. Non-numeric
+#' markers such as `"SC"` (Sem Conceito) and `"sub judice"` are converted
+#' to `NA`. Stacking the sheets of the IGC 2007-2016 can turn these
+#' columns into text when only one sheet carries such a marker.
+#'
+#' @param df A data frame.
+#'
+#' @return The data frame with score columns as numeric.
 #'
 #' @keywords internal
 convert_faixa_columns <- function(df) {
-  faixa_cols <- names(df)[grepl("_faixa$", names(df))]
+  faixa_cols <- names(df)[
+    grepl("(_faixas?|_continuo)$", names(df)) &
+      vapply(df, is.character, logical(1))
+  ]
 
   for (col in faixa_cols) {
     df[[col]] <- suppressWarnings(as.numeric(df[[col]]))

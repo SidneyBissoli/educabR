@@ -1,5 +1,33 @@
 # educabR (development version)
 
+This release fixes a bug that returned **incomplete data without any
+error or warning**. If you used `get_igc()` for 2008-2016, please re-run
+it: see the first item below.
+
+## Bug fixes
+
+* `get_igc()` now returns every institution for 2008-2016. INEP splits
+  those editions into one sheet per type of institution (universities,
+  university centers, faculties), and `get_igc()` read only the first
+  one: about 180-230 universities instead of about 2,000-2,200
+  institutions per year. All institution sheets are now read and
+  stacked; course- and program-level sheets in the same file are still
+  ignored.
+* `get_igc(2007)` works again. The 2007 archive holds three CSV files,
+  one per type of institution, not an Excel file, and `get_igc()`
+  stopped with "no Excel file found". It now reads and stacks the three
+  CSVs (1,840 institutions).
+* `get_cpc()` and `get_igc()` no longer return blank, footnote or total
+  rows as data (CPC 2021 and 2022, IGC 2021), nor a sub-header row as
+  the first record (IGC 2008, now with `igc_continuo` and `igc_faixas`
+  columns). A title row above the header (IGC 2009) is skipped.
+* `get_cpc()` 2007 and 2008 no longer return duplicated column names:
+  "% Docentes Doutores" and similar columns become `pct_docentes_doutores`
+  instead of colliding with `docentes_doutores`.
+* `igc_continuo`, `*_faixas` and other `*_continuo` columns stored as text
+  are converted to numeric, like `*_faixa` already were; markers such as
+  "SC" and "sub judice" become `NA`.
+
 # educabR 1.2.0
 
 This release fixes two bugs that returned the **wrong data without any

@@ -45,7 +45,11 @@ The data includes:
 \item IGC is published annually based on the last three ENADE cycles.
 \item There is no 2020 edition (COVID-19 suspension).
 \item Column names are standardized to lowercase with underscores.
-\item Files are in Excel format (xls/xlsx), except 2007 which is 7z.
+\item Files are in Excel format (xls/xlsx), except 2007, a 7z archive of
+CSV files.
+\item From 2007 to 2016, INEP splits the table by type of institution
+(one sheet or CSV each for universities, university centers and
+faculties); all parts are read and stacked into one tibble.
 }
 }
 \section{Data dictionary}{

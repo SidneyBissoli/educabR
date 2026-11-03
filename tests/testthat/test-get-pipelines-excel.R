@@ -284,7 +284,8 @@ test_that("get_igc full pipeline works for non-archive year", {
       file.create(destfile)
       destfile
     },
-    read_excel_safe = function(file, n_max = Inf) mock_igc,
+    read_excel_safe = function(file, n_max = Inf, sheet = 1) mock_igc,
+    igc_institution_sheets = function(file) "IGC",
     .package = "educabR"
   )
 
@@ -315,7 +316,8 @@ test_that("get_igc with keep_file=FALSE removes cached file", {
       file.create(destfile)
       destfile
     },
-    read_excel_safe = function(file, n_max = Inf) mock_igc,
+    read_excel_safe = function(file, n_max = Inf, sheet = 1) mock_igc,
+    igc_institution_sheets = function(file) "IGC",
     .package = "educabR"
   )
 
@@ -353,7 +355,8 @@ test_that("get_igc handles 7z archive year", {
       file.create(mock_xlsx)
       mock_xlsx
     },
-    read_excel_safe = function(file, n_max = Inf) mock_igc,
+    read_excel_safe = function(file, n_max = Inf, sheet = 1) mock_igc,
+    igc_institution_sheets = function(file) "IGC",
     .package = "educabR"
   )
 
@@ -364,7 +367,7 @@ test_that("get_igc handles 7z archive year", {
   expect_true(all(names(result) == tolower(names(result))))
 })
 
-test_that("get_igc 7z errors when no excel file in extracted archive", {
+test_that("get_igc 7z errors when no data file in extracted archive", {
   local_mocked_bindings(
     download_inep_file = function(url, destfile, quiet = FALSE) {
       dir.create(dirname(destfile), recursive = TRUE, showWarnings = FALSE)
@@ -372,7 +375,7 @@ test_that("get_igc 7z errors when no excel file in extracted archive", {
       destfile
     },
     extract_archive = function(archive, exdir, quiet = FALSE) {
-      # Create exdir but no excel files
+      # Create exdir but no data files
       dir.create(exdir, recursive = TRUE, showWarnings = FALSE)
       file.create(file.path(exdir, "readme.txt"))
       file.path(exdir, "readme.txt")
@@ -391,7 +394,7 @@ test_that("get_igc 7z errors when no excel file in extracted archive", {
 
   expect_error(
     get_igc(2007, quiet = TRUE),
-    "no Excel file found"
+    "no data file found"
   )
 })
 
@@ -1116,7 +1119,8 @@ test_that("get_igc cached file skips download", {
       file.create(destfile)
       destfile
     },
-    read_excel_safe = function(file, n_max = Inf) mock_igc,
+    read_excel_safe = function(file, n_max = Inf, sheet = 1) mock_igc,
+    igc_institution_sheets = function(file) "IGC",
     .package = "educabR"
   )
 

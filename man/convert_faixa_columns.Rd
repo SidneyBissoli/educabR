@@ -2,7 +2,7 @@
 % Please edit documentation in R/get-cpc.R
 \name{convert_faixa_columns}
 \alias{convert_faixa_columns}
-\title{Convert faixa columns to numeric}
+\title{Convert faixa and continuo columns to numeric}
 \usage{
 convert_faixa_columns(df)
 }
@@ -10,10 +10,13 @@ convert_faixa_columns(df)
 \item{df}{A data frame.}
 }
 \value{
-The data frame with faixa columns as numeric.
+The data frame with score columns as numeric.
 }
 \description{
-Internal function to convert columns ending in \verb{_faixa} from character
-to numeric. Values like \code{"SC"} (Sem Conceito) are converted to \code{NA}.
+Internal function to convert score columns (names ending in \verb{_faixa},
+\verb{_faixas} or \verb{_continuo}) from character to numeric. Non-numeric
+markers such as \code{"SC"} (Sem Conceito) and \code{"sub judice"} are converted
+to \code{NA}. Stacking the sheets of the IGC 2007-2016 can turn these
+columns into text when only one sheet carries such a marker.
 }
 \keyword{internal}

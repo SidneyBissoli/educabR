@@ -379,20 +379,44 @@ parse_sas_dates <- function(df) {
 #' Internal function to standardize column names to lowercase
 #' with underscores.
 #'
+#' When two names collide after standardization (CPC 2007/2008 have both
+#' "Docentes Doutores" and "% Docentes Doutores"), a "%" in the colliding
+#' original name becomes "pct"; any collision left gets a numeric suffix
+#' (`_2`, `_3`, ...). Names that do not collide are unchanged.
+#'
 #' @param df A data frame.
 #'
 #' @return The data frame with standardized names.
 #'
 #' @keywords internal
 standardize_names <- function(df) {
-  names(df) <- names(df) |>
-    str_to_lower() |>
-    iconv(from = "UTF-8", to = "ASCII//TRANSLIT") |>
-    str_replace_all("[^a-z0-9]", "_") |>
-    str_replace_all("_+", "_") |>
-    str_remove("^_") |>
-    str_remove("_$")
+  clean <- function(x) {
+    x |>
+      str_to_lower() |>
+      iconv(from = "UTF-8", to = "ASCII//TRANSLIT") |>
+      str_replace_all("[^a-z0-9]", "_") |>
+      str_replace_all("_+", "_") |>
+      str_remove("^_") |>
+      str_remove("_$")
+  }
 
+  original <- names(df)
+  new <- clean(original)
+
+  collide <- new %in% new[duplicated(new)] & str_detect(original, "%")
+  if (any(collide)) {
+    new[collide] <- clean(str_replace_all(original[collide], "%", " pct "))
+  }
+
+  if (anyDuplicated(new)) {
+    for (nm in unique(new[duplicated(new)])) {
+      idx <- which(new == nm)
+      stem <- if (nm == "") "unnamed" else nm
+      new[idx[-1]] <- str_c(stem, "_", seq_along(idx)[-1])
+    }
+  }
+
+  names(df) <- new
   df
 }
 
