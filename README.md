@@ -132,7 +132,7 @@ remotes::install_github("SidneyBissoli/educabR")
 | Dataset | Function | Available Years |
 |---------|----------|-----------------|
 | Higher Education Census | `get_censo_superior()` | 2009-2024 |
-| ENADE - National Student Performance Exam | `get_enade()` | 2004-2024 |
+| ENADE - National Student Performance Exam | `get_enade()` | 2004-2019, 2021-2023 |
 | Conceito Enade - course-level ENADE indicator | `get_conceito_enade()` | 2004-2019, 2021-2023, 2025 |
 | IDD - Value-Added Indicator | `get_idd()` | 2014-2023 |
 | CPC - Preliminary Course Concept | `get_cpc()` | 2007-2023 |

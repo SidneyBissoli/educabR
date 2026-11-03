@@ -1,10 +1,28 @@
 # educabR (development version)
 
-This release fixes bugs that returned **incomplete data without any
-error or warning**. If you used `get_igc()` for 2008-2016,
+This release fixes bugs that returned **wrong or incomplete data without
+any error or warning**. Most important: **`get_enade()` returned rows that
+mixed different students** in every edition; any analysis that crossed
+ENADE variables at the student level must be redone (see Breaking
+changes). If you used `get_igc()` for 2008-2016,
 `get_fundeb_distribution()` for 2007-2022 or 2025-2026, or the
 `sub_area` column of `get_cpc(2008)`, please re-run it: see the bug
 fixes below.
+
+## Breaking changes
+
+* `get_enade()` now reads **one file per call**, chosen with the new
+  `arquivo` argument (the number in the file name: `arq3` is
+  `arquivo = 3`). INEP publishes every ENADE edition (2004-2023) as 27 to
+  53 files, each sorted by different variables so that they cannot be
+  joined by student (LGPD; INEP's user manual: "nao e possivel agrupar as
+  informacoes no nivel de estudante"). `get_enade()` used to glue the
+  files side by side, so every row combined variables of different
+  students: in 2023, the course code of file 2 differed from file 1 in
+  406,163 of 406,294 rows. Without `arquivo`, file 1 is read with a
+  warning. Files can still be combined at the course level (`co_curso`).
+* New `list_enade_files()` lists the files of an edition and the
+  variables in each, to find the `arquivo` that holds a variable.
 
 ## New features
 
@@ -61,6 +79,8 @@ fixes below.
   in 2013) and most of four other date columns. SAS, "dd/mm/yyyy" and ISO
   dates are now read; a column that no format reads completely is kept as
   text.
+* `get_enade()` 2004-2009 works again: INEP replaced those files with
+  `_LGPD` versions and the old addresses no longer exist.
 * `get_idd(2022)` works. INEP serves that edition as a RAR archive under
   a `.zip` name, and the download check rejected it as "not a valid ZIP
   archive". Archives are now identified by their signature (ZIP, 7z or

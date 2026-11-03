@@ -4,10 +4,15 @@
 \alias{get_enade}
 \title{Get ENADE (Exame Nacional de Desempenho dos Estudantes) data}
 \usage{
-get_enade(year, n_max = Inf, keep_zip = TRUE, quiet = FALSE)
+get_enade(year, arquivo = NULL, n_max = Inf, keep_zip = TRUE, quiet = FALSE)
 }
 \arguments{
-\item{year}{The year of the exam (2004-2024).}
+\item{year}{The year of the exam (2004-2019, 2021-2023).}
+
+\item{arquivo}{The file to read: the number in its name
+(\code{microdados2023_arq3.txt} is \code{arquivo = 3}). Default \code{NULL} reads
+file 1 (course and institution identifiers) and warns that the
+edition is split.}
 
 \item{n_max}{Maximum number of rows to read. Default is \code{Inf} (all rows).
 Consider using a smaller value for exploration.}
@@ -17,46 +22,63 @@ Consider using a smaller value for exploration.}
 \item{quiet}{Logical. If \code{TRUE}, suppresses progress messages.}
 }
 \value{
-A tibble with ENADE microdata in tidy format.
+A tibble with the microdata of one ENADE file.
 }
 \description{
 Downloads and processes microdata from ENADE, the Brazilian National
 Student Performance Exam. ENADE evaluates the performance of
 undergraduate students in higher education.
+
+Every edition is published as several files (\code{arq1}, \code{arq2}, ...), each
+with one group of variables. \strong{The files cannot be joined student by
+student}: to comply with the LGPD, INEP sorts each file by different
+variables, so the first row of one file is not the same student as the
+first row of another. \code{get_enade()} therefore reads one file per call;
+use \code{\link[=list_enade_files]{list_enade_files()}} to see which variables each file holds.
 }
 \details{
 ENADE is conducted annually by INEP and evaluates undergraduate students
 nearing the end of their programs. Each year, a different set of course
 areas is assessed on a rotating cycle (typically every 3 years per area).
 
-The microdata includes:
-\itemize{
-\item Student performance scores (general and specific knowledge)
-\item Socioeconomic questionnaire responses
-\item Course and institution identifiers
-}
+Every file carries \code{nu_ano} and \code{co_curso}, so files can be combined at
+the course level (for example, averages by \code{co_curso}), as INEP's user
+manual recommends. Combining them row by row produces records that mix
+different students; up to educabR 1.2.0, \code{get_enade()} did exactly that.
+Student-level linkage is only available through INEP's protected data
+service (Sedap).
 
 \strong{Important notes:}
 \itemize{
-\item ENADE files can be large (several hundred MB for recent years).
 \item Use \code{n_max} to read a sample first for exploration.
 \item Column names are standardized to lowercase with underscores.
 \item Not all course areas are assessed every year due to the rotating cycle.
+\item The numbering of files can skip numbers (2013 has no \code{arq3}).
 }
 }
 \section{Data dictionary}{
 
-For detailed information about variables, see INEP's documentation:
+Each edition ships a dictionary of files and variables
+(\verb{Dicionario_arquivos_variaveis_microdados_Enade_<year>.xlsx}) in the
+downloaded archive. See also INEP's documentation:
 \url{https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/enade}
 }
 
 \examples{
 \dontrun{
-# get ENADE data for 2023
-enade <- get_enade(2023, n_max = 10000)
+# which variables are in which file?
+list_enade_files(2023)
 
-# get full dataset for 2021
-enade_2021 <- get_enade(2021)
+# read one file
+arq3 <- get_enade(2023, arquivo = 3)
+
+# combine files at the course level (co_curso), never row by row
+scores <- get_enade(2023, arquivo = 3)
+by_course <- aggregate(nt_ger ~ co_curso, data = scores, FUN = mean)
 }
+}
+\seealso{
+Other ENADE functions:
+\code{\link[=list_enade_files]{list_enade_files()}}
 }
 \concept{ENADE functions}

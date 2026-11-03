@@ -3,12 +3,12 @@
 
 # hardcoded URL map — INEP uses inconsistent naming for ENADE files
 enade_urls <- c(
-  "2004" = "https://download.inep.gov.br/microdados/microdados_enade_2004.zip",
-  "2005" = "https://download.inep.gov.br/microdados/microdados_enade_2005.zip",
-  "2006" = "https://download.inep.gov.br/microdados/microdados_enade_2006.zip",
-  "2007" = "https://download.inep.gov.br/microdados/microdados_enade_2007.zip",
-  "2008" = "https://download.inep.gov.br/microdados/microdados_enade_2008.zip",
-  "2009" = "https://download.inep.gov.br/microdados/microdados_enade_2009.zip",
+  "2004" = "https://download.inep.gov.br/microdados/microdados_enade_2004_LGPD.zip",
+  "2005" = "https://download.inep.gov.br/microdados/microdados_enade_2005_LGPD.zip",
+  "2006" = "https://download.inep.gov.br/microdados/microdados_enade_2006_LGPD.zip",
+  "2007" = "https://download.inep.gov.br/microdados/microdados_enade_2007_LGPD.zip",
+  "2008" = "https://download.inep.gov.br/microdados/microdados_enade_2008_LGPD.zip",
+  "2009" = "https://download.inep.gov.br/microdados/microdados_enade_2009_LGPD.zip",
   "2010" = "https://download.inep.gov.br/microdados/microdados_enade_2010.zip",
   "2011" = "https://download.inep.gov.br/microdados/microdados_enade_2011.zip",
   "2012" = "https://download.inep.gov.br/microdados/microdados_enade_2012_LGPD.zip",
@@ -31,34 +31,48 @@ enade_urls <- c(
 #' Student Performance Exam. ENADE evaluates the performance of
 #' undergraduate students in higher education.
 #'
-#' @param year The year of the exam (2004-2024).
+#' Every edition is published as several files (`arq1`, `arq2`, ...), each
+#' with one group of variables. **The files cannot be joined student by
+#' student**: to comply with the LGPD, INEP sorts each file by different
+#' variables, so the first row of one file is not the same student as the
+#' first row of another. `get_enade()` therefore reads one file per call;
+#' use [list_enade_files()] to see which variables each file holds.
+#'
+#' @param year The year of the exam (2004-2019, 2021-2023).
+#' @param arquivo The file to read: the number in its name
+#'   (`microdados2023_arq3.txt` is `arquivo = 3`). Default `NULL` reads
+#'   file 1 (course and institution identifiers) and warns that the
+#'   edition is split.
 #' @param n_max Maximum number of rows to read. Default is `Inf` (all rows).
 #'   Consider using a smaller value for exploration.
 #' @param keep_zip Logical. If `TRUE`, keeps the downloaded ZIP file in cache.
 #' @param quiet Logical. If `TRUE`, suppresses progress messages.
 #'
-#' @return A tibble with ENADE microdata in tidy format.
+#' @return A tibble with the microdata of one ENADE file.
 #'
 #' @details
 #' ENADE is conducted annually by INEP and evaluates undergraduate students
 #' nearing the end of their programs. Each year, a different set of course
 #' areas is assessed on a rotating cycle (typically every 3 years per area).
 #'
-#' The microdata includes:
-#'
-#' - Student performance scores (general and specific knowledge)
-#' - Socioeconomic questionnaire responses
-#' - Course and institution identifiers
+#' Every file carries `nu_ano` and `co_curso`, so files can be combined at
+#' the course level (for example, averages by `co_curso`), as INEP's user
+#' manual recommends. Combining them row by row produces records that mix
+#' different students; up to educabR 1.2.0, `get_enade()` did exactly that.
+#' Student-level linkage is only available through INEP's protected data
+#' service (Sedap).
 #'
 #' **Important notes:**
 #'
-#' - ENADE files can be large (several hundred MB for recent years).
 #' - Use `n_max` to read a sample first for exploration.
 #' - Column names are standardized to lowercase with underscores.
 #' - Not all course areas are assessed every year due to the rotating cycle.
+#' - The numbering of files can skip numbers (2013 has no `arq3`).
 #'
 #' @section Data dictionary:
-#' For detailed information about variables, see INEP's documentation:
+#' Each edition ships a dictionary of files and variables
+#' (`Dicionario_arquivos_variaveis_microdados_Enade_<year>.xlsx`) in the
+#' downloaded archive. See also INEP's documentation:
 #' \url{https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/enade}
 #'
 #' @family ENADE functions
@@ -66,92 +80,73 @@ enade_urls <- c(
 #'
 #' @examples
 #' \dontrun{
-#' # get ENADE data for 2023
-#' enade <- get_enade(2023, n_max = 10000)
+#' # which variables are in which file?
+#' list_enade_files(2023)
 #'
-#' # get full dataset for 2021
-#' enade_2021 <- get_enade(2021)
+#' # read one file
+#' arq3 <- get_enade(2023, arquivo = 3)
+#'
+#' # combine files at the course level (co_curso), never row by row
+#' scores <- get_enade(2023, arquivo = 3)
+#' by_course <- aggregate(nt_ger ~ co_curso, data = scores, FUN = mean)
 #' }
-get_enade <- function(year, n_max = Inf, keep_zip = TRUE, quiet = FALSE) {
+get_enade <- function(
+  year,
+  arquivo = NULL,
+  n_max = Inf,
+  keep_zip = TRUE,
+  quiet = FALSE
+) {
   # validate arguments
   validate_year(year, "enade")
-
-  # get url from map (or build for unknown years)
-  url <- enade_urls[as.character(year)]
-  if (is.na(url)) {
-    url <- build_inep_url("enade", year)
-  }
-  url <- unname(url)
-
-  # file paths — use actual filename from URL
-  archive_filename <- basename(url)
-  archive_path <- cache_path("enade", archive_filename)
-
-  # download if not cached
-  if (!is_cached("enade", archive_filename)) {
-    if (!quiet) {
-      cli::cli_alert_info("downloading ENADE {.val {year}}...")
-    }
-    download_inep_file(url, archive_path, quiet = quiet)
-  } else if (!quiet) {
-    cli::cli_alert_success("using cached file")
+  if (
+    !is.null(arquivo) &&
+      (length(arquivo) != 1L || !is.numeric(arquivo) || is.na(arquivo))
+  ) {
+    cli::cli_abort(c(
+      "{.arg arquivo} must be a single file number",
+      "i" = "see the files of an edition with {.code list_enade_files({year})}"
+    ))
   }
 
-  # extract files
-  exdir_name <- tools::file_path_sans_ext(archive_filename)
-  exdir <- cache_path("enade", exdir_name)
-
-  if (!dir.exists(exdir) || length(list.files(exdir, recursive = TRUE)) == 0) {
-    extract_archive(archive_path, exdir, quiet = quiet)
-  }
-
-  # clean up archive if requested
-  if (!keep_zip && file.exists(archive_path)) {
-    unlink(archive_path)
-  }
-
-  # find data files (all split parts)
+  exdir <- enade_prepare(year, keep_zip = keep_zip, quiet = quiet)
   data_files <- find_enade_files(exdir, year)
+  numbers <- enade_file_number(data_files)
+
+  if (is.null(arquivo)) {
+    arquivo <- 1L
+    if (length(data_files) > 1L) {
+      cli::cli_warn(
+        c(
+          "ENADE {.val {year}} is split into {.val {length(data_files)}} files that cannot be joined by student; reading {.code arquivo = 1}",
+          "i" = "see which variables each file holds with {.code list_enade_files({year})}",
+          "i" = "then read one with {.code get_enade({year}, arquivo = n)}"
+        ),
+        .frequency = "regularly",
+        .frequency_id = "educabR_enade_arquivo"
+      )
+    }
+  }
+
+  if (!arquivo %in% numbers) {
+    cli::cli_abort(c(
+      "ENADE {.val {year}} has no file {.val {arquivo}}",
+      "i" = "available files: {.val {numbers}}",
+      "i" = "see their variables with {.code list_enade_files({year})}"
+    ))
+  }
+
+  data_file <- data_files[match(arquivo, numbers)]
 
   if (!quiet) {
     cli::cli_alert_info(
-      "reading ENADE data ({.val {length(data_files)}} file(s))..."
+      "reading ENADE {.val {year}} file {.val {basename(data_file)}}..."
     )
-    if (is.infinite(n_max)) {
-      cli::cli_alert_warning(
-        "reading full file. use {.arg n_max} to limit rows if needed."
-      )
-    }
   }
 
-  # read first file (contains key columns)
-  delim <- detect_delim(data_files[1])
-  df <- read_inep_file(
-    data_files[1],
-    delim = delim,
-    n_max = n_max,
-    quiet = quiet
-  )
+  delim <- detect_delim(data_file)
+  df <- read_inep_file(data_file, delim = delim, n_max = n_max, quiet = quiet)
   df <- standardize_names(df)
-
-  # read and join remaining split files (suppress per-file messages)
-  if (length(data_files) > 1) {
-    key_cols <- names(df)
-
-    for (f in data_files[-1]) {
-      delim_f <- detect_delim(f)
-      part <- suppressMessages(
-        read_inep_file(f, delim = delim_f, n_max = n_max, quiet = TRUE)
-      )
-      part <- standardize_names(part)
-
-      # drop key columns that are duplicated across files
-      new_cols <- setdiff(names(part), key_cols)
-      if (length(new_cols) > 0) {
-        df <- dplyr::bind_cols(df, part[, new_cols, drop = FALSE])
-      }
-    }
-  }
 
   # replace dash placeholders with NA
   df <- clean_dash_values(df)
@@ -168,13 +163,122 @@ get_enade <- function(year, n_max = Inf, keep_zip = TRUE, quiet = FALSE) {
   df
 }
 
+#' List the files of an ENADE edition
+#'
+#' @description
+#' Downloads (if needed) the microdata of an ENADE edition and lists its
+#' data files with the variables each one holds. Use the `arquivo` number
+#' with [get_enade()].
+#'
+#' @param year The year of the exam.
+#' @param quiet Logical. If `TRUE`, suppresses progress messages.
+#'
+#' @return A tibble with one row per file: `arquivo` (number to pass to
+#'   [get_enade()]), `nome` (file name), `n_variaveis` and `variaveis`
+#'   (the variables other than `nu_ano` and `co_curso`, comma-separated).
+#'
+#' @family ENADE functions
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' files <- list_enade_files(2023)
+#'
+#' # which file has the overall score?
+#' files[grepl("nt_ger", files$variaveis), ]
+#' }
+list_enade_files <- function(year, quiet = FALSE) {
+  validate_year(year, "enade")
+  exdir <- enade_prepare(year, keep_zip = TRUE, quiet = quiet)
+  data_files <- find_enade_files(exdir, year)
+
+  vars <- lapply(data_files, function(f) {
+    header <- suppressMessages(readr::read_delim(
+      f,
+      delim = detect_delim(f),
+      n_max = 0,
+      locale = readr::locale(encoding = detect_encoding(f)),
+      show_col_types = FALSE
+    ))
+    setdiff(names(standardize_names(header)), c("nu_ano", "co_curso"))
+  })
+
+  dplyr::tibble(
+    arquivo = enade_file_number(data_files),
+    nome = basename(data_files),
+    n_variaveis = lengths(vars),
+    variaveis = vapply(vars, paste, character(1), collapse = ", ")
+  )
+}
+
+#' Download and extract an ENADE edition
+#'
+#' @description
+#' Internal function shared by [get_enade()] and [list_enade_files()].
+#'
+#' @param year The year.
+#' @param keep_zip Logical. Keep the downloaded archive.
+#' @param quiet Logical. Suppress messages.
+#'
+#' @return The extraction directory.
+#'
+#' @keywords internal
+enade_prepare <- function(year, keep_zip = TRUE, quiet = FALSE) {
+  # get url from map (or build for unknown years)
+  url <- enade_urls[as.character(year)]
+  if (is.na(url)) {
+    url <- build_inep_url("enade", year)
+  }
+  url <- unname(url)
+
+  archive_filename <- basename(url)
+  archive_path <- cache_path("enade", archive_filename)
+
+  if (!is_cached("enade", archive_filename)) {
+    if (!quiet) {
+      cli::cli_alert_info("downloading ENADE {.val {year}}...")
+    }
+    download_inep_file(url, archive_path, quiet = quiet)
+  } else if (!quiet) {
+    cli::cli_alert_success("using cached file")
+  }
+
+  exdir <- cache_path("enade", tools::file_path_sans_ext(archive_filename))
+  if (!dir.exists(exdir) || length(list.files(exdir, recursive = TRUE)) == 0) {
+    extract_archive(archive_path, exdir, quiet = quiet)
+  }
+
+  if (!keep_zip && file.exists(archive_path)) {
+    unlink(archive_path)
+  }
+
+  exdir
+}
+
+#' Number of an ENADE data file
+#'
+#' @description
+#' Internal function. `microdados2023_arq12.txt` is file 12; a file without
+#' an `arq` number counts as file 1.
+#'
+#' @param files File paths.
+#'
+#' @return An integer vector.
+#'
+#' @keywords internal
+enade_file_number <- function(files) {
+  n <- as.integer(str_extract(basename(files), "(?<=arq)[0-9]+"))
+  n[is.na(n)] <- 1L
+  n
+}
+
 #' Find ENADE data files
 #'
 #' @description
 #' Internal function to locate all ENADE data files within the extracted
 #' directory. INEP distributes ENADE microdata split across multiple files
-#' (`arq1.txt`, `arq2.txt`, ...) that share key columns (`NU_ANO`,
-#' `CO_CURSO`) and contain different variable groups.
+#' (`arq1.txt`, `arq2.txt`, ...) that share the columns `NU_ANO` and
+#' `CO_CURSO` but are sorted differently (they cannot be joined by row).
 #'
 #' @param exdir The extraction directory.
 #' @param year The year.

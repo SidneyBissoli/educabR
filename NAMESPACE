@@ -24,6 +24,7 @@ export(get_saeb)
 export(list_cache)
 export(list_censo_files)
 export(list_censo_superior_files)
+export(list_enade_files)
 export(list_ideb_available)
 export(set_cache_dir)
 importFrom(cli,
