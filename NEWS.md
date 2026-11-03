@@ -36,6 +36,19 @@ fixes below.
 
 ## Bug fixes
 
+* CSV columns that are empty in their first 1,000 rows no longer lose
+  their later values. readr guessed those columns as logical and turned
+  every later value into `NA`, with only a generic "parsing issues"
+  warning: `get_censo_escolar()` lost values in 1995 (234 of `vem2206`),
+  1997 (567 of `vpe626`), 1998 and 1999, among others. Columns with
+  parsing problems are now re-read and typed from all their values. This
+  applies to every function that reads INEP CSV files.
+* latin1 files whose first accent comes late are no longer read as
+  UTF-8. The encoding was guessed from the first 10 KB; in
+  `get_censo_escolar(2000)` the first accent is 238 MB into the file, and
+  34,882 values of `uf` came out with the accented letter replaced by
+  "�" ("S?o Paulo"). The encoding is now decided on the first part
+  of the file that holds a non-ASCII byte.
 * `get_fundeb_distribution()` now returns every FUNDEB source. It read
   only the tax-share sheets and left out the Complementacao da Uniao
   (`"COUN"`), the Lei Kandir compensation (`"LC8796"`), the adjustment

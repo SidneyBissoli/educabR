@@ -4,7 +4,7 @@
 \alias{detect_encoding}
 \title{Detect file encoding}
 \usage{
-detect_encoding(file)
+detect_encoding(file, chunk_size = 4 * 1024^2)
 }
 \arguments{
 \item{file}{Path to the file.}

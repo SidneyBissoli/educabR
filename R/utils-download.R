@@ -897,21 +897,40 @@ detect_delim <- function(file) {
 #' @return A character string with the encoding name.
 #'
 #' @keywords internal
-detect_encoding <- function(file) {
-  # read raw bytes from the first chunk of the file
-  raw_bytes <- readBin(file, "raw", n = 10000)
-
+detect_encoding <- function(file, chunk_size = 4 * 1024^2) {
+  # Decide on the first chunk that holds a non-ASCII byte. A fixed sample
+  # of the first bytes is not enough: in Censo Escolar 2000 (latin1) the
+  # first accent is 238 MB into a 318 MB file, so a 10 KB sample said
+  # "UTF-8" and 34,882 values of `uf` came out as "S�o Paulo".
+  # A file with no non-ASCII byte at all reads the same either way.
   # validUTF8() behaves the same on every platform; the former
   # iconv(from = "UTF-8", to = "UTF-8") check returned NA for invalid
-  # bytes on Windows and Linux but not on macOS, whose iconv passes them
-  # through, so latin1 files were read as UTF-8 there.
-  # When the chunk stops before the end of the file it may cut a multibyte
-  # character: drop an incomplete trailing sequence before checking.
-  if (file.size(file) > length(raw_bytes)) {
-    raw_bytes <- drop_incomplete_utf8_tail(raw_bytes)
-  }
+  # bytes on Windows and Linux but not on macOS.
+  con <- file(file, "rb")
+  on.exit(close(con), add = TRUE)
+  carry <- raw(0)
 
-  if (validUTF8(rawToChar(raw_bytes))) "UTF-8" else "latin1"
+  repeat {
+    bytes <- readBin(con, "raw", n = chunk_size)
+    if (length(bytes) == 0L) {
+      return("UTF-8")
+    }
+    bytes <- c(carry, bytes)
+    carry <- raw(0)
+    if (!any(bytes > as.raw(0x7F))) {
+      next
+    }
+    # a chunk that stops before the end of the file may cut a multibyte
+    # character: keep the incomplete tail for the next chunk
+    full <- length(bytes) >= chunk_size
+    if (full) {
+      kept <- drop_incomplete_utf8_tail(bytes)
+      carry <- bytes[seq_along(bytes) > length(kept)]
+      bytes <- kept
+    }
+    bytes <- bytes[bytes != as.raw(0)]
+    return(if (validUTF8(rawToChar(bytes))) "UTF-8" else "latin1")
+  }
 }
 
 #' Drop an incomplete UTF-8 sequence at the end of a raw vector
@@ -1067,16 +1086,77 @@ read_inep_file <- function(
     ))
   }
 
-  # read with readr
-  df <- readr::read_delim(
+  # read with readr; its "parsing issues" warning is muffled because the
+  # columns with problems are re-read just below
+  df <- withCallingHandlers(
+    readr::read_delim(
+      file,
+      delim = delim,
+      locale = readr::locale(encoding = encoding),
+      show_col_types = FALSE,
+      n_max = n_max,
+      col_types = col_spec,
+      progress = TRUE
+    ),
+    warning = function(w) {
+      if (grepl("parsing issues", conditionMessage(w), fixed = TRUE)) {
+        invokeRestart("muffleWarning")
+      }
+    }
+  )
+
+  df <- reread_problem_columns(df, file, delim, encoding, n_max)
+
+  normalize_utf8_nfc(df)
+}
+
+#' Re-read columns that readr failed to parse
+#'
+#' @description
+#' Internal helper for [read_inep_file()]. readr guesses each column type
+#' from the first 1,000 rows; a column that is empty there is read as
+#' logical and every later value becomes `NA` (Censo Escolar 1995: 234
+#' values of `VEM2206`, 1997: 567 of `VPE626`). Columns with parsing
+#' problems are read again as text and their type is guessed from all
+#' values. Columns without problems are untouched.
+#'
+#' @param df The tibble returned by `readr::read_delim()`.
+#' @param file,delim,encoding,n_max The arguments of that read.
+#'
+#' @return The tibble with those columns replaced.
+#'
+#' @keywords internal
+reread_problem_columns <- function(df, file, delim, encoding, n_max = Inf) {
+  probs <- readr::problems(df)
+  if (nrow(probs) == 0L) {
+    return(df)
+  }
+
+  bad <- unique(names(df)[unique(probs$col)])
+  bad <- bad[!is.na(bad) & nzchar(bad)]
+  if (length(bad) == 0L) {
+    return(df)
+  }
+
+  fixed <- readr::read_delim(
     file,
     delim = delim,
     locale = readr::locale(encoding = encoding),
-    show_col_types = FALSE,
+    col_select = dplyr::all_of(bad),
+    col_types = readr::cols(.default = readr::col_character()),
     n_max = n_max,
-    col_types = col_spec,
-    progress = TRUE
+    show_col_types = FALSE,
+    progress = FALSE
+  )
+  fixed <- readr::type_convert(
+    fixed,
+    col_types = readr::cols(.default = readr::col_guess()),
+    locale = readr::locale(encoding = encoding),
+    guess_integer = FALSE
   )
 
-  normalize_utf8_nfc(df)
+  for (col in bad) {
+    df[[col]] <- fixed[[col]]
+  }
+  df
 }
