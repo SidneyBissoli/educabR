@@ -135,3 +135,19 @@ test_that("get_saeb rejects invalid level via match.arg", {
     "arg"
   )
 })
+
+test_that("type = 'escola' never returns the municipal secretary file", {
+  # 2021 educacao infantil has only TS_EDUCACAO_INFANTIL and
+  # TS_SECRETARIO_MUNICIPAL; "escola" used to fall back on the latter
+  dir <- withr::local_tempdir()
+  file.create(file.path(
+    dir,
+    c("TS_EDUCACAO_INFANTIL_2021.csv", "TS_SECRETARIO_MUNICIPAL_2021.csv")
+  ))
+
+  expect_error(educabR:::find_saeb_file(dir, 2021, "escola"), "no SAEB")
+  expect_match(
+    educabR:::find_saeb_file(dir, 2021, "secretario"),
+    "TS_SECRETARIO_MUNICIPAL_2021\\.csv$"
+  )
+})

@@ -2,7 +2,7 @@
 % Please edit documentation in R/get-censo-escolar.R
 \name{parse_sas_dates}
 \alias{parse_sas_dates}
-\title{Parse SAS datetime columns to Date}
+\title{Parse date columns (dt_\emph{, dh_}) to Date}
 \usage{
 parse_sas_dates(df)
 }
@@ -13,7 +13,12 @@ parse_sas_dates(df)
 The data frame with date columns converted.
 }
 \description{
-Internal function to convert columns with SAS datetime format
-(e.g. "12FEB2024:00:00:00") to Date objects.
+Internal function to convert text date columns to Date objects. INEP
+and CAPES use several formats: SAS datetime ("12FEB2024:00:00:00"),
+"12/12/2013 00:00:00", "12/12/2013" and ISO "2013-12-12". For each
+column the format that reads every non-empty value is used. If no
+format reads them all, the column is kept as text: converting with a
+single fixed format turned every value of the CAPES catalogo 2013-2016
+dates into \code{NA}.
 }
 \keyword{internal}

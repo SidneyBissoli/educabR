@@ -12,8 +12,11 @@
 #' @param type Type of data to load. Options:
 #'   - `"ies"`: Higher education institutions (default)
 #'   - `"cursos"`: Undergraduate courses
-#'   - `"alunos"`: Student enrollment
-#'   - `"docentes"`: Faculty/professors
+#'   - `"alunos"`, `"docentes"`: `r lifecycle::badge("deprecated")` INEP no
+#'     longer publishes student or faculty microdata (withdrawn under the
+#'     LGPD); the archive of every year (2009-2024) holds only the IES and
+#'     course files. These options now stop with an explanation. Course-level
+#'     counts of students and faculty are in `type = "cursos"`.
 #' @param uf Optional. Filter by state (UF code or abbreviation).
 #' @param n_max Maximum number of rows to read. Default is `Inf` (all rows).
 #'   Consider using a smaller value for exploration.
@@ -77,6 +80,15 @@ get_censo_superior <- function(
   # validate arguments
   validate_year(year, "censo_superior")
   type <- match.arg(type)
+
+  # INEP's archive has only IES and course files (checked for 2009-2024)
+  if (type %in% c("alunos", "docentes")) {
+    cli::cli_abort(c(
+      "INEP no longer publishes {.val {type}} microdata of the Higher Education Census",
+      "i" = "the files were withdrawn under the LGPD; every year's archive holds only the IES and course files",
+      "i" = "course-level counts are in {.code get_censo_superior({year}, type = \"cursos\")}"
+    ))
+  }
 
   # build url and file paths
   url <- build_inep_url("censo_superior", year)

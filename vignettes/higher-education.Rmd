@@ -113,31 +113,38 @@ ENADE (Exame Nacional de Desempenho dos Estudantes) is an annual exam assessing
 undergraduate student performance. It follows a rotating cycle where different
 course areas are evaluated each year.
 
-### Downloading ENADE data
+### One file per call
 
-```{r enade-download}
-# Download ENADE microdata
-enade_2023 <- get_enade(year = 2023)
+INEP publishes each ENADE edition as several files (`arq1`, `arq2`, ...), each
+with one group of variables. To comply with the LGPD, each file is sorted by
+different variables, so **the files cannot be joined student by student**: the
+first row of one file is not the same student as the first row of another.
+`get_enade()` reads one file per call, and `list_enade_files()` shows which
+variables each file holds.
 
-# Sample for exploration
-enade_sample <- get_enade(year = 2023, n_max = 5000)
+```{r enade-files}
+# which file holds which variables?
+files <- list_enade_files(2023)
+files[grepl("nt_ger", files$variaveis), ]
+
+# scores are in file 3 in 2023
+scores <- get_enade(2023, arquivo = 3)
+
+# sample for exploration
+scores_sample <- get_enade(2023, arquivo = 3, n_max = 5000)
 ```
+
+Files can be combined at the course level (`co_curso`), for example by
+averaging scores per course, as INEP's user manual recommends.
 
 ### Available years
 
-Data is available from 2004 to 2024.
-
-### Data structure
-
-```{r enade-structure}
-enade <- get_enade(2023, n_max = 5000)
-glimpse(enade)
-```
+Data is available for 2004-2019 and 2021-2023 (there was no ENADE in 2020).
 
 ### Example analysis: Score distribution
 
 ```{r enade-analysis}
-enade <- get_enade(2023)
+enade <- get_enade(2023, arquivo = 3)
 
 enade |>
   filter(!is.na(nt_ger)) |>
@@ -183,6 +190,30 @@ idd <- get_idd(2023)
 
 glimpse(idd)
 ```
+
+---
+
+## Conceito Enade
+
+The Conceito Enade is the course-level indicator derived from ENADE: the
+performance of graduating students, on a continuous scale and in five levels
+(faixas 1 to 5). `get_enade()` returns the student microdata;
+`get_conceito_enade()` returns the official indicator, one row per course.
+
+```{r conceito-enade-download}
+# Conceito Enade 2023
+ce_2023 <- get_conceito_enade(2023)
+
+# 2025 is published as two files with their own methodology
+ce_lic <- get_conceito_enade(2025, type = "licenciaturas")
+ce_med <- get_conceito_enade(2025, type = "medicina")
+```
+
+Up to 2014 a row is a course *unit* (all courses of the same institution,
+municipality and area); from 2015 on, a row is a course with its e-MEC code
+(`codigo_do_curso`). For 2007-2011, INEP publishes the Conceito Enade inside
+the Enade/CPC table, which `get_conceito_enade()` returns as is. Column names
+change across editions, so map them to a common set before stacking years.
 
 ---
 

@@ -23,6 +23,42 @@ capes_type_slugs <- c(
   "catalogo" = "catalogo-de-teses-e-dissertacoes-brasil"
 )
 
+# CKAN packages whose slug does not follow "<range>-<type slug>". Checked
+# on dadosabertos.capes.gov.br (2026-11): without these, every year below
+# failed with "could not find package" although CAPES publishes it.
+# Note the "stricto-census" typo in CAPES's own programas 2013 slug.
+capes_package_slugs <- c(
+  "programas 2013-a-2016" = "programas-da-pos-graduacao-stricto-census-do-brasil-de-2013-a-2015",
+  "discentes 2013-a-2016" = "discentes-da-pos-graduacao-stricto-sensu-do-brasil-2013-a-2016",
+  "discentes 2017-a-2020" = "discentes-da-pos-graduacao-stricto-sensu-do-brasil-2017-a-2019",
+  "docentes 2013-a-2016" = "docentes-da-pos-graduacao-stricto-sensu-do-brasil-2013-a-2016",
+  "cursos 2013-a-2016" = "cursos-da-pos-graduacao-stricto-sensu-do-brasil-de-2013-a-2015",
+  "catalogo 2013-a-2016" = "catalogo-de-teses-e-dissertacoes-de-2013-a-2016",
+  "catalogo 2017-a-2020" = "2017-2020-catalogo-de-teses-e-dissertacoes-da-capes"
+)
+
+#' Reference year of a CAPES resource
+#'
+#' @description
+#' Internal function. CAPES file names carry the reference year followed
+#' by the publication date (`br-capes-colsucup-prog-2017-2021-11-10.csv`)
+#' or, in the 2013-2016 packages, a range and a `_YYYY` suffix
+#' (`br-capes-btd-2013a2016-2017-12-01_2014.csv`). Matching on "contains
+#' the year" picked the wrong file there (every 2013-2016 name contains
+#' "2016"), so the year is read from that structure.
+#'
+#' @param x Resource names or URLs.
+#'
+#' @return An integer vector (`NA` when no year is found).
+#'
+#' @keywords internal
+capes_resource_year <- function(x) {
+  x <- tools::file_path_sans_ext(basename(x))
+  suffix <- str_extract(x, "(?<=_)\\d{4}$")
+  first <- str_extract(x, "(?<![0-9])(19|20)\\d{2}(?![0-9])")
+  as.integer(ifelse(is.na(suffix), first, suffix))
+}
+
 #' Get CAPES graduate education data
 #'
 #' @description
@@ -180,7 +216,12 @@ discover_capes_url <- function(year, type) {
 
   # build the CKAN package slug
   type_slug <- capes_type_slugs[[type]]
-  package_slug <- str_c(range_prefix, "-", type_slug)
+  override <- capes_package_slugs[str_c(type, " ", range_prefix)]
+  package_slug <- if (!is.na(override)) {
+    unname(override)
+  } else {
+    str_c(range_prefix, "-", type_slug)
+  }
 
   # query CKAN API for package details
   api_url <- str_c(capes_api_url(), "/package_show?id=", package_slug)
@@ -189,7 +230,7 @@ discover_capes_url <- function(year, type) {
     {
       req <- httr2::request(api_url) |>
         httr2::req_timeout(seconds = 300) |>
-        httr2::req_retry(max_tries = 3, backoff = ~15)
+        httr2::req_retry(max_tries = 3, backoff = ~15, retry_on_failure = TRUE)
 
       resp <- httr2::req_perform(req)
       body <- httr2::resp_body_json(resp)
@@ -200,25 +241,14 @@ discover_capes_url <- function(year, type) {
         )
       }
 
-      # find the CSV resource for the requested year
+      # find the CSV resource whose reference year is the requested one
       resources <- body$result$resources
-      year_str <- as.character(year)
 
       for (res in resources) {
         is_csv <- tolower(res$format %||% "") == "csv"
-        name_matches <- grepl(year_str, res$name %||% "", fixed = TRUE)
+        res_year <- capes_resource_year(res$url %||% res$name %||% "")
 
-        if (is_csv && name_matches) {
-          return(res$url)
-        }
-      }
-
-      # fallback: try matching by URL filename
-      for (res in resources) {
-        is_csv <- tolower(res$format %||% "") == "csv"
-        url_matches <- grepl(str_c("-", year_str, "-"), res$url %||% "")
-
-        if (is_csv && url_matches) {
+        if (is_csv && isTRUE(res_year == year)) {
           return(res$url)
         }
       }

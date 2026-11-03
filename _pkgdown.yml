@@ -57,6 +57,8 @@ reference:
     desc: "Functions for ENADE data"
     contents:
       - get_enade
+      - list_enade_files
+      - get_conceito_enade
 
   - title: "IDD"
     desc: "Functions for IDD data"

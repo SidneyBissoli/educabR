@@ -788,6 +788,13 @@ read_ideb_excel <- function(file, sheet = NULL, metric = NULL, year = NULL) {
     n_max = 1,
     col_types = "text"
   ))
+  # INEP sometimes repeats a code with the wrong year (regioes_ufs 2025,
+  # anos iniciais: the 2025 "Indicador de Rendimento" is coded
+  # VL_INDICADOR_REND_2023); take the year from the block header instead
+  fixed <- ideb_resolve_codes(file, sheet, names(header))
+  if (!identical(fixed, names(header))) {
+    names(header) <- fixed
+  }
   keep <- ideb_keep_cols(names(header), metric = metric, year = year)
 
   # safety: if patterns matched nothing, fall back to reading everything
@@ -810,7 +817,8 @@ read_ideb_excel <- function(file, sheet = NULL, metric = NULL, year = NULL) {
     suppressMessages(readxl::read_excel(
       file,
       sheet = sheet,
-      skip = 9,
+      skip = 10,
+      col_names = names(header),
       col_types = col_types,
       na = na_tokens
     )),
@@ -825,7 +833,86 @@ read_ideb_excel <- function(file, sheet = NULL, metric = NULL, year = NULL) {
     }
   )
 
+  # the full-sheet fallback reads names from row 10 again
+  if (ncol(out) == length(names(header)) && !all(keep)) {
+    names(out) <- names(header)
+  }
+
   normalize_utf8_nfc(out)
+}
+
+#' Fix IDEB column codes that INEP repeated with the wrong year
+#'
+#' @description
+#' Internal helper for [read_ideb_excel()]. Row 10 of an IDEB sheet holds
+#' the column codes (`VL_INDICADOR_REND_2023`); rows above it hold the
+#' block headers ("Taxa de Aprovacao - 2025"), merged over the columns of
+#' each edition. When a `VL_*` code appears more than once, the year of
+#' each copy is taken from its block header. Codes that are not repeated
+#' are returned unchanged.
+#'
+#' @param file Path to the Excel file.
+#' @param sheet Sheet name or position.
+#' @param col_names Column names as read from row 10 (readxl may have
+#'   appended `...N` to repeated names).
+#'
+#' @return A character vector of column names.
+#'
+#' @keywords internal
+ideb_resolve_codes <- function(file, sheet, col_names) {
+  base <- sub("\\.\\.\\.[0-9]+$", "", col_names)
+  dup <- grepl("^VL_", base, ignore.case = TRUE) &
+    base %in% base[duplicated(base)]
+  if (!any(dup)) {
+    return(col_names)
+  }
+
+  top <- suppressMessages(readxl::read_excel(
+    file,
+    sheet = sheet,
+    col_names = FALSE,
+    n_max = 9,
+    col_types = "text"
+  ))
+  n <- min(ncol(top), length(col_names))
+
+  # carry each header row forward over its merged cells
+  carried <- lapply(seq_len(nrow(top)), function(i) {
+    v <- unlist(top[i, seq_len(n)], use.names = FALSE)
+    for (j in seq_along(v)[-1]) {
+      if (is.na(v[j])) v[j] <- v[j - 1]
+    }
+    v
+  })
+
+  # year of each column: nearest header row (from the bottom) naming one;
+  # "20215" (2021 + footnote 5) reads as 2021
+  header_year <- vapply(
+    seq_len(n),
+    function(j) {
+      for (i in rev(seq_along(carried))) {
+        y <- str_extract(carried[[i]][j], "(?<![0-9])20[0-9]{2}")
+        if (!is.na(y)) return(y)
+      }
+      NA_character_
+    },
+    character(1)
+  )
+
+  fixed <- col_names
+  for (j in which(dup[seq_len(n)])) {
+    code_year <- str_extract(base[j], "20[0-9]{2}")
+    if (
+      !is.na(header_year[j]) && !is.na(code_year) && header_year[j] != code_year
+    ) {
+      fixed[j] <- sub(code_year, header_year[j], base[j], fixed = TRUE)
+    } else {
+      fixed[j] <- base[j]
+    }
+  }
+
+  # only accept the fix if it removes the repetition
+  if (anyDuplicated(fixed[dup])) col_names else fixed
 }
 
 #' Decide which IDEB columns to keep for a given metric/year

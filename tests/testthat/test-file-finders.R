@@ -631,11 +631,13 @@ test_that("find_saeb_file finds TS_EDUCACAO_INFANTIL pattern for aluno type", {
   expect_true(grepl("TS_EDUCACAO_INFANTIL_2021\\.csv$", result))
 })
 
-test_that("find_saeb_file finds TS_SECRETARIO_MUNICIPAL pattern for escola type", {
+test_that("find_saeb_file finds TS_SECRETARIO_MUNICIPAL only for secretario type", {
   tmp <- withr::local_tempdir()
   create_mock_file(tmp, "DADOS/TS_SECRETARIO_MUNICIPAL_2023.csv")
 
-  result <- educabR:::find_saeb_file(tmp, 2023, "escola")
+  # the secretary questionnaire is not the school file
+  expect_error(educabR:::find_saeb_file(tmp, 2023, "escola"), "no SAEB")
+  result <- educabR:::find_saeb_file(tmp, 2023, "secretario")
   expect_true(grepl("TS_SECRETARIO_MUNICIPAL_2023\\.csv$", result))
 })
 

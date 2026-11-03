@@ -17,7 +17,7 @@ A character vector of file paths, sorted by split number.
 \description{
 Internal function to locate all ENADE data files within the extracted
 directory. INEP distributes ENADE microdata split across multiple files
-(\code{arq1.txt}, \code{arq2.txt}, ...) that share key columns (\code{NU_ANO},
-\code{CO_CURSO}) and contain different variable groups.
+(\code{arq1.txt}, \code{arq2.txt}, ...) that share the columns \code{NU_ANO} and
+\code{CO_CURSO} but are sorted differently (they cannot be joined by row).
 }
 \keyword{internal}

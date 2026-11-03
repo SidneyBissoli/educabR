@@ -30,7 +30,7 @@ financiamento via FUNDEB.
   para a série histórica.
 - *"O que existe para o Censo da Educação Superior e o ENADE em R?"* —
   `get_censo_superior()`, `get_enade()` e os indicadores de qualidade
-  `get_cpc()`, `get_idd()` e `get_igc()`.
+  `get_conceito_enade()`, `get_cpc()`, `get_idd()` e `get_igc()`.
 - *"Quanto do FUNDEB foi para cada estado?"* — `get_fundeb_distribution()` e
   `get_fundeb_enrollment()`.
 - *"Quais programas de pós a CAPES avalia, e com que notas?"* — `get_capes()`.
@@ -132,7 +132,8 @@ remotes::install_github("SidneyBissoli/educabR")
 | Dataset | Função | Anos disponíveis |
 |---------|--------|------------------|
 | Censo da Educação Superior | `get_censo_superior()` | 2009-2024 |
-| ENADE - Exame Nacional de Desempenho dos Estudantes | `get_enade()` | 2004-2024 |
+| ENADE - Exame Nacional de Desempenho dos Estudantes | `get_enade()` | 2004-2019, 2021-2023 |
+| Conceito Enade - indicador do ENADE por curso | `get_conceito_enade()` | 2004-2019, 2021-2023, 2025 |
 | IDD - Indicador de Diferença entre os Desempenhos | `get_idd()` | 2014-2023 |
 | CPC - Conceito Preliminar de Curso | `get_cpc()` | 2007-2023 |
 | IGC - Índice Geral de Cursos | `get_igc()` | 2007-2023 |
@@ -233,8 +234,8 @@ censo_sp <- get_censo_escolar(year = 2023, uf = "SP")
 # Censo da Educação Superior - instituições
 ies <- get_censo_superior(2023, type = "ies")
 
-# Microdados do ENADE
-enade <- get_enade(2023, n_max = 10000)
+# Microdados do ENADE: um arquivo por chamada (o arquivo 3 tem as notas em 2023)
+enade <- get_enade(2023, arquivo = 3, n_max = 10000)
 
 # Programas de pós-graduação (CAPES)
 programas <- get_capes(2023, type = "programas")

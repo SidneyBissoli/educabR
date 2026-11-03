@@ -18,5 +18,13 @@ A character vector of extracted file paths.
 }
 \description{
 Internal function to extract ZIP files with progress indication.
+
+\code{utils::unzip()} is tried first. Its zlib backend cannot decode some
+entries INEP ships (Deflate64 compression, used for \code{RESULTADOS_2025.csv}
+in the ENEM 2025 archive) and skips them with only a "zip file is corrupt"
+warning, so the number of extracted files is compared with the archive's
+listing. When anything is missing, the archive is extracted again with an
+external tool (7-Zip, then PowerShell on Windows or \code{unzip} elsewhere),
+and an error is raised if the archive is still incomplete.
 }
 \keyword{internal}

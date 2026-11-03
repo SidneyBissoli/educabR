@@ -376,6 +376,44 @@ test_that("verify_download_integrity rejects .zip missing magic bytes", {
   expect_false(file.exists(f))
 })
 
+test_that("verify_download_integrity accepts a RAR served as .zip", {
+  # IDD 2022: INEP serves a RAR v5 archive under a .zip name
+  f <- tempfile(fileext = ".zip")
+  withr::defer(unlink(f))
+  writeBin(as.raw(c(0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x01, 0x00, 0x58)), f)
+
+  expect_silent(educabR:::verify_download_integrity(f))
+  expect_true(file.exists(f))
+})
+
+test_that("archive_format identifies ZIP, 7z and RAR by signature", {
+  fmt <- educabR:::archive_format
+  expect_equal(fmt(as.raw(c(0x50, 0x4B, 0x03, 0x04, 0, 0))), "zip")
+  expect_equal(fmt(as.raw(c(0x37, 0x7A, 0xBC, 0xAF, 0x27, 0x1C))), "7z")
+  expect_equal(fmt(as.raw(c(0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x00))), "rar")
+  expect_true(is.na(fmt(as.raw(c(0xDE, 0xAD, 0xBE, 0xEF, 0, 0)))))
+  expect_true(is.na(fmt(raw(0))))
+})
+
+test_that("extract_archive dispatches on the signature, not the extension", {
+  f <- tempfile(fileext = ".zip")
+  withr::defer(unlink(f))
+  writeBin(as.raw(c(0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x01, 0x00)), f)
+  used_7z <- FALSE
+
+  local_mocked_bindings(
+    extract_zip = function(...) stop("should not use unzip for a RAR file"),
+    find_7z = function() {
+      used_7z <<- TRUE
+      stop("stop after dispatch")
+    },
+    .package = "educabR"
+  )
+
+  expect_error(educabR:::extract_archive(f, tempfile()), "stop after dispatch")
+  expect_true(used_7z)
+})
+
 test_that("verify_download_integrity rejects empty file", {
   f <- tempfile(fileext = ".zip")
   withr::defer(unlink(f))
@@ -664,6 +702,34 @@ test_that("parse_sas_dates converts dt_ columns with SAS datetime format", {
   expect_s3_class(result$dt_criacao, "Date")
   expect_equal(result$dt_criacao[1], as.Date("2024-02-12"))
   expect_equal(result$dt_criacao[2], as.Date("2023-01-01"))
+})
+
+test_that("parse_sas_dates reads dd/mm/yyyy dates instead of erasing them", {
+  # CAPES catalogo 2013-2016: every date became NA with the SAS-only format
+  df <- data.frame(
+    dt_titulacao = c("12/12/2013 00:00:00", "18/02/2013 00:00:00", NA, ""),
+    dt_iso = c("2013-12-12", NA, NA, NA),
+    stringsAsFactors = FALSE
+  )
+
+  result <- educabR:::parse_sas_dates(df)
+
+  expect_equal(
+    result$dt_titulacao,
+    as.Date(c("2013-12-12", "2013-02-18", NA, NA))
+  )
+  expect_equal(result$dt_iso[1], as.Date("2013-12-12"))
+})
+
+test_that("parse_sas_dates keeps text when no format reads every value", {
+  df <- data.frame(
+    dt_mixed = c("12FEB2024:00:00:00", "sem data", "13/02/2024"),
+    stringsAsFactors = FALSE
+  )
+
+  result <- educabR:::parse_sas_dates(df)
+
+  expect_identical(result$dt_mixed, df$dt_mixed)
 })
 
 test_that("parse_sas_dates converts dh_ columns", {
@@ -995,4 +1061,16 @@ test_that("normalize_utf8_nfc preserves NA values in character columns", {
   expect_true(is.na(out$rede[2]))
   expect_equal(out$rede[1], "Pública")
   expect_equal(out$rede[3], "Federal")
+})
+
+test_that("parse_sas_dates treats INEP's '0' as a missing date", {
+  # Censo Escolar 2008-2021: dt_ano_letivo_inicio uses "0" for no date
+  df <- data.frame(
+    dt_ano_letivo_inicio = c("02FEB2015:00:00:00", "0", NA),
+    stringsAsFactors = FALSE
+  )
+
+  result <- educabR:::parse_sas_dates(df)
+
+  expect_equal(result$dt_ano_letivo_inicio, as.Date(c("2015-02-02", NA, NA)))
 })

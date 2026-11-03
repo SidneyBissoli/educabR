@@ -20,8 +20,11 @@ get_censo_superior(
 \itemize{
 \item \code{"ies"}: Higher education institutions (default)
 \item \code{"cursos"}: Undergraduate courses
-\item \code{"alunos"}: Student enrollment
-\item \code{"docentes"}: Faculty/professors
+\item \code{"alunos"}, \code{"docentes"}: \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} INEP no
+longer publishes student or faculty microdata (withdrawn under the
+LGPD); the archive of every year (2009-2024) holds only the IES and
+course files. These options now stop with an explanation. Course-level
+counts of students and faculty are in \code{type = "cursos"}.
 }}
 
 \item{uf}{Optional. Filter by state (UF code or abbreviation).}
