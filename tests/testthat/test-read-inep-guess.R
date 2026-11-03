@@ -46,3 +46,16 @@ test_that("detect_encoding calls an all-ASCII file UTF-8", {
   writeLines(c("A;B", "1;2"), f)
   expect_equal(detect_encoding(f), "UTF-8")
 })
+
+test_that("answer letters T/F stay text instead of becoming logical", {
+  # SAEB 2021 diretor: 17,427 answers "F" in TX_RESP_Q106 became FALSE
+  f <- withr::local_tempfile(fileext = ".csv")
+  writeLines(c("ID;TX_RESP_Q106;TX_RESP_Q107", "1;F;A", "2;;T", "3;F;F"), f)
+
+  df <- suppressMessages(
+    read_inep_file(f, delim = ";", encoding = "UTF-8", quiet = TRUE)
+  )
+
+  expect_identical(df$TX_RESP_Q106, c("F", NA, "F"))
+  expect_identical(df$TX_RESP_Q107, c("A", "T", "F"))
+})

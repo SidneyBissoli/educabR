@@ -6,7 +6,7 @@
 \usage{
 get_saeb(
   year,
-  type = c("aluno", "escola", "diretor", "professor"),
+  type = c("aluno", "escola", "diretor", "professor", "secretario"),
   level = c("fundamental_medio", "educacao_infantil"),
   serie = NULL,
   n_max = Inf,
@@ -24,6 +24,10 @@ get_saeb(
 \item \code{"escola"}: School questionnaire
 \item \code{"diretor"}: Principal questionnaire
 \item \code{"professor"}: Teacher questionnaire
+\item \code{"secretario"}: Municipal education secretary questionnaire
+(\code{TS_SECRETARIO_MUNICIPAL}, 2019 onwards). For the 2021 early
+childhood level (\code{level = "educacao_infantil"}) INEP publishes only
+this file and \code{TS_EDUCACAO_INFANTIL} (read with \code{type = "aluno"}).
 }}
 
 \item{level}{For 2021 only, SAEB was split into two files:

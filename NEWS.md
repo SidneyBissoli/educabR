@@ -43,6 +43,17 @@ fixes below.
   1997 (567 of `vpe626`), 1998 and 1999, among others. Columns with
   parsing problems are now re-read and typed from all their values. This
   applies to every function that reads INEP CSV files.
+* Answer letters "T" and "F" are no longer turned into `TRUE`/`FALSE`.
+  readr reads a column holding only those letters as logical, so in
+  `get_saeb(2021, type = "diretor")` 17,427 answers "F" to question 106
+  (and three other questions) came out as `FALSE`. INEP files have no
+  logical columns; such columns are now kept as text.
+* `get_saeb()` gains `type = "secretario"` (municipal education secretary
+  questionnaire, 2019 onwards), which no type reached before. `type =
+  "escola"` no longer falls back on that file: with `level =
+  "educacao_infantil"` (2021) it returned the secretary questionnaire
+  labelled as the school one; it now stops and lists the files of the
+  edition.
 * latin1 files whose first accent comes late are no longer read as
   UTF-8. The encoding was guessed from the first 10 KB; in
   `get_censo_escolar(2000)` the first accent is 238 MB into the file, and

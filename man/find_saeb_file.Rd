@@ -11,7 +11,8 @@ find_saeb_file(exdir, year, type = "aluno", serie = NULL)
 
 \item{year}{The year.}
 
-\item{type}{The data type ("aluno", "escola", "diretor", "professor").}
+\item{type}{The data type ("aluno", "escola", "diretor", "professor",
+"secretario").}
 
 \item{serie}{For \code{"aluno"}, the normalized grade code (e.g. \code{"5ef"}), or
 \code{NULL}.}

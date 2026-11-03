@@ -1128,11 +1128,22 @@ read_inep_file <- function(
 #' @keywords internal
 reread_problem_columns <- function(df, file, delim, encoding, n_max = Inf) {
   probs <- readr::problems(df)
-  if (nrow(probs) == 0L) {
-    return(df)
+  bad <- if (nrow(probs) > 0L) {
+    unique(names(df)[unique(probs$col)])
+  } else {
+    character()
   }
 
-  bad <- unique(names(df)[unique(probs$col)])
+  # INEP files have no true logical columns: readr reads answer letters
+  # "T"/"F" as TRUE/FALSE (SAEB 2021 diretor: 17,427 answers "F" became
+  # FALSE). Those columns are re-read and kept as text.
+  as_text <- names(df)[vapply(
+    df,
+    function(x) is.logical(x) && any(!is.na(x)),
+    logical(1)
+  )]
+
+  bad <- unique(c(bad, as_text))
   bad <- bad[!is.na(bad) & nzchar(bad)]
   if (length(bad) == 0L) {
     return(df)
@@ -1148,12 +1159,21 @@ reread_problem_columns <- function(df, file, delim, encoding, n_max = Inf) {
     show_col_types = FALSE,
     progress = FALSE
   )
-  fixed <- readr::type_convert(
-    fixed,
-    col_types = readr::cols(.default = readr::col_guess()),
-    locale = readr::locale(encoding = encoding),
-    guess_integer = FALSE
-  )
+  to_type <- setdiff(bad, as_text)
+  if (length(to_type) > 0L) {
+    text <- fixed
+    fixed[to_type] <- readr::type_convert(
+      fixed[to_type],
+      col_types = readr::cols(.default = readr::col_guess()),
+      locale = readr::locale(encoding = encoding),
+      guess_integer = FALSE
+    )
+    # a column guessed logical again from all values holds letters: text
+    relogical <- to_type[vapply(fixed[to_type], is.logical, logical(1))]
+    for (col in relogical) {
+      fixed[[col]] <- text[[col]]
+    }
+  }
 
   for (col in bad) {
     df[[col]] <- fixed[[col]]
