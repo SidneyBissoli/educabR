@@ -2,8 +2,8 @@
 
 ## Authors
 
-- **Sidney da Silva Pereira Bissoli**. Author, maintainer.
-  [](https://orcid.org/0009-0001-0442-3700)
+- **Sidney da Silva Pereira Bissoli**. Author, maintainer, copyright
+  holder. [](https://orcid.org/0009-0001-0442-3700)
 
 ## Citation
 

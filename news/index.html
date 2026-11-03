@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">educabR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,20 +33,20 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="educabr-development-version">educabR (development version)<a class="anchor" aria-label="anchor" href="#educabr-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="2.0.0" id="educabr-200">educabR 2.0.0<a class="anchor" aria-label="anchor" href="#educabr-200"></a></h2>
 <p>This release fixes bugs that returned <strong>wrong or incomplete data without any error or warning</strong>. Most important: <strong><code><a href="../reference/get_enade.html">get_enade()</a></code> returned rows that mixed different students</strong> in every edition; any analysis that crossed ENADE variables at the student level must be redone (see Breaking changes). If you used <code><a href="../reference/get_igc.html">get_igc()</a></code> for 2008-2016, <code><a href="../reference/get_fundeb_distribution.html">get_fundeb_distribution()</a></code> for 2007-2022 or 2025-2026, or the <code>sub_area</code> column of <code>get_cpc(2008)</code>, please re-run it: see the bug fixes below.</p>
 <div class="section level3">
-<h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<h3 id="breaking-changes-2-0-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-2-0-0"></a></h3>
 <ul><li>
 <code><a href="../reference/get_enade.html">get_enade()</a></code> now reads <strong>one file per call</strong>, chosen with the new <code>arquivo</code> argument (the number in the file name: <code>arq3</code> is <code>arquivo = 3</code>). INEP publishes every ENADE edition (2004-2023) as 27 to 53 files, each sorted by different variables so that they cannot be joined by student (LGPD; INEP’s user manual: “nao e possivel agrupar as informacoes no nivel de estudante”). <code><a href="../reference/get_enade.html">get_enade()</a></code> used to glue the files side by side, so every row combined variables of different students: in 2023, the course code of file 2 differed from file 1 in 406,163 of 406,294 rows. Without <code>arquivo</code>, file 1 is read with a warning. Files can still be combined at the course level (<code>co_curso</code>).</li>
 <li>New <code><a href="../reference/list_enade_files.html">list_enade_files()</a></code> lists the files of an edition and the variables in each, to find the <code>arquivo</code> that holds a variable.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="new-features-2-0-0">New features<a class="anchor" aria-label="anchor" href="#new-features-2-0-0"></a></h3>
 <ul><li>New <code><a href="../reference/get_conceito_enade.html">get_conceito_enade()</a></code> downloads the Conceito Enade, the course-level ENADE indicator, for 2004-2019, 2021-2023 and 2025 (<code>type = "licenciaturas"</code> or <code>"medicina"</code>). <code><a href="../reference/get_enade.html">get_enade()</a></code> returns student microdata; until now the official indicator itself, with its 1-5 faixa, was only reachable inside the CPC table up to 2011. For 2007-2011, INEP publishes it inside the Enade/CPC table, which is returned as is.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<h3 id="bug-fixes-2-0-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-2-0-0"></a></h3>
 <ul><li><p><code>get_enem(2025, type = "resultados")</code> works. INEP compressed <code>RESULTADOS_2025.csv</code> with Deflate64, which R’s built-in unzip cannot read: the file was skipped with only a “zip file is corrupt” warning and the call failed with “no ENEM data file found”. ZIP extraction now checks that every file in the archive was extracted and, if not, falls back to 7-Zip (or PowerShell on Windows, <code>unzip</code> elsewhere), erroring clearly if the archive is still incomplete. This applies to every function that downloads a ZIP.</p></li>
 <li><p>CSV columns that are empty in their first 1,000 rows no longer lose their later values. readr guessed those columns as logical and turned every later value into <code>NA</code>, with only a generic “parsing issues” warning: <code><a href="../reference/get_censo_escolar.html">get_censo_escolar()</a></code> lost values in 1995 (234 of <code>vem2206</code>), 1997 (567 of <code>vpe626</code>), 1998 and 1999, among others. Columns with parsing problems are now re-read and typed from all their values. This applies to every function that reads INEP CSV files.</p></li>
 <li><p>Columns holding only zeros, which readr read as <code>FALSE</code> (Censo Escolar 1995-2006 counts), come back numeric.</p></li>
