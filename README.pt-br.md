@@ -234,8 +234,8 @@ censo_sp <- get_censo_escolar(year = 2023, uf = "SP")
 # Censo da Educação Superior - instituições
 ies <- get_censo_superior(2023, type = "ies")
 
-# Microdados do ENADE
-enade <- get_enade(2023, n_max = 10000)
+# Microdados do ENADE: um arquivo por chamada (o arquivo 3 tem as notas em 2023)
+enade <- get_enade(2023, arquivo = 3, n_max = 10000)
 
 # Programas de pós-graduação (CAPES)
 programas <- get_capes(2023, type = "programas")
