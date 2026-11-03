@@ -33,3 +33,4 @@
 ^coverage_report\.html$
 ^cov_output\.txt$
 ^air\.toml$
+^\.git-blame-ignore-revs$
